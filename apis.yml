@@ -1,0 +1,19 @@
+aid: fis
+url: https://raw.githubusercontent.com/api-evangelist/fis/refs/heads/main/apis.yml
+apis:
+- aid: fis:fis-api
+  name: FIS / Systematics Core Banking API
+  tags:
+  - Banking
+  - Core Banking
+  - Financial Services
+  - SOAP
+  - Mainframe
+  image: https://raw.githubusercontent.com/api-evangelist/fis/refs/heads/main/image.png
+  humanURL: https://www.fisglobal.com/
+  baseURL: https://api.fisglobal.example.com
+  properties:
+  - url: https://www.fisglobal.com/
+    type: Documentation
+  description: >-
+    FIS (Fidelity National Information Services) provides core banking platforms including the Systematics suite. APIs bridge mainframe-based account processing, transaction management, and loan servicing systems to modern integration layers via SOAP and REST interfaces.
