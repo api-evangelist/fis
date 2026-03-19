@@ -1,0 +1,66 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "schema": "https://schema.org/",
+    "fibo": "https://spec.edmcouncil.org/fibo/ontology/FND/",
+    "pay": "https://w3c-ccg.github.io/payment-handler-api/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dct": "http://purl.org/dc/terms/",
+
+    "Payment": {
+      "@id": "schema:PayAction",
+      "@type": "@id"
+    },
+    "BankAccount": {
+      "@id": "schema:BankAccount",
+      "@type": "@id"
+    },
+    "FinancialInstitution": {
+      "@id": "schema:BankOrCreditUnion",
+      "@type": "@id"
+    },
+
+    "paymentId": "schema:identifier",
+    "amount": {
+      "@id": "schema:totalPaymentDue",
+      "@type": "xsd:decimal"
+    },
+    "currency": "schema:currency",
+    "paymentMethod": "schema:paymentMethod",
+    "status": "schema:orderStatus",
+    "remittanceInfo": "schema:description",
+    "executionDate": {
+      "@id": "schema:scheduledTime",
+      "@type": "xsd:date"
+    },
+    "completedAt": {
+      "@id": "schema:endTime",
+      "@type": "xsd:dateTime"
+    },
+    "createdAt": {
+      "@id": "schema:dateCreated",
+      "@type": "xsd:dateTime"
+    },
+    "updatedAt": {
+      "@id": "schema:dateModified",
+      "@type": "xsd:dateTime"
+    },
+
+    "debtorAccount": {
+      "@id": "fibo:FBC/FunctionalEntities/FinancialServicesEntities/Debtor",
+      "@type": "@id"
+    },
+    "creditorAccount": {
+      "@id": "fibo:FBC/FunctionalEntities/FinancialServicesEntities/Creditor",
+      "@type": "@id"
+    },
+
+    "accountNumber": "schema:accountId",
+    "accountHolderName": "schema:name",
+    "bankName": "schema:legalName",
+    "accountType": "schema:bankAccountType",
+    "routingNumber": "schema:identifier",
+    "swiftCode": "schema:identifier",
+    "iban": "schema:identifier"
+  }
+}

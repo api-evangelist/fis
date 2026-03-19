@@ -1,0 +1,572 @@
+openapi: 3.1.0
+info:
+  title: FIS Payments API
+  description: >-
+    FIS (Fidelity National Information Services) Payments API provides programmatic
+    access to payment processing capabilities including ACH transfers, wire payments,
+    card processing, and real-time payment networks. Available through the FIS
+    CodeConnect marketplace for financial institutions and fintech developers.
+  version: 1.0.0
+  contact:
+    name: FIS CodeConnect Support
+    url: https://codeconnect.fisglobal.com/
+  license:
+    name: FIS Terms of Use
+    url: https://www.fisglobal.com/terms-of-use
+externalDocs:
+  description: FIS CodeConnect Developer Portal
+  url: https://codeconnect.fisglobal.com/
+
+servers:
+  - url: https://api.fisglobal.com/v1
+    description: FIS Production API
+  - url: https://sandbox.api.fisglobal.com/v1
+    description: FIS Sandbox environment
+
+security:
+  - OAuth2ClientCredentials: []
+
+tags:
+  - name: Payments
+    description: Initiate and manage payment transactions
+  - name: ACH
+    description: ACH (Automated Clearing House) payment operations
+  - name: Wire Transfers
+    description: Domestic and international wire transfer operations
+  - name: Accounts
+    description: Account information and balance inquiries
+  - name: Transactions
+    description: Transaction history and status
+
+paths:
+  /payments:
+    post:
+      operationId: initiatePayment
+      summary: Initiate a payment
+      description: Creates a new payment transaction. Supports ACH, wire transfer, RTP (Real-Time Payments), and FedNow payment rails based on the paymentMethod field.
+      tags: [Payments]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRequest'
+      responses:
+        '201':
+          description: Payment initiated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+        '422':
+          description: Unprocessable entity – business rule violation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /payments/{paymentId}:
+    get:
+      operationId: getPayment
+      summary: Get payment status
+      description: Returns the current status and details of a specific payment transaction.
+      tags: [Payments]
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique payment transaction identifier
+      responses:
+        '200':
+          description: Payment details returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        '404':
+          description: Payment not found
+
+  /payments/{paymentId}/cancel:
+    post:
+      operationId: cancelPayment
+      summary: Cancel a payment
+      description: Cancels a pending payment that has not yet been submitted for processing. Only available for payments in PENDING or SCHEDULED status.
+      tags: [Payments]
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Payment cancelled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        '409':
+          description: Payment cannot be cancelled in its current status
+
+  /ach/transfers:
+    post:
+      operationId: createAchTransfer
+      summary: Create ACH transfer
+      description: Initiates an ACH debit or credit transfer through the NACHA network. Standard ACH settles in 1-2 business days; Same-Day ACH settles same business day.
+      tags: [ACH]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AchTransferRequest'
+      responses:
+        '201':
+          description: ACH transfer created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AchTransfer'
+        '400':
+          description: Invalid request
+
+  /ach/batches:
+    post:
+      operationId: createAchBatch
+      summary: Submit ACH batch file
+      description: Submits a batch of ACH transactions (NACHA-formatted file or JSON batch). Used for payroll, vendor payments, and consumer debits.
+      tags: [ACH]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AchBatchRequest'
+      responses:
+        '201':
+          description: ACH batch submitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AchBatch'
+
+  /wire-transfers:
+    post:
+      operationId: initiateWireTransfer
+      summary: Initiate wire transfer
+      description: Initiates a domestic Fedwire or international SWIFT wire transfer. Domestic wires settle same day; international wires may take 1-5 business days.
+      tags: [Wire Transfers]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WireTransferRequest'
+      responses:
+        '201':
+          description: Wire transfer initiated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WireTransfer'
+        '400':
+          description: Invalid request
+
+  /accounts/{accountId}/balance:
+    get:
+      operationId: getAccountBalance
+      summary: Get account balance
+      description: Returns current and available balance for a specified account.
+      tags: [Accounts]
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Account identifier
+      responses:
+        '200':
+          description: Balance returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountBalance'
+        '404':
+          description: Account not found
+
+  /accounts/{accountId}/transactions:
+    get:
+      operationId: getAccountTransactions
+      summary: Get account transactions
+      description: Returns the transaction history for a specified account with optional date range filtering and pagination.
+      tags: [Transactions]
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: fromDate
+          in: query
+          schema:
+            type: string
+            format: date
+          description: Start date for transaction history (ISO 8601)
+        - name: toDate
+          in: query
+          schema:
+            type: string
+            format: date
+          description: End date for transaction history
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            default: 25
+            maximum: 100
+        - name: pageToken
+          in: query
+          schema:
+            type: string
+          description: Pagination token from previous response
+      responses:
+        '200':
+          description: Transaction list returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionList'
+
+components:
+  securitySchemes:
+    OAuth2ClientCredentials:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.fisglobal.com/oauth/token
+          scopes:
+            payments:read: Read payment data
+            payments:write: Create and modify payments
+            accounts:read: Read account information
+
+  schemas:
+    PaymentRequest:
+      type: object
+      required: [amount, currency, paymentMethod, debtorAccount, creditorAccount]
+      properties:
+        amount:
+          type: number
+          format: double
+          minimum: 0.01
+          description: Payment amount
+        currency:
+          type: string
+          minLength: 3
+          maxLength: 3
+          description: ISO 4217 currency code (e.g., "USD")
+        paymentMethod:
+          type: string
+          enum: [ACH, WIRE, RTP, FEDNOW, CARD]
+          description: Payment rail to use
+        debtorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        creditorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        remittanceInfo:
+          type: string
+          maxLength: 140
+          description: Payment reference or memo
+        executionDate:
+          type: string
+          format: date
+          description: Requested execution date (defaults to next business day)
+        priority:
+          type: string
+          enum: [NORMAL, HIGH, SAME_DAY]
+
+    Payment:
+      type: object
+      properties:
+        paymentId:
+          type: string
+          description: Unique payment identifier
+        status:
+          type: string
+          enum: [PENDING, SCHEDULED, PROCESSING, COMPLETED, FAILED, CANCELLED, RETURNED]
+        amount:
+          type: number
+          format: double
+        currency:
+          type: string
+        paymentMethod:
+          type: string
+        debtorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        creditorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        remittanceInfo:
+          type: string
+        executionDate:
+          type: string
+          format: date
+        completedAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        failureReason:
+          type: string
+        networkTransactionId:
+          type: string
+          description: Reference ID from the payment network (IMAD, OMAD, trace number, etc.)
+
+    AccountReference:
+      type: object
+      required: [accountNumber, routingNumber]
+      properties:
+        accountNumber:
+          type: string
+          description: Bank account number
+        routingNumber:
+          type: string
+          pattern: '^\d{9}$'
+          description: ABA routing transit number (9 digits)
+        accountType:
+          type: string
+          enum: [CHECKING, SAVINGS, LOAN]
+        accountHolderName:
+          type: string
+        bankName:
+          type: string
+        swiftCode:
+          type: string
+          description: SWIFT/BIC code for international wires
+
+    AchTransferRequest:
+      type: object
+      required: [amount, entryClassCode, transactionType, debtorAccount, creditorAccount]
+      properties:
+        amount:
+          type: number
+          format: double
+          minimum: 0.01
+        entryClassCode:
+          type: string
+          enum: [PPD, CCD, CTX, WEB, TEL, ARC, BOC, POP, RCK]
+          description: NACHA Standard Entry Class code
+        transactionType:
+          type: string
+          enum: [CREDIT, DEBIT]
+        debtorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        creditorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        description:
+          type: string
+          maxLength: 10
+          description: Company entry description (appears on bank statement)
+        effectiveDate:
+          type: string
+          format: date
+        sameDayAch:
+          type: boolean
+          default: false
+
+    AchTransfer:
+      allOf:
+        - $ref: '#/components/schemas/AchTransferRequest'
+        - type: object
+          properties:
+            transferId:
+              type: string
+            status:
+              type: string
+              enum: [CREATED, SUBMITTED, SETTLED, RETURNED, REJECTED]
+            traceNumber:
+              type: string
+              description: NACHA trace number
+            createdAt:
+              type: string
+              format: date-time
+
+    AchBatchRequest:
+      type: object
+      required: [companyName, companyId, transactions]
+      properties:
+        companyName:
+          type: string
+          maxLength: 16
+        companyId:
+          type: string
+          maxLength: 10
+        entryClassCode:
+          type: string
+          enum: [PPD, CCD, CTX, WEB, TEL]
+        description:
+          type: string
+          maxLength: 10
+        effectiveDate:
+          type: string
+          format: date
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AchTransferRequest'
+          maxItems: 10000
+
+    AchBatch:
+      type: object
+      properties:
+        batchId:
+          type: string
+        status:
+          type: string
+          enum: [RECEIVED, VALIDATED, SUBMITTED, SETTLED, REJECTED]
+        transactionCount:
+          type: integer
+        totalDebits:
+          type: number
+        totalCredits:
+          type: number
+        createdAt:
+          type: string
+          format: date-time
+
+    WireTransferRequest:
+      type: object
+      required: [amount, currency, debtorAccount, creditorAccount]
+      properties:
+        amount:
+          type: number
+          format: double
+          minimum: 0.01
+        currency:
+          type: string
+          minLength: 3
+          maxLength: 3
+        wireType:
+          type: string
+          enum: [DOMESTIC_FEDWIRE, INTERNATIONAL_SWIFT]
+          default: DOMESTIC_FEDWIRE
+        debtorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        creditorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        remittanceInfo:
+          type: string
+          maxLength: 140
+        instructionForCreditorAgent:
+          type: string
+
+    WireTransfer:
+      allOf:
+        - $ref: '#/components/schemas/WireTransferRequest'
+        - type: object
+          properties:
+            wireId:
+              type: string
+            status:
+              type: string
+              enum: [PENDING, SENT, CONFIRMED, RETURNED, FAILED]
+            imad:
+              type: string
+              description: Input Message Accountability Data (Fedwire reference)
+            omad:
+              type: string
+              description: Output Message Accountability Data
+            createdAt:
+              type: string
+              format: date-time
+
+    AccountBalance:
+      type: object
+      properties:
+        accountId:
+          type: string
+        availableBalance:
+          type: number
+          format: double
+        currentBalance:
+          type: number
+          format: double
+        currency:
+          type: string
+        asOf:
+          type: string
+          format: date-time
+
+    Transaction:
+      type: object
+      properties:
+        transactionId:
+          type: string
+        accountId:
+          type: string
+        amount:
+          type: number
+          format: double
+        currency:
+          type: string
+        type:
+          type: string
+          enum: [DEBIT, CREDIT]
+        status:
+          type: string
+        description:
+          type: string
+        postedDate:
+          type: string
+          format: date
+        effectiveDate:
+          type: string
+          format: date
+        balanceAfter:
+          type: number
+          format: double
+
+    TransactionList:
+      type: object
+      properties:
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+        nextPageToken:
+          type: string
+        totalCount:
+          type: integer
+
+    Error:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              issue:
+                type: string
+        requestId:
+          type: string

@@ -35,6 +35,8 @@ apis:
     type: Portal
   - url: https://codeconnect.fisglobal.com/
     type: Documentation
+  - url: openapi/fis-payments-openapi.yml
+    type: OpenAPI
   description: >-
     FIS provides payment processing APIs through the CodeConnect marketplace, enabling integration with card processing, ACH, wire transfers, and real-time payment networks for financial institutions and fintech developers.
 
@@ -81,6 +83,12 @@ common:
     type: Website
   - url: https://www.fisglobal.com/blog
     type: Blog
+  - url: openapi/fis-payments-openapi.yml
+    type: OpenAPI
+  - url: json-schema/fis-payment-schema.json
+    type: JSONSchema
+  - url: json-ld/fis-context.jsonld
+    type: JSONLDContext
 maintainer:
   name: Kin Lane
   email: kin@apievangelist.com
