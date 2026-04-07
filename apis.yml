@@ -1,6 +1,5 @@
 aid: fis
-url: 
-  https://raw.githubusercontent.com/api-evangelist/fis/refs/heads/main/apis.yml
+url: https://raw.githubusercontent.com/api-evangelist/fis/refs/heads/main/apis.yml
 apis:
   - aid: fis:fis-core-banking-api
     name: FIS Core Banking API
@@ -8,10 +7,9 @@ apis:
       - Banking
       - Core Banking
       - Financial Services
-      - SOAP
       - Mainframe
-    image: 
-      https://raw.githubusercontent.com/api-evangelist/fis/refs/heads/main/image.png
+      - SOAP
+    image: https://raw.githubusercontent.com/api-evangelist/fis/refs/heads/main/image.png
     humanURL: https://codeconnect.fisglobal.com/
     baseURL: https://api.fisglobal.com
     properties:
@@ -29,11 +27,10 @@ apis:
     name: FIS Payments API
     tags:
       - Banking
-      - Payments
       - Financial Services
+      - Payments
       - REST
-    image: 
-      https://raw.githubusercontent.com/api-evangelist/fis/refs/heads/main/image.png
+    image: https://raw.githubusercontent.com/api-evangelist/fis/refs/heads/main/image.png
     humanURL: https://codeconnect.fisglobal.com/
     baseURL: https://api.fisglobal.com
     properties:
@@ -52,11 +49,10 @@ apis:
     name: FIS Wealth Management API
     tags:
       - Banking
-      - Wealth Management
       - Financial Services
       - REST
-    image: 
-      https://raw.githubusercontent.com/api-evangelist/fis/refs/heads/main/image.png
+      - Wealth Management
+    image: https://raw.githubusercontent.com/api-evangelist/fis/refs/heads/main/image.png
     humanURL: https://codeconnect.fisglobal.com/
     baseURL: https://api.fisglobal.com
     properties:
@@ -77,8 +73,7 @@ common:
     providing APIs for core banking, payments, wealth management, and capital markets
     through the CodeConnect API marketplace. APIs connect financial institutions,
     fintechs, and enterprises to FIS banking and payment infrastructure.
-  image: 
-    https://raw.githubusercontent.com/api-evangelist/fis/refs/heads/main/image.png
+  image: https://raw.githubusercontent.com/api-evangelist/fis/refs/heads/main/image.png
   tags:
     - Banking
     - Core Banking

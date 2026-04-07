@@ -27,17 +27,17 @@ security:
   - OAuth2ClientCredentials: []
 
 tags:
-  - name: Payments
-    description: Initiate and manage payment transactions
-  - name: ACH
-    description: ACH (Automated Clearing House) payment operations
-  - name: Wire Transfers
-    description: Domestic and international wire transfer operations
   - name: Accounts
     description: Account information and balance inquiries
+  - name: ACH
+    description: ACH (Automated Clearing House) payment operations
+  - name: Payments
+    description: Initiate and manage payment transactions
   - name: Transactions
     description: Transaction history and status
 
+  - name: Wire Transfers
+    description: Domestic and international wire transfer operations
 paths:
   /payments:
     post:
