@@ -1,0 +1,374 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: FIS Payments API
+  description: FIS (Fidelity National Information Services) Payments API provides programmatic access to payment processing
+    capabilities including ACH transfers, wire payments, card processing, and real-time payment networks. Available through
+    the FIS CodeConnect marketplace for financial institutions and fintech developers.
+  tags:
+  - Fis
+  - API
+  created: '2026-05-06'
+  modified: '2026-05-06'
+capability:
+  consumes:
+  - type: http
+    namespace: fis
+    baseUri: https://api.fisglobal.com/v1
+    description: FIS Payments API HTTP API.
+    authentication:
+      type: bearer
+      token: '{{FIS_TOKEN}}'
+    resources:
+    - name: payments
+      path: /payments
+      operations:
+      - name: initiatepayment
+        method: POST
+        description: Initiate a payment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: payments-paymentid
+      path: /payments/{paymentId}
+      operations:
+      - name: getpayment
+        method: GET
+        description: Get payment status
+        inputParameters:
+        - name: paymentId
+          in: path
+          type: string
+          required: true
+          description: Unique payment transaction identifier
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: payments-paymentid-cancel
+      path: /payments/{paymentId}/cancel
+      operations:
+      - name: cancelpayment
+        method: POST
+        description: Cancel a payment
+        inputParameters:
+        - name: paymentId
+          in: path
+          type: string
+          required: true
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: ach-transfers
+      path: /ach/transfers
+      operations:
+      - name: createachtransfer
+        method: POST
+        description: Create ACH transfer
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: ach-batches
+      path: /ach/batches
+      operations:
+      - name: createachbatch
+        method: POST
+        description: Submit ACH batch file
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: wire-transfers
+      path: /wire-transfers
+      operations:
+      - name: initiatewiretransfer
+        method: POST
+        description: Initiate wire transfer
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: accounts-accountid-balance
+      path: /accounts/{accountId}/balance
+      operations:
+      - name: getaccountbalance
+        method: GET
+        description: Get account balance
+        inputParameters:
+        - name: accountId
+          in: path
+          type: string
+          required: true
+          description: Account identifier
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: accounts-accountid-transactions
+      path: /accounts/{accountId}/transactions
+      operations:
+      - name: getaccounttransactions
+        method: GET
+        description: Get account transactions
+        inputParameters:
+        - name: accountId
+          in: path
+          type: string
+          required: true
+        - name: fromDate
+          in: query
+          type: string
+          description: Start date for transaction history (ISO 8601)
+        - name: toDate
+          in: query
+          type: string
+          description: End date for transaction history
+        - name: pageSize
+          in: query
+          type: integer
+        - name: pageToken
+          in: query
+          type: string
+          description: Pagination token from previous response
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    port: 8080
+    namespace: fis-rest
+    description: REST adapter for FIS Payments API.
+    resources:
+    - path: /payments
+      name: initiatepayment
+      operations:
+      - method: POST
+        name: initiatepayment
+        description: Initiate a payment
+        call: fis.initiatepayment
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /payments/{paymentId}
+      name: getpayment
+      operations:
+      - method: GET
+        name: getpayment
+        description: Get payment status
+        call: fis.getpayment
+        with:
+          paymentId: rest.paymentId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /payments/{paymentId}/cancel
+      name: cancelpayment
+      operations:
+      - method: POST
+        name: cancelpayment
+        description: Cancel a payment
+        call: fis.cancelpayment
+        with:
+          paymentId: rest.paymentId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /ach/transfers
+      name: createachtransfer
+      operations:
+      - method: POST
+        name: createachtransfer
+        description: Create ACH transfer
+        call: fis.createachtransfer
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /ach/batches
+      name: createachbatch
+      operations:
+      - method: POST
+        name: createachbatch
+        description: Submit ACH batch file
+        call: fis.createachbatch
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /wire-transfers
+      name: initiatewiretransfer
+      operations:
+      - method: POST
+        name: initiatewiretransfer
+        description: Initiate wire transfer
+        call: fis.initiatewiretransfer
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /accounts/{accountId}/balance
+      name: getaccountbalance
+      operations:
+      - method: GET
+        name: getaccountbalance
+        description: Get account balance
+        call: fis.getaccountbalance
+        with:
+          accountId: rest.accountId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /accounts/{accountId}/transactions
+      name: getaccounttransactions
+      operations:
+      - method: GET
+        name: getaccounttransactions
+        description: Get account transactions
+        call: fis.getaccounttransactions
+        with:
+          accountId: rest.accountId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    port: 9090
+    namespace: fis-mcp
+    transport: http
+    description: MCP adapter for FIS Payments API for AI agent use.
+    tools:
+    - name: initiatepayment
+      description: Initiate a payment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: fis.initiatepayment
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getpayment
+      description: Get payment status
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: fis.getpayment
+      with:
+        paymentId: tools.paymentId
+      inputParameters:
+      - name: paymentId
+        type: string
+        description: Unique payment transaction identifier
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: cancelpayment
+      description: Cancel a payment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: fis.cancelpayment
+      with:
+        paymentId: tools.paymentId
+      inputParameters:
+      - name: paymentId
+        type: string
+        description: paymentId
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: createachtransfer
+      description: Create ACH transfer
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: fis.createachtransfer
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: createachbatch
+      description: Submit ACH batch file
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: fis.createachbatch
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: initiatewiretransfer
+      description: Initiate wire transfer
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: fis.initiatewiretransfer
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getaccountbalance
+      description: Get account balance
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: fis.getaccountbalance
+      with:
+        accountId: tools.accountId
+      inputParameters:
+      - name: accountId
+        type: string
+        description: Account identifier
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getaccounttransactions
+      description: Get account transactions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: fis.getaccounttransactions
+      with:
+        accountId: tools.accountId
+        fromDate: tools.fromDate
+        toDate: tools.toDate
+        pageSize: tools.pageSize
+        pageToken: tools.pageToken
+      inputParameters:
+      - name: accountId
+        type: string
+        description: accountId
+        required: true
+      - name: fromDate
+        type: string
+        description: Start date for transaction history (ISO 8601)
+      - name: toDate
+        type: string
+        description: End date for transaction history
+      - name: pageSize
+        type: integer
+        description: pageSize
+      - name: pageToken
+        type: string
+        description: Pagination token from previous response
+      outputParameters:
+      - type: object
+        mapping: $.
+binds:
+- namespace: env
+  keys:
+    FIS_TOKEN: FIS_TOKEN
