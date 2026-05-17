@@ -86,9 +86,9 @@ common:
     - url: https://codeconnect.fisglobal.com/
       type: Documentation
     - url: https://www.fisglobal.com/terms-of-use
-      type: Terms of Service
+      type: TermsOfService
     - url: https://www.fisglobal.com/privacy
-      type: Privacy Policy
+      type: PrivacyPolicy
     - url: https://www.fisglobal.com/
       type: Website
     - url: https://www.fisglobal.com/blog
