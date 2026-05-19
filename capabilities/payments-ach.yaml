@@ -1,0 +1,122 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: FIS Payments API — ACH
+  description: 'FIS Payments API — ACH. 2 operations. Lead operation: Submit ACH batch file. Self-contained Naftiko capability
+    covering one Fis business surface.'
+  tags:
+  - Fis
+  - ACH
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    FIS_API_KEY: FIS_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: payments-ach
+    baseUri: https://api.fisglobal.com/v1
+    description: FIS Payments API — ACH business capability. Self-contained, no shared references.
+    resources:
+    - name: ach-batches
+      path: /ach/batches
+      operations:
+      - name: createachbatch
+        method: POST
+        description: Submit ACH batch file
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: ach-transfers
+      path: /ach/transfers
+      operations:
+      - name: createachtransfer
+        method: POST
+        description: Create ACH transfer
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.FIS_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: payments-ach-rest
+    port: 8080
+    description: REST adapter for FIS Payments API — ACH. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/ach/batches
+      name: ach-batches
+      description: REST surface for ach-batches.
+      operations:
+      - method: POST
+        name: createachbatch
+        description: Submit ACH batch file
+        call: payments-ach.createachbatch
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/ach/transfers
+      name: ach-transfers
+      description: REST surface for ach-transfers.
+      operations:
+      - method: POST
+        name: createachtransfer
+        description: Create ACH transfer
+        call: payments-ach.createachtransfer
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: payments-ach-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for FIS Payments API — ACH. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: submit-ach-batch-file
+      description: Submit ACH batch file
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payments-ach.createachbatch
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-ach-transfer
+      description: Create ACH transfer
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payments-ach.createachtransfer
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -66,6 +66,8 @@ apis:
       financial advisors.
 
 common:
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/fis
   aid: fis
   name: FIS Global
   description: >-

@@ -1,0 +1,163 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: FIS Payments API — Payments
+  description: 'FIS Payments API — Payments. 3 operations. Lead operation: Initiate a payment. Self-contained Naftiko capability
+    covering one Fis business surface.'
+  tags:
+  - Fis
+  - Payments
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    FIS_API_KEY: FIS_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: payments-payments
+    baseUri: https://api.fisglobal.com/v1
+    description: FIS Payments API — Payments business capability. Self-contained, no shared references.
+    resources:
+    - name: payments
+      path: /payments
+      operations:
+      - name: initiatepayment
+        method: POST
+        description: Initiate a payment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: payments-paymentId
+      path: /payments/{paymentId}
+      operations:
+      - name: getpayment
+        method: GET
+        description: Get payment status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: paymentId
+          in: path
+          type: string
+          description: Unique payment transaction identifier
+          required: true
+    - name: payments-paymentId-cancel
+      path: /payments/{paymentId}/cancel
+      operations:
+      - name: cancelpayment
+        method: POST
+        description: Cancel a payment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: paymentId
+          in: path
+          type: string
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.FIS_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: payments-payments-rest
+    port: 8080
+    description: REST adapter for FIS Payments API — Payments. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/payments
+      name: payments
+      description: REST surface for payments.
+      operations:
+      - method: POST
+        name: initiatepayment
+        description: Initiate a payment
+        call: payments-payments.initiatepayment
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/payments/{paymentid}
+      name: payments-paymentid
+      description: REST surface for payments-paymentId.
+      operations:
+      - method: GET
+        name: getpayment
+        description: Get payment status
+        call: payments-payments.getpayment
+        with:
+          paymentId: rest.paymentId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/payments/{paymentid}/cancel
+      name: payments-paymentid-cancel
+      description: REST surface for payments-paymentId-cancel.
+      operations:
+      - method: POST
+        name: cancelpayment
+        description: Cancel a payment
+        call: payments-payments.cancelpayment
+        with:
+          paymentId: rest.paymentId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: payments-payments-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for FIS Payments API — Payments. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: initiate-payment
+      description: Initiate a payment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payments-payments.initiatepayment
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-payment-status
+      description: Get payment status
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: payments-payments.getpayment
+      with:
+        paymentId: tools.paymentId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: cancel-payment
+      description: Cancel a payment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: payments-payments.cancelpayment
+      with:
+        paymentId: tools.paymentId
+      outputParameters:
+      - type: object
+        mapping: $.
