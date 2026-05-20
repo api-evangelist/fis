@@ -66,41 +66,43 @@ apis:
       financial advisors.
 
 common:
+  - type: GitHubOrganization
+    url: https://github.com/FISGlobal
   - type: LinkedIn
     url: https://www.linkedin.com/company/fis
-  aid: fis
-  name: FIS Global
-  description: >-
-    FIS (Fidelity National Information Services) is a global leader in financial technology
-    providing APIs for core banking, payments, wealth management, and capital markets
-    through the CodeConnect API marketplace. APIs connect financial institutions,
-    fintechs, and enterprises to FIS banking and payment infrastructure.
-  image: https://raw.githubusercontent.com/api-evangelist/fis/refs/heads/main/image.png
-  tags:
-    - Banking
-    - Core Banking
-    - Financial Services
-    - Payments
-    - Fintech
-  properties:
-    - url: https://codeconnect.fisglobal.com/
-      type: Portal
-    - url: https://codeconnect.fisglobal.com/
-      type: Documentation
-    - url: https://www.fisglobal.com/terms-of-use
-      type: TermsOfService
-    - url: https://www.fisglobal.com/privacy
-      type: PrivacyPolicy
-    - url: https://www.fisglobal.com/
-      type: Website
-    - url: https://www.fisglobal.com/blog
-      type: Blog
-    - url: openapi/fis-payments-openapi.yml
-      type: OpenAPI
-    - url: json-schema/fis-payment-schema.json
-      type: JSONSchema
-    - url: json-ld/fis-context.jsonld
-      type: JSONLDContext
+aid: fis
+name: FIS Global
+description: >-
+  FIS (Fidelity National Information Services) is a global leader in financial technology
+  providing APIs for core banking, payments, wealth management, and capital markets
+  through the CodeConnect API marketplace. APIs connect financial institutions,
+  fintechs, and enterprises to FIS banking and payment infrastructure.
+image: https://raw.githubusercontent.com/api-evangelist/fis/refs/heads/main/image.png
+tags:
+  - Banking
+  - Core Banking
+  - Financial Services
+  - Payments
+  - Fintech
+properties:
+  - url: https://codeconnect.fisglobal.com/
+    type: Portal
+  - url: https://codeconnect.fisglobal.com/
+    type: Documentation
+  - url: https://www.fisglobal.com/terms-of-use
+    type: TermsOfService
+  - url: https://www.fisglobal.com/privacy
+    type: PrivacyPolicy
+  - url: https://www.fisglobal.com/
+    type: Website
+  - url: https://www.fisglobal.com/blog
+    type: Blog
+  - url: openapi/fis-payments-openapi.yml
+    type: OpenAPI
+  - url: json-schema/fis-payment-schema.json
+    type: JSONSchema
+  - url: json-ld/fis-context.jsonld
+    type: JSONLDContext
 maintainer:
   name: Kin Lane
   email: kin@apievangelist.com
