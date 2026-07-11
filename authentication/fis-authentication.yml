@@ -1,0 +1,17 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/fis-payments-openapi.yml
+summary:
+  types:
+  - oauth2
+  oauth2_flows:
+  - clientCredentials
+schemes:
+- name: OAuth2ClientCredentials
+  type: oauth2
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://api.fisglobal.com/oauth/token
+    scopes: 3
+  sources:
+  - openapi/fis-payments-openapi.yml

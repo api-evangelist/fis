@@ -66,6 +66,10 @@ apis:
     financial advisors.
 
 common:
+- type: DomainSecurity
+  url: security/fis-domain-security.yml
+- type: Authentication
+  url: authentication/fis-authentication.yml
 - type: OAuthScopes
   url: scopes/fis-scopes.yml
 - type: GitHubOrganization
