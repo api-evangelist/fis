@@ -66,6 +66,8 @@ apis:
     financial advisors.
 
 common:
+- type: OAuthScopes
+  url: scopes/fis-scopes.yml
 - type: GitHubOrganization
   url: https://github.com/FISGlobal
 - type: LinkedIn
