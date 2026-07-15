@@ -66,6 +66,8 @@ apis:
     financial advisors.
 
 common:
+- type: AgenticAccess
+  url: agentic-access/fis-agentic-access.yml
 - type: DomainSecurity
   url: security/fis-domain-security.yml
 - type: Authentication
