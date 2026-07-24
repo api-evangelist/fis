@@ -1,0 +1,225 @@
+openapi: 3.1.0
+info:
+  title: FIS Payments Accounts ACH API
+  description: FIS (Fidelity National Information Services) Payments API provides programmatic access to payment processing capabilities including ACH transfers, wire payments, card processing, and real-time payment networks. Available through the FIS CodeConnect marketplace for financial institutions and fintech developers.
+  version: 1.0.0
+  contact:
+    name: FIS CodeConnect Support
+    url: https://codeconnect.fisglobal.com/
+  license:
+    name: FIS Terms of Use
+    url: https://www.fisglobal.com/terms-of-use
+servers:
+- url: https://api.fisglobal.com/v1
+  description: FIS Production API
+- url: https://sandbox.api.fisglobal.com/v1
+  description: FIS Sandbox environment
+security:
+- OAuth2ClientCredentials: []
+tags:
+- name: ACH
+  description: ACH (Automated Clearing House) payment operations
+paths:
+  /ach/transfers:
+    post:
+      operationId: createAchTransfer
+      summary: Create ACH transfer
+      description: Initiates an ACH debit or credit transfer through the NACHA network. Standard ACH settles in 1-2 business days; Same-Day ACH settles same business day.
+      tags:
+      - ACH
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AchTransferRequest'
+      responses:
+        '201':
+          description: ACH transfer created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AchTransfer'
+        '400':
+          description: Invalid request
+  /ach/batches:
+    post:
+      operationId: createAchBatch
+      summary: Submit ACH batch file
+      description: Submits a batch of ACH transactions (NACHA-formatted file or JSON batch). Used for payroll, vendor payments, and consumer debits.
+      tags:
+      - ACH
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AchBatchRequest'
+      responses:
+        '201':
+          description: ACH batch submitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AchBatch'
+components:
+  schemas:
+    AchBatchRequest:
+      type: object
+      required:
+      - companyName
+      - companyId
+      - transactions
+      properties:
+        companyName:
+          type: string
+          maxLength: 16
+        companyId:
+          type: string
+          maxLength: 10
+        entryClassCode:
+          type: string
+          enum:
+          - PPD
+          - CCD
+          - CTX
+          - WEB
+          - TEL
+        description:
+          type: string
+          maxLength: 10
+        effectiveDate:
+          type: string
+          format: date
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AchTransferRequest'
+          maxItems: 10000
+    AchTransferRequest:
+      type: object
+      required:
+      - amount
+      - entryClassCode
+      - transactionType
+      - debtorAccount
+      - creditorAccount
+      properties:
+        amount:
+          type: number
+          format: double
+          minimum: 0.01
+        entryClassCode:
+          type: string
+          enum:
+          - PPD
+          - CCD
+          - CTX
+          - WEB
+          - TEL
+          - ARC
+          - BOC
+          - POP
+          - RCK
+          description: NACHA Standard Entry Class code
+        transactionType:
+          type: string
+          enum:
+          - CREDIT
+          - DEBIT
+        debtorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        creditorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        description:
+          type: string
+          maxLength: 10
+          description: Company entry description (appears on bank statement)
+        effectiveDate:
+          type: string
+          format: date
+        sameDayAch:
+          type: boolean
+          default: false
+    AchBatch:
+      type: object
+      properties:
+        batchId:
+          type: string
+        status:
+          type: string
+          enum:
+          - RECEIVED
+          - VALIDATED
+          - SUBMITTED
+          - SETTLED
+          - REJECTED
+        transactionCount:
+          type: integer
+        totalDebits:
+          type: number
+        totalCredits:
+          type: number
+        createdAt:
+          type: string
+          format: date-time
+    AchTransfer:
+      allOf:
+      - $ref: '#/components/schemas/AchTransferRequest'
+      - type: object
+        properties:
+          transferId:
+            type: string
+          status:
+            type: string
+            enum:
+            - CREATED
+            - SUBMITTED
+            - SETTLED
+            - RETURNED
+            - REJECTED
+          traceNumber:
+            type: string
+            description: NACHA trace number
+          createdAt:
+            type: string
+            format: date-time
+    AccountReference:
+      type: object
+      required:
+      - accountNumber
+      - routingNumber
+      properties:
+        accountNumber:
+          type: string
+          description: Bank account number
+        routingNumber:
+          type: string
+          pattern: ^\d{9}$
+          description: ABA routing transit number (9 digits)
+        accountType:
+          type: string
+          enum:
+          - CHECKING
+          - SAVINGS
+          - LOAN
+        accountHolderName:
+          type: string
+        bankName:
+          type: string
+        swiftCode:
+          type: string
+          description: SWIFT/BIC code for international wires
+  securitySchemes:
+    OAuth2ClientCredentials:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.fisglobal.com/oauth/token
+          scopes:
+            payments:read: Read payment data
+            payments:write: Create and modify payments
+            accounts:read: Read account information
+externalDocs:
+  description: FIS CodeConnect Developer Portal
+  url: https://codeconnect.fisglobal.com/
