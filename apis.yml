@@ -18,33 +18,9 @@ apis:
   - url: https://codeconnect.fisglobal.com/
     type: Documentation
   description: >-
-    FIS (Fidelity National Information Services) provides core banking platforms
-    including the Systematics suite. APIs bridge mainframe-based account processing,
-    transaction management, and loan servicing systems to modern integration layers
-    via SOAP and REST interfaces.
-
-- aid: fis:fis-payments-api
-  name: FIS Payments API
-  tags:
-  - Banking
-  - Financial Services
-  - Payments
-  - REST
-  image: https://raw.githubusercontent.com/api-evangelist/fis/refs/heads/main/image.png
-  humanURL: https://codeconnect.fisglobal.com/
-  baseURL: https://api.fisglobal.com
-  properties:
-  - url: https://codeconnect.fisglobal.com/
-    type: Portal
-  - url: https://codeconnect.fisglobal.com/
-    type: Documentation
-  - url: openapi/fis-payments-openapi.yml
-    type: OpenAPI
-  description: >-
-    FIS provides payment processing APIs through the CodeConnect marketplace, enabling
-    integration with card processing, ACH, wire transfers, and real-time payment
-    networks for financial institutions and fintech developers.
-
+    FIS (Fidelity National Information Services) provides core banking platforms including the Systematics
+    suite. APIs bridge mainframe-based account processing, transaction management, and loan servicing
+    systems to modern integration layers via SOAP and REST interfaces.
 - aid: fis:fis-wealth-management-api
   name: FIS Wealth Management API
   tags:
@@ -61,10 +37,78 @@ apis:
   - url: https://codeconnect.fisglobal.com/
     type: Documentation
   description: >-
-    FIS wealth management APIs enable integration with portfolio management, account
-    aggregation, trading, and advisory systems for wealth management platforms and
-    financial advisors.
-
+    FIS wealth management APIs enable integration with portfolio management, account aggregation, trading,
+    and advisory systems for wealth management platforms and financial advisors.
+- aid: fis:fis-accounts-api
+  name: FIS Global Accounts API
+  description: Account information and balance inquiries
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-accounts-api-openapi.yml
+  - type: Portal
+    url: https://codeconnect.fisglobal.com/
+  - type: Documentation
+    url: https://codeconnect.fisglobal.com/
+- aid: fis:fis-ach-api
+  name: FIS Global ACH API
+  description: ACH (Automated Clearing House) payment operations
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - ACH
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-ach-api-openapi.yml
+  - type: Portal
+    url: https://codeconnect.fisglobal.com/
+  - type: Documentation
+    url: https://codeconnect.fisglobal.com/
+- aid: fis:fis-payments-api
+  name: FIS Global Payments API
+  description: Initiate and manage payment transactions
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Payments
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-payments-api-openapi.yml
+  - type: Portal
+    url: https://codeconnect.fisglobal.com/
+  - type: Documentation
+    url: https://codeconnect.fisglobal.com/
+- aid: fis:fis-transactions-api
+  name: FIS Global Transactions API
+  description: Transaction history and status
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Transactions
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-transactions-api-openapi.yml
+  - type: Portal
+    url: https://codeconnect.fisglobal.com/
+  - type: Documentation
+    url: https://codeconnect.fisglobal.com/
+- aid: fis:fis-wire-transfers-api
+  name: FIS Global Wire Transfers API
+  description: Domestic and international wire transfer operations
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Wire Transfers
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-wire-transfers-api-openapi.yml
+  - type: Portal
+    url: https://codeconnect.fisglobal.com/
+  - type: Documentation
+    url: https://codeconnect.fisglobal.com/
 common:
 - type: AgenticAccess
   url: agentic-access/fis-agentic-access.yml
@@ -84,6 +128,19 @@ description: >-
   providing APIs for core banking, payments, wealth management, and capital markets
   through the CodeConnect API marketplace. APIs connect financial institutions,
   fintechs, and enterprises to FIS banking and payment infrastructure.
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
 image: https://raw.githubusercontent.com/api-evangelist/fis/refs/heads/main/image.png
 tags:
 - Banking
