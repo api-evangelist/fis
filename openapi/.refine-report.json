@@ -1,0 +1,22 @@
+{
+  "provider": "fis",
+  "sources": [
+    "fis-accounts-api-openapi.yml",
+    "fis-ach-api-openapi.yml",
+    "fis-payments-api-openapi.yml",
+    "fis-transactions-api-openapi.yml",
+    "fis-wire-transfers-api-openapi.yml"
+  ],
+  "outputs": [
+    "fis-accounts-api-openapi.yml",
+    "fis-ach-api-openapi.yml",
+    "fis-payments-api-openapi.yml",
+    "fis-transactions-api-openapi.yml",
+    "fis-wire-transfers-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
