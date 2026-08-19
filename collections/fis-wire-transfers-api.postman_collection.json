@@ -1,0 +1,195 @@
+{
+  "item": [
+    {
+      "id": "67d2e66a-5122-434d-9b1f-1ee423df2df9",
+      "name": "Wire Transfers",
+      "description": {
+        "content": "Domestic and international wire transfer operations",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f2be74af-da5c-47ba-928d-b4d0a9ba4475",
+          "name": "Initiate wire transfer",
+          "request": {
+            "name": "Initiate wire transfer",
+            "description": {
+              "content": "Initiates a domestic Fedwire or international SWIFT wire transfer. Domestic wires settle same day; international wires may take 1-5 business days.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "wire-transfers"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"debtorAccount\": {\n    \"accountNumber\": \"<string>\",\n    \"routingNumber\": \"<string>\",\n    \"accountType\": \"<string>\",\n    \"accountHolderName\": \"<string>\",\n    \"bankName\": \"<string>\",\n    \"swiftCode\": \"<string>\"\n  },\n  \"creditorAccount\": {\n    \"accountNumber\": \"<string>\",\n    \"routingNumber\": \"<string>\",\n    \"accountType\": \"<string>\",\n    \"accountHolderName\": \"<string>\",\n    \"bankName\": \"<string>\",\n    \"swiftCode\": \"<string>\"\n  },\n  \"wireType\": \"DOMESTIC_FEDWIRE\",\n  \"remittanceInfo\": \"<string>\",\n  \"instructionForCreditorAgent\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "fa68d18b-476d-47d0-927e-18423f4d4c70",
+              "name": "Wire transfer initiated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "wire-transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"debtorAccount\": {\n    \"accountNumber\": \"string\",\n    \"routingNumber\": \"897783360\",\n    \"accountType\": \"CHECKING\",\n    \"accountHolderName\": \"string\",\n    \"bankName\": \"string\",\n    \"swiftCode\": \"string\"\n  },\n  \"creditorAccount\": {\n    \"accountNumber\": \"string\",\n    \"routingNumber\": \"832321044\",\n    \"accountType\": \"CHECKING\",\n    \"accountHolderName\": \"string\",\n    \"bankName\": \"string\",\n    \"swiftCode\": \"string\"\n  },\n  \"wireType\": \"DOMESTIC_FEDWIRE\",\n  \"remittanceInfo\": \"<string>\",\n  \"instructionForCreditorAgent\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"amount\": 7216.370158665672,\n  \"currency\": \"str\",\n  \"debtorAccount\": {\n    \"accountNumber\": \"string\",\n    \"routingNumber\": \"898605166\",\n    \"accountType\": \"LOAN\",\n    \"accountHolderName\": \"string\",\n    \"bankName\": \"string\",\n    \"swiftCode\": \"string\"\n  },\n  \"creditorAccount\": {\n    \"accountNumber\": \"string\",\n    \"routingNumber\": \"798205675\",\n    \"accountType\": \"LOAN\",\n    \"accountHolderName\": \"string\",\n    \"bankName\": \"string\",\n    \"swiftCode\": \"string\"\n  },\n  \"wireType\": \"DOMESTIC_FEDWIRE\",\n  \"remittanceInfo\": \"string\",\n  \"instructionForCreditorAgent\": \"string\",\n  \"wireId\": \"string\",\n  \"status\": \"PENDING\",\n  \"imad\": \"string\",\n  \"omad\": \"string\",\n  \"createdAt\": \"1983-12-19T23:49:32.795Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "50dae47c-44a8-4cc0-b5fd-dbecdc783784",
+              "name": "Invalid request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "wire-transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"debtorAccount\": {\n    \"accountNumber\": \"string\",\n    \"routingNumber\": \"897783360\",\n    \"accountType\": \"CHECKING\",\n    \"accountHolderName\": \"string\",\n    \"bankName\": \"string\",\n    \"swiftCode\": \"string\"\n  },\n  \"creditorAccount\": {\n    \"accountNumber\": \"string\",\n    \"routingNumber\": \"832321044\",\n    \"accountType\": \"CHECKING\",\n    \"accountHolderName\": \"string\",\n    \"bankName\": \"string\",\n    \"swiftCode\": \"string\"\n  },\n  \"wireType\": \"DOMESTIC_FEDWIRE\",\n  \"remittanceInfo\": \"<string>\",\n  \"instructionForCreditorAgent\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fisglobal.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "payments:read payments:write accounts:read"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.fisglobal.com/oauth/token"
+      },
+      {
+        "key": "grant_type",
+        "value": "client_credentials"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "c41133e4-292d-4793-b9f6-a1a880830b02",
+    "name": "FIS Payments Accounts Wire Transfers API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "FIS (Fidelity National Information Services) Payments API provides programmatic access to payment processing capabilities including ACH transfers, wire payments, card processing, and real-time payment networks. Available through the FIS CodeConnect marketplace for financial institutions and fintech developers.\n\nContact Support:\n Name: FIS CodeConnect Support",
+      "type": "text/plain"
+    }
+  }
+}

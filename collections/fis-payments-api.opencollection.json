@@ -1,0 +1,81 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "FIS Accounts Payments API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "client_credentials",
+      "accessTokenUrl": "https://api.fisglobal.com/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Payments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Initiate a payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fisglobal.com/v1/payments",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new payment transaction. Supports ACH, wire transfer, RTP (Real-Time Payments), and FedNow payment rails based on the paymentMethod field."
+        },
+        {
+          "info": {
+            "name": "Get payment status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.fisglobal.com/v1/payments/:paymentId",
+            "params": [
+              {
+                "name": "paymentId",
+                "value": "",
+                "type": "path",
+                "description": "Unique payment transaction identifier"
+              }
+            ]
+          },
+          "docs": "Returns the current status and details of a specific payment transaction."
+        },
+        {
+          "info": {
+            "name": "Cancel a payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fisglobal.com/v1/payments/:paymentId/cancel",
+            "params": [
+              {
+                "name": "paymentId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Cancels a pending payment that has not yet been submitted for processing. Only available for payments in PENDING or SCHEDULED status."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

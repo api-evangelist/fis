@@ -1,0 +1,299 @@
+{
+  "item": [
+    {
+      "id": "1be45896-d9db-401e-aa47-47fe07a85f36",
+      "name": "ACH",
+      "description": {
+        "content": "ACH (Automated Clearing House) payment operations",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "d9ff482c-234a-4200-9cce-4f425a7df843",
+          "name": "Create ACH transfer",
+          "request": {
+            "name": "Create ACH transfer",
+            "description": {
+              "content": "Initiates an ACH debit or credit transfer through the NACHA network. Standard ACH settles in 1-2 business days; Same-Day ACH settles same business day.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "ach",
+                "transfers"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"<double>\",\n  \"entryClassCode\": \"<string>\",\n  \"transactionType\": \"<string>\",\n  \"debtorAccount\": {\n    \"accountNumber\": \"<string>\",\n    \"routingNumber\": \"<string>\",\n    \"accountType\": \"<string>\",\n    \"accountHolderName\": \"<string>\",\n    \"bankName\": \"<string>\",\n    \"swiftCode\": \"<string>\"\n  },\n  \"creditorAccount\": {\n    \"accountNumber\": \"<string>\",\n    \"routingNumber\": \"<string>\",\n    \"accountType\": \"<string>\",\n    \"accountHolderName\": \"<string>\",\n    \"bankName\": \"<string>\",\n    \"swiftCode\": \"<string>\"\n  },\n  \"description\": \"<string>\",\n  \"effectiveDate\": \"<date>\",\n  \"sameDayAch\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "bfb1de1c-6c54-47a3-8dfa-016ab575cf8d",
+              "name": "ACH transfer created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ach",
+                    "transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<double>\",\n  \"entryClassCode\": \"<string>\",\n  \"transactionType\": \"<string>\",\n  \"debtorAccount\": {\n    \"accountNumber\": \"string\",\n    \"routingNumber\": \"359283432\",\n    \"accountType\": \"CHECKING\",\n    \"accountHolderName\": \"string\",\n    \"bankName\": \"string\",\n    \"swiftCode\": \"string\"\n  },\n  \"creditorAccount\": {\n    \"accountNumber\": \"string\",\n    \"routingNumber\": \"106158934\",\n    \"accountType\": \"CHECKING\",\n    \"accountHolderName\": \"string\",\n    \"bankName\": \"string\",\n    \"swiftCode\": \"string\"\n  },\n  \"description\": \"<string>\",\n  \"effectiveDate\": \"<date>\",\n  \"sameDayAch\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"amount\": 3834.0359520847373,\n  \"entryClassCode\": \"POP\",\n  \"transactionType\": \"DEBIT\",\n  \"debtorAccount\": {\n    \"accountNumber\": \"string\",\n    \"routingNumber\": \"532001527\",\n    \"accountType\": \"SAVINGS\",\n    \"accountHolderName\": \"string\",\n    \"bankName\": \"string\",\n    \"swiftCode\": \"string\"\n  },\n  \"creditorAccount\": {\n    \"accountNumber\": \"string\",\n    \"routingNumber\": \"780690615\",\n    \"accountType\": \"SAVINGS\",\n    \"accountHolderName\": \"string\",\n    \"bankName\": \"string\",\n    \"swiftCode\": \"string\"\n  },\n  \"description\": \"string\",\n  \"effectiveDate\": \"2007-04-30\",\n  \"sameDayAch\": false,\n  \"transferId\": \"string\",\n  \"status\": \"RETURNED\",\n  \"traceNumber\": \"string\",\n  \"createdAt\": \"1998-05-14T10:30:00.804Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "78801b60-0dab-4526-aae7-d8a88234a28b",
+              "name": "Invalid request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ach",
+                    "transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<double>\",\n  \"entryClassCode\": \"<string>\",\n  \"transactionType\": \"<string>\",\n  \"debtorAccount\": {\n    \"accountNumber\": \"string\",\n    \"routingNumber\": \"359283432\",\n    \"accountType\": \"CHECKING\",\n    \"accountHolderName\": \"string\",\n    \"bankName\": \"string\",\n    \"swiftCode\": \"string\"\n  },\n  \"creditorAccount\": {\n    \"accountNumber\": \"string\",\n    \"routingNumber\": \"106158934\",\n    \"accountType\": \"CHECKING\",\n    \"accountHolderName\": \"string\",\n    \"bankName\": \"string\",\n    \"swiftCode\": \"string\"\n  },\n  \"description\": \"<string>\",\n  \"effectiveDate\": \"<date>\",\n  \"sameDayAch\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cc7b5a79-3f8a-4569-9a7c-359ccb5e5e18",
+          "name": "Submit ACH batch file",
+          "request": {
+            "name": "Submit ACH batch file",
+            "description": {
+              "content": "Submits a batch of ACH transactions (NACHA-formatted file or JSON batch). Used for payroll, vendor payments, and consumer debits.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "ach",
+                "batches"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"companyName\": \"<string>\",\n  \"companyId\": \"<string>\",\n  \"transactions\": [\n    {\n      \"amount\": \"<double>\",\n      \"entryClassCode\": \"<string>\",\n      \"transactionType\": \"<string>\",\n      \"debtorAccount\": {\n        \"accountNumber\": \"<string>\",\n        \"routingNumber\": \"<string>\",\n        \"accountType\": \"<string>\",\n        \"accountHolderName\": \"<string>\",\n        \"bankName\": \"<string>\",\n        \"swiftCode\": \"<string>\"\n      },\n      \"creditorAccount\": {\n        \"accountNumber\": \"<string>\",\n        \"routingNumber\": \"<string>\",\n        \"accountType\": \"<string>\",\n        \"accountHolderName\": \"<string>\",\n        \"bankName\": \"<string>\",\n        \"swiftCode\": \"<string>\"\n      },\n      \"description\": \"<string>\",\n      \"effectiveDate\": \"<date>\",\n      \"sameDayAch\": false\n    },\n    {\n      \"amount\": \"<double>\",\n      \"entryClassCode\": \"<string>\",\n      \"transactionType\": \"<string>\",\n      \"debtorAccount\": {\n        \"accountNumber\": \"<string>\",\n        \"routingNumber\": \"<string>\",\n        \"accountType\": \"<string>\",\n        \"accountHolderName\": \"<string>\",\n        \"bankName\": \"<string>\",\n        \"swiftCode\": \"<string>\"\n      },\n      \"creditorAccount\": {\n        \"accountNumber\": \"<string>\",\n        \"routingNumber\": \"<string>\",\n        \"accountType\": \"<string>\",\n        \"accountHolderName\": \"<string>\",\n        \"bankName\": \"<string>\",\n        \"swiftCode\": \"<string>\"\n      },\n      \"description\": \"<string>\",\n      \"effectiveDate\": \"<date>\",\n      \"sameDayAch\": false\n    }\n  ],\n  \"entryClassCode\": \"<string>\",\n  \"description\": \"<string>\",\n  \"effectiveDate\": \"<date>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4bfec22d-7987-483d-8f95-2e48e171cdfa",
+              "name": "ACH batch submitted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ach",
+                    "batches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"companyName\": \"<string>\",\n  \"companyId\": \"<string>\",\n  \"transactions\": [\n    {\n      \"amount\": 368.322050677853,\n      \"entryClassCode\": \"POP\",\n      \"transactionType\": \"CREDIT\",\n      \"debtorAccount\": {\n        \"accountNumber\": \"string\",\n        \"routingNumber\": \"625159286\",\n        \"accountType\": \"CHECKING\",\n        \"accountHolderName\": \"string\",\n        \"bankName\": \"string\",\n        \"swiftCode\": \"string\"\n      },\n      \"creditorAccount\": {\n        \"accountNumber\": \"string\",\n        \"routingNumber\": \"106099468\",\n        \"accountType\": \"CHECKING\",\n        \"accountHolderName\": \"string\",\n        \"bankName\": \"string\",\n        \"swiftCode\": \"string\"\n      },\n      \"description\": \"string\",\n      \"effectiveDate\": \"2009-01-03\",\n      \"sameDayAch\": false\n    },\n    {\n      \"amount\": 9646.34935262356,\n      \"entryClassCode\": \"WEB\",\n      \"transactionType\": \"CREDIT\",\n      \"debtorAccount\": {\n        \"accountNumber\": \"string\",\n        \"routingNumber\": \"413137610\",\n        \"accountType\": \"CHECKING\",\n        \"accountHolderName\": \"string\",\n        \"bankName\": \"string\",\n        \"swiftCode\": \"string\"\n      },\n      \"creditorAccount\": {\n        \"accountNumber\": \"string\",\n        \"routingNumber\": \"223351195\",\n        \"accountType\": \"LOAN\",\n        \"accountHolderName\": \"string\",\n        \"bankName\": \"string\",\n        \"swiftCode\": \"string\"\n      },\n      \"description\": \"string\",\n      \"effectiveDate\": \"2004-06-23\",\n      \"sameDayAch\": false\n    }\n  ],\n  \"entryClassCode\": \"<string>\",\n  \"description\": \"<string>\",\n  \"effectiveDate\": \"<date>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"batchId\": \"string\",\n  \"status\": \"RECEIVED\",\n  \"transactionCount\": 5666,\n  \"totalDebits\": 9857.352268292952,\n  \"totalCredits\": 1309.7827468219214,\n  \"createdAt\": \"2016-04-01T15:45:34.399Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fisglobal.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "payments:read payments:write accounts:read"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.fisglobal.com/oauth/token"
+      },
+      {
+        "key": "grant_type",
+        "value": "client_credentials"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "b734b8eb-c491-4061-8513-0015ff8c5324",
+    "name": "FIS Payments Accounts ACH API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "FIS (Fidelity National Information Services) Payments API provides programmatic access to payment processing capabilities including ACH transfers, wire payments, card processing, and real-time payment networks. Available through the FIS CodeConnect marketplace for financial institutions and fintech developers.\n\nContact Support:\n Name: FIS CodeConnect Support",
+      "type": "text/plain"
+    }
+  }
+}

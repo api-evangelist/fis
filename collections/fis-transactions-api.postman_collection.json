@@ -1,0 +1,188 @@
+{
+  "item": [
+    {
+      "id": "5f51c160-53bc-4d2e-8dc1-505cf3e93529",
+      "name": "Transactions",
+      "description": {
+        "content": "Transaction history and status",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b06654b3-be2a-4746-91ad-d2101badfa3e",
+          "name": "Get account transactions",
+          "request": {
+            "name": "Get account transactions",
+            "description": {
+              "content": "Returns the transaction history for a specified account with optional date range filtering and pagination.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":accountId",
+                "transactions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fromDate",
+                  "value": "<date>",
+                  "description": "Start date for transaction history (ISO 8601)"
+                },
+                {
+                  "disabled": false,
+                  "key": "toDate",
+                  "value": "<date>",
+                  "description": "End date for transaction history"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "25"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageToken",
+                  "value": "<string>",
+                  "description": "Pagination token from previous response"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "accountId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e759e00b-5828-4f08-a878-b620a148ca76",
+              "name": "Transaction list returned",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":accountId",
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fromDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "toDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "25"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"transactions\": [\n    {\n      \"transactionId\": \"string\",\n      \"accountId\": \"string\",\n      \"amount\": 3377.2758707097705,\n      \"currency\": \"string\",\n      \"type\": \"DEBIT\",\n      \"status\": \"string\",\n      \"description\": \"string\",\n      \"postedDate\": \"2004-01-18\",\n      \"effectiveDate\": \"1979-11-25\",\n      \"balanceAfter\": 9957.760666607184\n    },\n    {\n      \"transactionId\": \"string\",\n      \"accountId\": \"string\",\n      \"amount\": 6109.9194441063455,\n      \"currency\": \"string\",\n      \"type\": \"DEBIT\",\n      \"status\": \"string\",\n      \"description\": \"string\",\n      \"postedDate\": \"2024-10-19\",\n      \"effectiveDate\": \"2001-03-29\",\n      \"balanceAfter\": 5741.427356413516\n    }\n  ],\n  \"nextPageToken\": \"string\",\n  \"totalCount\": 8539\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fisglobal.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "payments:read payments:write accounts:read"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.fisglobal.com/oauth/token"
+      },
+      {
+        "key": "grant_type",
+        "value": "client_credentials"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "60d2416e-07cc-4127-82a8-95e12fb268dd",
+    "name": "FIS Payments Accounts Transactions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "FIS (Fidelity National Information Services) Payments API provides programmatic access to payment processing capabilities including ACH transfers, wire payments, card processing, and real-time payment networks. Available through the FIS CodeConnect marketplace for financial institutions and fintech developers.\n\nContact Support:\n Name: FIS CodeConnect Support",
+      "type": "text/plain"
+    }
+  }
+}

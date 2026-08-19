@@ -1,0 +1,588 @@
+{
+  "item": [
+    {
+      "id": "69afa3b5-e2dd-41bc-81e4-fb39c5d126bb",
+      "name": "Payments",
+      "description": {
+        "content": "Initiate and manage payment transactions",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4b320cee-ae19-48a6-8ef4-04df7b11fb08",
+          "name": "Initiate a payment",
+          "request": {
+            "name": "Initiate a payment",
+            "description": {
+              "content": "Creates a new payment transaction. Supports ACH, wire transfer, RTP (Real-Time Payments), and FedNow payment rails based on the paymentMethod field.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "payments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"paymentMethod\": \"<string>\",\n  \"debtorAccount\": {\n    \"accountNumber\": \"<string>\",\n    \"routingNumber\": \"<string>\",\n    \"accountType\": \"<string>\",\n    \"accountHolderName\": \"<string>\",\n    \"bankName\": \"<string>\",\n    \"swiftCode\": \"<string>\"\n  },\n  \"creditorAccount\": {\n    \"accountNumber\": \"<string>\",\n    \"routingNumber\": \"<string>\",\n    \"accountType\": \"<string>\",\n    \"accountHolderName\": \"<string>\",\n    \"bankName\": \"<string>\",\n    \"swiftCode\": \"<string>\"\n  },\n  \"remittanceInfo\": \"<string>\",\n  \"executionDate\": \"<date>\",\n  \"priority\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "12a3a689-ff45-4e1b-b781-6dcbf493c608",
+              "name": "Payment initiated successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"paymentMethod\": \"<string>\",\n  \"debtorAccount\": {\n    \"accountNumber\": \"string\",\n    \"routingNumber\": \"943445942\",\n    \"accountType\": \"CHECKING\",\n    \"accountHolderName\": \"string\",\n    \"bankName\": \"string\",\n    \"swiftCode\": \"string\"\n  },\n  \"creditorAccount\": {\n    \"accountNumber\": \"string\",\n    \"routingNumber\": \"947965615\",\n    \"accountType\": \"SAVINGS\",\n    \"accountHolderName\": \"string\",\n    \"bankName\": \"string\",\n    \"swiftCode\": \"string\"\n  },\n  \"remittanceInfo\": \"<string>\",\n  \"executionDate\": \"<date>\",\n  \"priority\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"paymentId\": \"string\",\n  \"status\": \"PENDING\",\n  \"amount\": 2514.99575585174,\n  \"currency\": \"string\",\n  \"paymentMethod\": \"string\",\n  \"debtorAccount\": {\n    \"accountNumber\": \"string\",\n    \"routingNumber\": \"141464394\",\n    \"accountType\": \"CHECKING\",\n    \"accountHolderName\": \"string\",\n    \"bankName\": \"string\",\n    \"swiftCode\": \"string\"\n  },\n  \"creditorAccount\": {\n    \"accountNumber\": \"string\",\n    \"routingNumber\": \"642857442\",\n    \"accountType\": \"LOAN\",\n    \"accountHolderName\": \"string\",\n    \"bankName\": \"string\",\n    \"swiftCode\": \"string\"\n  },\n  \"remittanceInfo\": \"string\",\n  \"executionDate\": \"2016-01-16\",\n  \"completedAt\": \"2024-01-15T09:26:19.717Z\",\n  \"createdAt\": \"1986-04-07T11:12:14.847Z\",\n  \"updatedAt\": \"2020-12-11T19:51:10.399Z\",\n  \"failureReason\": \"string\",\n  \"networkTransactionId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "703a017a-be60-4079-a2ad-d184c8792020",
+              "name": "Invalid request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"paymentMethod\": \"<string>\",\n  \"debtorAccount\": {\n    \"accountNumber\": \"string\",\n    \"routingNumber\": \"943445942\",\n    \"accountType\": \"CHECKING\",\n    \"accountHolderName\": \"string\",\n    \"bankName\": \"string\",\n    \"swiftCode\": \"string\"\n  },\n  \"creditorAccount\": {\n    \"accountNumber\": \"string\",\n    \"routingNumber\": \"947965615\",\n    \"accountType\": \"SAVINGS\",\n    \"accountHolderName\": \"string\",\n    \"bankName\": \"string\",\n    \"swiftCode\": \"string\"\n  },\n  \"remittanceInfo\": \"<string>\",\n  \"executionDate\": \"<date>\",\n  \"priority\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"issue\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"issue\": \"string\"\n    }\n  ],\n  \"requestId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f043dd9c-d885-4f31-bf3f-c0d4322417ed",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"paymentMethod\": \"<string>\",\n  \"debtorAccount\": {\n    \"accountNumber\": \"string\",\n    \"routingNumber\": \"943445942\",\n    \"accountType\": \"CHECKING\",\n    \"accountHolderName\": \"string\",\n    \"bankName\": \"string\",\n    \"swiftCode\": \"string\"\n  },\n  \"creditorAccount\": {\n    \"accountNumber\": \"string\",\n    \"routingNumber\": \"947965615\",\n    \"accountType\": \"SAVINGS\",\n    \"accountHolderName\": \"string\",\n    \"bankName\": \"string\",\n    \"swiftCode\": \"string\"\n  },\n  \"remittanceInfo\": \"<string>\",\n  \"executionDate\": \"<date>\",\n  \"priority\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5950d02f-866a-4c6f-af42-b580ad1168c1",
+              "name": "Unprocessable entity – business rule violation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<double>\",\n  \"currency\": \"<string>\",\n  \"paymentMethod\": \"<string>\",\n  \"debtorAccount\": {\n    \"accountNumber\": \"string\",\n    \"routingNumber\": \"943445942\",\n    \"accountType\": \"CHECKING\",\n    \"accountHolderName\": \"string\",\n    \"bankName\": \"string\",\n    \"swiftCode\": \"string\"\n  },\n  \"creditorAccount\": {\n    \"accountNumber\": \"string\",\n    \"routingNumber\": \"947965615\",\n    \"accountType\": \"SAVINGS\",\n    \"accountHolderName\": \"string\",\n    \"bankName\": \"string\",\n    \"swiftCode\": \"string\"\n  },\n  \"remittanceInfo\": \"<string>\",\n  \"executionDate\": \"<date>\",\n  \"priority\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"field\": \"string\",\n      \"issue\": \"string\"\n    },\n    {\n      \"field\": \"string\",\n      \"issue\": \"string\"\n    }\n  ],\n  \"requestId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ab2fd254-5e2f-4cea-8b9a-b5334b4c93b4",
+          "name": "Get payment status",
+          "request": {
+            "name": "Get payment status",
+            "description": {
+              "content": "Returns the current status and details of a specific payment transaction.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "payments",
+                ":paymentId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "paymentId",
+                  "description": "(Required) Unique payment transaction identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "99b394fb-4897-40ac-89d6-e42e20c33113",
+              "name": "Payment details returned",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":paymentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) Unique payment transaction identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"paymentId\": \"string\",\n  \"status\": \"PENDING\",\n  \"amount\": 2514.99575585174,\n  \"currency\": \"string\",\n  \"paymentMethod\": \"string\",\n  \"debtorAccount\": {\n    \"accountNumber\": \"string\",\n    \"routingNumber\": \"141464394\",\n    \"accountType\": \"CHECKING\",\n    \"accountHolderName\": \"string\",\n    \"bankName\": \"string\",\n    \"swiftCode\": \"string\"\n  },\n  \"creditorAccount\": {\n    \"accountNumber\": \"string\",\n    \"routingNumber\": \"642857442\",\n    \"accountType\": \"LOAN\",\n    \"accountHolderName\": \"string\",\n    \"bankName\": \"string\",\n    \"swiftCode\": \"string\"\n  },\n  \"remittanceInfo\": \"string\",\n  \"executionDate\": \"2016-01-16\",\n  \"completedAt\": \"2024-01-15T09:26:19.717Z\",\n  \"createdAt\": \"1986-04-07T11:12:14.847Z\",\n  \"updatedAt\": \"2020-12-11T19:51:10.399Z\",\n  \"failureReason\": \"string\",\n  \"networkTransactionId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1eaaaf41-495f-4140-8e33-263a5c2c1e30",
+              "name": "Payment not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":paymentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) Unique payment transaction identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c5ac7864-99a0-4207-bbc7-bb8e0bd5e240",
+          "name": "Cancel a payment",
+          "request": {
+            "name": "Cancel a payment",
+            "description": {
+              "content": "Cancels a pending payment that has not yet been submitted for processing. Only available for payments in PENDING or SCHEDULED status.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "payments",
+                ":paymentId",
+                "cancel"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "paymentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a8b20aff-9e6c-4250-b00d-6277170f76c3",
+              "name": "Payment cancelled",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":paymentId",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"paymentId\": \"string\",\n  \"status\": \"PENDING\",\n  \"amount\": 2514.99575585174,\n  \"currency\": \"string\",\n  \"paymentMethod\": \"string\",\n  \"debtorAccount\": {\n    \"accountNumber\": \"string\",\n    \"routingNumber\": \"141464394\",\n    \"accountType\": \"CHECKING\",\n    \"accountHolderName\": \"string\",\n    \"bankName\": \"string\",\n    \"swiftCode\": \"string\"\n  },\n  \"creditorAccount\": {\n    \"accountNumber\": \"string\",\n    \"routingNumber\": \"642857442\",\n    \"accountType\": \"LOAN\",\n    \"accountHolderName\": \"string\",\n    \"bankName\": \"string\",\n    \"swiftCode\": \"string\"\n  },\n  \"remittanceInfo\": \"string\",\n  \"executionDate\": \"2016-01-16\",\n  \"completedAt\": \"2024-01-15T09:26:19.717Z\",\n  \"createdAt\": \"1986-04-07T11:12:14.847Z\",\n  \"updatedAt\": \"2020-12-11T19:51:10.399Z\",\n  \"failureReason\": \"string\",\n  \"networkTransactionId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d960a061-5878-4e87-9d5d-0b02f82f28fa",
+              "name": "Payment cannot be cancelled in its current status",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payments",
+                    ":paymentId",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "paymentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fisglobal.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "payments:read payments:write accounts:read"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.fisglobal.com/oauth/token"
+      },
+      {
+        "key": "grant_type",
+        "value": "client_credentials"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "c0b8ac0d-f90b-45a3-82d2-12cf51ade87d",
+    "name": "FIS Accounts Payments API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "FIS (Fidelity National Information Services) Payments API provides programmatic access to payment processing capabilities including ACH transfers, wire payments, card processing, and real-time payment networks. Available through the FIS CodeConnect marketplace for financial institutions and fintech developers.\n\nContact Support:\n Name: FIS CodeConnect Support",
+      "type": "text/plain"
+    }
+  }
+}

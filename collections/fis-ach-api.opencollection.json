@@ -1,0 +1,59 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "FIS Payments Accounts ACH API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "client_credentials",
+      "accessTokenUrl": "https://api.fisglobal.com/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "ACH",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create ACH transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fisglobal.com/v1/ach/transfers",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiates an ACH debit or credit transfer through the NACHA network. Standard ACH settles in 1-2 business days; Same-Day ACH settles same business day."
+        },
+        {
+          "info": {
+            "name": "Submit ACH batch file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fisglobal.com/v1/ach/batches",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submits a batch of ACH transactions (NACHA-formatted file or JSON batch). Used for payroll, vendor payments, and consumer debits."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
