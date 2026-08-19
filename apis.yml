@@ -1,5 +1,6 @@
 aid: fis
 url: https://raw.githubusercontent.com/api-evangelist/fis/refs/heads/main/apis.yml
+specificationVersion: '0.23'
 apis:
 - aid: fis:fis-core-banking-api
   name: FIS Core Banking API
