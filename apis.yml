@@ -7,6 +7,12 @@ apis:
   tags:
   - Banking
   - Core Banking
+  - Financial-Services
+  - Mainframe
+  - SOAP
+  tags_raw:
+  - Banking
+  - Core Banking
   - Financial Services
   - Mainframe
   - SOAP
@@ -25,6 +31,11 @@ apis:
 - aid: fis:fis-wealth-management-api
   name: FIS Wealth Management API
   tags:
+  - Banking
+  - Financial-Services
+  - REST
+  - Wealth Management
+  tags_raw:
   - Banking
   - Financial Services
   - REST
@@ -46,6 +57,8 @@ apis:
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
+  - Account
+  tags_raw:
   - Accounts
   properties:
   - type: OpenAPI
@@ -88,6 +101,8 @@ apis:
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
+  - Transaction
+  tags_raw:
   - Transactions
   properties:
   - type: OpenAPI
@@ -155,6 +170,12 @@ accessModel:
   method: derived
 image: https://raw.githubusercontent.com/api-evangelist/fis/refs/heads/main/image.png
 tags:
+- Banking
+- Core Banking
+- Financial-Services
+- Payments
+- Fintech
+tags_raw:
 - Banking
 - Core Banking
 - Financial Services
