@@ -126,6 +126,9 @@ apis:
   - type: Documentation
     url: https://codeconnect.fisglobal.com/
 common:
+- type: CapabilityMap
+  url: capabilities/fis-capability-edges.yml
+  name: FIS Global Business Capability Map
 - type: AgenticAccess
   url: agentic-access/fis-agentic-access.yml
 - type: DomainSecurity
