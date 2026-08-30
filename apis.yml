@@ -16,7 +16,6 @@ apis:
   - Financial Services
   - Mainframe
   - SOAP
-  image: https://raw.githubusercontent.com/api-evangelist/fis/refs/heads/main/image.png
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   properties:
@@ -40,7 +39,6 @@ apis:
   - Financial Services
   - REST
   - Wealth Management
-  image: https://raw.githubusercontent.com/api-evangelist/fis/refs/heads/main/image.png
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   properties:
@@ -171,7 +169,6 @@ accessModel:
   - authentication
   generated: '2026-07-22'
   method: derived
-image: https://raw.githubusercontent.com/api-evangelist/fis/refs/heads/main/image.png
 tags:
 - Banking
 - Core Banking
