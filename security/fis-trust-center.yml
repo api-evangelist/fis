@@ -1,0 +1,24 @@
+generated: '2026-09-10'
+method: probed
+source: DNS + HTTP probes of the conventional trust-center hosts and a search of fisglobal.com
+trust_center:
+  exists: false
+certifications: []
+note: >-
+  No public FIS trust center was found. trust.fisglobal.com, security.fisglobal.com and
+  status.fisglobal.com all return NXDOMAIN, and no certification index (SOC 2 / ISO 27001 /
+  PCI DSS attestation listing) is published on a page a member of the public can reach without
+  a customer login. FIS publishes compliance material inside client and RFP channels rather
+  than on an open trust page, so this is a recorded absence of a PUBLIC surface, not a claim
+  that FIS holds no certifications. No Compliance pointer is emitted, because there is no
+  published compliance program page to point at.
+evidence:
+- url: https://trust.fisglobal.com
+  status: 0
+  detail: NXDOMAIN
+- url: https://security.fisglobal.com
+  status: 0
+  detail: NXDOMAIN
+- url: https://status.fisglobal.com
+  status: 0
+  detail: NXDOMAIN

@@ -1,0 +1,129 @@
+generated: '2026-09-10'
+method: derived
+source: openapi/_original/fis-accounting-data-as-a-service-openapi.json (4xx/5xx responses) enriched from
+  https://docs.railz.ai/reference/errors
+docs: https://docs.railz.ai/reference/errors
+api: FIS Accounting Data as a Service
+format: vendor
+format_note: 'Not RFC 9457. No operation returns application/problem+json and no `type` URI is minted.
+  The envelope is a vendor shape: a top-level object with `error` and `payload`, where `error` carries
+  statusCode, message and error. `message` is an ARRAY of strings, not a string — a client that renders
+  it as a scalar will print [object Object].'
+envelope:
+  schema: Error400ResponseDto
+  fields:
+    error: object — the fault itself
+    payload: object — always present, empty on failure
+  error_fields:
+    statusCode: number, echoes the HTTP status
+    message: ARRAY of strings, one per failed field
+    error: string, the reason phrase e.g. "Bad Request"
+  example_message:
+  - businessName cannot be null
+field_validation:
+  schema: Validation
+  shape: '{ errors: [ { field, message } ] }'
+  note: A second, separate validation shape also exists in components.schemas (Error/Validation, keyed
+    on `field` and `message`). Two error vocabularies coexist in one contract.
+coverage:
+  operations_total: 233
+  with_400: 232
+  with_401: 232
+  with_403: 232
+  with_404: 1
+  with_500: 232
+  note: 400/401/403/500 are declared on 232 of 233 operations — near-total and consistent. 404 is declared
+    on exactly ONE operation despite 32 operations taking an {id} path parameter, and 429 is declared
+    on NONE even though the docs list it and the API enforces it. A generated client will not model either.
+problems:
+- status: 400
+  title: Bad Request
+  in_contract: true
+  operations_declaring: 232
+  remediation: 'Fix the request. The message field is an ARRAY of per-field validation strings (example:
+    "businessName cannot be null"); read every element, not just the first.'
+  schema: Error400ResponseDto
+  description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+  source_operations:
+  - GET /connections#connections
+  - PUT /connections/disconnect#disable connection
+  - GET /v2/connections#connections
+- status: 401
+  title: Unauthorized
+  in_contract: true
+  operations_declaring: 232
+  remediation: Mint a fresh access_token. Tokens expire after 60 minutes and the docs recommend minting
+    one before each call.
+  schema: Error401ResponseDto
+  description: Unauthorized - Not logged in or log in expired
+  source_operations:
+  - GET /connections#connections
+  - PUT /connections/disconnect#disable connection
+  - GET /v2/connections#connections
+- status: 403
+  title: Forbidden
+  in_contract: true
+  operations_declaring: 232
+  remediation: The token is valid but the team lacks entitlement to that connection or data type. Check
+    the key mode (SB_ vs ID_) and the connection scope; do not retry.
+  schema: Error403ResponseDto
+  description: Forbidden - Not enough permission
+  source_operations:
+  - GET /connections#connections
+  - PUT /connections/disconnect#disable connection
+  - GET /v2/connections#connections
+- status: 404
+  title: Not Found
+  in_contract: true
+  operations_declaring: 1
+  remediation: The identified resource does not exist for this connection. Do not retry.
+  schema: Error404Dto
+  source_operations:
+  - POST /v2/businesses/generateUrl#generateUrl
+- status: 409
+  title: Conflict
+  in_contract: false
+  operations_declaring: 0
+  remediation: Conflicting state, documented in the response-code reference but not attached to any operation
+    in the contract.
+  source: https://docs.railz.ai/reference/errors
+- status: 429
+  title: Too Many Requests
+  in_contract: false
+  operations_declaring: 0
+  remediation: Back off exponentially. No Retry-After and no RateLimit-* header is emitted, so the interval
+    is the client’s own choice.
+  source: https://docs.railz.ai/reference/errors
+- status: 500
+  title: Internal Server Error
+  in_contract: true
+  operations_declaring: 232
+  remediation: Server fault. Safe to retry an idempotent GET; a POST/PUT has no replay protection, so
+    retrying a write may duplicate it.
+  schema: Error500ResponseDto
+  description: Server Error
+  source_operations:
+  - GET /connections#connections
+  - PUT /connections/disconnect#disable connection
+  - GET /v2/connections#connections
+- status: 502
+  title: Bad Gateway
+  in_contract: false
+  operations_declaring: 0
+  remediation: Upstream gateway fault, documented in the response-code reference but not attached to any
+    operation in the contract.
+  source: https://docs.railz.ai/reference/errors
+- status: 503
+  title: Service Unavailable
+  in_contract: false
+  operations_declaring: 0
+  remediation: Service unavailable, documented in the response-code reference but not attached to any
+    operation in the contract.
+  source: https://docs.railz.ai/reference/errors
+- status: 504
+  title: Gateway Timeout
+  in_contract: false
+  operations_declaring: 0
+  remediation: Gateway timeout, documented in the response-code reference but not attached to any operation
+    in the contract.
+  source: https://docs.railz.ai/reference/errors

@@ -1,0 +1,79 @@
+generated: '2026-09-10'
+method: derived
+source: openapi/_original/fis-accounting-data-as-a-service-openapi.json + https://fisglobal.com/.well-known/security.txt + docs.railz.ai
+standards:
+- id: openapi-3.0
+  conforms: true
+  evidence: openapi/_original/fis-accounting-data-as-a-service-openapi.json declares openapi 3.0.0 with 175 paths and 233 operations.
+- id: rfc9116-security-txt
+  conforms: true
+  partial: true
+  evidence: https://fisglobal.com/.well-known/security.txt serves the required Contact and Expires fields plus Policy, Acknowledgments, Preferred-Languages and Hiring.
+  deviations:
+  - Expires lapsed 2023-12-31, which RFC 9116 §6.6 says clients should treat as stale.
+  - Served as text/html rather than the text/plain required by §3.
+- id: rfc6750-bearer-token
+  conforms: true
+  evidence: components.securitySchemes.bearer declares type http, scheme bearer, bearerFormat JWT; docs specify the Authorization Bearer header.
+- id: rfc7617-basic-auth
+  conforms: true
+  evidence: Token minting uses HTTP Basic with client_id as username and secret_key as password (docs.railz.ai/reference/authentication).
+- id: oauth2
+  conforms: false
+  evidence: No oauth2 securityScheme, no authorization or token URL, and no scope map anywhere in the contract. The token exchange is a bespoke Basic-to-bearer swap, not an OAuth 2.0 grant.
+- id: oidc
+  conforms: false
+  evidence: No /.well-known/openid-configuration on any FIS or Railz host; every probe returned 301, 403, 404, or an SPA shell.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: No operation returns application/problem+json. The error envelope is a vendor shape with no `type` URI. See errors/fis-problem-types.yml.
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: No Sunset or Deprecation header is documented or emitted, and no operation is flagged deprecated despite a v1 surface superseded by /v2/.
+- id: rfc9110-idempotency
+  conforms: false
+  evidence: No Idempotency-Key or equivalent on any of the 86 mutating operations. See conventions/fis-conventions.yml.
+- id: json-api
+  conforms: false
+  evidence: Responses are a bespoke { data, meta } shape, not JSON:API media type or document structure.
+- id: hsts
+  conforms: true
+  evidence: 'Strict-Transport-Security: max-age=31536000; includeSubDomains observed on api.railz.ai and on fisglobal.com.'
+- id: webhooks
+  conforms: true
+  evidence: A nine-value event enum is declared in the contract (components.schemas.FireWebhookConnectionV2Dto.event) with a sandbox trigger operation. See asyncapi/fis-webhooks.yml.
+- id: asyncapi
+  conforms: false
+  evidence: Webhooks are documented in prose and a sandbox trigger, but no AsyncAPI document is published on any host.
+domain_standards:
+- id: ofx
+  conforms: false
+  evidence: >-
+    Probed because this is an accounting/banking data API and OFX is the incumbent exchange
+    format in that market. No OFX message type, element name, or version string appears anywhere
+    in the 809 schemas; the contract is a bespoke JSON model.
+- id: iso-20022
+  conforms: false
+  evidence: >-
+    Probed because FIS is a payments processor and ISO 20022 is the standard for its sector. The
+    public contract is an accounting-data read/write surface, not a payment-message surface, and
+    carries no pacs/pain/camt message type. FIS's ISO 20022 payment surfaces, if any, sit behind
+    Code Connect and could not be read.
+- id: fdx
+  conforms: false
+  evidence: >-
+    Probed because FDX is the US financial-data-sharing standard and this API aggregates
+    financial data. No FDX resource path, entity name, or version marker appears in the
+    contract; the connection/consent model is proprietary to the Connect widget.
+domain_standard_note: >-
+  REWARD-ONLY check, and FIS earns nothing on it from its public surface. The three standards
+  its market actually speaks — OFX for accounting exchange, ISO 20022 for payment messaging,
+  FDX for consented financial-data sharing — are each absent from the one contract that can be
+  read. That is a finding about the readable surface, not a claim that FIS does not implement
+  them elsewhere: its ISO 20022 work is real and sits inside licensed core-banking products
+  that publish nothing publicly.
+compliance:
+  published: false
+  note: >-
+    No public certification index. See security/fis-trust-center.yml. No Compliance pointer is
+    emitted, because there is no published compliance page to point at.

@@ -1,0 +1,60 @@
+generated: '2026-09-10'
+method: searched
+source: https://docs.railz.ai/changelog + https://status.railz.ai/ + openapi/_original/fis-accounting-data-as-a-service-openapi.json
+versioning:
+  scheme: uri-path
+  current: v2
+  docs: https://docs.railz.ai/changelog
+  detail: >-
+    Versioning is per-path, not per-host. The contract carries both an unprefixed v1 surface
+    (/accounts, /connections, /refunds) and a /v2/ surface that supersedes it (/v2/accounting/accounts,
+    /v2/connections). info.version is "v2". Both generations are live in the same document —
+    of the 175 paths, roughly half are the older unprefixed form.
+  policy_published: false
+deprecation:
+  policy_url: null
+  sunset_header: false
+  detail: >-
+    No deprecation policy and no RFC 8594 Sunset/Deprecation header support is published, and
+    not one of the 233 operations is flagged `deprecated: true` in the contract — including the
+    unprefixed v1 operations that the /v2/ paths plainly replace. A consumer on the v1 surface
+    has no machine-readable signal that it is superseded and no stated retirement date.
+sla:
+  url: null
+  uptime_target: null
+  note: >-
+    No published SLA for the Accounting Data as a Service API. Code Connect's marketing copy
+    claims 99.9%/99.99% portal up-time for the marketplace UI, which is not an API SLA and is
+    not recorded as one.
+status_page:
+  url: https://status.railz.ai
+  public: true
+  http_status: 200
+  platform: Atlassian Statuspage
+  page_name: FIS Accounting Data as a Service™
+  api: https://status.railz.ai/api/v2/summary.json
+  api_status: 200
+  detail: >-
+    Public and machine-readable. Components are broken out per upstream accounting system
+    (QuickBooks Desktop, FreshBooks, and others), which is the useful granularity for this
+    product — a consumer can tell which connector is degraded, not just whether the API is up.
+other_status_pages:
+- url: https://codeconnectstatus.statuspage.io/
+  public: false
+  http_status: 302
+  detail: >-
+    Code Connect has a Statuspage but it is private — the root 302s to a Microsoft Entra SAML
+    login and the JSON API answers 401 "Your page is a private page." It is recorded here so a
+    later run does not re-discover it as a public surface; no StatusPage pointer is emitted for it.
+changelog:
+  url: https://docs.railz.ai/changelog
+  cadence: quarterly
+  latest: '2026-09-02'
+deprecated_operations: []
+evidence:
+- url: https://status.railz.ai/api/v2/summary.json
+  status: 200
+- url: https://codeconnectstatus.statuspage.io/api/v2/summary.json
+  status: 401
+- url: https://docs.railz.ai/changelog
+  status: 200

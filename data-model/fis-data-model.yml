@@ -1,0 +1,681 @@
+generated: '2026-09-10'
+method: derived
+source: openapi/_original/fis-accounting-data-as-a-service-openapi.json
+api: FIS Accounting Data as a Service
+note: 'Derived from the contract''s own path shape and shared parameters. The graph has an unusual centre
+  for an accounting API: nothing hangs off a customer or an account, everything hangs off a CONNECTION
+  — the authorised link to an upstream accounting or banking system that Connect creates. connectionUuid
+  is a parameter on 84 operations and businessName on 58, and those two are the join keys for the entire
+  surface.'
+root_entities:
+- name: connection
+  id_field: connectionUuid
+  id_prefix: CON-
+  id_example: CON-004f4cbe-e9ba-46c0-a7ef-2da661fe0e15
+  description: An authorised link to one upstream system for one business. Created through the Connect
+    widget, not through the REST API.
+  evidence: components.schemas.FireWebhookConnectionV2Dto.connectionUuid example
+- name: business
+  id_field: businessName
+  description: The end customer whose books are being read or written.
+entities:
+- name: bills
+  operations: 20
+  paths:
+  - /bills
+  - /bills/creditNotes
+  - /bills/payments
+  - /bills/{id}
+- name: invoices
+  operations: 16
+  paths:
+  - /invoices
+  - /invoices/creditNotes
+  - /invoices/payments
+  - /v2/accounting/invoices
+- name: visualizations
+  operations: 16
+  paths:
+  - /v2/visualizations/balanceSheets
+  - /v2/visualizations/bankAccounts
+  - /v2/visualizations/bankReconciliation
+  - /v2/visualizations/bills
+- name: businesses
+  operations: 12
+  paths:
+  - /businesses
+  - /businesses/info
+  - /businesses/{businessName}
+  - /v2/businesses
+- name: analytics
+  operations: 11
+  paths:
+  - /v2/analytics/bankReconciliation
+  - /v2/analytics/businessValuations
+  - /v2/analytics/creditRatings
+  - /v2/analytics/creditScores
+- name: vendors
+  operations: 11
+  paths:
+  - /v2/accounting/vendors
+  - /v2/accounting/vendors/bankAccounts
+  - /v2/accounting/vendors/bankAccounts/{id}
+  - /v2/accounting/vendors/batch
+- name: customers
+  operations: 10
+  paths:
+  - /customers
+  - /customers/{id}
+  - /v2/accounting/customers
+  - /v2/accounting/customers/bankAccounts
+- name: reports
+  operations: 10
+  paths:
+  - /reports/balanceSheets
+  - /reports/bills
+  - /reports/cashflowStatements
+  - /reports/credits
+- name: data
+  operations: 9
+  paths:
+  - /data/pushStatus
+  - /data/sync
+  - /data/syncStatus
+  - /v2/data/deleteStatus
+- name: journalEntries
+  operations: 8
+  paths:
+  - /journalEntries
+  - /journalEntries/{id}
+  - /v2/accounting/journalEntries
+  - /v2/accounting/journalEntries/batch
+- name: commerce
+  operations: 8
+  paths:
+  - /commerce/disputes
+  - /commerce/orders
+  - /commerce/products
+  - /commerce/transactions
+- name: accounts
+  operations: 7
+  paths:
+  - /accounts
+  - /v2/accounting/accounts
+  - /v2/accounting/accounts/batch
+  - /v2/accounting/accounts/{id}
+- name: bankTransactions
+  operations: 7
+  paths:
+  - /bankTransactions
+  - /v2/accounting/bankTransactions
+  - /v2/accounting/bankTransactions/batch
+  - /v2/accounting/bankTransactions/{id}
+- name: inventory
+  operations: 6
+  paths:
+  - /inventory
+  - /inventory/{id}
+  - /v2/accounting/inventory
+  - /v2/accounting/inventory/{id}
+- name: connections
+  operations: 4
+  paths:
+  - /connections
+  - /connections/disconnect
+  - /v2/connections
+  - /v2/connections/disconnect
+- name: attachments
+  operations: 4
+  paths:
+  - /attachments
+  - /v2/accounting/attachments
+- name: bankTransfers
+  operations: 4
+  paths:
+  - /bankTransfers
+  - /v2/accounting/bankTransfers
+- name: deposits
+  operations: 4
+  paths:
+  - /deposits
+  - /v2/accounting/deposits
+- name: estimates
+  operations: 4
+  paths:
+  - /estimates
+  - /v2/accounting/estimates
+- name: purchaseOrders
+  operations: 4
+  paths:
+  - /purchaseOrders
+  - /v2/accounting/purchaseOrders
+- name: refunds
+  operations: 4
+  paths:
+  - /refunds
+  - /v2/accounting/refunds
+- name: trackingCategories
+  operations: 4
+  paths:
+  - /trackingCategories
+  - /v2/accounting/trackingCategories
+- name: bankAccounts
+  operations: 3
+  paths:
+  - /bankAccounts
+  - /v2/accounting/bankAccounts
+- name: banking
+  operations: 3
+  paths:
+  - /v2/banking/bankAccounts
+  - /v2/banking/bankAssets
+  - /v2/banking/bankTransactions
+- name: balanceSheets
+  operations: 3
+  paths:
+  - /balanceSheets
+  - /v2/accounting/balanceSheets
+  - /v2/accounting/balanceSheets/report
+- name: cashflowStatements
+  operations: 3
+  paths:
+  - /cashflowStatements
+  - /v2/accounting/cashflowStatements
+  - /v2/accounting/cashflowStatements/report
+- name: incomeStatements
+  operations: 3
+  paths:
+  - /incomeStatements
+  - /v2/accounting/incomeStatements
+  - /v2/accounting/incomeStatements/report
+- name: journals
+  operations: 3
+  paths:
+  - /v2/accounting/journals
+  - /v2/accounting/journals/{id}
+- name: taxRates
+  operations: 3
+  paths:
+  - /taxRates
+  - /v2/accounting/taxRates
+- name: accountingTransactions
+  operations: 2
+  paths:
+  - /accountingTransactions
+  - /v2/accounting/accountingTransactions
+- name: apAging
+  operations: 2
+  paths:
+  - /apAging
+  - /v2/accounting/apAging
+- name: arAging
+  operations: 2
+  paths:
+  - /arAging
+  - /v2/accounting/arAging
+- name: trialBalances
+  operations: 2
+  paths:
+  - /trialBalances
+  - /v2/accounting/trialBalances
+- name: expenses
+  operations: 2
+  paths:
+  - /v2/accounting/expenses
+- name: sandbox
+  operations: 2
+  paths:
+  - /sandbox/fireWebhooks
+  - /v2/sandbox/fireWebhooks
+- name: bankReconciliation
+  operations: 1
+  paths:
+  - /bankReconciliation
+- name: businessValuations
+  operations: 1
+  paths:
+  - /businessValuations
+- name: creditScores
+  operations: 1
+  paths:
+  - /creditScores
+- name: creditRatings
+  operations: 1
+  paths:
+  - /creditRatings
+- name: financialBenchmarking
+  operations: 1
+  paths:
+  - /financialBenchmarking
+- name: financialForecasts
+  operations: 1
+  paths:
+  - /financialForecasts
+- name: fraudRiskMetrics
+  operations: 1
+  paths:
+  - /fraudRiskMetrics
+- name: financialRatios
+  operations: 1
+  paths:
+  - /financialRatios
+- name: portfolioMetrics
+  operations: 1
+  paths:
+  - /portfolioMetrics
+- name: probabilityOfDefault
+  operations: 1
+  paths:
+  - /probabilityOfDefault
+- name: taxBenchmarking
+  operations: 1
+  paths:
+  - /taxBenchmarking
+- name: taxAuthority
+  operations: 1
+  paths:
+  - /v2/accounting/taxAuthority
+- name: paymentMethods
+  operations: 1
+  paths:
+  - /v2/accounting/paymentMethods
+- name: contacts
+  operations: 1
+  paths:
+  - /v2/accounting/contacts
+- name: payrollTransactions
+  operations: 1
+  paths:
+  - /v2/accounting/payrollTransactions
+- name: budgets
+  operations: 1
+  paths:
+  - /v2/accounting/budgets
+- name: fileUpload
+  operations: 1
+  paths:
+  - /v2/accounting/fileUpload/{type}
+relationships:
+- from: accountingTransactions
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: accountingTransactions
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: accounts
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: accounts
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: analytics
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: apAging
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: apAging
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: arAging
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: arAging
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: attachments
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: attachments
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: balanceSheets
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: balanceSheets
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: bankAccounts
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: bankAccounts
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: bankReconciliation
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: bankTransactions
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: bankTransactions
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: bankTransfers
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: bankTransfers
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: banking
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: bills
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: bills
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: budgets
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: businessValuations
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: businesses
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: businesses
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: cashflowStatements
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: cashflowStatements
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: commerce
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: commerce
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: connections
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: connections
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: contacts
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: creditRatings
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: creditScores
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: customers
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: customers
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: data
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: data
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: deposits
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: deposits
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: estimates
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: estimates
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: expenses
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: financialForecasts
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: financialRatios
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: fraudRiskMetrics
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: incomeStatements
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: incomeStatements
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: inventory
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: inventory
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: invoices
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: invoices
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: journalEntries
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: journalEntries
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: journals
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: paymentMethods
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: payrollTransactions
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: probabilityOfDefault
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: purchaseOrders
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: purchaseOrders
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: refunds
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: refunds
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: reports
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: taxAuthority
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: taxRates
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: taxRates
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: trackingCategories
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: trackingCategories
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: trialBalances
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: trialBalances
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: vendors
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+- from: vendors
+  to: businesses
+  type: belongs_to
+  via: businessName
+  evidence: businessName query parameter
+- from: visualizations
+  to: connections
+  type: belongs_to
+  via: connectionUuid
+  evidence: connectionUuid query parameter
+schema_count: 809
+counts:
+  paths: 175
+  operations: 233
+  schemas: 809
+versioning_note: Entities are duplicated across the v1 and v2 generations of the surface — /accounts and
+  /v2/accounting/accounts are the same entity reached two ways — which is why the schema count (809) is
+  roughly double what the distinct entity set needs.

@@ -1,17 +1,83 @@
-generated: '2026-07-11'
-method: derived
-source: openapi/fis-payments-openapi.yml
+generated: '2026-09-10'
+method: searched
+source: https://docs.railz.ai/reference/authentication
+docs: https://docs.railz.ai/reference/authentication
+supersedes:
+  note: >-
+    Replaces the 2026-07-11 derived profile, which read its OAuth2 clientCredentials scheme and
+    a tokenUrl of https://api.fisglobal.com/oauth/token out of openapi/_original/fis-payments-openapi.yml.
+    That host does not resolve in DNS and the scheme is not corroborated by any FIS document
+    that can be reached without a Code Connect account, so it is not carried forward as fact.
 summary:
   types:
-  - oauth2
-  oauth2_flows:
-  - clientCredentials
+  - http
+  - basic
+  oauth2_flows: []
+  note: >-
+    Two distinct authentication surfaces, only one of which is publicly documented.
+surfaces:
+- api: FIS Accounting Data as a Service
+  base_url: https://api.railz.ai
+  documented: true
+  model: two-step bearer
+  steps:
+  - step: 1
+    name: Mint an access token
+    description: >-
+      HTTP Basic against the Get Access Token endpoint. The API identifier client_id is the
+      Basic username and the secret_key is the password, base64 encoded.
+    scheme: basic
+  - step: 2
+    name: Call the API
+    description: 'Present the minted token as an Authorization header: Bearer <access_token>, on every request.'
+    scheme: bearer
+  token:
+    lifetime_minutes: 60
+    format: JWT
+    guidance: The docs recommend minting a fresh access_token before each call rather than caching to the edge of its life.
+  credentials:
+    key_prefixes:
+      sandbox: SB_
+      production: ID_
+    max_keys_per_team: 5
+    rotation: Keys never expire on their own; revocation is by deleting the key in the Dashboard.
+  transport:
+    https_required: true
+    note: 'Docs state plainly: calls made over plain HTTP will fail.'
+  spec_evidence:
+    file: openapi/_original/fis-accounting-data-as-a-service-openapi.json
+    securitySchemes:
+    - name: bearer
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    applied: false
+    gap: >-
+      The contract DEFINES the bearer scheme in components.securitySchemes but declares no
+      top-level `security` and applies it to none of the 233 operations. A generated client
+      reading the spec alone would send no credential and take a 401 on every call; the
+      requirement is only in prose.
+- api: FIS Code Connect (core banking, payments, wealth)
+  base_url: null
+  documented: false
+  model: unknown
+  note: >-
+    Code Connect documents authentication at
+    https://codeconnect.fisglobal.com/app/guides/authenticate, but that route renders inside an
+    Angular application that serves the same shell to an unauthenticated crawler, and the
+    marketplace requires a reviewed registration before the catalog or the key-generation flow
+    is visible. The auth model is therefore not publicly readable, and none is asserted here.
 schemes:
-- name: OAuth2ClientCredentials
-  type: oauth2
-  flows:
-  - flow: clientCredentials
-    tokenUrl: https://api.fisglobal.com/oauth/token
-    scopes: 3
+- name: bearer
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
   sources:
-  - openapi/fis-payments-openapi.yml
+  - openapi/_original/fis-accounting-data-as-a-service-openapi.json
+  - https://docs.railz.ai/reference/authentication
+- name: basic
+  type: http
+  scheme: basic
+  used_for: token minting only
+  sources:
+  - https://docs.railz.ai/reference/authentication

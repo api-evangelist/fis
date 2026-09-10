@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: FIS Payments Accounts Wire Transfers API
   description: FIS (Fidelity National Information Services) Payments API provides programmatic access to payment processing capabilities including ACH transfers, wire payments, card processing, and real-time payment networks. Available through the FIS CodeConnect marketplace for financial institutions and fintech developers.
@@ -44,32 +44,6 @@ paths:
           description: Invalid request
 components:
   schemas:
-    AccountReference:
-      type: object
-      required:
-      - accountNumber
-      - routingNumber
-      properties:
-        accountNumber:
-          type: string
-          description: Bank account number
-        routingNumber:
-          type: string
-          pattern: ^\d{9}$
-          description: ABA routing transit number (9 digits)
-        accountType:
-          type: string
-          enum:
-          - CHECKING
-          - SAVINGS
-          - LOAN
-        accountHolderName:
-          type: string
-        bankName:
-          type: string
-        swiftCode:
-          type: string
-          description: SWIFT/BIC code for international wires
     WireTransferRequest:
       type: object
       required:
@@ -101,6 +75,32 @@ components:
           maxLength: 140
         instructionForCreditorAgent:
           type: string
+    AccountReference:
+      type: object
+      required:
+      - accountNumber
+      - routingNumber
+      properties:
+        accountNumber:
+          type: string
+          description: Bank account number
+        routingNumber:
+          type: string
+          pattern: ^\d{9}$
+          description: ABA routing transit number (9 digits)
+        accountType:
+          type: string
+          enum:
+          - CHECKING
+          - SAVINGS
+          - LOAN
+        accountHolderName:
+          type: string
+        bankName:
+          type: string
+        swiftCode:
+          type: string
+          description: SWIFT/BIC code for international wires
     WireTransfer:
       allOf:
       - $ref: '#/components/schemas/WireTransferRequest'

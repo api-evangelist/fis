@@ -1,0 +1,28 @@
+generated: '2026-09-10'
+method: generated
+source: openapi/_original/fis-accounting-data-as-a-service-openapi.json + conventions/fis-conventions.yml + errors/fis-problem-types.yml
+api: FIS Accounting Data as a Service
+note: >-
+  Three packaged skills covering the marquee flows of the one FIS API with a publicly readable
+  contract. Every operationId in every skill was grepped out of the harvested spec; none is
+  invented. No skills are written for FIS Code Connect core banking, payments or wealth — their
+  contracts sit behind a reviewed registration and there is nothing to ground a skill in.
+skills:
+- name: fis-onboard-a-business-connection
+  file: fis-onboard-a-business-connection.md
+  summary: Create the business, generate a Connect URL, wait for the connection, confirm the first sync.
+  operations: 5
+- name: fis-read-a-customers-financials
+  file: fis-read-a-customers-financials.md
+  summary: Read accounts, invoices, bills, customers and derived analytics with correct pagination and the cash/accrual switch.
+  operations: 7
+- name: fis-push-a-record-into-the-ledger
+  file: fis-push-a-record-into-the-ledger.md
+  summary: Write back into a customer's books, confirm asynchronously, and handle the total absence of idempotency.
+  operations: 9
+provider_published_skills:
+  found: false
+  searched:
+  - https://docs.railz.ai/llms.txt (404)
+  - https://docs.railz.ai/AGENTS.md (not served)
+  - https://github.com/railz-ai (no skills or AGENTS.md in any public repo)

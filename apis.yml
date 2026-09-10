@@ -23,10 +23,7 @@ apis:
     type: Portal
   - url: https://codeconnect.fisglobal.com/
     type: Documentation
-  description: >-
-    FIS (Fidelity National Information Services) provides core banking platforms including the Systematics
-    suite. APIs bridge mainframe-based account processing, transaction management, and loan servicing
-    systems to modern integration layers via SOAP and REST interfaces.
+  description: FIS (Fidelity National Information Services) provides core banking platforms including the Systematics suite. APIs bridge mainframe-based account processing, transaction management, and loan servicing systems to modern integration layers via SOAP and REST interfaces.
 - aid: fis:fis-wealth-management-api
   name: FIS Wealth Management API
   tags:
@@ -46,9 +43,7 @@ apis:
     type: Portal
   - url: https://codeconnect.fisglobal.com/
     type: Documentation
-  description: >-
-    FIS wealth management APIs enable integration with portfolio management, account aggregation, trading,
-    and advisory systems for wealth management platforms and financial advisors.
+  description: FIS wealth management APIs enable integration with portfolio management, account aggregation, trading, and advisory systems for wealth management platforms and financial advisors.
 - aid: fis:fis-accounts-api
   name: FIS Global Accounts API
   description: Account information and balance inquiries
@@ -123,28 +118,134 @@ apis:
     url: https://codeconnect.fisglobal.com/
   - type: Documentation
     url: https://codeconnect.fisglobal.com/
+- aid: fis:fis-accounting-data-as-a-service
+  name: FIS Accounting Data as a Service
+  image: https://codeconnect.fisglobal.com/assets/FIS_codeConnect_logo_white.svg
+  description: 'FIS Accounting Data as a Service (shipped as Railz before FIS acquired it) reads and writes a business''s accounting, banking and commerce data through an authorised connection to that business''s own system. It is the one FIS API whose contract is publicly readable end to end: an OpenAPI 3.0.0 document served openly at https://api.railz.ai/swagger.json with 175 paths and 233 operations across two live generations. Everything is scoped by a connectionUuid created through the Connect widget.'
+  humanURL: https://docs.railz.ai/
+  baseURL: https://api.railz.ai
+  tags:
+  - Accounting
+  - Financial-Services
+  - Data
+  - Banking
+  - REST
+  tags_raw:
+  - Accounting
+  - Financial Services
+  - Data
+  - Banking
+  - REST
+  properties:
+  - type: OpenAPI
+    url: openapi/_original/fis-accounting-data-as-a-service-openapi.json
+  - type: Overlay
+    url: overlays/fis-accounting-data-as-a-service-overlay.yaml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: MCPServer
+    url: mcp/fis-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fidelity-national-information:code-connect
+  name: FIS Code Connect API Marketplace
+  description: FIS Code Connect is the developer marketplace exposing FIS APIs across payments, banking, capital markets, and wealth management products. Access to most APIs requires a partner agreement and authenticated developer credentials.
+  humanURL: https://codeconnect.fisglobal.com/
+  tags:
+  - API Marketplace
+  - Payments
+  - Banking
+  - Capital Markets
+  properties:
+  - type: Documentation
+    url: https://codeconnect.fisglobal.com/
 common:
-- type: CapabilityMap
-  url: capabilities/fis-capability-edges.yml
-  name: FIS Global Business Capability Map
+- type: InvestorRelations
+  url: https://investor.fisglobal.com/
 - type: AgenticAccess
   url: agentic-access/fis-agentic-access.yml
 - type: DomainSecurity
   url: security/fis-domain-security.yml
 - type: Authentication
   url: authentication/fis-authentication.yml
-- type: OAuthScopes
-  url: scopes/fis-scopes.yml
 - type: GitHubOrganization
   url: https://github.com/FISGlobal
 - type: LinkedIn
   url: https://www.linkedin.com/company/fis
+- type: Website
+  url: https://www.fisglobal.com/
+- type: WellKnown
+  url: well-known/fis-well-known.yml
+- type: SecurityTxt
+  url: well-known/fis-security.txt
+- type: VulnerabilityDisclosure
+  url: security/fis-vulnerability-disclosure.yml
+- type: Security
+  url: https://www.fisglobal.com/en/responsible-disclosure
+- type: TrustCenter
+  url: security/fis-trust-center.yml
+- type: Packages
+  url: packages/fis-packages.yml
+- type: SDKs
+  url: packages/fis-packages.yml
+- type: Components
+  url: components/fis-components.yml
+- type: Sandbox
+  url: sandbox/fis-sandbox.yml
+- type: Lifecycle
+  url: lifecycle/fis-lifecycle.yml
+- type: StatusPage
+  url: https://status.railz.ai
+- type: ChangeLog
+  url: changelog/fis-changelog.yml
+- type: RateLimits
+  url: rate-limits/fis-rate-limits.yml
+- type: Plans
+  url: plans/fis-plans-pricing.yml
+- type: ErrorCatalog
+  url: errors/fis-problem-types.yml
+- type: Conventions
+  url: conventions/fis-conventions.yml
+- type: DataModel
+  url: data-model/fis-data-model.yml
+- type: Conformance
+  url: conformance/fis-conformance.yml
+- type: Webhooks
+  url: asyncapi/fis-webhooks.yml
+- type: MCPServer
+  url: mcp/fis-mcp.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/fis-llms.txt
+- type: DeveloperPortal
+  url: https://codeconnect.fisglobal.com/
+- type: Documentation
+  url: https://docs.railz.ai/
+- type: APIReference
+  url: https://docs.railz.ai/reference
+- type: GettingStarted
+  url: https://codeconnect.fisglobal.com/app/guides/gettingstarted
+- type: SignUp
+  url: https://codeconnect.fisglobal.com/app/userregister
+- type: Support
+  url: https://codeconnect.fisglobal.com/app/guides/faqs
+- type: Pricing
+  url: https://www.fisglobal.com/products/accounting-data-as-a-service
+- type: TermsOfService
+  url: https://www.fisglobal.com/terms-of-use
+- type: PrivacyPolicy
+  url: https://www.fisglobal.com/privacy
+- type: Blog
+  url: https://www.fisglobal.com/insights
 name: FIS Global
-description: >-
-  FIS (Fidelity National Information Services) is a global leader in financial technology
-  providing APIs for core banking, payments, wealth management, and capital markets
-  through the CodeConnect API marketplace. APIs connect financial institutions,
-  fintechs, and enterprises to FIS banking and payment infrastructure.
+description: FIS (Fidelity National Information Services) is a global leader in financial technology providing APIs for core banking, payments, wealth management, and capital markets through the CodeConnect API marketplace. APIs connect financial institutions, fintechs, and enterprises to FIS banking and payment infrastructure.
 deliveryModel:
   model: unknown
   open_source: false
@@ -192,9 +293,9 @@ properties:
   type: PrivacyPolicy
 - url: https://www.fisglobal.com/
   type: Website
-- url: https://www.fisglobal.com/blog
+- url: https://www.fisglobal.com/insights
   type: Blog
-- url: openapi/fis-payments-openapi.yml
+- url: openapi/_original/fis-payments-openapi.yml
   type: OpenAPI
 - url: json-schema/fis-payment-schema.json
   type: JSONSchema
@@ -203,4 +304,45 @@ properties:
 maintainer:
   name: Kin Lane
   email: kin@apievangelist.com
-modified: '2026-04-28'
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
+  url: https://apievangelist.com
+  X-twitter: apievangelist
+image: https://codeconnect.fisglobal.com/assets/FIS_codeConnect_logo_white.svg
+created: '2026-04-28'
+modified: '2026-09-10'
+x-spec-provenance-flag:
+  date: '2026-09-10'
+  severity: high
+  applies_to:
+  - openapi/_original/fis-payments-openapi.yml
+  - openapi/fis-accounts-api-openapi.yml
+  - openapi/fis-ach-api-openapi.yml
+  - openapi/fis-payments-api-openapi.yml
+  - openapi/fis-transactions-api-openapi.yml
+  - openapi/fis-wire-transfers-api-openapi.yml
+  finding: 'The FIS Payments OpenAPI in openapi/_original/, and the five per-tag specs split from it, declare servers[] of https://api.fisglobal.com/v1 and https://sandbox.api.fisglobal.com/v1. Neither host resolves in DNS — both return NXDOMAIN as of 2026-09-10 — and the same api.fisglobal.com value is carried as the baseURL on six apis[] entries. No FIS document reachable without a Code Connect account names either host, and FIS''s own developer index at https://www.fisglobal.com/developer names four product portals, none of them api.fisglobal.com. This pass therefore treated that spec as unverified: no new artifact in this repository is derived from it, and the authentication and scopes artifacts that previously were have been rewritten from the provider''s own published documentation instead.'
+  action: Needs a scaffold-sweep decision on whether the spec was harvested or authored. Not deleted here; deleting six wired specs is outside the scope of an enrichment pass.
+  evidence:
+  - probe: dig api.fisglobal.com
+    result: NXDOMAIN
+  - probe: dig sandbox.api.fisglobal.com
+    result: NXDOMAIN
+x-enrichment:
+  date: '2026-09-10'
+  status: enriched
+  artifacts_added: 24
+  pass: local-v3
+x-coverage:
+  state: covered
+  reason: covered
+  detail: One FIS API is fully readable — FIS Accounting Data as a Service serves an OpenAPI 3.0.0 with 233 operations openly at https://api.railz.ai/swagger.json — while the Code Connect marketplace holding core banking, payments and wealth renders its catalog inside an Angular application and requires a reviewed registration, with FIS-representative approval for any API not classified "Public".
+  evidence:
+  - url: https://api.railz.ai/swagger.json
+    status: 200
+  - url: https://codeconnect.fisglobal.com/app/apicatalog
+    status: 200
+  - url: https://fisglobal.com/.well-known/security.txt
+    status: 200
+  checked: '2026-09-10'

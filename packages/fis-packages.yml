@@ -1,0 +1,132 @@
+generated: '2026-09-10'
+method: searched
+source: https://registry.npmjs.org/ (per-package metadata endpoint), reached from the @railzai scope named in the FIS Accounting Data as a Service docs
+ownership_note: >-
+  The @railzai npm scope and the github.com/railz-ai organisation are the publishing surface of
+  Railz, acquired by FIS and now shipped as FIS Accounting Data as a Service — FIS's own
+  developer page (https://www.fisglobal.com/developer) lists dashboard.railz.ai as one of its
+  four product developer portals, the OpenAPI at api.railz.ai declares info.title
+  "FIS Accounting Data as a Service™ API", and docs.railz.ai resolves through a ReadMe tenant
+  named fis-accounting-group. The packages carry the pre-acquisition Railz name; the product is FIS.
+registries_probed:
+- npm
+- pypi
+- rubygems
+- packagist
+- crates.io
+- maven-central
+- nuget
+- pkg.go.dev
+packages:
+- language: javascript
+  registry: npm
+  name: '@railzai/railz-connect'
+  url: https://www.npmjs.com/package/@railzai/railz-connect
+  install: npm install @railzai/railz-connect
+  official: true
+  version: 2.23.0
+  published: '2025-01-29'
+  repository: https://github.com/railz-ai/railz-connect
+  note: Connect widget — the account-linking flow a customer embeds to authorise an accounting-system connection.
+- language: javascript
+  registry: npm
+  name: '@railzai/railz-visualizations'
+  url: https://www.npmjs.com/package/@railzai/railz-visualizations
+  install: npm install @railzai/railz-visualizations
+  official: true
+  version: 0.0.8-alpha.52
+  published: '2025-12-05'
+  repository: https://github.com/railz-ai/railz-visualizations
+  note: Still on an alpha pre-release line after four years; no stable 1.x has ever been published.
+- language: javascript
+  registry: npm
+  name: '@railzai/railz-visualizations-react'
+  url: https://www.npmjs.com/package/@railzai/railz-visualizations-react
+  install: npm install @railzai/railz-visualizations-react
+  official: true
+  version: 0.0.8-alpha.52
+  published: '2025-12-05'
+  repository: https://github.com/railz-ai/railz-visualizations
+- language: javascript
+  registry: npm
+  name: '@railzai/railz-visualizations-angular'
+  url: https://www.npmjs.com/package/@railzai/railz-visualizations-angular
+  install: npm install @railzai/railz-visualizations-angular
+  official: true
+  version: 0.0.8-alpha.52
+  published: '2025-12-05'
+  repository: https://github.com/railz-ai/railz-visualizations
+- language: javascript
+  registry: npm
+  name: '@railzai/railz-uikit'
+  url: https://www.npmjs.com/package/@railzai/railz-uikit
+  install: npm install @railzai/railz-uikit
+  official: true
+  version: 0.0.1-alpha.68
+  published: '2025-08-28'
+  repository: https://github.com/railz-ai/railz-uikit
+- language: javascript
+  registry: npm
+  name: '@railzai/railz-uikit-react'
+  url: https://www.npmjs.com/package/@railzai/railz-uikit-react
+  install: npm install @railzai/railz-uikit-react
+  official: true
+  version: 0.0.1-alpha.68
+  published: '2025-08-28'
+  repository: https://github.com/railz-ai/railz-uikit
+- language: javascript
+  registry: npm
+  name: '@railzai/railz-tokens'
+  url: https://www.npmjs.com/package/@railzai/railz-tokens
+  install: npm install @railzai/railz-tokens
+  official: true
+  version: 0.0.1-alpha.68
+  published: '2025-08-28'
+  repository: https://github.com/railz-ai/railz-uikit
+- language: javascript
+  registry: npm
+  name: '@railzai/railz-uikit-angular'
+  url: https://www.npmjs.com/package/@railzai/railz-uikit-angular
+  install: npm install @railzai/railz-uikit-angular
+  official: true
+  version: 0.0.1-alpha.52
+  published: '2023-06-05'
+  repository: https://github.com/railz-ai/railz-uikit
+  note: Last published 2023-06-05 — three years behind the React line of the same kit.
+- language: javascript
+  registry: npm
+  name: '@railzai/railz-uikit-vue'
+  url: https://www.npmjs.com/package/@railzai/railz-uikit-vue
+  install: npm install @railzai/railz-uikit-vue
+  official: true
+  version: 0.0.1-alpha.52
+  published: '2023-06-05'
+  repository: https://github.com/railz-ai/railz-uikit
+  note: Last published 2023-06-05 — three years behind the React line of the same kit.
+not_found:
+- registry: pypi
+  query: railz
+  status: 404
+  note: No first-party Python client.
+- registry: npm
+  query: fis-global / fisglobal / codeconnect
+  version: null
+  note: >-
+    No first-party client library was found for FIS Code Connect itself on any registry. Code
+    Connect documents SDKs at /app/guides/sdk, but that page and the SDK downloads sit behind
+    the marketplace registration wall, so nothing is publicly installable.
+excluded:
+- name: '@worldpay/*'
+  reason: >-
+    Worldpay is no longer FIS. FIS sold its majority stake in 2024 and Worldpay was subsequently
+    acquired by Global Payments; the @worldpay npm scope is not an FIS surface and is not counted here.
+- name: railz-client
+  reason: npm description says "Unofficial Railz API client" — third party, official:false, not counted.
+coverage:
+  official_count: 9
+  languages:
+  - javascript
+  note: >-
+    Every first-party package is a browser/JS surface — an embeddable Connect widget, a UI kit
+    and a charting library. There is no server-side API client in any language for the 233
+    operations the REST contract exposes; integrators call it over plain HTTP.

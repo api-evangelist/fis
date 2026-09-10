@@ -3,43 +3,47 @@ specificationVersion: '0.1'
 schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
 provider: FIS
 providerId: fis
+generated: '2026-09-10'
+method: probed
+source: https://docs.railz.ai/reference/errors + observed response headers on https://api.railz.ai/v2/connections
 created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-05'
-reconciled: false
+modified: '2026-09-10'
+limit_count: 0
 tags:
-  - Banking
-  - Core Banking
-  - Financial Services
-  - Payments
-  - Wealth Management
-  - Rate Limiting
-description: FIS does not publish numeric rate limits for its public-facing API products. Throttles are sized per FI customer's licensed capacity tier and are governed by the master service agreement. Public 429/503 conventions apply to web-facing endpoints; legacy mainframe and IBS connectors typically operate on session/queue throughput limits rather than HTTP rate limits.
-notes: No public RPS/RPM numbers published. Scaffold trimmed to a single umbrella entry. Per-FI limits are set during onboarding/capacity planning.
-sources:
-  - https://www.fisglobal.com/
-  - https://developer.fis.com/
-responseCodes:
+- Banking
+- Financial Services
+- Payments
+- Rate Limiting
+description: >-
+  FIS publishes no numeric rate limit for any of its APIs, and the one live public API emits no
+  rate-limit headers. An agent calling FIS Accounting Data as a Service has no way to know how
+  much budget it has left; it can only discover exhaustion by taking a 429.
+limits: []
+response_codes:
   throttled: 429
-  serviceUnavailable: 503
-limits:
-  - name: Per-customer FI throttle
-    scope: customer/api-key
-    metric: varies
-    limit: per-FI capacity tier; not publicly published
-    applies:
-      - FIS Core Banking API
-      - FIS Payments API
-      - FIS Wealth Management API
+  service_unavailable: 503
+headers:
+  observed: []
+  note: >-
+    An unauthenticated GET to https://api.railz.ai/v2/connections on 2026-09-10 returned 401
+    with a full security-header set (HSTS, CSP, X-Content-Type-Options, Referrer-Policy) and NO
+    RateLimit-* , X-RateLimit-* or Retry-After header of any kind. The docs likewise document
+    429 without naming a header, a threshold, a window, or a reset field.
+documented_guidance:
+- source: https://docs.railz.ai/reference/errors
+  detail: >-
+    429 is listed as one of fifteen documented status codes, with the guidance "We recommend an
+    exponential backoff of your requests." No threshold and no reset signal accompanies it.
 policies:
-  - name: Backoff Strategy
-    description: Clients should implement exponential backoff with jitter on 429/5xx responses; Retry-After is honored when emitted.
-  - name: Capacity Tiering
-    description: Throughput is provisioned per customer financial institution at onboarding; raises require account-team engagement and capacity planning.
-  - name: Settlement / Batch Windows
-    description: Batch and settlement windows on core banking and payments products may impose stricter throttles or queueing during cutoff periods.
-  - name: Sandbox vs Production
-    description: Sandbox throughput is intentionally low and unsuitable for performance/load testing; production load tests must be coordinated with the FIS account team.
-maintainers: []
+- name: Backoff
+  description: Exponential backoff on 429, per the provider's own wording. Retry-After is not emitted, so the interval is the client's guess.
+undocumented_products:
+- name: FIS Code Connect
+  note: Throughput is provisioned per financial institution at onboarding under the master service agreement; no public number exists.
+evidence:
+- url: https://api.railz.ai/v2/connections
+  status: 401
+  detail: No rate-limit header present in the response.
+- url: https://docs.railz.ai/reference/errors
+  status: 200
+  detail: 429 documented; no limit, window, or header named.

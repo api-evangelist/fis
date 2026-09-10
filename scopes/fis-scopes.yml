@@ -1,28 +1,27 @@
-generated: '2026-07-11'
-method: derived
-source: openapi/fis-payments-openapi.yml
-schemes:
-- name: OAuth2ClientCredentials
-  source: openapi/fis-payments-openapi.yml
-  flows:
-  - flow: clientCredentials
-    tokenUrl: https://api.fisglobal.com/oauth/token
-scopes:
-- scope: accounts:read
-  description: Read account information
-  flows:
-  - clientCredentials
-  sources:
-  - openapi/fis-payments-openapi.yml
-- scope: payments:read
-  description: Read payment data
-  flows:
-  - clientCredentials
-  sources:
-  - openapi/fis-payments-openapi.yml
-- scope: payments:write
-  description: Create and modify payments
-  flows:
-  - clientCredentials
-  sources:
-  - openapi/fis-payments-openapi.yml
+generated: '2026-09-10'
+method: searched
+source: https://docs.railz.ai/reference/authentication + openapi/_original/fis-accounting-data-as-a-service-openapi.json
+scope_count: 0
+schemes: []
+scopes: []
+note: >-
+  FIS publishes no OAuth scope surface that a member of the public can read. The one public
+  contract, FIS Accounting Data as a Service, authenticates with an opaque bearer token minted
+  from a Basic-auth key pair — it declares no oauth2 securityScheme and no scopes, so there is
+  nothing to enumerate. FIS Code Connect generates client keys behind a reviewed registration;
+  whatever scope model it uses is not visible without an account.
+supersedes:
+  note: >-
+    Replaces the 2026-07-11 derived file, which listed accounts:read / payments:read /
+    payments:write against a tokenUrl of https://api.fisglobal.com/oauth/token. That host
+    returns NXDOMAIN and no FIS document reachable without a Code Connect account corroborates
+    those scope names, so they are withdrawn rather than carried forward. The OAuthScopes
+    pointer is withdrawn from apis.yml with them — an empty scope surface should not be
+    credited as a documented one.
+evidence:
+- url: https://api.railz.ai/swagger.json
+  status: 200
+  detail: 'securitySchemes contains only a bearer entry of type http, scheme bearer; no oauth2 flow and no scopes map.'
+- url: https://codeconnect.fisglobal.com/app/guides/authenticate
+  status: 200
+  detail: 200 returns the Angular application shell; the guide body renders only after login.

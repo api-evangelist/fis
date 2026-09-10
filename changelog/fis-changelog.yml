@@ -1,0 +1,27 @@
+generated: '2026-09-10'
+method: searched
+source: https://docs.railz.ai/changelog
+product: FIS Accounting Data as a Service
+url: https://docs.railz.ai/changelog
+scheme: quarterly-release
+url_pattern: https://docs.railz.ai/changelog/{YYYY-MM-DD}-{quarter}
+current_version: Q3.1
+paginated: true
+entries:
+- version: Q3.1
+  date: '2026-09-02'
+  url: https://docs.railz.ai/changelog/2026-09-02-q31
+- version: Q2.2
+  date: '2026-07-20'
+- version: Q2.1
+  date: '2026-06-16'
+- version: Q1.2
+  date: '2026-04-21'
+- version: Q1.1
+  date: '2026-03-17'
+note: >-
+  A dated, paginated release log on a quarterly cadence with two releases per quarter, current
+  to eight days before this pass. Entry bodies were not transcribed — the index gives dates and
+  release identifiers only, and breaking-vs-additive is not labelled on the index, so no
+  breaking flag is asserted for any entry.
+window: most recent five releases

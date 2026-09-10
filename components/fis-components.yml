@@ -1,0 +1,49 @@
+generated: '2026-09-10'
+method: searched
+source: https://docs.railz.ai/ + the @railzai npm scope
+note: >-
+  Client-side embeddable surfaces for FIS Accounting Data as a Service. Distinct from SDKs —
+  these render UI in the integrator's own page rather than wrapping the REST contract.
+families:
+- name: Connect
+  description: >-
+    The hosted account-linking flow an integrator embeds so their customer can authorise a
+    connection to an accounting, banking, or commerce system. Produces the connectionUuid that
+    every data operation in the REST contract takes as a parameter.
+  loader: '@railzai/railz-connect'
+  version: 2.23.0
+  published: '2025-01-29'
+  frameworks:
+  - javascript
+- name: UI Kit
+  description: Design-system component library and design tokens for building an accounting-data surface.
+  loader: '@railzai/railz-uikit'
+  version: 0.0.1-alpha.68
+  published: '2025-08-28'
+  frameworks:
+  - javascript
+  - react
+  - angular
+  - vue
+  wrappers:
+  - '@railzai/railz-uikit-react'
+  - '@railzai/railz-uikit-angular'
+  - '@railzai/railz-uikit-vue'
+  - '@railzai/railz-tokens'
+  note: The Angular and Vue wrappers were last published 2023-06-05; only the core and React wrapper are current.
+- name: Visualizations
+  description: Prebuilt charts over the financial statements, ratios and benchmarking data the API returns.
+  loader: '@railzai/railz-visualizations'
+  version: 0.0.8-alpha.52
+  published: '2025-12-05'
+  frameworks:
+  - javascript
+  - react
+  - angular
+  wrappers:
+  - '@railzai/railz-visualizations-react'
+  - '@railzai/railz-visualizations-angular'
+  note: Never released past 0.0.8-alpha.
+coverage:
+  family_count: 3
+  package_count: 9

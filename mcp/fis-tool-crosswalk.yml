@@ -1,0 +1,359 @@
+generated: '2026-09-10'
+method: derived
+source: mcp/fis-mcp.yml + openapi/_original/fis-accounting-data-as-a-service-openapi.json
+api: FIS Accounting Data as a Service
+surfaces:
+  openapi:
+    file: openapi/_original/fis-accounting-data-as-a-service-openapi.json
+    url: https://api.railz.ai/swagger.json
+    status: 200
+    gated: false
+    operations: 233
+  graphql:
+    endpoint: null
+    note: No GraphQL surface exists on any FIS or Railz host.
+  mcp:
+    url: https://docs.railz.ai/mcp
+    status: 401
+    gated: true
+    note: tools/list requires a bearer token; the live tool set could not be read. The endpoint is ReadMe's
+      documentation MCP, not an FIS API tool surface.
+crosswalk: []
+crosswalk_note: EMPTY ON PURPOSE, and the emptiness is the finding. The only MCP endpoint FIS exposes
+  is a documentation-retrieval server provided by its docs platform; it does not bind to REST operations,
+  so there is no tool to bind. Mapping speculative tool names onto operationIds here would manufacture
+  an agent surface FIS has not built.
+mcp_only: []
+rest_only:
+- capability: visualizations
+  operations:
+  - bankAccountsVisualizations
+  - bankReconciliationVisualizations
+  - businessValuationVisualizations
+  - credits
+  - financialForecasts report
+  - financialForecasts summary eligibility
+  - reportBalanceSheets
+  - reportBills
+  - reportCashflowStatements
+  - reportExpenses
+  - reportFinancialRatios
+  - reportIncomeStatements
+  - reportInvoices
+  - reportRailzScore
+  - reportRevenue
+  - taxbenchmarkingVisualizations
+  count: 16
+- capability: bills
+  operations:
+  - bill-creditNotes
+  - bill-paymentRequests
+  - billsPayments
+  - delete-bill-payments
+  - delete-bills
+  - getBills
+  - post-bill-paymentRequests
+  - push-bill-creditNotes
+  - push-bills
+  - push-bills-payments
+  - put-bill-paymentRequests
+  - put-bills
+  - put-bills-payments
+  count: 13
+- capability: analytics
+  operations:
+  - bankReconciliation
+  - businessValuations
+  - creditRatings
+  - creditScores
+  - financialBenchmarking
+  - financialForecasts
+  - financialFraudMetrics
+  - financialRatios
+  - getPortfolioMetrics
+  - probabilityOfDefaults
+  - taxbenchmarking
+  count: 11
+- capability: invoices
+  operations:
+  - delete-invoices
+  - delete-invoices-payments
+  - invoice-creditNotes
+  - invoices
+  - invoicesPayments
+  - push-invoices
+  - push-invoices-creditNotes
+  - push-invoices-payments
+  - update-invoices
+  - update-invoices-payments
+  count: 10
+- capability: reports
+  operations:
+  - credits
+  - reportBalanceSheets
+  - reportBills
+  - reportCashflowStatements
+  - reportExpenses
+  - reportFinancialRatios
+  - reportIncomeStatements
+  - reportInvoices
+  - reportRailzScore
+  - reportRevenue
+  count: 10
+- capability: vendors
+  operations:
+  - push-batchVendors
+  - push-vendors
+  - push-vendors-bankAccounts
+  - put-vendor
+  - put-vendors-bankAccounts
+  - update-batchVendors
+  - vendors
+  - vendors-bankAccounts
+  count: 8
+- capability: businesses
+  operations:
+  - businessInfo
+  - create businesses
+  - delete business by name
+  - generateUrl
+  - get businesses
+  - migrateConnection
+  - update businesses
+  count: 7
+- capability: customers
+  operations:
+  - customers
+  - customers-bankAccounts
+  - post-batchCustomer
+  - push-customers
+  - push-customers-bankAccounts
+  - put-customer
+  - update-batchCustomer
+  count: 7
+- capability: data
+  operations:
+  - dataSync
+  - deleteStatus
+  - pushOptions
+  - pushStatus
+  - syncInfo
+  - syncStatus
+  count: 6
+- capability: bankTransactions
+  operations:
+  - accounting-bankTransactions
+  - bankTransactions
+  - push-bankTransaction
+  - push-batchbankTransaction
+  - update-bankTransaction
+  - update-batchbankTransaction
+  count: 6
+- capability: accounts
+  operations:
+  - accounts
+  - push-accounts
+  - push-batchAccounts
+  - update-accounts
+  - update-batchAccounts
+  count: 5
+- capability: journalEntries
+  operations:
+  - journalEntries
+  - push-batchJournalEntries
+  - push-journalEntries
+  - put-journalEntries
+  - update-batchJournalEntries
+  count: 5
+- capability: commerce
+  operations:
+  - dispute
+  - order
+  - product
+  - transactions
+  count: 4
+- capability: bankAccounts
+  operations:
+  - accounting-BankAccounts
+  - bankAccounts
+  - push-accountingBankAccounts
+  count: 3
+- capability: banking
+  operations:
+  - bankAccounts
+  - bankAssets
+  - bankTransactions
+  count: 3
+- capability: inventory
+  operations:
+  - inventory
+  - push-inventory
+  - put-inventory
+  count: 3
+- capability: journals
+  operations:
+  - journals
+  - push-journals
+  - update-journals
+  count: 3
+- capability: connections
+  operations:
+  - connections
+  - disable connection
+  count: 2
+- capability: attachments
+  operations:
+  - attachments
+  - pushAttachment
+  count: 2
+- capability: bankTransfers
+  operations:
+  - bankTransfers
+  - push-bankTransfer
+  count: 2
+- capability: deposits
+  operations:
+  - deposits
+  - push-deposit
+  count: 2
+- capability: estimates
+  operations:
+  - estimates
+  - push-estimates
+  count: 2
+- capability: balanceSheets
+  operations:
+  - balanceSheets
+  - balanceSheetsReport
+  count: 2
+- capability: cashflowStatements
+  operations:
+  - cashflowStatements
+  - cashflowStatementsReport
+  count: 2
+- capability: incomeStatements
+  operations:
+  - incomeStatements
+  - incomeStatementsReport
+  count: 2
+- capability: purchaseOrders
+  operations:
+  - purchaseOrder
+  - push-purchaseOrders
+  count: 2
+- capability: refunds
+  operations:
+  - push-refund
+  - refund
+  count: 2
+- capability: taxRates
+  operations:
+  - push-taxRates
+  - taxRates
+  count: 2
+- capability: trackingCategories
+  operations:
+  - push-trackingCategories
+  - trackingCategories
+  count: 2
+- capability: expenses
+  operations:
+  - Expense
+  - push-expense
+  count: 2
+- capability: sandbox
+  operations:
+  - FeederSandboxControllerV2_fireWebhook_v2
+  - FeederSandboxController_fireWebhook
+  count: 2
+- capability: accountingTransactions
+  operations:
+  - accountingTransactions
+  count: 1
+- capability: apAging
+  operations:
+  - apAging
+  count: 1
+- capability: arAging
+  operations:
+  - arAging
+  count: 1
+- capability: bankReconciliation
+  operations:
+  - bankReconciliation
+  count: 1
+- capability: businessValuations
+  operations:
+  - businessValuations
+  count: 1
+- capability: creditScores
+  operations:
+  - creditScores
+  count: 1
+- capability: creditRatings
+  operations:
+  - creditRatings
+  count: 1
+- capability: financialBenchmarking
+  operations:
+  - benchmarking
+  count: 1
+- capability: financialForecasts
+  operations:
+  - financialForecasts
+  count: 1
+- capability: fraudRiskMetrics
+  operations:
+  - financialFraudMetrics
+  count: 1
+- capability: financialRatios
+  operations:
+  - financialRatios
+  count: 1
+- capability: portfolioMetrics
+  operations:
+  - getPortfolioMetrics
+  count: 1
+- capability: probabilityOfDefault
+  operations:
+  - probabilityOfDefaults
+  count: 1
+- capability: taxBenchmarking
+  operations:
+  - taxbenchmarking
+  count: 1
+- capability: taxAuthority
+  operations:
+  - taxAuthority
+  count: 1
+- capability: trialBalances
+  operations:
+  - trialBalance
+  count: 1
+- capability: paymentMethods
+  operations:
+  - paymentMethod
+  count: 1
+- capability: contacts
+  operations:
+  - contacts
+  count: 1
+- capability: payrollTransactions
+  operations:
+  - payrollTransactions
+  count: 1
+- capability: budgets
+  operations:
+  - budget
+  count: 1
+- capability: fileUpload
+  operations:
+  - uploadFile
+  count: 1
+coverage:
+  tools_named: 0
+  tools_bound: 0
+  mcp_only: 0
+  rest_operations_total: 233
+  rest_operations_with_a_tool: 0
+  note: 233 of 233 REST operations have no MCP tool. Every capability below is reachable only over HTTP.

@@ -1,0 +1,51 @@
+generated: '2026-09-10'
+method: searched
+source: https://docs.railz.ai/reference/authentication
+sandbox:
+  exists: true
+  product: FIS Accounting Data as a Service
+  model: key-prefix
+  description: >-
+    Sandbox and production are selected by which secret key you present, not by a separate
+    hostname — the same https://api.railz.ai base serves both. This is why the OpenAPI declares
+    only one server.
+key_prefixes:
+- mode: sandbox
+  prefix: SB_
+  field: secret_key
+- mode: production
+  prefix: ID_
+  field: secret_key
+credential_rules:
+- Integration API keys do not expire on their own; they stop working only when deleted through the Dashboard.
+- A maximum of 5 keys may exist per team.
+- An access_token minted from a key is valid for 60 minutes.
+fixtures_and_triggers:
+- name: Fire webhooks
+  operation: POST /v2/sandbox/fireWebhooks
+  source_operation: openapi/_original/fis-accounting-data-as-a-service-openapi.json#fireWebhooks
+  description: >-
+    Sandbox-only trigger that emits a chosen webhook event against a chosen connectionUuid, so
+    an integrator can rehearse webhook handling without waiting for a real accounting-system
+    event. Event values are taken verbatim from the spec enum.
+  events:
+  - login
+  - auth
+  - connectionStatus
+  - customerRequest
+  - data
+  - dataPerType
+  - push
+  - batchPush
+  - delete
+- name: Fire webhooks (v1)
+  operation: POST /sandbox/fireWebhooks
+  note: The v1 sibling of the same trigger; still present in the contract.
+test_values:
+  note: >-
+    No published test card numbers, test bank accounts or magic identifiers — the sandbox is
+    populated by connecting a sandbox accounting system through Connect, not by fixed fixtures,
+    so there is nothing to record verbatim here and nothing was invented.
+console:
+  url: https://dashboard.railz.ai/
+  note: Key creation, webhook configuration and sandbox/production mode all live in the Dashboard, which requires an account.

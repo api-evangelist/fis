@@ -1,0 +1,46 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for FIS Accounting Data as a Service
+  version: 1.0.0
+extends: openapi/_original/fis-accounting-data-as-a-service-openapi.json
+x-generated: '2026-09-10'
+x-method: generated
+x-source: derived from this repository's own artifacts; the original contract is never mutated
+actions:
+- target: $.info
+  update:
+    x-apievangelist-profile: https://apis.io/provider/fis/
+    x-apievangelist-harvested-from: https://api.railz.ai/swagger.json
+    x-apievangelist-harvested-on: '2026-09-10'
+    x-provider: FIS
+    x-product-history: >-
+      Shipped as Railz until FIS acquired the company; FIS's own developer page lists
+      dashboard.railz.ai as an FIS developer portal and info.title is FIS-branded.
+- target: $.info
+  update:
+    contact:
+      name: FIS Accounting Data as a Service
+      url: https://docs.railz.ai/
+- target: $
+  update:
+    security:
+    - bearer: []
+    x-apievangelist-note-security: >-
+      The original declares the bearer scheme in components.securitySchemes but applies it to no
+      operation and declares no top-level security. This overlay adds the top-level requirement
+      the docs state in prose, so a generated client sends a credential instead of taking a 401
+      on every call. It does not change the API.
+- target: $.info
+  update:
+    x-apievangelist-gaps:
+      idempotency: none — no Idempotency-Key on any of the 86 mutating operations
+      rate_limit_headers: none emitted; 429 documented without a threshold or Retry-After
+      request_tracing: no correlation or request-id header
+      deprecation: v1 operations superseded by /v2/ are not flagged deprecated
+      error_format: vendor envelope, not RFC 9457; message is an array of strings
+      four_oh_four: declared on 1 operation despite 32 operations taking an {id} path parameter
+      tags: the contract declares no tags at all, so no operation is grouped
+- target: $.externalDocs
+  update:
+    description: FIS Accounting Data as a Service documentation
+    url: https://docs.railz.ai/

@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: FIS Payments Accounts ACH API
   description: FIS (Fidelity National Information Services) Payments API provides programmatic access to payment processing capabilities including ACH transfers, wire payments, card processing, and real-time payment networks. Available through the FIS CodeConnect marketplace for financial institutions and fintech developers.
@@ -96,6 +96,53 @@ components:
           items:
             $ref: '#/components/schemas/AchTransferRequest'
           maxItems: 10000
+    AccountReference:
+      type: object
+      required:
+      - accountNumber
+      - routingNumber
+      properties:
+        accountNumber:
+          type: string
+          description: Bank account number
+        routingNumber:
+          type: string
+          pattern: ^\d{9}$
+          description: ABA routing transit number (9 digits)
+        accountType:
+          type: string
+          enum:
+          - CHECKING
+          - SAVINGS
+          - LOAN
+        accountHolderName:
+          type: string
+        bankName:
+          type: string
+        swiftCode:
+          type: string
+          description: SWIFT/BIC code for international wires
+    AchTransfer:
+      allOf:
+      - $ref: '#/components/schemas/AchTransferRequest'
+      - type: object
+        properties:
+          transferId:
+            type: string
+          status:
+            type: string
+            enum:
+            - CREATED
+            - SUBMITTED
+            - SETTLED
+            - RETURNED
+            - REJECTED
+          traceNumber:
+            type: string
+            description: NACHA trace number
+          createdAt:
+            type: string
+            format: date-time
     AchTransferRequest:
       type: object
       required:
@@ -163,53 +210,6 @@ components:
         createdAt:
           type: string
           format: date-time
-    AchTransfer:
-      allOf:
-      - $ref: '#/components/schemas/AchTransferRequest'
-      - type: object
-        properties:
-          transferId:
-            type: string
-          status:
-            type: string
-            enum:
-            - CREATED
-            - SUBMITTED
-            - SETTLED
-            - RETURNED
-            - REJECTED
-          traceNumber:
-            type: string
-            description: NACHA trace number
-          createdAt:
-            type: string
-            format: date-time
-    AccountReference:
-      type: object
-      required:
-      - accountNumber
-      - routingNumber
-      properties:
-        accountNumber:
-          type: string
-          description: Bank account number
-        routingNumber:
-          type: string
-          pattern: ^\d{9}$
-          description: ABA routing transit number (9 digits)
-        accountType:
-          type: string
-          enum:
-          - CHECKING
-          - SAVINGS
-          - LOAN
-        accountHolderName:
-          type: string
-        bankName:
-          type: string
-        swiftCode:
-          type: string
-          description: SWIFT/BIC code for international wires
   securitySchemes:
     OAuth2ClientCredentials:
       type: oauth2

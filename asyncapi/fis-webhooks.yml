@@ -1,0 +1,121 @@
+generated: '2026-09-10'
+method: searched
+source: https://docs.railz.ai/reference/webhooks + openapi/_original/fis-accounting-data-as-a-service-openapi.json
+api: FIS Accounting Data as a Service
+asyncapi_published: false
+asyncapi_note: FIS publishes no AsyncAPI document on any host. The event surface is real and is documented
+  in prose plus a sandbox trigger operation, so it is captured here as a webhook catalogue rather than
+  fabricated into an AsyncAPI we would have authored ourselves.
+transport: http-webhook
+configuration:
+  where: https://dashboard.railz.ai/
+  docs: https://docs.railz.ai/reference/webhooks
+  limit: A maximum of 5 webhook event types may be registered per URL.
+  api_configurable: false
+  note: Webhook endpoints and event subscriptions are configured in the Dashboard UI only — there is no
+    REST operation to register or list a webhook, so an agent cannot set up its own event delivery.
+security:
+  mechanisms:
+  - webhook signature
+  - webhook authorization header
+  detail: The docs recommend verifying delivery with either a webhook signature or an authorization header
+    on the callback. The signing algorithm and header name are documented on the webhook-security page
+    rather than in the contract.
+  signature_algorithm: null
+events:
+- name: login
+  source: openapi components.schemas.FireWebhookConnectionV2Dto.event enum
+- name: auth
+  source: openapi components.schemas.FireWebhookConnectionV2Dto.event enum
+- name: connectionStatus
+  source: openapi components.schemas.FireWebhookConnectionV2Dto.event enum
+- name: customerRequest
+  source: openapi components.schemas.FireWebhookConnectionV2Dto.event enum
+- name: data
+  source: openapi components.schemas.FireWebhookConnectionV2Dto.event enum
+- name: dataPerType
+  source: openapi components.schemas.FireWebhookConnectionV2Dto.event enum
+- name: push
+  source: openapi components.schemas.FireWebhookConnectionV2Dto.event enum
+- name: batchPush
+  source: openapi components.schemas.FireWebhookConnectionV2Dto.event enum
+- name: delete
+  source: openapi components.schemas.FireWebhookConnectionV2Dto.event enum
+event_count: 9
+docs_named_events:
+- New Connection
+- Authentication Completed
+- Data Synchronized
+- Connection Disconnected
+docs_events_note: The docs page names four events in human language; the contract's own enum carries nine
+  machine values. The enum is authoritative and is what a subscriber will actually receive.
+data_per_type_request_types:
+- ACCOUNTING_TRANSACTION
+- ACCOUNTS
+- AGED_PAYABLE
+- AGED_RECEIVABLE
+- ATTACHMENT
+- BALANCE_SHEETS
+- BANKING_RECONCILIATION
+- BANK_TRANSACTION_ACCOUNTING
+- BANK_ACCOUNT_ACCOUNTING
+- BANK_TRANSFERS
+- BILL_CREDIT_NOTES
+- BILL_PAYMENTS
+- BILLS
+- BUDGET
+- BUSINESS_INFO
+- BUSINESS_VALUATION
+- CASH_FLOW_STATEMENTS
+- CREDIT_SCORE
+- CUSTOMERS
+- DEPOSITS
+- ESTIMATES
+- FINANCIAL_BENCHMARKING
+- FINANCIAL_FORECAST
+- FINANCIAL_RATIO
+- FRAUD_RISK_METRICS
+- INCOME_STATEMENTS
+- INVENTORY
+- INVOICE_CREDIT_NOTES
+- INVOICE_PAYMENTS
+- INVOICES
+- JOURNAL_ENTRIES
+- JOURNAL
+- PROBABILITY_OF_DEFAULT
+- PURCHASE_ORDERS
+- REFUNDS
+- TAX_BENCHMARKING
+- TAX_RATES
+- TAX_AUTHORITY
+- TRACKING_CATEGORIES
+- TRIAL_BALANCES
+- VENDORS
+- PAYMENT_METHODS
+- PORTFOLIO_METRICS
+- EXPENSES
+- CONTACT
+- VENDOR_BANK_ACCOUNT
+- CUSTOMER_BANK_ACCOUNT
+- BILL_PAYMENT_REQUEST
+- PAYROLL_TRANSACTION
+- COMMERCE_TRANSACTION
+- COMMERCE_PRODUCT
+- COMMERCE_ORDER
+- COMMERCE_DISPUTE
+- BANK_ACCOUNT
+- BANK_TRANSACTION
+- BANK_ASSET
+data_per_type_note: The dataPerType event fans out by requestType — the enum above is taken verbatim from
+  the contract's example and is the set of data domains an event can be scoped to.
+sandbox_trigger:
+  operation: POST /v2/sandbox/fireWebhooks
+  v1: POST /sandbox/fireWebhooks
+  description: Sandbox-only. Emits a chosen event against a chosen connectionUuid so webhook handling
+    can be rehearsed.
+  source_operation: openapi/_original/fis-accounting-data-as-a-service-openapi.json#fireWebhooks
+payload:
+  shape: '{ connection: { connectionUuid, event, requestType? } }'
+  schema: FireWebhookV2Dto
+  note: This is the shape the SANDBOX TRIGGER accepts. The provider does not publish the schema of the
+    delivered webhook body itself, so it is not asserted here.

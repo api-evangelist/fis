@@ -1,0 +1,149 @@
+generated: '2026-09-10'
+method: derived
+source: openapi/_original/fis-accounting-data-as-a-service-openapi.json + https://docs.railz.ai/reference/
+api: FIS Accounting Data as a Service
+base_url: https://api.railz.ai
+scope_note: >-
+  These conventions describe the one FIS API with a publicly readable contract. Code Connect
+  core banking, payments and wealth are behind a reviewed registration and their conventions are
+  not readable without an account; nothing here is asserted about them.
+authentication:
+  style: bearer
+  mint: HTTP Basic (client_id / secret_key) against the access-token endpoint
+  header: Authorization
+  token_lifetime_minutes: 60
+  see: authentication/fis-authentication.yml
+idempotency:
+  supported: false
+  coverage: none
+  mechanism: null
+  header: null
+  scope: []
+  detail: >-
+    No replay protection of any kind. Not one of the 86 mutating operations (59 POST, 26 PUT,
+    6 DELETE, 1 PATCH) accepts an Idempotency-Key or any equivalent client-supplied token, and
+    the docs describe none. Combined with the absence of Retry-After on 429 and the presence of
+    502/503/504 in the documented status set, a client that retries a timed-out push has no way
+    to avoid writing the record twice into the customer's books. For a write path that lands in
+    an accounting ledger this is the sharpest gap in the contract.
+pagination:
+  style: offset-limit
+  params:
+    offset: offset
+    limit: limit
+  applies_to: 103 operations
+  response_fields:
+    container: meta
+    schema: PaginationMetaData
+    fields:
+    - offset
+    - limit
+    - count
+  cursor: false
+  detail: Classic offset/limit with a total count returned in meta. No cursor or keyset option, so deep pages over a large ledger get progressively more expensive.
+filtering:
+  common_params:
+  - name: connectionUuid
+    operations: 84
+    note: The primary scoping key — which authorised upstream connection to read from.
+  - name: businessName
+    operations: 58
+  - name: startDate
+    operations: 94
+  - name: endDate
+    operations: 99
+  - name: orderBy
+    operations: 99
+  - name: reportFrequency
+    operations: 39
+  - name: accountingMethod
+    operations: 23
+    note: cash vs accrual — a semantic switch that changes what the numbers mean, not just which rows come back.
+field_expansion:
+  supported: false
+sparse_fields:
+  supported: false
+metadata:
+  supported: false
+  note: No customer-supplied metadata field on any resource.
+request_id_tracing:
+  supported: false
+  detail: No X-Request-Id, correlation-id, or trace header is documented, declared in the contract, or emitted on an observed response. A consumer opening a support ticket has no identifier to quote.
+versioning:
+  style: uri-path
+  current: v2
+  detail: >-
+    Both generations live in one document — an unprefixed v1 surface and a /v2/ surface. No
+    Accept-header or query versioning. See lifecycle/fis-lifecycle.yml.
+error_envelope:
+  format: vendor
+  rfc9457: false
+  shape: '{ error: { statusCode, message[], error }, payload: {} }'
+  gotcha: message is an ARRAY of strings, not a string.
+  see: errors/fis-problem-types.yml
+rate_limit_signaling:
+  headers: []
+  status: 429
+  retry_after: false
+  detail: No rate-limit header of any kind is emitted. See rate-limits/fis-rate-limits.yml.
+dry_run_mode:
+  supported: false
+  coverage: none
+  detail: >-
+    No preview, validate-only, or dry-run flag on any write operation. The nearest thing is the
+    sandbox key prefix (SB_), which is a separate environment rather than a rehearsal of a
+    production call.
+reversibility:
+  grade: documented
+  detail: >-
+    Reversal paths exist for the main write surface and are named in the contract, but the
+    provider states no window for any of them, so this grades `documented` rather than
+    `verified`. No retention, undo, or restore period is published anywhere in the docs, and
+    none is invented here.
+  surfaces:
+  - write: push-invoices / push-bills / push-accounts (POST /v2/accounting/...)
+    reversal: DELETE /v2/accounting/invoices/{id}, DELETE /v2/accounting/bills/{id}
+    operations:
+    - delete-invoices
+    - delete-bills
+    window: null
+    window_source: null
+    note: >-
+      Deletion is proxied through to the customer's own accounting system, so whether it is
+      reversible at all depends on that system's rules — which the contract does not surface.
+  - write: push-bill-payments / push-invoice-payments
+    reversal: DELETE /v2/accounting/bills/payments/{id}, DELETE /v2/accounting/invoices/payments/{id}
+    operations:
+    - delete-bill-payments
+    - delete-invoices-payments
+    window: null
+    window_source: null
+  - write: push-refund (POST /v2/accounting/refunds)
+    reversal: null
+    operations: []
+    window: null
+    note: A refund is itself a reversal of a payment; there is no operation to reverse the refund.
+  - write: business creation
+    reversal: DELETE /v2/businesses/{uuid}
+    operations:
+    - delete business by name
+    window: null
+    note: Deleting a business tears down its connections and synced data. No restore operation exists and no retention period is stated.
+  - write: connection (created via the Connect widget, not the REST API)
+    reversal: PUT /v2/connections/disconnect
+    operations:
+    - disable connection
+    window: null
+    note: Disconnect stops the sync; the docs do not say whether previously synced data survives or for how long.
+  no_reversal:
+  - operation: dataSync (POST /v2/data/sync)
+    note: >-
+      Queues a sync. There is a deleteStatus endpoint to watch a delete complete, but no
+      operation to cancel a queued or in-flight sync.
+cross_links:
+  errors: errors/fis-problem-types.yml
+  lifecycle: lifecycle/fis-lifecycle.yml
+  authentication: authentication/fis-authentication.yml
+  rate_limits: rate-limits/fis-rate-limits.yml
+  sandbox: sandbox/fis-sandbox.yml
+  data_model: data-model/fis-data-model.yml

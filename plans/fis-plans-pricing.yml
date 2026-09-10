@@ -3,112 +3,84 @@ specificationVersion: '0.1'
 schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
 provider: FIS
 providerId: fis
+generated: '2026-09-10'
+method: searched
+source: https://www.fisglobal.com/products/accounting-data-as-a-service
 created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-05'
-reconciled: false
+modified: '2026-09-10'
+reconciled: true
+plan_count: 2
 tags:
-  - Banking
-  - Core Banking
-  - Financial Services
-  - Payments
-  - Wealth Management
-description: FIS (Fidelity National Information Services) is a B2B fintech provider whose APIs (Code Connect, IFX, Modern Banking Platform, FIS Payments, Wealth) are licensed to financial institutions under negotiated master service agreements. There is no public developer pricing — access requires a customer contract, and limits/fees are set per institution.
-notes: No public pricing page on fisglobal.com; developer.fis.com is not publicly indexed. Scaffold tiers replaced with a Sandbox / Customer-licensed / Enterprise model. All commercial pricing remains contact-sales.
-sources:
-  - https://www.fisglobal.com/
-  - https://developer.fis.com/
+- Banking
+- Core Banking
+- Financial Services
+- Payments
+- Accounting Data
+description: >-
+  FIS publishes named plans for exactly one of its API products. FIS Accounting Data as a
+  Service (formerly Railz) has a two-tier public page with a free entry tier and an enterprise
+  tier; no dollar figure is printed for either. Every other FIS API surface — Code Connect core
+  banking, payments and wealth, Total Issuing, Everlink — is licensed under a negotiated
+  customer agreement with no public price, plan, or quota, and is recorded here as such rather
+  than being given invented tiers.
+supersedes:
+  note: >-
+    Replaces the 2026-05-04 bulk-sweep file, which was marked method:generated and carried three
+    scaffold tiers (fis-sandbox, and siblings) priced at 0.00 against domains on
+    api.fisglobal.com — a host that returns NXDOMAIN. Those tiers were not published by FIS and
+    are withdrawn.
 plans:
-  - id: fis-sandbox
-    name: Sandbox / Code Connect
-    type: freemium
-    description: Sandbox environment via FIS Code Connect for evaluation by partners and prospective customers. No production transaction processing; access subject to FIS partner-program approval.
-    entries:
-      - label: Sandbox Access
-        description: Non-production sandbox testing for FIS APIs
-        name: sandbox_access
-        type: flat
-        metric: month
-        limit: -1
-        timeFrame: month
-        geo: global
-        domains:
-          - https://api.fisglobal.com
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-    elements:
-      - name: Code Connect Documentation
-      - name: Sandbox Credentials
-      - name: Partner Program (Application Required)
-      - name: FIS Core Banking API
-      - name: FIS Payments API
-      - name: FIS Wealth Management API
-  - id: fis-customer-licensed
-    name: Customer-Licensed
-    type: enterprise
-    description: Production access for FIS customer financial institutions under master service agreement. Pricing is per-product (Modern Banking Platform, IBS, HORIZON, etc.), typically structured as implementation/licensing plus per-account, per-transaction, or per-asset fees depending on the product line.
-    entries:
-      - label: Per-Product Licensing
-        description: Per-product licensing and implementation fees
-        name: licensing
-        type: subscription
-        metric: month
-        limit: -1
-        timeFrame: month
-        geo: global
-        domains:
-          - https://api.fisglobal.com
-        unit: 1
-        price: contact sales
-        userMultiplied: false
-      - label: Transaction / Account Fees
-        description: Per-transaction or per-account/asset fees per the product agreement
-        name: usage_fees
-        type: metered
-        metric: transaction
-        limit: -1
-        timeFrame: usage
-        geo: global
-        domains:
-          - https://api.fisglobal.com
-        unit: 1
-        price: contact sales
-        userMultiplied: false
-    elements:
-      - name: Production API Access
-      - name: Named Account Management
-      - name: Implementation Services
-      - name: SOC 2 / Bank-Grade Compliance
-      - name: FIS Core Banking API
-      - name: FIS Payments API
-      - name: FIS Wealth Management API
-  - id: fis-enterprise
-    name: Enterprise / Strategic
-    type: enterprise
-    description: Tier-1 bank or strategic-customer arrangement with negotiated SLAs, dedicated capacity, multi-region deployment, and bespoke integration. Pricing fully custom.
-    entries:
-      - label: Negotiated Volume
-        description: Custom volume and SLA terms
-        name: enterprise
-        type: flat
-        metric: varies
-        limit: -1
-        timeFrame: usage
-        geo: configurable
-        domains:
-          - https://api.fisglobal.com
-        unit: 1
-        price: custom
-        userMultiplied: false
-    elements:
-      - name: Dedicated Tenancy / Private Cloud Deployment
-      - name: Contractual SLA
-      - name: 24/7 Dedicated Support
-      - name: Custom Data Residency
-      - name: FIS Core Banking API
-      - name: FIS Payments API
-      - name: FIS Wealth Management API
-maintainers: []
+- id: fis-adaas-freemium
+  name: Freemium
+  type: freemium
+  api: FIS Accounting Data as a Service
+  price: null
+  currency: null
+  period: null
+  price_published: false
+  description: >-
+    Free entry tier. Lifetime sandbox testing plus production access for up to five connected
+    businesses, with access to the accounting and banking integrations and both automated and
+    on-demand syncing.
+  limits:
+  - metric: connected_businesses
+    limit: 5
+    period: lifetime
+  url: https://www.fisglobal.com/products/accounting-data-as-a-service
+- id: fis-adaas-enterprise
+  name: Enterprise
+  type: enterprise
+  api: FIS Accounting Data as a Service
+  price: null
+  currency: null
+  period: null
+  price_published: false
+  contact_sales: true
+  description: >-
+    Personalised solution with volume pricing, dedicated support and an account manager,
+    unlimited connected businesses, and white-labelling. No figure is published; the page routes
+    to a Contact sales form.
+  limits:
+  - metric: connected_businesses
+    limit: null
+    note: unlimited
+  url: https://www.fisglobal.com/products/accounting-data-as-a-service
+unpriced_products:
+- name: FIS Code Connect (core banking, payments, wealth)
+  model: contract
+  note: >-
+    No public pricing page. Access is granted per financial institution under a master service
+    agreement, and the marketplace itself requires a reviewed registration before any commercial
+    term is visible.
+- name: Total Issuing / Total Issuing PRIME
+  model: contract
+  note: Developer portals at developers.tsys.com and developers.prime.tsys.com both gate at a login; no public price.
+- name: FIS Everlink
+  model: contract
+  note: developer.everlink.ca returns the Theneo "no project found" page; no public price.
+evidence:
+- url: https://www.fisglobal.com/products/accounting-data-as-a-service
+  status: 200
+- url: https://railz.ai/pricing
+  status: 301
+  detail: Redirects to the FIS product page above — further confirmation that the Railz commercial surface is now FIS's.

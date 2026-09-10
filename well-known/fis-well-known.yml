@@ -1,0 +1,186 @@
+generated: '2026-09-10'
+method: probed
+source: live GET of the named /.well-known/ path list on every host in apis.yml, every OpenAPI servers[] host, and the developer/console hosts
+note: >-
+  fisglobal.com serves a real RFC 9116 security.txt at the edge — byte-identical (md5
+  5b357f49f727ff2ab9e06f110adecc55) on the apex and on every fisglobal.com subdomain probed
+  (developer., api-dev-uat., api-gw-ui-uat.). Its Expires field (2023-12-31) has lapsed, which
+  RFC 9116 §6.6 says clients should treat as stale, and it is served as text/html rather than
+  text/plain; the content is genuine FIS (bugcrowd.com/fis, careers.fisglobal.com) so it is
+  recorded as a hit with those two deviations noted. Every other named path on fisglobal.com
+  301s or 403s, and the negative control 301s, so the apex is NOT a catch-all.
+  codeconnect.fisglobal.com and codeconnectprod.fisglobal.com are Angular SPAs that answer 200
+  with the same ~100KB app shell for EVERY path including the negative control — no document
+  was fetched from either and no hit is recorded there. api.fisglobal.com and
+  sandbox.api.fisglobal.com, the baseURL/servers[] hosts carried in this record, do not resolve
+  in DNS at all (NXDOMAIN).
+path_echo_control: passed        # only on the hosts credited below; see soft_404_control notes
+hosts:
+- host: https://fisglobal.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: fis-security.txt
+  - path: /.well-known/openid-configuration
+    status: 301
+  - path: /.well-known/oauth-authorization-server
+    status: 301
+  - path: /.well-known/oauth-protected-resource
+    status: 301
+  - path: /.well-known/api-catalog
+    status: 301
+  - path: /.well-known/ai-plugin.json
+    status: 301
+  - path: /.well-known/ucp.json
+    status: 301
+  - path: /.well-known/acp.json
+    status: 301
+  - path: /.well-known/aauth-resource.json
+    status: 301
+  - path: /.well-known/apis.json
+    status: 301
+  - path: /apis.json
+    status: 301
+  - path: /apis.yml
+    status: 301
+  - path: /.well-known/agent-card.json
+    status: 301
+  - path: /.well-known/agent.json
+    status: 301
+  - path: /.well-known/fis-negative-control-7f3ab91c.json
+    status: 301
+- host: https://www.fisglobal.com
+  soft_404_control: not-reachable-by-crawler
+  note: Akamai bot management resets the HTTP/2 stream for this host on every path; no status could be observed even with a browser User-Agent. Not recorded as a miss or a hit.
+  documents: []
+- host: https://developer.fisglobal.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: fis-security.txt
+  - path: /.well-known/openid-configuration
+    status: 301
+  - path: /.well-known/oauth-authorization-server
+    status: 301
+  - path: /.well-known/oauth-protected-resource
+    status: 301
+  - path: /.well-known/api-catalog
+    status: 301
+  - path: /.well-known/ai-plugin.json
+    status: 301
+  - path: /.well-known/aauth-resource.json
+    status: 301
+  - path: /.well-known/apis.json
+    status: 301
+  - path: /apis.json
+    status: 301
+  - path: /apis.yml
+    status: 301
+  - path: /.well-known/agent-card.json
+    status: 301
+  - path: /.well-known/agent.json
+    status: 301
+  - path: /.well-known/fis-negative-control-7f3ab91c.json
+    status: 301
+- host: https://codeconnect.fisglobal.com
+  soft_404_control: failed
+  hit_count: 0
+  note: >-
+    Angular SPA catch-all. Every named path returned 200 with the identical 100,954-byte
+    application shell, including /.well-known/fis-negative-control-7f3ab91c.json which cannot
+    exist. No document was saved and no pointer is emitted for this host.
+  documents: []
+- host: https://codeconnectprod.fisglobal.com
+  soft_404_control: failed
+  hit_count: 0
+  note: Same Angular SPA catch-all as codeconnect.fisglobal.com; negative control returned 200.
+  documents: []
+- host: https://api-dev-uat.fisglobal.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: fis-security.txt
+  - path: /.well-known/openid-configuration
+    status: 403
+  - path: /.well-known/oauth-authorization-server
+    status: 403
+  - path: /.well-known/oauth-protected-resource
+    status: 403
+  - path: /.well-known/api-catalog
+    status: 403
+  - path: /.well-known/aauth-resource.json
+    status: 403
+  - path: /.well-known/apis.json
+    status: 403
+  - path: /apis.json
+    status: 403
+  - path: /.well-known/agent-card.json
+    status: 403
+  - path: /.well-known/agent.json
+    status: 403
+  - path: /.well-known/fis-negative-control-7f3ab91c.json
+    status: 403
+- host: https://api-gw-ui-uat.fisglobal.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: fis-security.txt
+  - path: /.well-known/openid-configuration
+    status: 403
+  - path: /.well-known/oauth-authorization-server
+    status: 403
+  - path: /.well-known/api-catalog
+    status: 403
+  - path: /.well-known/aauth-resource.json
+    status: 403
+  - path: /apis.json
+    status: 403
+  - path: /.well-known/agent-card.json
+    status: 403
+  - path: /.well-known/agent.json
+    status: 403
+  - path: /.well-known/fis-negative-control-7f3ab91c.json
+    status: 403
+- host: https://api.railz.ai
+  note: >-
+    The live host for the FIS Accounting Data as a Service API. Clean 404s including on the
+    negative control, so these are trustworthy misses. The machine-readable contract on this
+    host is /swagger.json (200, OpenAPI 3.0.0), not a /.well-known document.
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /apis.json
+    status: 404
+  - path: /.well-known/fis-negcontrol-91ab.json
+    status: 404
+- host: https://docs.railz.ai
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /llms.txt
+    status: 404
+  - path: /.well-known/fis-negcontrol-91ab.json
+    status: 404
+- host: https://dashboard.railz.ai
+  soft_404_control: failed
+  hit_count: 0
+  note: SPA catch-all — every path including the negative control returned 200 with the same 2,634-byte shell.
+  documents: []
+- host: https://api.fisglobal.com
+  note: NXDOMAIN — this host, carried as the baseURL on six apis[] entries and in the servers[] of openapi/_original/fis-payments-openapi.yml, has no DNS record and could not be probed.
+  documents: []
+- host: https://sandbox.api.fisglobal.com
+  note: NXDOMAIN — no DNS record.
+  documents: []
