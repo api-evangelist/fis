@@ -13,19 +13,22 @@ deployment:
   package: null
   auth: oauth
   verified: probed
+  probe_prior: (never probed)
+  probe: gated
+  probe_why: JSON-RPC error envelope -- the MCP server answered
+  checked: '2026-09-11'
+  source: claimed-backlog re-probe 2026-09-11
 authorship:
   authored_by: platform
   platform: ReadMe
-  detail: >-
-    This endpoint is served by the ReadMe documentation platform that hosts docs.railz.ai, not
-    written by FIS — the response carries ReadMe's own CORS allow-list (x-readme-project-id,
-    x-readme-conversation-id) and a Render origin header. It is a REAL, reachable MCP endpoint
-    on a host FIS controls, so an agent can genuinely connect to it, but what it exposes is
-    documentation retrieval over the FIS Accounting Data as a Service docs, not tools that call
-    the 233 REST operations. Recording it as an FIS-authored API tool surface would overstate
-    what FIS shipped.
+  detail: This endpoint is served by the ReadMe documentation platform that hosts docs.railz.ai, not written
+    by FIS — the response carries ReadMe's own CORS allow-list (x-readme-project-id, x-readme-conversation-id)
+    and a Render origin header. It is a REAL, reachable MCP endpoint on a host FIS controls, so an agent
+    can genuinely connect to it, but what it exposes is documentation retrieval over the FIS Accounting
+    Data as a Service docs, not tools that call the 233 REST operations. Recording it as an FIS-authored
+    API tool surface would overstate what FIS shipped.
 probe:
-  method: 'POST {"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+  method: POST {"jsonrpc":"2.0","id":1,"method":"tools/list"}
   http_status: 401
   www_authenticate: Bearer realm="mcp"
   body: '{"jsonrpc":"2.0","error":{"code":-32001,"message":"Authorization required"},"id":null}'
@@ -34,16 +37,14 @@ probe:
   oauth_discovery:
     /.well-known/oauth-protected-resource: 404
     /.well-known/oauth-authorization-server: 404
-    note: >-
-      The endpoint challenges with a bearer realm but publishes no RFC 9728 protected-resource
-      document and no RFC 8414 authorization-server metadata on the same host, so a client
-      cannot discover where to get a token. The token has to come from a ReadMe session.
+    note: The endpoint challenges with a bearer realm but publishes no RFC 9728 protected-resource document
+      and no RFC 8414 authorization-server metadata on the same host, so a client cannot discover where
+      to get a token. The token has to come from a ReadMe session.
 tools:
   known: []
-  note: >-
-    tools/list is auth-gated, so the live tool set and its inputSchemas could not be read. No
-    llms.txt exists on docs.railz.ai (404, confirmed against a clean control) to fall back to, so
-    no tool names are recorded. Nothing is guessed.
+  note: tools/list is auth-gated, so the live tool set and its inputSchemas could not be read. No llms.txt
+    exists on docs.railz.ai (404, confirmed against a clean control) to fall back to, so no tool names
+    are recorded. Nothing is guessed.
 api_mcp_server:
   exists: false
   searched:
@@ -51,6 +52,5 @@ api_mcp_server:
   - https://mcp.railz.ai/mcp — NXDOMAIN
   - https://mcp.fisglobal.com/mcp — NXDOMAIN
   - https://api.railz.ai/mcp — 404
-  detail: >-
-    FIS ships no MCP server over its API surface, hosted or stdio, for any of its products. An
-    agent that wants to read or write accounting data has to drive the REST contract directly.
+  detail: FIS ships no MCP server over its API surface, hosted or stdio, for any of its products. An agent
+    that wants to read or write accounting data has to drive the REST contract directly.
