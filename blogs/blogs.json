@@ -2,11 +2,15 @@
   "repo": "fis",
   "feeds": [
     {
-      "source": "https://www.fisglobal.com/blog",
+      "source": "https://www.fisglobal.com/privacy",
+      "error": "TimeoutError"
+    },
+    {
+      "source": "https://www.fisglobal.com/insights",
       "error": "TimeoutError"
     }
   ],
-  "fetched": "2026-09-06T19:17:18Z",
+  "fetched": "2026-09-13T13:00:00Z",
   "post_count": 0,
   "agent_pulled": "2026-06-27"
 }

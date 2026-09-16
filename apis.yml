@@ -23,7 +23,10 @@ apis:
     type: Portal
   - url: https://codeconnect.fisglobal.com/
     type: Documentation
-  description: FIS (Fidelity National Information Services) provides core banking platforms including the Systematics suite. APIs bridge mainframe-based account processing, transaction management, and loan servicing systems to modern integration layers via SOAP and REST interfaces.
+  description: >-
+    FIS (Fidelity National Information Services) provides core banking platforms including the Systematics
+    suite. APIs bridge mainframe-based account processing, transaction management, and loan servicing
+    systems to modern integration layers via SOAP and REST interfaces.
 - aid: fis:fis-wealth-management-api
   name: FIS Wealth Management API
   tags:
@@ -43,7 +46,9 @@ apis:
     type: Portal
   - url: https://codeconnect.fisglobal.com/
     type: Documentation
-  description: FIS wealth management APIs enable integration with portfolio management, account aggregation, trading, and advisory systems for wealth management platforms and financial advisors.
+  description: >-
+    FIS wealth management APIs enable integration with portfolio management, account aggregation, trading,
+    and advisory systems for wealth management platforms and financial advisors.
 - aid: fis:fis-accounts-api
   name: FIS Global Accounts API
   description: Account information and balance inquiries
@@ -118,44 +123,12 @@ apis:
     url: https://codeconnect.fisglobal.com/
   - type: Documentation
     url: https://codeconnect.fisglobal.com/
-- aid: fis:fis-accounting-data-as-a-service
-  name: FIS Accounting Data as a Service
-  image: https://codeconnect.fisglobal.com/assets/FIS_codeConnect_logo_white.svg
-  description: 'FIS Accounting Data as a Service (shipped as Railz before FIS acquired it) reads and writes a business''s accounting, banking and commerce data through an authorised connection to that business''s own system. It is the one FIS API whose contract is publicly readable end to end: an OpenAPI 3.0.0 document served openly at https://api.railz.ai/swagger.json with 175 paths and 233 operations across two live generations. Everything is scoped by a connectionUuid created through the Connect widget.'
-  humanURL: https://docs.railz.ai/
-  baseURL: https://api.railz.ai
-  tags:
-  - Accounting
-  - Financial-Services
-  - Data
-  - Banking
-  - REST
-  tags_raw:
-  - Accounting
-  - Financial Services
-  - Data
-  - Banking
-  - REST
-  properties:
-  - type: OpenAPI
-    url: openapi/_original/fis-accounting-data-as-a-service-openapi.json
-  - type: Overlay
-    url: overlays/fis-accounting-data-as-a-service-overlay.yaml
-  - type: Documentation
-    url: https://docs.railz.ai/
-  - type: APIReference
-    url: https://docs.railz.ai/reference
-  - type: Portal
-    url: https://dashboard.railz.ai/
-  - type: Webhooks
-    url: asyncapi/fis-webhooks.yml
-  - type: MCPServer
-    url: mcp/fis-mcp.yml
-  - type: ToolCrosswalk
-    url: mcp/fis-tool-crosswalk.yml
 - aid: fidelity-national-information:code-connect
   name: FIS Code Connect API Marketplace
-  description: FIS Code Connect is the developer marketplace exposing FIS APIs across payments, banking, capital markets, and wealth management products. Access to most APIs requires a partner agreement and authenticated developer credentials.
+  description: >-
+    FIS Code Connect is the developer marketplace exposing FIS APIs across payments, banking, capital
+    markets, and wealth management products. Access to most APIs requires a partner agreement and authenticated
+    developer credentials.
   humanURL: https://codeconnect.fisglobal.com/
   tags:
   - API Marketplace
@@ -165,7 +138,1569 @@ apis:
   properties:
   - type: Documentation
     url: https://codeconnect.fisglobal.com/
+- aid: fis:fis-account-api
+  name: FIS Global Account API
+  description: The Account API from FIS Global — 1 operation(s) for account.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Account
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-account-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-accountcontrollerv2-api
+  name: FIS Global Account Controller V2 API
+  description: The AccountControllerV2 API from FIS Global — 3 operation(s) for accountcontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - AccountControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-accountcontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-accountingtransaction-api
+  name: FIS Global Accounting Transaction API
+  description: >-
+    The AccountingTransaction API from FIS Global — 1 operation(s) for accountingtransaction.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - AccountingTransaction
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-accountingtransaction-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-accountingtransactioncontrollerv2-api
+  name: FIS Global Accounting Transaction Controller V2 API
+  description: >-
+    The AccountingTransactionControllerV2 API from FIS Global — 1 operation(s) for accountingtransactioncontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - AccountingTransactionControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-accountingtransactioncontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-aging-api
+  name: FIS Global Aging API
+  description: The Aging API from FIS Global — 2 operation(s) for aging.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Aging
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-aging-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-agingcontrollerv2-api
+  name: FIS Global Aging Controller V2 API
+  description: The AgingControllerV2 API from FIS Global — 2 operation(s) for agingcontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - AgingControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-agingcontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-attachment-api
+  name: FIS Global Attachment API
+  description: The Attachment API from FIS Global — 1 operation(s) for attachment.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Attachment
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-attachment-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-attachmentcontrollerv2-api
+  name: FIS Global Attachment Controller V2 API
+  description: >-
+    The AttachmentControllerV2 API from FIS Global — 1 operation(s) for attachmentcontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - AttachmentControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-attachmentcontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-bank-api
+  name: FIS Global Bank API
+  description: The Bank API from FIS Global — 4 operation(s) for bank.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Bank
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-bank-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-bankcontrollerv2-api
+  name: FIS Global Bank Controller V2 API
+  description: The BankControllerV2 API from FIS Global — 9 operation(s) for bankcontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - BankControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-bankcontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-bill-api
+  name: FIS Global Bill API
+  description: The Bill API from FIS Global — 4 operation(s) for bill.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Bill
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-bill-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-billcontrollerv2-api
+  name: FIS Global Bill Controller V2 API
+  description: The BillControllerV2 API from FIS Global — 7 operation(s) for billcontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - BillControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-billcontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-budget-api
+  name: FIS Global Budget API
+  description: The Budget API from FIS Global — 1 operation(s) for budget.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Budget
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-budget-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-businesses-api
+  name: FIS Global Businesses API
+  description: The Businesses API from FIS Global — 8 operation(s) for businesses.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Businesses
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-businesses-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-businessvaluation-api
+  name: FIS Global Business Valuation API
+  description: The BusinessValuation API from FIS Global — 1 operation(s) for businessvaluation.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - BusinessValuation
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-businessvaluation-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-businessvaluationcontrollerv2-api
+  name: FIS Global Business Valuation Controller V2 API
+  description: >-
+    The BusinessValuationControllerV2 API from FIS Global — 1 operation(s) for businessvaluationcontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - BusinessValuationControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-businessvaluationcontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-connection-api
+  name: FIS Global Connection API
+  description: The Connection API from FIS Global — 2 operation(s) for connection.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Connection
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-connection-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-connectioncontrollerv2-api
+  name: FIS Global Connection Controller V2 API
+  description: >-
+    The ConnectionControllerV2 API from FIS Global — 2 operation(s) for connectioncontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - ConnectionControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-connectioncontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-contactcontrollerv2-api
+  name: FIS Global Contact Controller V2 API
+  description: The ContactControllerV2 API from FIS Global — 1 operation(s) for contactcontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - ContactControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-contactcontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-credit-api
+  name: FIS Global Credit API
+  description: The Credit API from FIS Global — 2 operation(s) for credit.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Credit
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-credit-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-creditcontrollerv2-api
+  name: FIS Global Credit Controller V2 API
+  description: The CreditControllerV2 API from FIS Global — 2 operation(s) for creditcontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - CreditControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-creditcontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-customer-api
+  name: FIS Global Customer API
+  description: The Customer API from FIS Global — 2 operation(s) for customer.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Customer
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-customer-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-customercontrollerv2-api
+  name: FIS Global Customer Controller V2 API
+  description: The CustomerControllerV2 API from FIS Global — 4 operation(s) for customercontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - CustomerControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-customercontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-data-api
+  name: FIS Global Data API
+  description: The Data API from FIS Global — 3 operation(s) for data.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Data
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-data-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-datacontrollerv2-api
+  name: FIS Global Data Controller V2 API
+  description: The DataControllerV2 API from FIS Global — 6 operation(s) for datacontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - DataControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-datacontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-deposit-api
+  name: FIS Global Deposit API
+  description: The Deposit API from FIS Global — 1 operation(s) for deposit.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Deposit
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-deposit-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-depositcontrollerv2-api
+  name: FIS Global Deposit Controller V2 API
+  description: The DepositControllerV2 API from FIS Global — 1 operation(s) for depositcontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - DepositControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-depositcontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-dispute-api
+  name: FIS Global Dispute API
+  description: The Dispute API from FIS Global — 1 operation(s) for dispute.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Dispute
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-dispute-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-disputecontrollerv2-api
+  name: FIS Global Dispute Controller V2 API
+  description: The DisputeControllerV2 API from FIS Global — 1 operation(s) for disputecontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - DisputeControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-disputecontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-estimate-api
+  name: FIS Global Estimate API
+  description: The Estimate API from FIS Global — 1 operation(s) for estimate.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Estimate
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-estimate-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-estimatecontrollerv2-api
+  name: FIS Global Estimate Controller V2 API
+  description: The EstimateControllerV2 API from FIS Global — 1 operation(s) for estimatecontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - EstimateControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-estimatecontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-expensecontrollerv2-api
+  name: FIS Global Expense Controller V2 API
+  description: The ExpenseControllerV2 API from FIS Global — 1 operation(s) for expensecontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - ExpenseControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-expensecontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-file-api
+  name: FIS Global File API
+  description: The File API from FIS Global — 1 operation(s) for file.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - File
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-file-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-financialbenchmarking-api
+  name: FIS Global Financial Benchmarking API
+  description: >-
+    The FinancialBenchmarking API from FIS Global — 1 operation(s) for financialbenchmarking.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - FinancialBenchmarking
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-financialbenchmarking-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-financialbenchmarkingcontrollerv2-api
+  name: FIS Global Financial Benchmarking Controller V2 API
+  description: >-
+    The FinancialBenchmarkingControllerV2 API from FIS Global — 1 operation(s) for financialbenchmarkingcontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - FinancialBenchmarkingControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-financialbenchmarkingcontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-financialforecast-api
+  name: FIS Global Financial Forecast API
+  description: The FinancialForecast API from FIS Global — 1 operation(s) for financialforecast.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - FinancialForecast
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-financialforecast-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-financialforecastcontrollerv2-api
+  name: FIS Global Financial Forecast Controller V2 API
+  description: >-
+    The FinancialForecastControllerV2 API from FIS Global — 1 operation(s) for financialforecastcontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - FinancialForecastControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-financialforecastcontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-financialfraudrisk-api
+  name: FIS Global Financial Fraud Risk API
+  description: The FinancialFraudRisk API from FIS Global — 1 operation(s) for financialfraudrisk.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - FinancialFraudRisk
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-financialfraudrisk-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-financialfraudriskcontrollerv2-api
+  name: FIS Global Financial Fraud Risk Controller V2 API
+  description: >-
+    The FinancialFraudRiskControllerV2 API from FIS Global — 1 operation(s) for financialfraudriskcontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - FinancialFraudRiskControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-financialfraudriskcontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-financialratio-api
+  name: FIS Global Financial Ratio API
+  description: The FinancialRatio API from FIS Global — 1 operation(s) for financialratio.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - FinancialRatio
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-financialratio-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-financialratiocontrollerv2-api
+  name: FIS Global Financial Ratio Controller V2 API
+  description: >-
+    The FinancialRatioControllerV2 API from FIS Global — 1 operation(s) for financialratiocontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - FinancialRatioControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-financialratiocontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-financialstatement-api
+  name: FIS Global Financial Statement API
+  description: The FinancialStatement API from FIS Global — 3 operation(s) for financialstatement.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - FinancialStatement
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-financialstatement-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-financialstatementcontrollerv2-api
+  name: FIS Global Financial Statement Controller V2 API
+  description: >-
+    The FinancialStatementControllerV2 API from FIS Global — 6 operation(s) for financialstatementcontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - FinancialStatementControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-financialstatementcontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-inventory-api
+  name: FIS Global Inventory API
+  description: The Inventory API from FIS Global — 2 operation(s) for inventory.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Inventory
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-inventory-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-inventorycontrollerv2-api
+  name: FIS Global Inventory Controller V2 API
+  description: >-
+    The InventoryControllerV2 API from FIS Global — 2 operation(s) for inventorycontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - InventoryControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-inventorycontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-invoice-api
+  name: FIS Global Invoice API
+  description: The Invoice API from FIS Global — 3 operation(s) for invoice.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Invoice
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-invoice-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-invoicecontrollerv2-api
+  name: FIS Global Invoice Controller V2 API
+  description: The InvoiceControllerV2 API from FIS Global — 5 operation(s) for invoicecontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - InvoiceControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-invoicecontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-journal-api
+  name: FIS Global Journal API
+  description: The Journal API from FIS Global — 2 operation(s) for journal.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Journal
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-journal-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-journalcontrollerv2-api
+  name: FIS Global Journal Controller V2 API
+  description: The JournalControllerV2 API from FIS Global — 5 operation(s) for journalcontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - JournalControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-journalcontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-order-api
+  name: FIS Global Order API
+  description: The Order API from FIS Global — 1 operation(s) for order.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Order
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-order-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-ordercontrollerv2-api
+  name: FIS Global Order Controller V2 API
+  description: The OrderControllerV2 API from FIS Global — 1 operation(s) for ordercontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - OrderControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-ordercontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-paymentmethodcontrollerv2-api
+  name: FIS Global Payment Method Controller V2 API
+  description: >-
+    The PaymentMethodControllerV2 API from FIS Global — 1 operation(s) for paymentmethodcontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - PaymentMethodControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-paymentmethodcontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-payrolltransaction-api
+  name: FIS Global Payroll Transaction API
+  description: The PayrollTransaction API from FIS Global — 1 operation(s) for payrolltransaction.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - PayrollTransaction
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-payrolltransaction-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-portfoliometrics-api
+  name: FIS Global Portfolio Metrics API
+  description: The PortfolioMetrics API from FIS Global — 1 operation(s) for portfoliometrics.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - PortfolioMetrics
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-portfoliometrics-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-portfoliometricscontrollerv2-api
+  name: FIS Global Portfolio Metrics Controller V2 API
+  description: >-
+    The PortfolioMetricsControllerV2 API from FIS Global — 1 operation(s) for portfoliometricscontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - PortfolioMetricsControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-portfoliometricscontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-probabilityofdefault-api
+  name: FIS Global Probability Of Default API
+  description: The ProbabilityOfDefault API from FIS Global — 1 operation(s) for probabilityofdefault.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - ProbabilityOfDefault
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-probabilityofdefault-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-probabilityofdefaultcontrollerv2-api
+  name: FIS Global Probability Of Default Controller V2 API
+  description: >-
+    The ProbabilityOfDefaultControllerV2 API from FIS Global — 1 operation(s) for probabilityofdefaultcontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - ProbabilityOfDefaultControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-probabilityofdefaultcontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-product-api
+  name: FIS Global Product API
+  description: The Product API from FIS Global — 1 operation(s) for product.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Product
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-product-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-productcontrollerv2-api
+  name: FIS Global Product Controller V2 API
+  description: The ProductControllerV2 API from FIS Global — 1 operation(s) for productcontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - ProductControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-productcontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-purchaseorder-api
+  name: FIS Global Purchase Order API
+  description: The PurchaseOrder API from FIS Global — 1 operation(s) for purchaseorder.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - PurchaseOrder
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-purchaseorder-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-purchaseordercontrollerv2-api
+  name: FIS Global Purchase Order Controller V2 API
+  description: >-
+    The PurchaseOrderControllerV2 API from FIS Global — 1 operation(s) for purchaseordercontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - PurchaseOrderControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-purchaseordercontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-refunds-api
+  name: FIS Global Refunds API
+  description: The Refunds API from FIS Global — 2 operation(s) for refunds.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Refunds
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-refunds-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-reports-api
+  name: FIS Global Reports API
+  description: The Reports API from FIS Global — 10 operation(s) for reports.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-reports-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-sandbox-api
+  name: FIS Global Sandbox API
+  description: The Sandbox API from FIS Global — 2 operation(s) for sandbox.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Sandbox
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-sandbox-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-taxbenchmarking-api
+  name: FIS Global Tax Benchmarking API
+  description: The TaxBenchmarking API from FIS Global — 1 operation(s) for taxbenchmarking.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - TaxBenchmarking
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-taxbenchmarking-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-taxbenchmarkingcontrollerv2-api
+  name: FIS Global Tax Benchmarking Controller V2 API
+  description: >-
+    The TaxBenchmarkingControllerV2 API from FIS Global — 1 operation(s) for taxbenchmarkingcontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - TaxBenchmarkingControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-taxbenchmarkingcontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-taxrate-api
+  name: FIS Global Tax Rate API
+  description: The TaxRate API from FIS Global — 1 operation(s) for taxrate.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - TaxRate
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-taxrate-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-taxratecontrollerv2-api
+  name: FIS Global Tax Rate Controller V2 API
+  description: The TaxRateControllerV2 API from FIS Global — 2 operation(s) for taxratecontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - TaxRateControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-taxratecontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-trackingcategory-api
+  name: FIS Global Tracking Category API
+  description: The TrackingCategory API from FIS Global — 1 operation(s) for trackingcategory.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - TrackingCategory
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-trackingcategory-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-trackingcategorycontrollerv2-api
+  name: FIS Global Tracking Category Controller V2 API
+  description: >-
+    The TrackingCategoryControllerV2 API from FIS Global — 1 operation(s) for trackingcategorycontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - TrackingCategoryControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-trackingcategorycontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-transaction-api
+  name: FIS Global Transaction API
+  description: The Transaction API from FIS Global — 1 operation(s) for transaction.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Transaction
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-transaction-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-transactioncontrollerv2-api
+  name: FIS Global Transaction Controller V2 API
+  description: >-
+    The TransactionControllerV2 API from FIS Global — 1 operation(s) for transactioncontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - TransactionControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-transactioncontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-trialbalance-api
+  name: FIS Global Trial Balance API
+  description: The TrialBalance API from FIS Global — 1 operation(s) for trialbalance.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - TrialBalance
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-trialbalance-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-trialbalancecontrollerv2-api
+  name: FIS Global Trial Balance Controller V2 API
+  description: >-
+    The TrialBalanceControllerV2 API from FIS Global — 1 operation(s) for trialbalancecontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - TrialBalanceControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-trialbalancecontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-vendor-api
+  name: FIS Global Vendor API
+  description: The Vendor API from FIS Global — 2 operation(s) for vendor.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Vendor
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-vendor-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-vendorcontrollerv2-api
+  name: FIS Global Vendor Controller V2 API
+  description: The VendorControllerV2 API from FIS Global — 5 operation(s) for vendorcontrollerv2.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - VendorControllerV2
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-vendorcontrollerv2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-visualizations-api
+  name: FIS Global Visualizations API
+  description: The Visualizations API from FIS Global — 16 operation(s) for visualizations.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Visualizations
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-visualizations-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
 common:
+- type: Overlay
+  url: overlays/fis-accounting-data-as-a-service-overlay.yaml
 - type: InvestorRelations
   url: https://investor.fisglobal.com/
 - type: AgenticAccess
