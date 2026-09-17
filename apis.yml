@@ -1333,26 +1333,6 @@ apis:
     url: asyncapi/fis-webhooks.yml
   - type: ToolCrosswalk
     url: mcp/fis-tool-crosswalk.yml
-- aid: fis:fis-purchaseorder-api
-  name: FIS Global Purchase Order API
-  description: The PurchaseOrder API from FIS Global — 1 operation(s) for purchaseorder.
-  humanURL: https://codeconnect.fisglobal.com/
-  baseURL: https://api.fisglobal.com
-  tags:
-  - PurchaseOrder
-  properties:
-  - type: OpenAPI
-    url: openapi/fis-purchaseorder-api-openapi.yml
-  - type: Documentation
-    url: https://docs.railz.ai/
-  - type: APIReference
-    url: https://docs.railz.ai/reference
-  - type: Portal
-    url: https://dashboard.railz.ai/
-  - type: Webhooks
-    url: asyncapi/fis-webhooks.yml
-  - type: ToolCrosswalk
-    url: mcp/fis-tool-crosswalk.yml
 - aid: fis:fis-purchaseordercontrollerv2-api
   name: FIS Global Purchase Order Controller V2 API
   description: >-
@@ -1465,26 +1445,6 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/fis-taxbenchmarkingcontrollerv2-api-openapi.yml
-  - type: Documentation
-    url: https://docs.railz.ai/
-  - type: APIReference
-    url: https://docs.railz.ai/reference
-  - type: Portal
-    url: https://dashboard.railz.ai/
-  - type: Webhooks
-    url: asyncapi/fis-webhooks.yml
-  - type: ToolCrosswalk
-    url: mcp/fis-tool-crosswalk.yml
-- aid: fis:fis-taxrate-api
-  name: FIS Global Tax Rate API
-  description: The TaxRate API from FIS Global — 1 operation(s) for taxrate.
-  humanURL: https://codeconnect.fisglobal.com/
-  baseURL: https://api.fisglobal.com
-  tags:
-  - TaxRate
-  properties:
-  - type: OpenAPI
-    url: openapi/fis-taxrate-api-openapi.yml
   - type: Documentation
     url: https://docs.railz.ai/
   - type: APIReference
@@ -1688,6 +1648,46 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/fis-visualizations-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-purchase-order-api
+  name: FIS Global Purchase Order API
+  description: The Purchase Order API from FIS Global — 1 operation(s) for purchase order.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Purchase Order
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-purchase-order-api-openapi.yml
+  - type: Documentation
+    url: https://docs.railz.ai/
+  - type: APIReference
+    url: https://docs.railz.ai/reference
+  - type: Portal
+    url: https://dashboard.railz.ai/
+  - type: Webhooks
+    url: asyncapi/fis-webhooks.yml
+  - type: ToolCrosswalk
+    url: mcp/fis-tool-crosswalk.yml
+- aid: fis:fis-tax-rate-api
+  name: FIS Global Tax Rate API
+  description: The Tax Rate API from FIS Global — 1 operation(s) for tax rate.
+  humanURL: https://codeconnect.fisglobal.com/
+  baseURL: https://api.fisglobal.com
+  tags:
+  - Tax Rate
+  properties:
+  - type: OpenAPI
+    url: openapi/fis-tax-rate-api-openapi.yml
   - type: Documentation
     url: https://docs.railz.ai/
   - type: APIReference
