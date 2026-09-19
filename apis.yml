@@ -347,6 +347,8 @@ apis:
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
+  - Bills
+  tags_raw:
   - Bill
   properties:
   - type: OpenAPI
@@ -387,6 +389,8 @@ apis:
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
+  - Budgets
+  tags_raw:
   - Budget
   properties:
   - type: OpenAPI
@@ -407,6 +411,8 @@ apis:
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
+  - Business
+  tags_raw:
   - Businesses
   properties:
   - type: OpenAPI
@@ -427,6 +433,8 @@ apis:
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
+  - Business Valuation
+  tags_raw:
   - BusinessValuation
   properties:
   - type: OpenAPI
@@ -569,6 +577,8 @@ apis:
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
+  - Customers
+  tags_raw:
   - Customer
   properties:
   - type: OpenAPI
@@ -1056,6 +1066,8 @@ apis:
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
+  - Invoices
+  tags_raw:
   - Invoice
   properties:
   - type: OpenAPI
@@ -1096,6 +1108,8 @@ apis:
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
+  - Journals
+  tags_raw:
   - Journal
   properties:
   - type: OpenAPI
@@ -1258,6 +1272,8 @@ apis:
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
+  - Probability of Default
+  tags_raw:
   - ProbabilityOfDefault
   properties:
   - type: OpenAPI
@@ -1644,6 +1660,8 @@ apis:
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
+  - Visualization
+  tags_raw:
   - Visualizations
   properties:
   - type: OpenAPI
