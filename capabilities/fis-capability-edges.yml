@@ -1,0 +1,44 @@
+slug: fis
+provider: FIS Global
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Banking & Capital Markets
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 3
+edges:
+- tag: Payments
+  spec_file: fis-payments-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.92
+  evidence: POST /payments  initiatePayment  Initiate a payment; POST /payments/{paymentId}/cancel  cancelPayment
+  reason: Operations capture, query and cancel payment instructions — payment initiation within payments
+    & card management.
+- tag: ACH
+  spec_file: fis-ach-api-openapi.yml
+  capability_id: BC-1340.30
+  capability_id_l1: BC-1340
+  capability_name: Clearing & Settlement Management
+  confidence: 0.8
+  evidence: POST /ach/transfers  createAchTransfer  Create ACH transfer; POST /ach/batches  createAchBatch  Submit
+    ACH batch file
+  reason: Creates and submits ACH transfers and batch files onto the domestic clearing rail, which the
+    frame names explicitly ('Domestic clearing - ACH, BACS, SEPA, FPS'); slight ambiguity with payment
+    initiation.
+- tag: Wire Transfers
+  spec_file: fis-wire-transfers-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.8
+  evidence: POST /wire-transfers  initiateWireTransfer  Initiate wire transfer
+  reason: Initiation of a wire payment instruction; clearly payments management, with payment initiation
+    the best-fitting sub-capability (could be cross-border if international wires).
