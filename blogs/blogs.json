@@ -3,14 +3,14 @@
   "feeds": [
     {
       "source": "https://www.fisglobal.com/privacy",
-      "error": "TimeoutError"
+      "error": "HTTPError"
     },
     {
       "source": "https://www.fisglobal.com/insights",
-      "error": "TimeoutError"
+      "error": "HTTPError"
     }
   ],
-  "fetched": "2026-09-13T13:00:00Z",
+  "fetched": "2026-09-19T20:17:39Z",
   "post_count": 0,
   "agent_pulled": "2026-06-27"
 }
