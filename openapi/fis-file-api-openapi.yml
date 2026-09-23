@@ -1,0 +1,124 @@
+openapi: 3.2.0
+info:
+  title: FIS® Accounting Data as a Service™ File API
+  description: What's changed in our API
+  version: v2
+  contact: {}
+servers:
+- url: https://api.railz.ai
+  description: Main (production) API server
+tags:
+- name: File
+paths:
+  /v2/accounting/fileUpload/{type}:
+    post:
+      description: '**Supported for:**
+
+
+        `byod`'
+      operationId: uploadFile
+      parameters:
+      - name: type
+        required: true
+        in: path
+        schema:
+          example: FinancialStatement
+          type: string
+          enum:
+          - FinancialStatement
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PushFileUploadDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushFileUploadDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushFileUploadResponseDto'
+      security:
+      - bearer: []
+      summary: Upload documents
+      tags:
+      - File
+components:
+  schemas:
+    PushFileUploadDto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        files:
+          type: array
+          items:
+            type: string
+            format: binary
+      required:
+      - connectionUuid
+      - files
+    PushFileUploadResponseDto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - pushCommunicationId
+      - requestedOn
+      - status
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http

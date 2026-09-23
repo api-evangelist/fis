@@ -1,0 +1,686 @@
+openapi: 3.2.0
+info:
+  title: FIS® Accounting Data as a Service™ Financial Ratio API
+  description: What's changed in our API
+  version: v2
+  contact: {}
+servers:
+- url: https://api.railz.ai
+  description: Main (production) API server
+tags:
+- name: FinancialRatio
+paths:
+  /financialRatios:
+    get:
+      description: Gets a set of business financial ratios.
+      operationId: financialRatios
+      parameters:
+      - name: businessName
+        required: true
+        in: query
+        schema:
+          example: Railz
+          type: string
+      - name: reportFrequency
+        required: true
+        in: query
+        schema:
+          type: string
+          enum:
+          - month
+          - quarter
+          - year
+      - name: serviceName
+        required: true
+        in: query
+        schema:
+          type: string
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - zohoBooks
+          - byod
+      - name: startDate
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: endDate
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: ratio
+        required: false
+        in: query
+        schema:
+          type: string
+          enum:
+          - averageCollectionPeriod
+          - grossBurnRate
+          - inventoryTurnoverRatio
+          - assetTurnoverRatio
+          - payablesConversionPeriod
+          - accountsReceivableTurnoverRatio
+          - accountsPayableTurnoverRatio
+          - daysPayableOutstanding
+          - daysSalesOutstanding
+          - averageOutstandingPayablesBalance
+          - averageOutstandingReceivablesBalance
+          - churnRate
+          - equityToLTAssets
+          - shortDebtToEquityRatio
+          - debtToEquityRatio
+          - interestBankLoan
+          - interestCoverageRatio
+          - debtToAssetsRatio
+          - debtServiceCoverageRatio
+          - leverageIndex
+          - leverageRatio
+          - quickRatio
+          - absoluteLiquidity
+          - currentRatio
+          - grossBurn
+          - runway
+          - cashRatio
+          - freeCashflowRatio
+          - cashFlowCoverageRatio
+          - debtToEnterpriseValue
+          - returnOnAssets
+          - ebitda
+          - ebitdaMargin
+          - workingCapital
+          - freeCashFlow
+          - grossMargin
+          - netProfitMargin
+          - operatingMargin
+          - returnOnEquity
+          - revenueConcentrationIndex
+          - totalAccrualsTotalAssets
+          - sgaExpensesIndex
+          - salesGrowthIndex
+          - grossMarginIndex
+          - monthlyRecurringRevenue
+          - monthlyRecurringRevenueRate
+          - annualRecurringRevenue
+          - annualRecurringRevenueRate
+          - depreciationIndex
+          - assetQualityIndex
+          - daysSalesReceivablesIndex
+      - name: ratioType
+        required: false
+        in: query
+        schema:
+          type: string
+          enum:
+          - credit
+          - efficiency
+          - leverage
+          - liquidity
+          - market
+          - profitability
+          - reliability
+      - name: offset
+        required: false
+        in: query
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinancialRatiosResponseDto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinancialRatiosResponseDto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Financial ratios
+      tags:
+      - FinancialRatio
+      x-summary-source: derived
+components:
+  schemas:
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    FinancialRatiosLiquidityData:
+      type: object
+      properties:
+        quickRatio:
+          type: number
+          example: 0.88811223
+          format: float
+        absoluteLiquidity:
+          type: number
+          example: 530167.93
+          format: float
+        currentRatio:
+          type: number
+          example: 1.10856651
+          format: float
+        grossBurn:
+          type: number
+          example: 382071.92
+          format: float
+        runway:
+          type: number
+          example: 12.84898122
+          format: float
+        cashRatio:
+          type: number
+          example: 0.73314452
+          format: float
+        freeCashflowRatio:
+          type: number
+          example: 0.45151529
+          format: float
+        cashFlowCoverageRatio:
+          type: number
+          example: 0.09030305
+          format: float
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    FinancialRatiosProfitabilityData:
+      type: object
+      properties:
+        returnOnAssets:
+          type: number
+          example: 0.09109873
+          format: float
+        ebitda:
+          type: number
+          example: 278309.39
+          format: float
+        ebitdaMargin:
+          type: number
+          example: 0.32309803
+          format: float
+        workingCapital:
+          type: number
+          example: 78903.24
+          format: float
+        freeCashFlow:
+          type: number
+          example: 129834.37
+          format: float
+        grossMargin:
+          type: number
+          example: 0.48199755
+          format: float
+        netProfitMargin:
+          type: number
+          example: 0.16412058
+          format: float
+        operatingMargin:
+          type: number
+          example: 0.06156661
+          format: float
+        returnOnEquity:
+          type: number
+          example: 0.15532511
+          format: float
+        revenueConcentrationIndex:
+          type: number
+          example: 2.58889925
+          format: float
+        totalAccrualsTotalAssets:
+          type: number
+          example: 0.044
+          format: float
+        sgaExpensesIndex:
+          type: number
+          example: 1.11
+          format: float
+        salesGrowthIndex:
+          type: number
+          example: 0.755
+          format: float
+        grossMarginIndex:
+          type: number
+          example: 1.556
+          format: float
+        annualRecurringRevenue:
+          type: number
+          example: 0.814
+          format: float
+        annualRecurringRevenueRate:
+          type: number
+          example: 0.266
+          format: float
+        monthlyRecurringRevenue:
+          type: number
+          example: 1.556
+          format: float
+        monthlyRecurringRevenueRate:
+          type: number
+          example: 0.389
+          format: float
+    FinancialRatiosLeverageData:
+      type: object
+      properties:
+        equityToLTAssets:
+          type: number
+          example: 0.26784885
+          format: float
+        shortDebtToEquityRatio:
+          type: number
+          example: 0.87117832
+          format: float
+        debtToEquityRatio:
+          type: number
+          example: 1.03899521
+          format: float
+        interestBankLoan:
+          type: number
+          example: 1.03899521
+          format: float
+        interestCoverageRatio:
+          type: number
+          example: 3.48778221
+          format: float
+        debtToAssetsRatio:
+          type: number
+          example: 0.89995561
+          format: float
+        debtServiceCoverageRatio:
+          type: number
+          example: 4.20509522
+          format: float
+        leverageIndex:
+          type: number
+          example: 0.878
+          format: float
+        leverageRatio:
+          type: number
+          example: 0.067
+          format: float
+    FinancialRatiosCreditData:
+      type: object
+      properties:
+        averageCollectionPeriod:
+          type: number
+          example: 36.5
+          format: float
+    FinancialRatiosData:
+      type: object
+      properties:
+        credit:
+          $ref: '#/components/schemas/FinancialRatiosCreditData'
+        efficiency:
+          $ref: '#/components/schemas/FinancialRatiosEfficiencyData'
+        leverage:
+          $ref: '#/components/schemas/FinancialRatiosLeverageData'
+        liquidity:
+          $ref: '#/components/schemas/FinancialRatiosLiquidityData'
+        market:
+          $ref: '#/components/schemas/FinancialRatiosMarketData'
+        profitability:
+          $ref: '#/components/schemas/FinancialRatiosProfitabilityData'
+        reliability:
+          $ref: '#/components/schemas/FinancialRatiosReliabilityData'
+    FinancialRatiosReport:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/FinancialRatiosMetaData'
+        data:
+          $ref: '#/components/schemas/FinancialRatiosData'
+      required:
+      - meta
+      - data
+    FinancialRatiosMarketData:
+      type: object
+      properties:
+        debtToEnterpriseValue:
+          type: number
+          example: 0.19155987
+          format: float
+    FinancialRatiosResponseDto:
+      type: object
+      properties:
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        ratios:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/FinancialRatiosReport'
+      required:
+      - count
+      - pagination
+      - ratios
+    FinancialRatiosEfficiencyData:
+      type: object
+      properties:
+        grossBurnRate:
+          type: number
+          example: 56223.25
+          format: float
+        inventoryTurnoverRatio:
+          type: number
+          example: 2.78891542
+          format: float
+        assetTurnoverRatio:
+          type: number
+          example: 3.83548112
+          format: float
+        payablesConversionPeriod:
+          type: number
+          example: 83
+          format: float
+        accountsReceivableTurnoverRatio:
+          type: number
+          example: 15.55
+          format: float
+        accountsPayableTurnoverRatio:
+          type: number
+          example: 8.99
+          format: float
+        daysPayableOutstanding:
+          type: number
+          example: 42.26
+          format: float
+        daysSalesOutstanding:
+          type: number
+          example: 34.19
+          format: float
+        averageOutstandingPayablesBalance:
+          type: number
+          example: 100.99
+          format: float
+        averageOutstandingReceivablesBalance:
+          type: number
+          example: 29.01
+          format: float
+        churnRate:
+          type: number
+          example: 1
+          format: float
+    FinancialRatiosMetaData:
+      type: object
+      properties:
+        reportId:
+          type: string
+          readOnly: true
+          example: 5fad8a342a88364234392fb5
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - quickbooks
+          - xero
+          - freshbooks
+          - quickbooksDesktop
+          - sageIntacct
+          - sageBusinessCloud
+          - oracleNetsuite
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - zohoBooks
+          - myob
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        reportFrequency:
+          type: string
+          readOnly: true
+          example: month
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+      required:
+      - reportId
+      - startDate
+      - endDate
+      - serviceName
+      - businessName
+      - reportFrequency
+      - createdAt
+      - updatedAt
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    FinancialRatiosReliabilityData:
+      type: object
+      properties:
+        assetQualityIndex:
+          type: number
+          example: 0.608
+          format: float
+        depreciationIndex:
+          type: number
+          example: 0.801
+          format: float
+        daysSalesReceivablesIndex:
+          type: number
+          example: 0.814
+          format: float
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http

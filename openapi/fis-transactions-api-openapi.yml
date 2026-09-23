@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: FIS Payments Accounts Transactions API
+  title: FIS Payments Transactions API
   description: FIS (Fidelity National Information Services) Payments API provides programmatic access to payment processing capabilities including ACH transfers, wire payments, card processing, and real-time payment networks. Available through the FIS CodeConnect marketplace for financial institutions and fintech developers.
   version: 1.0.0
   contact:

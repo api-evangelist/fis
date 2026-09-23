@@ -1,0 +1,1241 @@
+openapi: 3.2.0
+info:
+  title: FIS® Accounting Data as a Service™ Account Controller V2 API
+  description: What's changed in our API
+  version: v2
+  contact: {}
+servers:
+- url: https://api.railz.ai
+  description: Main (production) API server
+tags:
+- name: AccountControllerV2
+paths:
+  /v2/accounting/accounts:
+    get:
+      description: '**Supported for:**
+
+
+        `freshbooks` `quickbooks` `quickbooksDesktop` `xero` `oracleNetsuite` `sageBusinessCloud` `sageIntacct` `dynamicsBusinessCentral` `dynamics365Finance` `wave` `myob` `zohoBooks`'
+      operationId: accounts
+      parameters:
+      - name: connectionUuid
+        required: true
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+          type: string
+      - name: offset
+        required: false
+        in: query
+        description: The offset is the position in the dataset of a particular record.
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        description: 'This is the size of the results set you would like (default: 100).'
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: isActive
+        required: false
+        in: query
+        description: Confirms whether the account is an active account or not.
+        schema:
+          format: boolean
+          example: 'true'
+          type: boolean
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetChartOfAccountsV2ResponseDto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetChartOfAccountsV2ResponseDto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: List Accounts
+      tags:
+      - AccountControllerV2
+    post:
+      description: '**Supported for:**
+
+
+        `freshbooks` `quickbooks` `xero` `oracleNetsuite` `sageBusinessCloud` `sageIntacct` `wave` `myob` `zohoBooks`'
+      operationId: push-accounts
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushChartOfAccountV2Dto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushChartOfAccountV2ResponseDto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Create an Account
+      tags:
+      - AccountControllerV2
+  /v2/accounting/accounts/batch:
+    post:
+      description: '**Supported for:**
+
+
+        `quickbooks` `xero` `oracleNetsuite` `sageBusinessCloud` `sageIntacct` `wave`'
+      operationId: push-batchAccounts
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchPushChartOfAccountV2Dto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchPushChartOfAccountV2ResponseDto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Batch Create Accounts
+      tags:
+      - AccountControllerV2
+    put:
+      description: '**Supported for:**
+
+
+        `zohoBooks`'
+      operationId: update-batchAccounts
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchUpdateChartOfAccountV2Dto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchUpdateChartOfAccountV2ResponseDto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Batch Update Accounts
+      tags:
+      - AccountControllerV2
+  /v2/accounting/accounts/{id}:
+    put:
+      description: '**Supported for:**
+
+
+        `myob` `zohoBooks`'
+      operationId: update-accounts
+      parameters:
+      - name: id
+        required: true
+        in: path
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateChartOfAccountV2Dto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateChartOfAccountV2ResponseDto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Update an Account
+      tags:
+      - AccountControllerV2
+components:
+  schemas:
+    UpdateChartOfAccountIndividualResponseV2Dto:
+      type: object
+      properties:
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/BatchUpdateChartOfAccount'
+      required:
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - data
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    PushChartOfAccountIndividualResponseV2Dto:
+      type: object
+      properties:
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushChartOfAccountV2'
+      required:
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - data
+    BatchPushChartOfAccountV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        batch:
+          type: array
+          items:
+            $ref: '#/components/schemas/PushChartOfAccountV2'
+      required:
+      - connectionUuid
+      - batch
+    GetChartOfAccountsV2ResponseDto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        meta:
+          $ref: '#/components/schemas/ListReportMetaDataV2'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetChartOfAccountsDataV2'
+      required:
+      - pagination
+      - meta
+      - data
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    GetChartOfAccountsDataV2:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        nominalCode:
+          type: string
+          example: '200'
+        name:
+          type: string
+          example: Bank Account
+        description:
+          type: string
+          example: Account description.
+        group:
+          type: string
+          example: Cash And Cash Equivalents
+        subGroup:
+          type: string
+          example: Checking
+        classification:
+          type: string
+          example: Asset
+        fullyQualifiedName:
+          type: string
+          example: 'Expenses : Transportation : Car Mileage'
+        depth:
+          type: number
+          example: 3
+        currentBalance:
+          type: number
+          example: 0
+          format: float
+        subType:
+          type: string
+          example: cash&Bank
+          enum:
+          - cash&Bank
+          - currentAsset
+          - propertyPlantAndEquipment
+          - longTermAsset
+          - currentLiability
+          - longTermLiability
+          - equity
+          - income
+          - costOfGoodsSold
+          - operatingExpense
+        isBankAccount:
+          type: boolean
+          example: true
+        isSubAccount:
+          type: boolean
+          example: true
+        isActive:
+          type: boolean
+          example: true
+        subsidiaryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubsidiaryRef'
+        parentRef:
+          $ref: '#/components/schemas/AccountParentRef'
+        sourceModifiedDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        accountUuid:
+          type: string
+          example: 6f436c63-308f-4ccd-8c56-a445c2948640
+        type:
+          type: string
+          example: Accounts Receivable
+        section:
+          type: string
+          example: Assets
+        subSection:
+          type: string
+          example: Current Assets
+        currency:
+          type: string
+          example: USD
+        isPosting:
+          type: boolean
+          example: true
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateObjectRefResponse'
+        bankAccountNumber:
+          type: string
+          example: '11200'
+        paymentsEnabled:
+          type: boolean
+          example: true
+      required:
+      - id
+      - isActive
+      - section
+      - subSection
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    BatchUpdateChartOfAccountV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        batch:
+          type: array
+          items:
+            $ref: '#/components/schemas/BatchUpdateChartOfAccount'
+      required:
+      - connectionUuid
+      - batch
+    BatchUpdateChartOfAccount:
+      type: object
+      properties:
+        nominalCode:
+          type: string
+          example: SALES001
+          maxLength: 10
+          minLength: 5
+        name:
+          type: string
+          example: Consulting Income
+          maxLength: 100
+        description:
+          type: string
+          example: Sales account.
+          maxLength: 100
+        classification:
+          type: string
+          enum:
+          - asset
+          - equity
+          - expense
+          - liability
+          - revenue
+          - nonPosting
+          example: asset
+        currency:
+          type: string
+          example: CAD
+        type:
+          type: string
+          enum:
+          - bank
+          - currentAsset
+          - fixedAsset
+          - inventory
+          - nonCurrentAsset
+          - accountReceivable
+          - equity
+          - expense
+          - otherExpense
+          - cogs
+          - accountPayable
+          - creditCard
+          - nonCurrentLiability
+          - currentLiability
+          - income
+          - incomeGeneral
+          - otherIncome
+          - unbilledReceivable
+          - deferredExpense
+          - deferredIncome
+          example: currentAsset
+        bankAccountNumber:
+          type: string
+          example: '11200'
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateRefDto'
+        parentRef:
+          $ref: '#/components/schemas/ParentRefDtoV2'
+        subsidiaryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubsidiaryRefDto'
+        passThrough:
+          type: object
+          additionalProperties: true
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+        accountRef:
+          type: string
+          description: id of account to be updated
+      required:
+      - accountRef
+    BatchUpdateChartOfAccountV2ResponseDto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        batchId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        batch:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateChartOfAccountIndividualResponseV2Dto'
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - batchId
+      - batch
+    PushChartOfAccountV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        data:
+          $ref: '#/components/schemas/PushChartOfAccountV2'
+      required:
+      - connectionUuid
+      - data
+    Error400DtoV2:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    UpdateChartOfAccountV2:
+      type: object
+      properties:
+        nominalCode:
+          type: string
+          example: SALES001
+          maxLength: 10
+          minLength: 5
+        name:
+          type: string
+          example: Consulting Income
+          maxLength: 100
+        description:
+          type: string
+          example: Sales account.
+          maxLength: 100
+        classification:
+          type: string
+          enum:
+          - asset
+          - equity
+          - expense
+          - liability
+          - revenue
+          - nonPosting
+          example: asset
+        currency:
+          type: string
+          example: CAD
+        type:
+          type: string
+          enum:
+          - bank
+          - currentAsset
+          - fixedAsset
+          - inventory
+          - nonCurrentAsset
+          - accountReceivable
+          - equity
+          - expense
+          - otherExpense
+          - cogs
+          - accountPayable
+          - creditCard
+          - nonCurrentLiability
+          - currentLiability
+          - income
+          - incomeGeneral
+          - otherIncome
+          - unbilledReceivable
+          - deferredExpense
+          - deferredIncome
+          example: currentAsset
+        bankAccountNumber:
+          type: string
+          example: '11200'
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateRefDto'
+        parentRef:
+          $ref: '#/components/schemas/ParentRefDtoV2'
+        subsidiaryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubsidiaryRefDto'
+        passThrough:
+          type: object
+          additionalProperties: true
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+    AccountParentRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4'
+        name:
+          type: string
+          example: assets
+    UpdateChartOfAccountV2ResponseDto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/UpdateChartOfAccountV2'
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - data
+    SubsidiaryRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Railz Financial
+    UpdateChartOfAccountV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        data:
+          $ref: '#/components/schemas/UpdateChartOfAccountV2'
+      required:
+      - connectionUuid
+      - data
+    TaxRateObjectRefResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '124'
+        name:
+          type: string
+          example: Railz
+      required:
+      - id
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    BatchPushChartOfAccountV2ResponseDto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        batchId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        batch:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/PushChartOfAccountIndividualResponseV2Dto'
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - batchId
+      - batch
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    TaxRateRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '12'
+      required:
+      - id
+    ListReportMetaDataV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          - 5fad8a342a88364234392fb6
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - reportId
+      - createdAt
+      - updatedAt
+    SubsidiaryRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4'
+      required:
+      - id
+    PushChartOfAccountV2ResponseDto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushChartOfAccountV2'
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - data
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    PushChartOfAccountV2:
+      type: object
+      properties:
+        nominalCode:
+          type: string
+          example: SALES001
+          maxLength: 10
+          minLength: 4
+        name:
+          type: string
+          example: Consulting Income
+          maxLength: 100
+        description:
+          type: string
+          example: Sales account.
+          maxLength: 100
+        type:
+          type: string
+          enum:
+          - bank
+          - currentAsset
+          - fixedAsset
+          - inventory
+          - nonCurrentAsset
+          - accountReceivable
+          - equity
+          - expense
+          - otherExpense
+          - cogs
+          - accountPayable
+          - creditCard
+          - nonCurrentLiability
+          - currentLiability
+          - income
+          - incomeGeneral
+          - otherIncome
+          - unbilledReceivable
+          - deferredExpense
+          - deferredIncome
+          example: currentAsset
+        currency:
+          type: string
+          example: CAD
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateRefDto'
+        bankAccountNumber:
+          type: string
+          example: '11200'
+        subType:
+          type: string
+          enum:
+          - cash&Bank
+          - currentAsset
+          - propertyPlantAndEquipment
+          - longTermAsset
+          - currentLiability
+          - longTermLiability
+          - equity
+          - income
+          - costOfGoodsSold
+          - operatingExpense
+          example: cash&Bank
+        classification:
+          type: string
+          enum:
+          - asset
+          - equity
+          - expense
+          - liability
+          - revenue
+          - nonPosting
+          example: asset
+        subsidiaryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubsidiaryRefDto'
+        parentRef:
+          $ref: '#/components/schemas/ParentRefDtoV2'
+        passThrough:
+          type: object
+          additionalProperties: true
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+      required:
+      - name
+    ParentRefDtoV2:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '32'
+        name:
+          type: string
+          example: Parent Name
+      required:
+      - id
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http

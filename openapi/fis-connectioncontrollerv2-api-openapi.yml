@@ -1,0 +1,547 @@
+openapi: 3.2.0
+info:
+  title: FIS® Accounting Data as a Service™ Connection Controller V2…
+  description: What's changed in our API
+  version: v2
+  contact: {}
+servers:
+- url: https://api.railz.ai
+  description: Main (production) API server
+tags:
+- name: ConnectionControllerV2
+paths:
+  /v2/connections:
+    get:
+      description: '**Supported for:**
+
+
+        `freshbooks` `quickbooks` `quickbooksDesktop` `xero` `oracleNetsuite` `sageBusinessCloud` `sageIntacct` `dynamicsBusinessCentral` `dynamics365Finance` `wave` `shopify` `square` `plaid` `myob` `zohoBooks` `byod`'
+      operationId: connections
+      parameters:
+      - name: businessName
+        required: false
+        in: query
+        description: Unique business name identifier.
+        schema:
+          example: Railz
+          type: string
+      - name: businessUuid
+        required: false
+        in: query
+        description: Unique business identifier.
+        schema:
+          example: BIZ-26bc4510-8c6f-4688-996d-e87acf3e0b3f
+          type: string
+      - name: serviceName
+        required: false
+        in: query
+        description: Name of accounting service provider.
+        schema:
+          type: string
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - shopify
+          - square
+          - plaid
+          - myob
+          - zohoBooks
+          - byod
+      - name: institutionName
+        required: false
+        in: query
+        description: Name of banking service.
+        schema:
+          type: string
+      - name: connectionUuid
+        required: false
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-e66400c1-4d2f-4683-9bea-275799943695
+          type: string
+      - name: status
+        required: false
+        in: query
+        description: The status of a connection.
+        schema:
+          type: string
+          enum:
+          - pending
+          - active
+          - disconnected
+          - expired
+          - invalid
+      - name: limit
+        required: false
+        in: query
+        schema:
+          minimum: 1
+          maximum: 500
+          format: integer
+          type: number
+      - name: offset
+        required: false
+        in: query
+        schema:
+          format: integer
+          type: number
+      - name: serviceAccountRef.id
+        required: false
+        in: query
+        schema:
+          example: '12345'
+          type: string
+      - name: serviceAccountRef.entityRef.id
+        required: false
+        in: query
+        schema:
+          example: '100'
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectionsResponseDtoV2'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectionsResponseDtoV2'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: List Connections
+      tags:
+      - ConnectionControllerV2
+  /v2/connections/disconnect:
+    put:
+      description: '**Supported for:**
+
+
+        `freshbooks` `quickbooks` `quickbooksDesktop` `xero` `oracleNetsuite` `sageBusinessCloud` `sageIntacct` `dynamicsBusinessCentral` `dynamics365Finance` `wave` `shopify` `square` `plaid` `myob` `zohoBooks` `byod`'
+      operationId: disable connection
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DisableConnectionDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisconnectResponseDto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Disconnect a connection
+      tags:
+      - ConnectionControllerV2
+components:
+  schemas:
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    ConnectionsResponseDtoV2:
+      type: object
+      properties:
+        meta:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/MetaDataCount'
+        data:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectionsResponseDataV2'
+      required:
+      - meta
+      - data
+    DisableConnectionDto:
+      type: object
+      properties:
+        connectionId:
+          type: string
+          example: CON-e66400c1-4d2f-4683-9bea-275799943695
+      required:
+      - connectionId
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    serviceAccountRefType:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '12345'
+        entityRef:
+          type:
+          - object
+          - 'null'
+          example:
+            id: '100'
+          properties:
+            id:
+              type: string
+              example: '100'
+    MetaDataCount:
+      type: object
+      properties:
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+      required:
+      - count
+    ConnectionsResponseDataV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-e66400c1-4d2f-4683-9bea-275799943695
+        firstRecordDate:
+          type: string
+          example: '2020-12-25T01:02:03Z'
+          format: date-time
+          deprecated: true
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - quickbooks
+          - xero
+          - freshbooks
+          - quickbooksDesktop
+          - sageIntacct
+          - sageBusinessCloud
+          - oracleNetsuite
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - zohoBooks
+          - myob
+        description:
+          type: string
+          example: TD Bank
+        status:
+          type: string
+          readOnly: true
+          example: active
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+          format: date-time
+        disconnectReason:
+          type: string
+          example: disconnectedByCustomer
+        syncTime:
+          type: number
+          example: '1.3092'
+        institution:
+          example:
+            name: Citizens bank
+            logo: https://serverlogo.url
+          allOf:
+          - $ref: '#/components/schemas/ConnectionsInstitutionData'
+        isMockData:
+          type: boolean
+          example: true
+        serviceAccountRef:
+          example:
+            id: '12345'
+            entityRef:
+              id: '100'
+          allOf:
+          - $ref: '#/components/schemas/serviceAccountRefType'
+        businessUuid:
+          type: string
+          readOnly: true
+          example: BIZ-26bc4510-8c6f-4688-996d-e87acf3e0b3f
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+      required:
+      - connectionUuid
+      - serviceName
+      - status
+      - createdAt
+      - updatedAt
+      - businessUuid
+      - businessName
+    ConnectionsInstitutionData:
+      type: object
+      properties:
+        name:
+          type: string
+          readOnly: true
+          example: Citizens bank
+        logo:
+          type: string
+          readOnly: true
+          example: https://serverlogo.url
+      required:
+      - name
+      - logo
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    DisconnectResponseDto:
+      type: object
+      properties:
+        connectionId:
+          type: string
+          readOnly: true
+          example: CON-e66400c1-4d2f-4683-9bea-275799943695
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - quickbooks
+          - xero
+          - freshbooks
+          - quickbooksDesktop
+          - sageIntacct
+          - sageBusinessCloud
+          - oracleNetsuite
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - zohoBooks
+          - myob
+        status:
+          type: string
+          readOnly: true
+          example: disconnected
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+        updatedAt:
+          format: date-time
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+      required:
+      - connectionId
+      - businessName
+      - serviceName
+      - status
+      - createdAt
+      - updatedAt
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http

@@ -1,0 +1,30 @@
+# Front Door AI Index — fis — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: fis
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: www.fisglobal.com
+  final_host: www.fisglobal.com
+  ownership: unresolved
+  owner: null
+  shares_host_with:
+  - intellimatch
+  - sungard-data-systems
+  inherited_from: null
+  verdict: scored
+  score: null
+  host_score: 5
+  density: null
+  words: 900
+  tiers:
+    agentic: 1
+    core: 2
+    model: 2
+  ambiguous: 1
+  top_terms:
+    AI: 2
+    Anthropic: 2
+    AI agent: 1
+    agent: 1

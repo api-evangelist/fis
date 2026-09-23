@@ -1,0 +1,1361 @@
+openapi: 3.2.0
+info:
+  title: FIS® Accounting Data as a Service™ Refunds API
+  description: What's changed in our API
+  version: v2
+  contact: {}
+servers:
+- url: https://api.railz.ai
+  description: Main (production) API server
+tags:
+- name: Refunds
+paths:
+  /refunds:
+    get:
+      description: Gets the latest refunds for a business.
+      operationId: refund
+      parameters:
+      - name: businessName
+        required: true
+        in: query
+        schema:
+          type: string
+      - name: serviceName
+        required: true
+        in: query
+        schema:
+          type: string
+          enum:
+          - quickbooks
+          - xero
+          - oracleNetsuite
+          - myob
+      - name: startDate
+        required: false
+        in: query
+        description: 'Transaction date greater than or equal to parameter in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: endDate
+        required: false
+        in: query
+        description: 'Transaction date less than or equal to parameter in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: offset
+        required: false
+        in: query
+        description: The offset is the position in the dataset of a particular record.
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        description: 'This is the size of the results set you would like (default: 100).'
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: totalAmount
+        required: false
+        in: query
+        schema:
+          format: float
+          type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRefundResponseDto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRefundResponseDto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Refund
+      tags:
+      - Refunds
+      x-summary-source: derived
+    post:
+      description: Posts an individual refund for a business.
+      operationId: push-refund
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushRefundDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushRefundResponseDto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Push refund
+      tags:
+      - Refunds
+      x-summary-source: derived
+  /v2/accounting/refunds:
+    get:
+      description: '**Supported for:**
+
+
+        `quickbooks` `xero` `oracleNetsuite` `myob`'
+      operationId: refund
+      parameters:
+      - name: connectionUuid
+        required: true
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+          type: string
+      - name: startDate
+        required: false
+        in: query
+        description: 'Transaction date greater than or equal to parameter in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: endDate
+        required: false
+        in: query
+        description: 'Transaction date less than or equal to parameter in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: offset
+        required: false
+        in: query
+        description: The offset is the position in the dataset of a particular record.
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        description: 'This is the size of the results set you would like (default: 100).'
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: totalAmount
+        required: false
+        in: query
+        schema:
+          format: float
+          type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRefundResponseV2Dto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRefundResponseV2Dto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: List Refunds
+      tags:
+      - Refunds
+    post:
+      description: '**Supported for:**
+
+
+        `quickbooks` `xero` `oracleNetsuite` `myob`'
+      operationId: push-refund
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushRefundV2Dto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushRefundResponseV2Dto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Create a Refund
+      tags:
+      - Refunds
+components:
+  schemas:
+    GetRefundResponseDto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        meta:
+          $ref: '#/components/schemas/BasicStartEndDateReportMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetRefundDataV1'
+      required:
+      - pagination
+      - count
+      - meta
+      - data
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    CustomerRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Railz Financial
+      required:
+      - id
+    InventoryRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Digital Services
+      required:
+      - id
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    PushRefundLine:
+      type: object
+      properties:
+        inventoryRef:
+          type: string
+          example: '32'
+        taxRef:
+          type: string
+          example: '2'
+        totalAmount:
+          type: number
+          format: float
+          example: '12.88'
+    TaxRateRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: HST
+        effectiveTaxRate:
+          type: number
+          example: 13
+          format: float
+      required:
+      - id
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    PushRefundResponseDto:
+      type: object
+      properties:
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - xero
+          - quickbooks
+          - freshbooks
+        data:
+          readOnly: false
+          allOf:
+          - $ref: '#/components/schemas/PushRefundData'
+      required:
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - businessName
+      - serviceName
+      - data
+    PushRefundDataV2:
+      type: object
+      properties:
+        passThrough:
+          type: object
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+          additionalProperties: true
+        currencyRate:
+          type: number
+          example: '1.13'
+          readOnly: false
+        totalAmount:
+          type: number
+          format: float
+          example: 150.5
+          readOnly: false
+        memo:
+          type: string
+          example: Services rendered.
+          maxLength: 4000
+          readOnly: false
+        postedDate:
+          type: string
+          format: date
+          example: '2021-03-09'
+          readOnly: false
+        customerRef:
+          $ref: '#/components/schemas/CustomerRefDto'
+        accountRef:
+          $ref: '#/components/schemas/AccountRefDto'
+        currency:
+          type: string
+          example: CAD
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/PushRefundLineV2'
+      required:
+      - accountRef
+    PushRefundData:
+      type: object
+      properties:
+        passThrough:
+          type: object
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+          additionalProperties: true
+        currencyRate:
+          type: number
+          example: '1.13'
+          readOnly: false
+        totalAmount:
+          type: number
+          format: float
+          example: 150.5
+          readOnly: false
+        memo:
+          type: string
+          example: Services rendered.
+          maxLength: 4000
+          readOnly: false
+        customerRef:
+          type: string
+          example: '145'
+          readOnly: false
+        accountRef:
+          type: string
+          example: '130'
+          readOnly: false
+        date:
+          type: string
+          format: date
+          example: '2021-03-09'
+          readOnly: false
+        invoiceRef:
+          type: string
+          example: '503'
+          readOnly: false
+        currency:
+          type: string
+          example: CAD
+          readOnly: false
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/PushRefundLine'
+      required:
+      - totalAmount
+      - customerRef
+      - accountRef
+      - date
+    PushRefundLineV2:
+      type: object
+      properties:
+        description:
+          type: string
+          example: Refund description
+        inventoryRef:
+          $ref: '#/components/schemas/InventoryRefDto'
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateRefDto'
+        amount:
+          type: number
+          format: float
+          example: '12.88'
+        unitAmount:
+          type: number
+          format: float
+          example: '12.88'
+        quantity:
+          type: number
+          format: float
+          example: 3
+        discountPercentage:
+          type: number
+          format: float
+          example: 100.5
+        accountRef:
+          $ref: '#/components/schemas/AccountRefDto'
+        trackingCategoryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/RefundTrackingCategoryRefDto'
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/PushRefundLineLinkV2'
+      required:
+      - amount
+    AccountRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '145'
+        name:
+          type: string
+          example: Example account
+      required:
+      - id
+    RefundLineItemV2:
+      type: object
+      properties:
+        description:
+          type: string
+          example: Services rendered.
+        unitAmount:
+          type: number
+          example: 100.5
+          format: float
+        quantity:
+          type: number
+          example: 3
+          format: float
+        discountAmount:
+          type: number
+          example: 0
+          format: float
+        taxAmount:
+          type: number
+          example: 20.5
+          format: float
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateRef'
+        inventoryRef:
+          $ref: '#/components/schemas/InventoryRef'
+        discountPercentage:
+          type: number
+          example: 10.5
+          format: float
+        amount:
+          type: number
+          example: 10.5
+          format: float
+        trackingCategoryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrackingCategoryRefV2'
+        accountRef:
+          $ref: '#/components/schemas/AccountRef'
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/RefundLineItemLinks'
+      required:
+      - amount
+    Error400DtoV2:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    GetRefundDataV1:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        customerRef:
+          $ref: '#/components/schemas/CustomerRef'
+        accountRef:
+          $ref: '#/components/schemas/AccountRef'
+        currencyRate:
+          type: number
+          example: 1.13
+          format: float
+        totalDiscount:
+          type: number
+          example: 322
+          format: float
+        discountPercentage:
+          type: number
+          example: 322
+          format: float
+        subTotal:
+          type: number
+          example: 301.5
+          format: float
+        taxAmount:
+          type: number
+          example: 20.5
+          format: float
+        totalAmount:
+          type: number
+          example: 322
+          format: float
+        memo:
+          type: string
+          example: Example bill memo.
+        sourceModifiedDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        date:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        shippingAddress:
+          $ref: '#/components/schemas/BaseAddress'
+        currencyRef:
+          $ref: '#/components/schemas/CurrencyRef'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/RefundLineItemV1'
+      required:
+      - id
+      - totalAmount
+      - date
+    BasicStartEndDateReportMetaDataV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - reportId
+      - createdAt
+      - updatedAt
+      - startDate
+      - endDate
+    BaseAddress:
+      type: object
+      properties:
+        line1:
+          type: string
+          example: 1234 Park Street
+        line2:
+          type: string
+          example: Suite 1000
+        city:
+          type: string
+          example: Toronto
+        region:
+          type: string
+          example: 'ON'
+        country:
+          type: string
+          example: CAN
+        postalCode:
+          type: string
+          example: A0B1C2
+    GetRefundDataV2:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        customerRef:
+          $ref: '#/components/schemas/CustomerRef'
+        accountRef:
+          $ref: '#/components/schemas/AccountRef'
+        currencyRate:
+          type: number
+          example: 1.13
+          format: float
+        totalDiscount:
+          type: number
+          example: 322
+          format: float
+        discountPercentage:
+          type: number
+          example: 322
+          format: float
+        subTotal:
+          type: number
+          example: 301.5
+          format: float
+        taxAmount:
+          type: number
+          example: 20.5
+          format: float
+        totalAmount:
+          type: number
+          example: 322
+          format: float
+        memo:
+          type: string
+          example: Example bill memo.
+        sourceModifiedDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        postedDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        currency:
+          type: string
+          example: USD
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/RefundLineItemV2'
+        passThrough:
+          type: object
+          additionalProperties: true
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+      required:
+      - id
+      - totalAmount
+      - postedDate
+    RefundTrackingCategoryRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4040'
+        type:
+          type: string
+          example: class
+          enum:
+          - class
+          - department
+          - location
+          - unknown
+      required:
+      - id
+    PushRefundConnection:
+      type: object
+      properties:
+        businessName:
+          type: string
+          example: Railz
+          description: Unique business name identifier.
+        serviceName:
+          type: string
+          example: xero
+          description: Name of accounting platform service.
+          enum:
+          - xero
+          - quickbooks
+      required:
+      - businessName
+      - serviceName
+    TrackingCategoryRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4040'
+          readOnly: false
+        name:
+          type: string
+          readOnly: false
+          example: Region
+        option:
+          type: string
+          readOnly: false
+          example: East
+        optionId:
+          type: string
+          readOnly: false
+          example: '40401'
+      required:
+      - id
+    CurrencyRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: CAD
+        name:
+          type: string
+          example: Canadian Dollar
+        symbol:
+          type: string
+          example: USD,CAD
+      required:
+      - id
+    TrackingCategoryRefV2:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4040'
+          readOnly: false
+        name:
+          type: string
+          readOnly: false
+          example: Region
+        type:
+          type: string
+          example: class
+          enum:
+          - class
+          - department
+          - location
+          - unknown
+      required:
+      - id
+      - type
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    AccountRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '200'
+      required:
+      - id
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    GetRefundResponseV2Dto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        meta:
+          $ref: '#/components/schemas/BasicStartEndDateReportMetaDataV2'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetRefundDataV2'
+      required:
+      - pagination
+      - meta
+      - data
+    TaxRateRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '12'
+      required:
+      - id
+    PushRefundLineLinkV2:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '125'
+      required:
+      - id
+    InventoryRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '32'
+      required:
+      - id
+    PushRefundDto:
+      type: object
+      properties:
+        connection:
+          $ref: '#/components/schemas/PushRefundConnection'
+        data:
+          $ref: '#/components/schemas/PushRefundData'
+      required:
+      - connection
+      - data
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    RefundLineItemLinks:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '123'
+      required:
+      - id
+    BasicStartEndDateReportMetaData:
+      type: object
+      properties:
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          type: array
+          items:
+            type: string
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+      required:
+      - reportId
+      - serviceName
+      - businessName
+      - createdAt
+      - updatedAt
+      - startDate
+      - endDate
+    PushRefundV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        data:
+          $ref: '#/components/schemas/PushRefundDataV2'
+      required:
+      - connectionUuid
+      - data
+    CustomerRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '124'
+      required:
+      - id
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    RefundLineItemV1:
+      type: object
+      properties:
+        description:
+          type: string
+          example: Services rendered.
+        unitAmount:
+          type: number
+          example: 100.5
+          format: float
+        quantity:
+          type: number
+          example: 3
+          format: float
+        discountAmount:
+          type: number
+          example: 0
+          format: float
+        taxAmount:
+          type: number
+          example: 20.5
+          format: float
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateRef'
+        inventoryRef:
+          $ref: '#/components/schemas/InventoryRef'
+        discountPercentage:
+          type: number
+          example: 10.5
+          format: float
+        id:
+          type: string
+        totalAmount:
+          type: number
+          example: 10.5
+          format: float
+          deprecated: true
+        subTotal:
+          type: number
+          example: 301.5
+          format: float
+          deprecated: true
+        trackingCategoryRef:
+          deprecated: true
+          allOf:
+          - $ref: '#/components/schemas/TrackingCategoryRef'
+    PushRefundResponseV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        data:
+          readOnly: false
+          allOf:
+          - $ref: '#/components/schemas/PushRefundDataV2'
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - data
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http

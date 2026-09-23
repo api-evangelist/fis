@@ -1,0 +1,1963 @@
+openapi: 3.2.0
+info:
+  title: FIS® Accounting Data as a Service™ Businesses API
+  description: What's changed in our API
+  version: v2
+  contact: {}
+servers:
+- url: https://api.railz.ai
+  description: Main (production) API server
+tags:
+- name: Businesses
+paths:
+  /businesses:
+    get:
+      description: Gets a list of all team's businesses.
+      operationId: get businesses
+      parameters:
+      - name: businessName
+        required: false
+        in: query
+        schema:
+          example: Railz
+          type: string
+      - name: businessNameOrUuid
+        required: false
+        in: query
+        description: Partial or full business name or UUID.
+        schema:
+          example: BIZ-123
+          type: string
+      - name: integrationUuids
+        required: false
+        in: query
+        description: One or more integration uuids related to businesses to filter by.
+        schema:
+          minItems: 1
+          example:
+          - INT-123
+          type: array
+          items:
+            type: string
+      - name: status
+        required: false
+        in: query
+        description: The status of a business. If no status is provided then it fetches all
+        schema:
+          minItems: 1
+          type: array
+          items:
+            type: string
+            enum:
+            - active
+            - inactive
+            - new
+      - name: limit
+        required: false
+        in: query
+        schema:
+          minimum: 1
+          maximum: 500
+          format: integer
+          type: number
+      - name: offset
+        required: false
+        in: query
+        schema:
+          format: integer
+          type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessesV1ResponseDto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessesV1ResponseDto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Get businesses
+      tags:
+      - Businesses
+      x-summary-source: derived
+    post:
+      description: Create a business in 'new' state.
+      operationId: create businesses
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBusinessDto'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostBusinessesResponseDto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Create businesses
+      tags:
+      - Businesses
+      x-summary-source: derived
+    put:
+      description: Update a business name or metadata.
+      operationId: update businesses
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBusinessDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PutBusinessesResponseDto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Update businesses
+      tags:
+      - Businesses
+      x-summary-source: derived
+  /businesses/{businessName}:
+    delete:
+      description: Delete a business
+      operationId: delete business by name
+      parameters:
+      - name: businessName
+        required: true
+        in: path
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteBusinessResponseDto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Delete business by name
+      tags:
+      - Businesses
+      x-summary-source: derived
+  /businesses/info:
+    get:
+      description: Get business info for team's business
+      operationId: businessInfo
+      parameters:
+      - name: businessName
+        required: true
+        in: query
+        schema:
+          example: Railz
+          type: string
+      - name: serviceName
+        required: true
+        in: query
+        schema:
+          type: string
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessInfoResponseDtoV1'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessInfoResponseDtoV1'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Business info
+      tags:
+      - Businesses
+      x-summary-source: derived
+  /v2/businesses:
+    get:
+      operationId: get businesses
+      parameters:
+      - name: businessName
+        required: false
+        in: query
+        schema:
+          example: Railz
+          type: string
+      - name: businessNameOrUuid
+        required: false
+        in: query
+        description: Partial or full business name or UUID.
+        schema:
+          example: BIZ-123
+          type: string
+      - name: integrationUuids
+        required: false
+        in: query
+        description: One or more integration uuids related to businesses to filter by.
+        schema:
+          minItems: 1
+          example:
+          - INT-123
+          type: array
+          items:
+            type: string
+      - name: status
+        required: false
+        in: query
+        description: The status of a business. If no status is provided then it fetches all
+        schema:
+          minItems: 1
+          type: array
+          items:
+            type: string
+            enum:
+            - active
+            - inactive
+            - new
+      - name: limit
+        required: false
+        in: query
+        schema:
+          minimum: 1
+          maximum: 500
+          format: integer
+          type: number
+      - name: offset
+        required: false
+        in: query
+        schema:
+          format: integer
+          type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessesV2ResponseDto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessesV2ResponseDto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: List Businesses
+      tags:
+      - Businesses
+    post:
+      operationId: create businesses
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBusinessDto'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostBusinessesResponseDtoV2'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Create a Business
+      tags:
+      - Businesses
+  /v2/businesses/{uuid}:
+    put:
+      operationId: update businesses
+      parameters:
+      - name: uuid
+        required: true
+        in: path
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBusinessDtoV2'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PutBusinessesResponseDtoV2'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Update a Business
+      tags:
+      - Businesses
+    delete:
+      operationId: delete business by name
+      parameters:
+      - name: uuid
+        required: true
+        in: path
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteBusinessResponseDto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Delete a Business
+      tags:
+      - Businesses
+  /v2/businesses/{uuid}/connection/migrate:
+    post:
+      operationId: migrateConnection
+      parameters:
+      - name: uuid
+        required: true
+        in: path
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConnectionMigrationDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectionMigrationResponseDto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Migrate Connection
+      tags:
+      - Businesses
+  /v2/businesses/info:
+    get:
+      description: '**Supported for:**
+
+
+        `freshbooks` `quickbooks` `quickbooksDesktop` `xero` `oracleNetsuite` `sageBusinessCloud` `sageIntacct` `dynamicsBusinessCentral` `dynamics365Finance` `wave` `myob` `zohoBooks`'
+      operationId: businessInfo
+      parameters:
+      - name: connectionUuid
+        required: true
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessInfoResponseDtoV2'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessInfoResponseDtoV2'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: List Business Info
+      tags:
+      - Businesses
+  /v2/businesses/generateUrl:
+    post:
+      description: API for generating short lived session IDs, session ID should expire 5 days from created date
+      operationId: generateUrl
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                businessUuid:
+                  type: string
+                  example: BUS-1233
+              required:
+              - businessUuid
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                    example: https://sites.railz.ai/ux34ass113333
+                  expiryDate:
+                    type: string
+                    readOnly: true
+                    example: '2021-08-09 23:50:00'
+                required:
+                - url
+                - expiryDate
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404Dto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: API for generating sites URL
+      tags:
+      - Businesses
+components:
+  schemas:
+    BusinessInfoDataV2:
+      type: object
+      properties:
+        businessName:
+          type: string
+          example: Railz
+        legalName:
+          type: string
+          example: Railz Financial Technologies Inc
+        businessEmail:
+          type: string
+          example: noreply@railz.ai
+        website:
+          type: string
+          example: www.railz.ai
+        primaryPhoneNumber:
+          type: string
+          example: 416-555-1212
+        fiscalYearEndDay:
+          type: number
+          example: 31
+          format: integer
+        fiscalYearEndMonth:
+          type: number
+          example: 12
+          format: integer
+        industryType:
+          type: string
+          example: Financial
+        industryCode:
+          type: string
+          example: '123'
+        businessShortCode:
+          type: string
+          example: 6Qfdg!
+        baseCurrency:
+          type: string
+          example: USD
+        businessRegistrationNumber:
+          type: string
+          example: BN123456789
+        currencyRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessInfoCurrencyRef'
+        subsidiaryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessInfoSubsidiaryRef'
+        mailingAddress:
+          $ref: '#/components/schemas/BusinessInfoAddressV2'
+        legalAddress:
+          $ref: '#/components/schemas/BusinessInfoAddressV2'
+        businessType:
+          type: string
+          example: organization
+          enum:
+          - soleProprietorship
+          - partnership
+          - limitedLiability
+          - corporation
+          - organization
+          - other
+          - unknown
+          - notForProfit
+        accountingMethod:
+          type: string
+          example: accrual
+        passThrough:
+          type: object
+          additionalProperties: true
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+      required:
+      - businessType
+      - accountingMethod
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    BusinessInfoSubsidiaryRefParentRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '2'
+        name:
+          type: string
+          example: Honeywell Holdings
+    BusinessInfoLocationParentRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '11'
+        name:
+          type: string
+          example: United States
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    BusinessInfoLocationRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '52'
+        name:
+          type: string
+          example: United States
+        address:
+          $ref: '#/components/schemas/BusinessInfoLocationAddress'
+        parentRef:
+          $ref: '#/components/schemas/BusinessInfoLocationParentRef'
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    BaseConnectionsResponseDataV1:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-e66400c1-4d2f-4683-9bea-275799943695
+        firstRecordDate:
+          type: string
+          example: '2020-12-25T01:02:03Z'
+          format: date-time
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - quickbooks
+          - xero
+          - freshbooks
+          - quickbooksDesktop
+          - sageIntacct
+          - sageBusinessCloud
+          - oracleNetsuite
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - zohoBooks
+          - myob
+        description:
+          type: string
+          example: TD Bank
+        status:
+          type: string
+          readOnly: true
+          example: active
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+          format: date-time
+        disconnectReason:
+          type: string
+          example: disconnectedByCustomer
+        syncTime:
+          type: number
+          example: '1.3092'
+        institution:
+          example:
+            name: Citizens bank
+            logo: https://serverlogo.url
+          allOf:
+          - $ref: '#/components/schemas/ConnectionsInstitutionData'
+        isMockData:
+          type: boolean
+          example: true
+        serviceAccountRef:
+          example:
+            id: '12345'
+            entityRef:
+              id: '100'
+          allOf:
+          - $ref: '#/components/schemas/serviceAccountRefType'
+        connectionId:
+          type: string
+          readOnly: true
+          example: CON-e66400c1-4d2f-4683-9bea-275799943695
+      required:
+      - connectionUuid
+      - serviceName
+      - status
+      - createdAt
+      - updatedAt
+      - connectionId
+    BusinessesResponseDataV1:
+      type: object
+      properties:
+        businessUuid:
+          type: string
+          readOnly: true
+          example: BIZ-0f1ef788-54eb-4ed1-a7d3-5605febe6d84
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        status:
+          type: string
+          readOnly: true
+          example: active
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+          format: date-time
+        metadata:
+          readOnly: true
+          example:
+          - name: new business1
+            value: canada
+            webhookLocation:
+            - header
+            - body
+          type: array
+          items:
+            type: string
+        connections:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/BaseConnectionsResponseDataV1'
+      required:
+      - businessUuid
+      - businessName
+      - status
+      - createdAt
+      - updatedAt
+      - metadata
+      - connections
+    BusinessesV1ResponseDto:
+      type: object
+      properties:
+        meta:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/MetaPageData'
+        data:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessesResponseDataV1'
+      required:
+      - meta
+      - data
+    BusinessInfoLocationAddress:
+      type: object
+      properties:
+        line1:
+          type: string
+          example: 180 John St
+        line2:
+          type: string
+          example: Suite 12E
+        city:
+          type: string
+          example: Seattle
+        region:
+          type: string
+          example: Washington
+        country:
+          type: string
+          example: United States
+        postalCode:
+          type: string
+          example: '19222'
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    BusinessInfoResponseDtoV1:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/BusinessInfoMetaData'
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/BusinessInfoDataV1'
+      required:
+      - meta
+      - data
+    PostBusinessesResponseDtoV2:
+      type: object
+      properties:
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        url:
+          type: string
+          readOnly: true
+        metadata:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/MetadataObjectDto'
+        status:
+          type: string
+          readOnly: true
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        businessUuid:
+          type: string
+          readOnly: true
+      required:
+      - businessName
+      - url
+      - metadata
+      - status
+      - createdAt
+      - businessUuid
+    BusinessInfoMetaDataV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        reportId:
+          type: string
+          readOnly: true
+          example: 5fad8a342a88364234392fb5
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+      required:
+      - connectionUuid
+      - reportId
+      - createdAt
+      - updatedAt
+    BusinessInfoAddressV2:
+      type: object
+      properties:
+        city:
+          type: string
+          example: Toronto
+        country:
+          type: string
+          example: Canada
+        line1:
+          type: string
+          example: 1234 Park Street
+        line2:
+          type: string
+          example: Suite 1000
+        region:
+          type: string
+          example: 'ON'
+        postalCode:
+          type: string
+          example: A0B1C2
+    DeleteBusinessResponseDto:
+      type: object
+      properties:
+        deleted:
+          type: string
+          readOnly: true
+      required:
+      - deleted
+    BaseConnectionsResponseDataV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-e66400c1-4d2f-4683-9bea-275799943695
+        firstRecordDate:
+          type: string
+          example: '2020-12-25T01:02:03Z'
+          format: date-time
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - quickbooks
+          - xero
+          - freshbooks
+          - quickbooksDesktop
+          - sageIntacct
+          - sageBusinessCloud
+          - oracleNetsuite
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - zohoBooks
+          - myob
+        description:
+          type: string
+          example: TD Bank
+        status:
+          type: string
+          readOnly: true
+          example: active
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+          format: date-time
+        disconnectReason:
+          type: string
+          example: disconnectedByCustomer
+        syncTime:
+          type: number
+          example: '1.3092'
+        institution:
+          example:
+            name: Citizens bank
+            logo: https://serverlogo.url
+          allOf:
+          - $ref: '#/components/schemas/ConnectionsInstitutionData'
+        isMockData:
+          type: boolean
+          example: true
+        serviceAccountRef:
+          example:
+            id: '12345'
+            entityRef:
+              id: '100'
+          allOf:
+          - $ref: '#/components/schemas/serviceAccountRefType'
+      required:
+      - connectionUuid
+      - serviceName
+      - status
+      - createdAt
+      - updatedAt
+    BusinessInfoSubsidiaryRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '8'
+        name:
+          type: string
+          example: Honeywell
+        parentRef:
+          $ref: '#/components/schemas/BusinessInfoSubsidiaryRefParentRef'
+        currencies:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessInfoSubsidiaryRefCurrencyRef'
+        locations:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessInfoSubsidiaryRefLocationRef'
+    ConnectionMigrationDto:
+      type: object
+      properties:
+        serviceName:
+          type: string
+          enum:
+          - quickbooks
+          - xero
+          - freshbooks
+          - dynamicsBusinessCentral
+          - sageBusinessCloud
+          - zohoBooks
+          - wave
+          - plaid
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+        accountId:
+          type: string
+        location:
+          type: string
+          enum:
+          - com
+          - eu
+          - in
+          - au
+          - jp
+          - ca
+      required:
+      - serviceName
+    PutBusinessesResponseDtoV2:
+      type: object
+      properties:
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        url:
+          type: string
+          readOnly: true
+        metadata:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/MetadataObjectDto'
+        status:
+          type: string
+          readOnly: true
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        businessUuid:
+          type: string
+          readOnly: true
+        updatedAt:
+          format: date-time
+          type: string
+          readOnly: true
+      required:
+      - businessName
+      - url
+      - metadata
+      - status
+      - createdAt
+      - businessUuid
+      - updatedAt
+    BusinessesResponseDataV2:
+      type: object
+      properties:
+        businessUuid:
+          type: string
+          readOnly: true
+          example: BIZ-0f1ef788-54eb-4ed1-a7d3-5605febe6d84
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        status:
+          type: string
+          readOnly: true
+          example: active
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+          format: date-time
+        metadata:
+          readOnly: true
+          example:
+          - name: new business1
+            value: canada
+            webhookLocation:
+            - header
+            - body
+          type: array
+          items:
+            type: string
+        connections:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/BaseConnectionsResponseDataV2'
+      required:
+      - businessUuid
+      - businessName
+      - status
+      - createdAt
+      - updatedAt
+      - metadata
+      - connections
+    MetaPageData:
+      type: object
+      properties:
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        offset:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        limit:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        currentPage:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        totalPages:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+      required:
+      - count
+      - offset
+      - limit
+      - currentPage
+      - totalPages
+    PostBusinessesResponseDto:
+      type: object
+      properties:
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        url:
+          type: string
+          readOnly: true
+        metadata:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/MetadataObjectDto'
+        status:
+          type: string
+          readOnly: true
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        businessUUID:
+          type: string
+          readOnly: true
+      required:
+      - businessName
+      - url
+      - metadata
+      - status
+      - createdAt
+      - businessUUID
+    Error400DtoV2:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    MetadataObjectDto:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        webhookLocation:
+          type: array
+          items:
+            type: string
+            enum:
+            - header
+            - body
+            - query
+      required:
+      - name
+      - value
+    BusinessInfoResponseDtoV2:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/BusinessInfoMetaDataV2'
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/BusinessInfoDataV2'
+      required:
+      - meta
+      - data
+    ConnectionsInstitutionData:
+      type: object
+      properties:
+        name:
+          type: string
+          readOnly: true
+          example: Citizens bank
+        logo:
+          type: string
+          readOnly: true
+          example: https://serverlogo.url
+      required:
+      - name
+      - logo
+    BusinessInfoDataV1:
+      type: object
+      properties:
+        businessName:
+          type: string
+          example: Railz
+        legalName:
+          type: string
+          example: Railz Financial Technologies Inc
+        businessEmail:
+          type: string
+          example: noreply@railz.ai
+        website:
+          type: string
+          example: www.railz.ai
+        primaryPhoneNumber:
+          type: string
+          example: 416-555-1212
+        fiscalYearEndDay:
+          type: number
+          example: 31
+          format: integer
+        fiscalYearEndMonth:
+          type: number
+          example: 12
+          format: integer
+        industryType:
+          type: string
+          example: Financial
+        industryCode:
+          type: string
+          example: '123'
+        businessShortCode:
+          type: string
+          example: 6Qfdg!
+        baseCurrency:
+          type: string
+          example: USD
+        businessRegistrationNumber:
+          type: string
+          example: BN123456789
+        currencyRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessInfoCurrencyRef'
+        subsidiaryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessInfoSubsidiaryRef'
+        mailingAddress:
+          $ref: '#/components/schemas/BusinessInfoAddress'
+        legalAddress:
+          $ref: '#/components/schemas/BusinessInfoAddress'
+        locationRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessInfoLocationRef'
+        businessType:
+          type: string
+          example: organization
+          enum:
+          - soleProprietorship
+          - partnership
+          - limitedLiability
+          - corporation
+          - organization
+          - other
+          - unknown
+          - notForProfit
+        accountingMethod:
+          type: string
+          example: accrual
+    CreateBusinessDto:
+      type: object
+      properties:
+        businessName:
+          type: string
+          example: Railz
+        metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetadataObjectDto'
+      required:
+      - businessName
+    BusinessInfoCurrencyRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '21'
+        isActive:
+          type: boolean
+          example: false
+        isBaseCurrency:
+          type: boolean
+          example: true
+        symbol:
+          type: string
+          example: USD
+        name:
+          type: string
+          example: USA
+    BusinessInfoMetaData:
+      type: object
+      properties:
+        reportId:
+          type: string
+          readOnly: true
+          example: 5fad8a342a88364234392fb5
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - quickbooks
+          - xero
+          - freshbooks
+          - quickbooksDesktop
+          - sageIntacct
+          - sageBusinessCloud
+          - oracleNetsuite
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - zohoBooks
+          - myob
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+      required:
+      - reportId
+      - serviceName
+      - businessName
+      - createdAt
+      - updatedAt
+    BusinessInfoAddress:
+      type: object
+      properties:
+        streetNumber:
+          type: string
+          example: '5100'
+          deprecated: true
+        streetName:
+          type: string
+          example: York Street
+          deprecated: true
+        city:
+          type: string
+          example: Toronto
+        state:
+          type: string
+          example: Ontario
+          deprecated: true
+        country:
+          type: string
+          example: Canada
+        zip:
+          type: string
+          example: M5J0B1
+          deprecated: true
+        line1:
+          type: string
+          example: 1234 Park Street
+        line2:
+          type: string
+          example: Suite 1000
+        region:
+          type: string
+          example: 'ON'
+        postalCode:
+          type: string
+          example: A0B1C2
+    serviceAccountRefType:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '12345'
+        entityRef:
+          type:
+          - object
+          - 'null'
+          example:
+            id: '100'
+          properties:
+            id:
+              type: string
+              example: '100'
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error404Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 404
+        message:
+          readOnly: true
+          example:
+          - Not Found
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Not Found
+      required:
+      - statusCode
+      - message
+      - error
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    UpdateBusinessDtoV2:
+      type: object
+      properties:
+        businessName:
+          type: string
+          example: Railz
+        metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetadataObjectDto'
+    BusinessInfoSubsidiaryRefCurrencyRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '3'
+    ConnectionMigrationResponseDto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+      required:
+      - connectionUuid
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    BusinessInfoSubsidiaryRefLocationRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '5'
+    BusinessesV2ResponseDto:
+      type: object
+      properties:
+        meta:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/MetaPageData'
+        data:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessesResponseDataV2'
+      required:
+      - meta
+      - data
+    UpdateBusinessDto:
+      type: object
+      properties:
+        businessName:
+          type: string
+          example: Railz
+        newBusinessName:
+          type: string
+          example: Railz
+        metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetadataObjectDto'
+      required:
+      - businessName
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    PutBusinessesResponseDto:
+      type: object
+      properties:
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        url:
+          type: string
+          readOnly: true
+        metadata:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/MetadataObjectDto'
+        status:
+          type: string
+          readOnly: true
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        businessUUID:
+          type: string
+          readOnly: true
+        updatedAt:
+          format: date-time
+          type: string
+          readOnly: true
+      required:
+      - businessName
+      - url
+      - metadata
+      - status
+      - createdAt
+      - businessUUID
+      - updatedAt
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http

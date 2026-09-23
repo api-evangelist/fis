@@ -1,0 +1,845 @@
+openapi: 3.2.0
+info:
+  title: FIS® Accounting Data as a Service™ Inventory API
+  description: What's changed in our API
+  version: v2
+  contact: {}
+servers:
+- url: https://api.railz.ai
+  description: Main (production) API server
+tags:
+- name: Inventory
+paths:
+  /inventory:
+    get:
+      description: Gets the latest inventory/items for a business.
+      operationId: inventory
+      parameters:
+      - name: businessName
+        required: true
+        in: query
+        schema:
+          type: string
+      - name: serviceName
+        required: true
+        in: query
+        schema:
+          type: string
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+      - name: offset
+        required: false
+        in: query
+        description: The offset is the position in the dataset of a particular record.
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        description: 'This is the size of the results set you would like (default: 100).'
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetInventoryResponseDto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetInventoryResponseDto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Inventory
+      tags:
+      - Inventory
+      x-summary-source: derived
+    post:
+      description: Posts an individual inventory item for a business.
+      operationId: push-inventory
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushInventoryV1Dto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushInventoryV1ResponseDto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Push inventory
+      tags:
+      - Inventory
+      x-summary-source: derived
+  /inventory/{id}:
+    put:
+      description: PUT an update to an individual inventory item for a business.
+      operationId: put-inventory
+      parameters:
+      - name: id
+        required: true
+        in: path
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateInventoryV1Dto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateInventoryV1ResponseDto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Put inventory
+      tags:
+      - Inventory
+      x-summary-source: derived
+components:
+  schemas:
+    UpdateInventoryV1:
+      type: object
+      properties:
+        code:
+          type: string
+          maxLength: 30
+          example: GOL-W
+        type:
+          type: string
+          enum:
+          - inventory
+          - nonInventory
+          - service
+          example: inventory
+        subsidiaryRefs:
+          example:
+          - '2'
+          - 3hn
+          - 1t2
+          type: array
+          items:
+            type: string
+        name:
+          type: string
+          example: White golf balls.
+          maxLength: 50
+        invoiceItem:
+          $ref: '#/components/schemas/InventoryBillInvoiceLineItems'
+        billItem:
+          $ref: '#/components/schemas/InventoryBillInvoiceLineItems'
+        isBillItem:
+          type: boolean
+          example: true
+          default: true
+        isInvoiceItem:
+          type: boolean
+          example: true
+          default: true
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    UpdateInventoryConnection:
+      type: object
+      properties:
+        businessName:
+          type: string
+          example: Railz
+          description: Unique business name identifier.
+        serviceName:
+          type: string
+          example: quickbooks
+          description: Name of accounting platform service.
+          enum:
+          - quickbooks
+          - xero
+          - freshbooks
+          - dynamicsBusinessCentral
+          - oracleNetsuite
+          - wave
+          - sageIntacct
+      required:
+      - businessName
+      - serviceName
+    TaxRateRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: HST
+        effectiveTaxRate:
+          type: number
+          example: 13
+          format: float
+      required:
+      - id
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    GetInventoryResponseDto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        meta:
+          $ref: '#/components/schemas/ListReportMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetInventoryDataV1'
+      required:
+      - pagination
+      - count
+      - meta
+      - data
+    InventoryLocationRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '9'
+        name:
+          type: string
+          example: Boston
+      required:
+      - id
+    BillOrInvoiceItem:
+      type: object
+      properties:
+        description:
+          type: string
+          example: Item description
+        unitPrice:
+          type: number
+          example: 100.5
+          format: float
+        accountRef:
+          $ref: '#/components/schemas/AccountRef'
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateRef'
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    UpdateInventoryV1ResponseDto:
+      type: object
+      properties:
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: quickbooks
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/UpdateInventoryV1'
+      required:
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - businessName
+      - serviceName
+      - data
+    UpdateInventoryV1Dto:
+      type: object
+      properties:
+        connection:
+          $ref: '#/components/schemas/UpdateInventoryConnection'
+        data:
+          $ref: '#/components/schemas/UpdateInventoryV1'
+      required:
+      - connection
+      - data
+    AccountRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '145'
+        name:
+          type: string
+          example: Example account
+      required:
+      - id
+    PushInventoryV1ResponseDto:
+      type: object
+      properties:
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: quickbooks
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushInventoryV1'
+      required:
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - businessName
+      - serviceName
+      - data
+    PushInventoryV1Dto:
+      type: object
+      properties:
+        connection:
+          $ref: '#/components/schemas/PushConnection'
+        data:
+          $ref: '#/components/schemas/PushInventoryV1'
+      required:
+      - connection
+      - data
+    GetInventoryDataV1:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Product Services
+        code:
+          type: string
+          example: '100'
+        sourceModifiedDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        billItem:
+          $ref: '#/components/schemas/BillOrInvoiceItem'
+        invoiceItem:
+          $ref: '#/components/schemas/BillOrInvoiceItem'
+        isInvoiceItem:
+          type: boolean
+          example: true
+        isBillItem:
+          type: boolean
+          example: true
+        subsidiaryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/InventorySubsidiaryRef'
+        quantityOnHand:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuantityOnHandData'
+        type:
+          type: string
+          enum:
+          - inventory
+          - nonInventory
+          - service
+          example: inventory
+        quantityOnHandPerLocation:
+          deprecated: true
+          type: array
+          items:
+            $ref: '#/components/schemas/QuantityOnHandData'
+        itemStatus:
+          type: string
+          enum:
+          - unknown
+          - active
+          - archived
+          example: active
+      required:
+      - id
+      - itemStatus
+    PushConnection:
+      type: object
+      properties:
+        businessName:
+          type: string
+          example: Railz
+          description: Unique business name identifier.
+        serviceName:
+          type: string
+          example: quickbooks
+          description: Name of accounting platform service.
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - shopify
+          - square
+          - plaid
+          - myob
+          - zohoBooks
+          - byod
+      required:
+      - businessName
+      - serviceName
+    InventorySubsidiaryRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '2'
+        name:
+          type: string
+          example: Company Ltd
+    InventoryBillInvoiceLineItems:
+      type: object
+      properties:
+        description:
+          type: string
+          maxLength: 4000
+          example: Item description.
+        unitPrice:
+          type: number
+          format: float
+          maximum: 999999999999
+          example: 2.5
+        accountRef:
+          type: string
+          example: '200'
+        taxRateRef:
+          type: string
+          example: '12'
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    PushInventoryV1:
+      type: object
+      properties:
+        code:
+          type: string
+          maxLength: 30
+          example: GOL-W
+        type:
+          type: string
+          enum:
+          - inventory
+          - nonInventory
+          - service
+          example: inventory
+        name:
+          type: string
+          example: White golf balls.
+          maxLength: 50
+        quantityOnHand:
+          type: number
+          format: float
+          example: 200
+          maximum: 999999999999
+        subsidiaryRefs:
+          example:
+          - '2'
+          - 3hn
+          - 1t2
+          type: array
+          items:
+            type: string
+        invoiceItem:
+          $ref: '#/components/schemas/InventoryBillInvoiceLineItems'
+        billItem:
+          $ref: '#/components/schemas/InventoryBillInvoiceLineItems'
+        isBillItem:
+          type: boolean
+          example: true
+          default: true
+        isInvoiceItem:
+          type: boolean
+          example: true
+          default: true
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    ListReportMetaData:
+      type: object
+      properties:
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          - 5fad8a342a88364234392fb6
+          type: array
+          items:
+            type: string
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
+      required:
+      - reportId
+      - serviceName
+      - businessName
+      - createdAt
+      - updatedAt
+    QuantityOnHandData:
+      type: object
+      properties:
+        locationRef:
+          $ref: '#/components/schemas/InventoryLocationRef'
+        quantity:
+          type: number
+          example: 2.5
+          format: float
+        accountRef:
+          $ref: '#/components/schemas/AccountRef'
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http

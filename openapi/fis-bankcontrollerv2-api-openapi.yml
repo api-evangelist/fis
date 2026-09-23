@@ -1,0 +1,3187 @@
+openapi: 3.2.0
+info:
+  title: FIS® Accounting Data as a Service™ Bank Controller V2 API
+  description: What's changed in our API
+  version: v2
+  contact: {}
+servers:
+- url: https://api.railz.ai
+  description: Main (production) API server
+tags:
+- name: BankControllerV2
+paths:
+  /v2/accounting/bankTransfers:
+    get:
+      description: '**Supported for:**
+
+
+        `xero` `sageBusinessCloud` `myob` `zohoBooks`'
+      operationId: bankTransfers
+      parameters:
+      - name: connectionUuid
+        required: true
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+          type: string
+      - name: startDate
+        required: false
+        in: query
+        description: 'The start date of the Transaction report frequency in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: endDate
+        required: false
+        in: query
+        description: 'The end date of the Transaction report frequency in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: offset
+        required: false
+        in: query
+        description: The offset is the position in the dataset of a particular record.
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        description: 'This is the size of the results set you would like (default: 100).'
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBankTransfersResponseV2Dto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBankTransfersResponseV2Dto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: List Bank Transfers
+      tags:
+      - BankControllerV2
+    post:
+      description: '**Supported for:**
+
+
+        `xero` `sageBusinessCloud` `myob` `zohoBooks`'
+      operationId: push-bankTransfer
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushBankTransfersV2Dto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushBankTransfersResponseV2Dto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Create a Bank Transfer
+      tags:
+      - BankControllerV2
+  /v2/banking/bankAccounts:
+    get:
+      description: '**Supported for:**
+
+
+        `plaid`'
+      operationId: bankAccounts
+      parameters:
+      - name: connectionUuid
+        required: true
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+          type: string
+      - name: offset
+        required: false
+        in: query
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBankAccountResponseV2Dto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBankAccountResponseV2Dto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: List Bank Accounts
+      tags:
+      - BankControllerV2
+  /v2/accounting/bankAccounts:
+    get:
+      description: '**Supported for:**
+
+
+        `quickbooks` `quickbooksDesktop` `xero` `sageBusinessCloud` `sageIntacct` `dynamicsBusinessCentral` `dynamics365Finance` `myob` `zohoBooks`'
+      operationId: accounting-BankAccounts
+      parameters:
+      - name: connectionUuid
+        required: true
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+          type: string
+      - name: offset
+        required: false
+        in: query
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBankAccountAccountingResponseV2Dto'
+        '202':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBankAccountAccountingResponseV2Dto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: List Bank Accounts
+      tags:
+      - BankControllerV2
+    post:
+      description: '**Supported for:**
+
+
+        `quickbooks` `xero` `sageBusinessCloud` `sageIntacct` `dynamicsBusinessCentral` `zohoBooks`'
+      operationId: push-accountingBankAccounts
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushBankAccountV2Dto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushBankAccountResponseV2Dto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Create a Bank Account
+      tags:
+      - BankControllerV2
+  /v2/banking/bankTransactions:
+    get:
+      description: '**Supported for:**
+
+
+        `plaid`'
+      operationId: bankTransactions
+      parameters:
+      - name: connectionUuid
+        required: true
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+          type: string
+      - name: offset
+        required: false
+        in: query
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: startDate
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: endDate
+        required: false
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBankTransactionsV2ResponseDto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBankTransactionsV2ResponseDto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: List Bank Transactions
+      tags:
+      - BankControllerV2
+  /v2/accounting/bankTransactions:
+    get:
+      description: '**Supported for:**
+
+
+        `xero` `myob` `zohoBooks`'
+      operationId: accounting-bankTransactions
+      parameters:
+      - name: connectionUuid
+        required: true
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+          type: string
+      - name: startDate
+        required: false
+        in: query
+        description: 'The start date of the Transaction report frequency in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: endDate
+        required: false
+        in: query
+        description: 'The end date of the Transaction report frequency in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: offset
+        required: false
+        in: query
+        description: The offset is the position in the dataset of a particular record.
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        description: 'This is the size of the results set you would like (default: 100).'
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAspBankTransactionsV2ResponseDto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAspBankTransactionsV2ResponseDto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: List Bank Transactions
+      tags:
+      - BankControllerV2
+    post:
+      description: '**Supported for:**
+
+
+        `xero` `wave` `myob` `zohoBooks`'
+      operationId: push-bankTransaction
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushBankTransactionV2Dto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushBankTransactionResponseV2Dto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Create a Bank Transaction
+      tags:
+      - BankControllerV2
+  /v2/accounting/bankTransactions/batch:
+    post:
+      description: '**Supported for:**
+
+
+        `xero`'
+      operationId: push-batchbankTransaction
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchPushBankTransactionV2Dto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchPushBankTransactionResponseV2Dto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Batch Create Bank Transactions
+      tags:
+      - BankControllerV2
+    put:
+      description: '**Supported for:**
+
+
+        `xero`'
+      operationId: update-batchbankTransaction
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchUpdateBankTransactionDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchUpdateBankTransactionResponseV2Dto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Batch Update Bank Transactions
+      tags:
+      - BankControllerV2
+  /v2/accounting/bankTransactions/{id}:
+    put:
+      description: '**Supported for:**
+
+
+        `xero` `myob` `zohoBooks`'
+      operationId: update-bankTransaction
+      parameters:
+      - name: id
+        required: true
+        in: path
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBankTransactionDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateBankTransactionResponseDto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Update a Bank Transaction
+      tags:
+      - BankControllerV2
+  /v2/analytics/bankReconciliation:
+    get:
+      description: '**Supported for:**
+
+
+        `freshbooks` `quickbooks` `quickbooksDesktop` `xero` `oracleNetsuite` `sageBusinessCloud` `sageIntacct` `dynamicsBusinessCentral` `myob`'
+      operationId: bankReconciliation
+      parameters:
+      - name: connectionUuid
+        required: true
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+          type: string
+      - name: startDate
+        required: false
+        in: query
+        description: 'The start date of the Transaction report frequency in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: endDate
+        required: false
+        in: query
+        description: 'The end date of the Transaction report frequency in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: offset
+        required: false
+        in: query
+        description: The offset is the position in the dataset of a particular record.
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        description: 'This is the size of the results set you would like (default: 100).'
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankReconciliationResponseV2Dto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankReconciliationResponseV2Dto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: List Banking Reconciliations
+      tags:
+      - BankControllerV2
+  /v2/banking/bankAssets:
+    get:
+      description: '**Supported for:**
+
+
+        `plaid`'
+      operationId: bankAssets
+      parameters:
+      - name: connectionUuid
+        required: true
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+          type: string
+      - name: offset
+        required: false
+        in: query
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBankAssetResponseDto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBankAssetResponseDto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: List Bank Assets
+      tags:
+      - BankControllerV2
+components:
+  schemas:
+    GetAspBankTransactionsV2ResponseDto:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/BankTransactionsAccountingReportMetaData'
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetBankTransactionsAccountingData'
+      required:
+      - meta
+      - pagination
+      - data
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    BankReconciliationV2Data:
+      type: object
+      properties:
+        bankTransactionsCount:
+          type: number
+          example: 35
+        accountingTransactionsCount:
+          type: number
+          example: 50
+        bankTransactionsAmount:
+          type: number
+          example: 105.5
+          format: float
+        accountingTransactionsAmount:
+          type: number
+          example: 750.5
+          format: float
+        bankTransactionsTotalValue:
+          type: number
+          example: 109.95
+          format: float
+        accountingTransactionsTotalValue:
+          type: number
+          example: 500.5
+          format: float
+        weightedPercentageError:
+          type: number
+          example: 1
+          format: float
+        accuracyScore:
+          type: number
+          example: 50.5
+          format: float
+        bankTransactionsUnreconciledCount:
+          type: number
+          example: 25
+        bankTransactionsUnreconciledAmount:
+          type: number
+          example: 109.95
+          format: float
+        dailyAccuracyScore:
+          type: number
+          example: 0.24
+          format: float
+        unreconciledBankTransactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/BankTransactions'
+        reconciledBankTransactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReconciledBankTransactionsV2'
+      required:
+      - bankTransactionsCount
+      - accountingTransactionsCount
+      - bankTransactionsAmount
+      - accountingTransactionsAmount
+      - bankTransactionsTotalValue
+      - accountingTransactionsTotalValue
+      - weightedPercentageError
+      - accuracyScore
+      - bankTransactionsUnreconciledCount
+      - bankTransactionsUnreconciledAmount
+      - dailyAccuracyScore
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    BankAccountMetaDataV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          readOnly: true
+          format: date-time
+          example: '2020-12-25T01:02:03Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2020-12-25T01:02:03Z'
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - reportId
+      - createdAt
+      - updatedAt
+    GetBankAccountResponseV2Dto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetBankAccountData'
+        meta:
+          $ref: '#/components/schemas/BankAccountMetaDataV2'
+        count:
+          type: integer
+          readOnly: true
+          example: 1
+          deprecated: true
+      required:
+      - pagination
+      - data
+      - meta
+      - count
+    PushBankTransactionV2:
+      type: object
+      properties:
+        currencyRate:
+          type: number
+          example: '1.13'
+        currency:
+          type: string
+          example: CAD
+        transactionType:
+          type: string
+          example: payment
+          enum:
+          - payment
+          - refund
+          - deposit
+          - expense
+          - transfer
+          - overPayment
+          - unknown
+          - salesReturn
+          - ownerDrawings
+          - salesWithoutInvoices
+          - interestIncome
+          - otherIncome
+          - expenseRefund
+          - depositFromOtherAccounts
+          - ownersContribution
+        bankAccountRef:
+          $ref: '#/components/schemas/BankAccountRefDto'
+        entityRef:
+          $ref: '#/components/schemas/EntityRefDto'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/PushBankTransactionLineV2'
+        totalAmount:
+          type: number
+          format: float
+          example: '150.50'
+        memo:
+          type: string
+          maxLength: 4000
+          example: Example memo.
+        postedDate:
+          format: date-time
+          type: string
+          example: '2020-11-30'
+        transactionDirection:
+          type: string
+          enum:
+          - outgoing
+          - incoming
+          example: incoming
+        passThrough:
+          type: object
+          additionalProperties: true
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+      required:
+      - bankAccountRef
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    TrackingCategoryRefV2Dto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4040'
+        type:
+          type: string
+          example: class
+          enum:
+          - class
+          - department
+          - location
+          - unknown
+    PushBankTransfersV2:
+      type: object
+      properties:
+        currencyRate:
+          type: number
+          example: '1.13'
+        totalAmount:
+          type: number
+          format: float
+          example: '150.50'
+        date:
+          type: string
+          format: date
+          example: '2021-03-09'
+        memo:
+          type: string
+          maxLength: 4000
+          example: Services rendered.
+        fromAccountRef:
+          $ref: '#/components/schemas/AccountRefDto'
+        toAccountRef:
+          $ref: '#/components/schemas/AccountRefDto'
+        currency:
+          type: string
+          example: CAD
+        passThrough:
+          type: object
+          additionalProperties: true
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+      required:
+      - totalAmount
+      - fromAccountRef
+      - toAccountRef
+    GetBankTransactionsAccountingData:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '25'
+        postedDate:
+          format: date-time
+          type: string
+          example: '2020-11-30T01:02:03Z'
+        transactionType:
+          type: string
+          example: payment
+          enum:
+          - payment
+          - refund
+          - deposit
+          - expense
+          - transfer
+          - overPayment
+          - unknown
+          - salesReturn
+          - ownerDrawings
+          - salesWithoutInvoices
+          - interestIncome
+          - otherIncome
+          - expenseRefund
+          - depositFromOtherAccounts
+          - ownersContribution
+        bankAccountRef:
+          $ref: '#/components/schemas/AccountRef'
+        currency:
+          type: string
+          example: CAD
+        currencyRate:
+          type: number
+          example: 1.13
+          format: float
+        isReconciled:
+          type: boolean
+          example: false
+        totalAmount:
+          type: number
+          example: 322
+          format: float
+        lines:
+          $ref: '#/components/schemas/BankTransactionsAccountingLineItem'
+        memo:
+          type: string
+          example: Example memo.
+        sourceModifiedDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        entityRef:
+          $ref: '#/components/schemas/EntityRefV2'
+        transactionDirection:
+          type: string
+          enum:
+          - outgoing
+          - incoming
+          example: incoming
+      required:
+      - id
+      - postedDate
+      - transactionType
+      - totalAmount
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    GetBankTransactionsV2Data:
+      type: object
+      properties:
+        id:
+          type: string
+          example: lPNjeW1nR6CDn5okmGQ6hEpMo4lLNoSrzqDje
+        accountId:
+          type: string
+          example: blgvvBlXw3cq5GMPwqB6s6q4dLKB9WcVqGDGo
+        date:
+          type: string
+          format: date-time
+          example: '2017-01-29'
+        authorizedOnDate:
+          type: string
+          format: date-time
+          example: '2017-01-29'
+        isPending:
+          type: boolean
+          example: false
+        amount:
+          type: number
+          format: float
+          example: 100
+        currency:
+          type: string
+          example: CAD
+        transactionType:
+          type: string
+          enum:
+          - adjustment
+          - atm
+          - bankCharge
+          - billPayment
+          - cash
+          - cashback
+          - cheque
+          - directDebit
+          - interest
+          - purchase
+          - standingOrder
+          - transfer
+          example: directDebit
+        paymentChannel:
+          type: string
+          enum:
+          - online
+          - inStore
+          - other
+          example: online
+        categories:
+          type: array
+          items:
+            type: string
+          example:
+          - Shops
+          - Computers and Electronics
+        merchantName:
+          type: string
+          example: Apple
+        merchantStoreNumber:
+          type: string
+          example: '1235'
+        description:
+          type: string
+          example: Apple Store
+        location:
+          $ref: '#/components/schemas/BankLocationData'
+        section:
+          type: string
+          example: Assets
+          enum:
+          - Assets
+          - Expenses
+          - Income
+          - Liabilities
+          - Equity
+        subSection:
+          type: string
+          example: Current Assets
+          enum:
+          - Current Assets
+          - Non-Current Assets
+          - Current Liabilities
+          - Non-Current Liabilities
+          - Equity
+          - Income
+          - Other Income
+          - Operating Expenses
+          - Other Expenses
+          - Cost of Goods Sold
+        group:
+          type: string
+          example: Office General Administrative Expenses
+        subGroup:
+          type: string
+          example: Office Supplies & Software
+        accountType:
+          type: string
+        accountSubType:
+          type: string
+      required:
+      - id
+      - accountId
+      - date
+      - isPending
+      - amount
+      - currency
+      - paymentChannel
+      - description
+    BatchPushBankTransactionV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        batch:
+          type: array
+          items:
+            $ref: '#/components/schemas/PushBankTransactionV2'
+      required:
+      - connectionUuid
+      - batch
+    PushBankTransfersResponseV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushBankTransfersV2'
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - data
+    ReconcilationAccountRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1334'
+          readOnly: false
+        name:
+          type: string
+          example: Account Receivable
+          readOnly: false
+        section:
+          type: string
+          example: Assets
+          readOnly: false
+          enum:
+          - Assets
+          - Expenses
+          - Income
+          - Liabilities
+          - Equity
+        subSection:
+          type: string
+          example: Current Assets
+          readOnly: false
+          enum:
+          - Current Assets
+          - Non-Current Assets
+          - Current Liabilities
+          - Non-Current Liabilities
+          - Equity
+          - Income
+          - Other Income
+          - Operating Expenses
+          - Other Expenses
+          - Cost of Goods Sold
+        group:
+          type: string
+          example: Cash And Cash Equivalents
+          readOnly: false
+        subGroup:
+          type: string
+          example: Cash And Cash Equivalents
+          readOnly: false
+      required:
+      - id
+      - name
+    BankTransactions:
+      type: object
+      properties:
+        id:
+          type: string
+          example: lPNjeW1nR6CDn5okmGQ6hEpMo4lLNoSrzqDje
+          readOnly: false
+        date:
+          type: string
+          example: '2017-01-29'
+          readOnly: false
+          format: date-time
+        amount:
+          type: number
+          readOnly: false
+          example: 1000
+        accountType:
+          type: string
+          example: investment, credit, depository, loan, brokerage, other
+        accountId:
+          type: string
+          example: onD7kPQJ98cDejlnXpZeHeqp1qBlX5TogLqxW
+        description:
+          type: string
+          example: BMO Bank of Montreal
+      required:
+      - id
+      - date
+      - amount
+      - accountId
+    EntityRefDto:
+      type: object
+      properties:
+        type:
+          type: string
+          example: customer
+          enum:
+          - customer
+          - vendor
+        id:
+          type: string
+          example: '130'
+      required:
+      - id
+    BankAssetMetaData:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          readOnly: true
+          format: date-time
+          example: '2020-12-25T01:02:03Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2020-12-25T01:02:03Z'
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - reportId
+      - createdAt
+      - updatedAt
+    GetBankTransactionsV2ResponseDto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        meta:
+          $ref: '#/components/schemas/TransactionalReportMetaDataV2'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetBankTransactionsV2Data'
+      required:
+      - pagination
+      - meta
+      - data
+    BankLocationData:
+      type: object
+      properties:
+        line1:
+          type: string
+          example: 300 Post St
+        line2:
+          type: string
+        city:
+          type: string
+          example: San Francisco
+        region:
+          type: string
+          example: CA
+        country:
+          type: string
+          example: USA
+        postalCode:
+          type: string
+          example: '94108'
+    PushBankAccountV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        data:
+          $ref: '#/components/schemas/PushBankAccountV2'
+      required:
+      - connectionUuid
+      - data
+    GetBankAccountAccountingResponseV2Dto:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/BankAccountMetaDataV2'
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetBankAccountAccountingDataV2'
+      required:
+      - meta
+      - pagination
+      - data
+    TrackingCategoryRefAccounting:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4040'
+          readOnly: false
+        name:
+          type: string
+          readOnly: false
+          example: Region
+        type:
+          type: string
+          example: class
+          enum:
+          - class
+          - department
+          - location
+          - unknown
+      required:
+      - id
+    AccountRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '145'
+        name:
+          type: string
+          example: Example account
+      required:
+      - id
+    GetBankAssetData:
+      type: object
+      properties:
+        accountId:
+          type: string
+          example: blgvvBlXw3cq5GMPwqB6s6q4dLKB9WcVqGDGo
+        currentBalance:
+          type: number
+          format: float
+          example: 110
+        availableBalance:
+          type: number
+          format: float
+          example: 100
+        limit:
+          type: number
+          format: float
+          example: 200
+        currency:
+          type: string
+          example: CAD
+        date:
+          type: string
+          format: date-time
+          example: '2017-01-29'
+        daysAvailable:
+          type: number
+          format: float
+        historicalBalances:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricalBalances'
+        accountName:
+          type: string
+          example: Railz Checking
+        accountType:
+          type: string
+          enum:
+          - checking
+          - saving
+          - creditCard
+          - loan
+          - investment
+          - unknown
+          example: checking
+        accountSubType:
+          type: string
+          example: checking
+        sourceModifiedDate:
+          type: string
+          format: date-time
+          example: '2021-03-09T10:18:29.985Z'
+      required:
+      - accountId
+    PushBankTransfersV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        data:
+          $ref: '#/components/schemas/PushBankTransfersV2'
+      required:
+      - connectionUuid
+      - data
+    UpdateBankTransactionLine:
+      type: object
+      properties:
+        quantity:
+          type: number
+          format: float
+          example: '4'
+        unitAmount:
+          type: number
+          format: float
+          example: '50.5'
+        id:
+          type: string
+          example: 8a3fdcc9-83eb-4fdd-83e0-52ec1b40b072
+        description:
+          type: string
+          maxLength: 4000
+          example: Services rendered.
+        accountRef:
+          $ref: '#/components/schemas/AccountRefDto'
+        taxRateRef:
+          $ref: '#/components/schemas/BaseTaxRateRef'
+        trackingCategoryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrackingCategoryRefV2Dto'
+    BankTransactionsAccountingReportMetaData:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          - 5fad8a342a88364234392fb6
+          type: array
+          items:
+            type: string
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - reportId
+      - startDate
+      - endDate
+      - createdAt
+      - updatedAt
+    Error400DtoV2:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    UpdateBankTransactionResponseDto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/UpdateBankTransaction'
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - data
+    BatchUpdateBankTransactionDto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        batch:
+          type: array
+          items:
+            $ref: '#/components/schemas/BatchUpdateBankTransaction'
+      required:
+      - connectionUuid
+      - batch
+    BankTransferFromAccountRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1233455'
+        name:
+          type: string
+          example: Business Savings Account
+      required:
+      - id
+    UpdateBankTransactionIndividualResponseV2Dto:
+      type: object
+      properties:
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/BatchUpdateBankTransaction'
+      required:
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - data
+    BaseTaxRateRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '12'
+      required:
+      - id
+    PushBankTransactionResponseV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushBankTransactionV2'
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - data
+    TransactionalReportMetaDataV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          - 5fad8a342a88364234392fb6
+          type: array
+          items:
+            type: string
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - reportId
+      - startDate
+      - endDate
+      - createdAt
+      - updatedAt
+    BankTransfersReportMetaDataV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          - 5fad8a342a88364234392fb6
+          type: array
+          items:
+            type: string
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - reportId
+      - startDate
+      - endDate
+      - createdAt
+      - updatedAt
+    EntityRefV2:
+      type: object
+      properties:
+        type:
+          type: string
+          example: customer
+          enum:
+          - customer
+          - vendor
+        id:
+          type: string
+          example: '130'
+        name:
+          type: string
+          example: ABC Inc
+      required:
+      - id
+    HistoricalBalances:
+      type: object
+      properties:
+        currency:
+          type: string
+          example: CAD
+        date:
+          type: string
+          format: date-time
+          example: '2017-01-29'
+        amount:
+          type: number
+          format: float
+          example: 100
+    UpdateBankTransaction:
+      type: object
+      properties:
+        passThrough:
+          type: object
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+          additionalProperties: true
+        currencyRate:
+          type: number
+          example: '1.13'
+        currency:
+          type: string
+          example: CAD
+        transactionType:
+          type: string
+          example: payment
+          enum:
+          - payment
+          - refund
+          - deposit
+          - expense
+          - transfer
+          - overPayment
+          - unknown
+          - salesReturn
+          - ownerDrawings
+          - salesWithoutInvoices
+          - interestIncome
+          - otherIncome
+          - expenseRefund
+          - depositFromOtherAccounts
+          - ownersContribution
+        transactionDirection:
+          type: string
+          enum:
+          - outgoing
+          - incoming
+          example: incoming
+        bankAccountRef:
+          $ref: '#/components/schemas/BankAccountRefDto'
+        entityRef:
+          $ref: '#/components/schemas/EntityRefDto'
+        totalAmount:
+          type: number
+          format: float
+          example: '150.50'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateBankTransactionLine'
+        memo:
+          type: string
+          maxLength: 4000
+          example: Example memo.
+        postedDate:
+          format: date-time
+          type: string
+          example: '2020-11-30'
+      required:
+      - transactionType
+    BankAccountRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '200'
+      required:
+      - id
+    BankReconciliationReportMetaDataV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        reportId:
+          type: string
+          example: 5fad8a342a88364234392fb6
+          readOnly: true
+        startDate:
+          type: string
+          example: '2020-11-25T01:02:03Z'
+          readOnly: true
+          format: date-time
+        endDate:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          readOnly: true
+          format: date-time
+        createdAt:
+          type: string
+          example: '2020-11-25T01:02:03Z'
+          readOnly: true
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          readOnly: false
+          format: date-time
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - reportId
+      - startDate
+      - endDate
+      - createdAt
+      - updatedAt
+    BatchPushBankTransactionResponseV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        batchId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        batch:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/PushBankTransactionIndividualResponseV2Dto'
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - batchId
+      - batch
+    BankTaxRateRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '12'
+        name:
+          type: string
+      required:
+      - id
+    PushBankTransactionLineV2:
+      type: object
+      properties:
+        quantity:
+          type: number
+          format: float
+          example: '4'
+        unitAmount:
+          type: number
+          format: float
+          example: '50.5'
+        description:
+          type: string
+          maxLength: 4000
+          example: Services rendered.
+        accountRef:
+          $ref: '#/components/schemas/AccountRefDto'
+        taxRateRef:
+          $ref: '#/components/schemas/BaseTaxRateRef'
+        taxAmount:
+          type: number
+          format: float
+          example: '15.25'
+        trackingCategoryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrackingCategoryRefV2Dto'
+      required:
+      - accountRef
+    BatchUpdateBankTransaction:
+      type: object
+      properties:
+        passThrough:
+          type: object
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+          additionalProperties: true
+        currencyRate:
+          type: number
+          example: '1.13'
+        currency:
+          type: string
+          example: CAD
+        transactionType:
+          type: string
+          example: payment
+          enum:
+          - payment
+          - refund
+          - deposit
+          - expense
+          - transfer
+          - overPayment
+          - unknown
+          - salesReturn
+          - ownerDrawings
+          - salesWithoutInvoices
+          - interestIncome
+          - otherIncome
+          - expenseRefund
+          - depositFromOtherAccounts
+          - ownersContribution
+        transactionDirection:
+          type: string
+          enum:
+          - outgoing
+          - incoming
+          example: incoming
+        bankAccountRef:
+          $ref: '#/components/schemas/BankAccountRefDto'
+        entityRef:
+          $ref: '#/components/schemas/EntityRefDto'
+        totalAmount:
+          type: number
+          format: float
+          example: '150.50'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateBankTransactionLine'
+        memo:
+          type: string
+          maxLength: 4000
+          example: Example memo.
+        postedDate:
+          format: date-time
+          type: string
+          example: '2020-11-30'
+        bankTransactionRef:
+          type: string
+          description: reference to the bank transaction to be updated
+      required:
+      - transactionType
+      - bankTransactionRef
+    GetBankTransfersResponseV2Dto:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/BankTransfersReportMetaDataV2'
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetBankTransferDataV2'
+      required:
+      - meta
+      - pagination
+      - data
+    PushBankAccountResponseV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushBankAccountV2'
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - data
+    GetBankAssetResponseDto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetBankAssetData'
+        meta:
+          $ref: '#/components/schemas/BankAssetMetaData'
+      required:
+      - pagination
+      - data
+      - meta
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    PushBankTransactionIndividualResponseV2Dto:
+      type: object
+      properties:
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushBankTransactionV2'
+      required:
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - data
+    AccountRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '200'
+      required:
+      - id
+    UpdateBankTransactionDto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        data:
+          $ref: '#/components/schemas/UpdateBankTransaction'
+      required:
+      - connectionUuid
+      - data
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    PushBankTransactionV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        data:
+          $ref: '#/components/schemas/PushBankTransactionV2'
+      required:
+      - connectionUuid
+      - data
+    BankReconciliationResponseV2Dto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+          deprecated: true
+        reports:
+          readOnly: false
+          type: array
+          items:
+            $ref: '#/components/schemas/BankReconciliationReportV2'
+      required:
+      - pagination
+      - count
+      - reports
+    BatchUpdateBankTransactionResponseV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        batchId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        batch:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateBankTransactionIndividualResponseV2Dto'
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - batchId
+      - batch
+    GetBankAccountData:
+      type: object
+      properties:
+        institutionName:
+          type: string
+          example: TD Bank
+        accountId:
+          type: string
+          example: blgvvBlXw3cq5GMPwqB6s6q4dLKB9WcVqGDGo
+        currentBalance:
+          type: number
+          format: float
+          example: 110
+        availableBalance:
+          type: number
+          format: float
+          example: 100
+        limit:
+          type: number
+          format: float
+          example: 200
+        currency:
+          type: string
+          example: CAD
+        maskedAccountNumber:
+          type: string
+          example: '4445'
+        accountName:
+          type: string
+          example: Railz Checking
+        officialAccountName:
+          type: string
+          example: Railz Gold Standard 0% Interest Checking
+        accountType:
+          type: string
+          enum:
+          - investment
+          - credit
+          - depository
+          - loan
+          - brokerage
+          - other
+          example: depository
+        accountSubType:
+          type: string
+          example: checking
+        sourceModifiedDate:
+          type: string
+          format: date-time
+          example: '2021-03-09T10:18:29.985Z'
+      required:
+      - institutionName
+      - accountId
+      - currency
+      - accountName
+      - accountType
+    BankTransferToAccountRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '327623'
+        name:
+          type: string
+          example: Business Bank Account
+      required:
+      - id
+    BankTransactionsAccountingLineItem:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 8a3fdcc9-83eb-4fdd-83e0-52ec1b40b072
+        description:
+          type: string
+          example: Railz store
+        taxRateRef:
+          $ref: '#/components/schemas/BankTaxRateRef'
+        taxAmount:
+          type: number
+          example: 20.5
+          format: float
+        amount:
+          type: number
+          example: 322
+          format: float
+        accountRef:
+          $ref: '#/components/schemas/AccountRef'
+        unitAmount:
+          type: number
+          format: float
+          example: '50.5'
+        quantity:
+          type: number
+          format: float
+          example: '4'
+        trackingCategoryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrackingCategoryRefAccounting'
+      required:
+      - amount
+      - accountRef
+      - unitAmount
+      - quantity
+    PushBankAccountV2:
+      type: object
+      properties:
+        id:
+          type: string
+          example: lPNjeW1nR6CDn5okmGQ6hEpMo4lLNoSrzqDje
+        nominalCode:
+          type: string
+          example: '200'
+        name:
+          type: string
+          example: Business Bank Account
+        accountType:
+          type: string
+          enum:
+          - checking
+          - saving
+          - creditCard
+          - loan
+          - investment
+          - unknown
+          example: checking
+        accountNumber:
+          type: string
+          example: '11200'
+        routingNumber:
+          type: string
+          example: '123456789'
+        bankCode:
+          type: string
+          example: TD
+        iBan:
+          type: string
+          example: CA123456789012345678901234
+        locationId:
+          type: string
+          example: '100'
+        institutionName:
+          type: string
+          example: TD Bank
+        currency:
+          type: string
+          example: CAD
+        currentBalance:
+          type: number
+          example: 24.55
+        overdraftLimit:
+          type: number
+          example: 8.75
+        availableBalance:
+          type: number
+          example: 5.55
+        isActive:
+          type: boolean
+          example: true
+    EntityRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '233'
+        name:
+          type: string
+          example: Railz Inc.
+      required:
+      - id
+    BankReconciliationReportV2:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/BankReconciliationReportMetaDataV2'
+        data:
+          readOnly: false
+          type: array
+          items:
+            $ref: '#/components/schemas/BankReconciliationV2Data'
+      required:
+      - meta
+      - data
+    ReconciledBankTransactionsV2:
+      type: object
+      properties:
+        id:
+          type: string
+          example: lPNjeW1nR6CDn5okmGQ6hEpMo4lLNoSrzqDje
+          readOnly: false
+        date:
+          type: string
+          example: '2017-01-29'
+          readOnly: false
+          format: date-time
+        amount:
+          type: number
+          readOnly: false
+          example: 1000
+        accountType:
+          type: string
+          example: investment, credit, depository, loan, brokerage, other
+        accountId:
+          type: string
+          example: onD7kPQJ98cDejlnXpZeHeqp1qBlX5TogLqxW
+        description:
+          type: string
+          example: BMO Bank of Montreal
+        accountingTransactionId:
+          type: string
+          example: 13
+        accountingTransactionType:
+          type: string
+          enum:
+          - expense
+          - invoice
+          - payment
+          - payroll
+          - journalEntry
+          - bill
+          - vendorCreditNote
+          - creditNote
+          - billPayment
+          - bankTransaction
+          - transfer
+          - deposit
+          - refund
+          - estimate
+          - inventoryAdjustment
+          - purchaseOrder
+          - taxPayment
+          - taxAdjustment
+          - taxRefund
+          - taxReversal
+          - other
+          - unknown
+        isPosting:
+          type: boolean
+          example: 'true'
+        isSplitTransaction:
+          type: boolean
+          example: 'true'
+        subTotal:
+          type: number
+          example: 300.5
+          format: float
+        transactionNumber:
+          type: string
+          example: INV-001
+        transactionReportId:
+          type: string
+          example: 5fad8a342a88364234392fb6
+        accountRef:
+          $ref: '#/components/schemas/ReconcilationAccountRef'
+        entityRef:
+          $ref: '#/components/schemas/EntityRef'
+      required:
+      - id
+      - date
+      - amount
+      - accountId
+      - accountRef
+    GetBankTransferDataV2:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '123'
+        date:
+          type: string
+          format: date-time
+          example: '2021-03-09T10:18:29.985Z'
+        currencyRate:
+          type: number
+          example: 1.13
+          format: float
+        totalAmount:
+          type: number
+          example: 1000.5
+          format: float
+        fromAccountRef:
+          $ref: '#/components/schemas/BankTransferFromAccountRef'
+        toAccountRef:
+          $ref: '#/components/schemas/BankTransferToAccountRef'
+        fromBankTransactionId:
+          type: string
+          example: b11794bc
+        toBankTransactionId:
+          type: string
+          example: b11794cd
+        memo:
+          type: string
+          example: Reference to bank transfer.
+        sourceModifiedDate:
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+          format: date-time
+        currency:
+          type: string
+          example: USD
+      required:
+      - id
+      - date
+      - totalAmount
+      - fromAccountRef
+      - toAccountRef
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    GetBankAccountAccountingDataV2:
+      type: object
+      properties:
+        id:
+          type: string
+          example: lPNjeW1nR6CDn5okmGQ6hEpMo4lLNoSrzqDje
+        nominalCode:
+          type: string
+          example: '200'
+        name:
+          type: string
+          example: Business Bank Account
+        accountType:
+          type: string
+          enum:
+          - checking
+          - saving
+          - creditCard
+          - loan
+          - investment
+          - unknown
+          example: checking
+        accountNumber:
+          type: string
+          example: '11200'
+        routingNumber:
+          type: string
+          example: '123456789'
+        achId:
+          type: string
+          example: '123456789'
+        bankCode:
+          type: string
+          example: TD
+        iBan:
+          type: string
+          example: CA123456789012345678901234
+        institutionName:
+          type: string
+          example: TD Bank
+        currency:
+          type: string
+          example: CAD
+        currentBalance:
+          type: number
+          example: 24.55
+        overdraftLimit:
+          type: number
+          example: 8.75
+        availableBalance:
+          type: number
+          example: 5.55
+        isActive:
+          type: boolean
+          example: true
+        sourceModifiedDate:
+          format: date-time
+          type: string
+          example: 2022-03-11T11:29:03-05:00"
+      required:
+      - id
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http

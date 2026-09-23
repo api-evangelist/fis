@@ -1,0 +1,924 @@
+openapi: 3.2.0
+info:
+  title: FIS® Accounting Data as a Service™ Purchase Order…
+  description: What's changed in our API
+  version: v2
+  contact: {}
+servers:
+- url: https://api.railz.ai
+  description: Main (production) API server
+tags:
+- name: PurchaseOrderControllerV2
+paths:
+  /v2/accounting/purchaseOrders:
+    get:
+      description: '**Supported for:**
+
+
+        `quickbooks` `quickbooksDesktop` `xero` `oracleNetsuite` `sageIntacct` `dynamicsBusinessCentral` `myob` `zohoBooks`'
+      operationId: purchaseOrder
+      parameters:
+      - name: connectionUuid
+        required: true
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+          type: string
+      - name: startDate
+        required: false
+        in: query
+        description: 'Transaction date greater than or equal to parameter in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: endDate
+        required: false
+        in: query
+        description: 'Transaction date less than or equal to parameter in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: offset
+        required: false
+        in: query
+        description: The offset is the position in the dataset of a particular record.
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        description: 'This is the size of the results set you would like (default: 100).'
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: totalAmount
+        required: false
+        in: query
+        schema:
+          format: float
+          type: number
+      - name: status
+        required: false
+        in: query
+        schema:
+          type: string
+          enum:
+          - open
+          - closed
+          - void
+          - unknown
+          - draft
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPurchaseOrderResponseV2Dto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPurchaseOrderResponseV2Dto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: List Purchase Orders
+      tags:
+      - PurchaseOrderControllerV2
+    post:
+      description: '**Supported for:**
+
+
+        `quickbooks` `xero` `oracleNetsuite` `dynamicsBusinessCentral` `myob` `zohoBooks`'
+      operationId: push-purchaseOrders
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushPurchaseOrderV2Dto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushPurchaseOrderV2ResponseDto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Create a Purchase Order
+      tags:
+      - PurchaseOrderControllerV2
+components:
+  schemas:
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    InventoryRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Digital Services
+      required:
+      - id
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    TaxRateRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: HST
+        effectiveTaxRate:
+          type: number
+          example: 13
+          format: float
+      required:
+      - id
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    ShippingContact:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 500
+          example: John Smith
+        email:
+          type: string
+          maxLength: 100
+          example: email@example.com
+        phone:
+          type: string
+          maxLength: 30
+          example: 800-123-4567
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    InvoiceBillLineItemsV2:
+      type: object
+      properties:
+        description:
+          type: string
+          example: Services rendered.
+        unitAmount:
+          type: number
+          example: 100.5
+          format: float
+        quantity:
+          type: number
+          example: 3
+          format: float
+        discountAmount:
+          type: number
+          example: 0
+          format: float
+        taxAmount:
+          type: number
+          example: 20.5
+          format: float
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateRef'
+        inventoryRef:
+          $ref: '#/components/schemas/InventoryRef'
+        discountPercentage:
+          type: number
+          example: 10.5
+          format: float
+        id:
+          type: string
+        accountRef:
+          $ref: '#/components/schemas/AccountRef'
+        amount:
+          type: number
+          example: 10.5
+          format: float
+        trackingCategoryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrackingCategoryRefV2'
+    GetPurchaseOrderDataV2:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        postedDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        deliveryDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        expectedArrivalDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        dueDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        currencyRate:
+          type: number
+          example: 1.13
+          format: float
+        totalDiscount:
+          type: number
+          example: 322
+          format: float
+        discountPercentage:
+          type: number
+          example: 322
+          format: float
+        subTotal:
+          type: number
+          example: 301.5
+          format: float
+        taxAmount:
+          type: number
+          example: 20.5
+          format: float
+        totalAmount:
+          type: number
+          example: 322
+          format: float
+        status:
+          type: string
+          enum:
+          - open
+          - closed
+          - void
+          - unknown
+          - draft
+          example: open
+        memo:
+          type: string
+          example: Example bill memo.
+        shippingAddress:
+          $ref: '#/components/schemas/BaseAddress'
+        contact:
+          $ref: '#/components/schemas/BasicContact'
+        sourceModifiedDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        vendorRef:
+          $ref: '#/components/schemas/VendorRef'
+        currency:
+          type: string
+          example: USD
+        apAccountRef:
+          $ref: '#/components/schemas/AccountRef'
+        purchaseOrderType:
+          type: string
+          enum:
+          - item
+          - service
+          - professional
+          - miscellaneous
+          example: item
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceBillLineItemsV2'
+        passThrough:
+          type: object
+          additionalProperties: true
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+      required:
+      - id
+      - postedDate
+      - totalAmount
+      - status
+      - vendorRef
+    ShippingAddressDto:
+      type: object
+      properties:
+        line1:
+          type: string
+          maxLength: 500
+          example: 1234 Park Street
+        line2:
+          type: string
+          maxLength: 500
+          example: Suite 1000
+        city:
+          type: string
+          maxLength: 255
+          example: Toronto
+        region:
+          type: string
+          maxLength: 255
+          example: 'ON'
+          description: Region within a country. For example, state name for USA, province name for Canada.
+        country:
+          type: string
+          example: CAN
+          description: Country name as 3 ISO alpha-3 characters.
+        postalCode:
+          type: string
+          maxLength: 30
+          example: A0B1C2
+          description: Postal code. For example, zip code for USA and Canada.
+    AccountRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '145'
+        name:
+          type: string
+          example: Example account
+      required:
+      - id
+    GetPurchaseOrderResponseV2Dto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        meta:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/BasicStartEndDateReportMetaDataV2'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetPurchaseOrderDataV2'
+      required:
+      - pagination
+      - meta
+      - data
+    Error400DtoV2:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    PushPurchaseOrderV2ResponseDto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushPurchaseOrderV2'
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - data
+    BasicStartEndDateReportMetaDataV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - reportId
+      - createdAt
+      - updatedAt
+      - startDate
+      - endDate
+    BaseAddress:
+      type: object
+      properties:
+        line1:
+          type: string
+          example: 1234 Park Street
+        line2:
+          type: string
+          example: Suite 1000
+        city:
+          type: string
+          example: Toronto
+        region:
+          type: string
+          example: 'ON'
+        country:
+          type: string
+          example: CAN
+        postalCode:
+          type: string
+          example: A0B1C2
+    PushPurchaseOrderV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        data:
+          $ref: '#/components/schemas/PushPurchaseOrderV2'
+      required:
+      - connectionUuid
+      - data
+    TrackingCategoryRefV2:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4040'
+          readOnly: false
+        name:
+          type: string
+          readOnly: false
+          example: Region
+        type:
+          type: string
+          example: class
+          enum:
+          - class
+          - department
+          - location
+          - unknown
+      required:
+      - id
+      - type
+    ApAccountRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '22'
+      required:
+      - id
+    PushPurchaseOrderV2:
+      type: object
+      properties:
+        passThrough:
+          type: object
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+          additionalProperties: true
+        currencyRate:
+          type: number
+          example: '1.13'
+        postedDate:
+          type: string
+          format: date
+          example: '2021-03-29'
+        dueDate:
+          type: string
+          format: date
+          example: '2021-03-29'
+        deliveryDate:
+          type: string
+          format: date
+          example: '2021-03-29'
+        memo:
+          type: string
+          maxLength: 4000
+          example: Example memo.
+        vendorRef:
+          $ref: '#/components/schemas/VendorRefDto'
+        currency:
+          type: string
+          example: CAD
+        apAccountRef:
+          $ref: '#/components/schemas/ApAccountRefDto'
+        expectedArrivalDate:
+          type: string
+          format: date
+          example: '2021-03-29'
+        shippingAddress:
+          $ref: '#/components/schemas/ShippingAddressDto'
+        contact:
+          $ref: '#/components/schemas/ShippingContact'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/PurchaseOrderLineV2'
+        purchaseOrderType:
+          type: string
+          enum:
+          - item
+          - service
+          - professional
+          - miscellaneous
+          example: item
+      required:
+      - vendorRef
+      - lines
+    PurchaseOrderTrackingCategoryRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4040'
+        name:
+          type: string
+          example: Region
+        type:
+          type: string
+          example: class
+          enum:
+          - class
+          - department
+          - location
+          - unknown
+    BasicContact:
+      type: object
+      properties:
+        name:
+          type: string
+          example: John Smith
+        email:
+          type: string
+          example: jsmith@company.com
+        phone:
+          type: string
+          example: '8884449999'
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    AccountRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '200'
+      required:
+      - id
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    TaxRateRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '12'
+      required:
+      - id
+    InventoryRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '32'
+      required:
+      - id
+    VendorRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Home Depot
+      required:
+      - id
+    PurchaseOrderLineV2:
+      type: object
+      properties:
+        description:
+          type: string
+          maxLength: 4000
+          example: Services rendered.
+        accountRef:
+          $ref: '#/components/schemas/AccountRefDto'
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateRefDto'
+        inventoryRef:
+          $ref: '#/components/schemas/InventoryRefDto'
+        trackingCategoryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/PurchaseOrderTrackingCategoryRefDto'
+        quantity:
+          type: number
+          format: float
+          example: '4'
+        unitAmount:
+          type: number
+          format: float
+          example: '50.4'
+        discountPercentage:
+          type: number
+          example: 22
+          format: float
+        taxAmount:
+          type: number
+          example: 20.5
+          format: float
+    VendorRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '130'
+      required:
+      - id
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http

@@ -1,0 +1,488 @@
+openapi: 3.2.0
+info:
+  title: FIS® Accounting Data as a Service™ Transaction Controller…
+  description: What's changed in our API
+  version: v2
+  contact: {}
+servers:
+- url: https://api.railz.ai
+  description: Main (production) API server
+tags:
+- name: TransactionControllerV2
+paths:
+  /v2/commerce/transactions:
+    get:
+      description: '**Supported for:**
+
+
+        `shopify` `square`'
+      operationId: transactions
+      parameters:
+      - name: connectionUuid
+        required: true
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+          type: string
+      - name: offset
+        required: false
+        in: query
+        description: The offset is the position in the dataset of a particular record.
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        description: 'This is the size of the results set you would like (default: 100).'
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: id
+        required: false
+        in: query
+        schema:
+          example: '12345'
+          type: string
+      - name: status
+        required: false
+        in: query
+        schema:
+          example: cancelled
+          type: string
+          enum:
+          - success
+          - failed
+          - pending
+          - cancelled
+          - approved
+          - scheduled
+          - other
+          - unknown
+      - name: startDate
+        required: false
+        in: query
+        schema:
+          example: '2022-04-25'
+          type: string
+      - name: endDate
+        required: false
+        in: query
+        schema:
+          example: '2022-04-25'
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTransactionResponseV2Dto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTransactionResponseV2Dto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: List Transactions
+      tags:
+      - TransactionControllerV2
+components:
+  schemas:
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    GetTransactionResponseV2Dto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetTransactionData'
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+          deprecated: true
+        meta:
+          $ref: '#/components/schemas/BasicStartEndDateReportMetaDataV2'
+      required:
+      - pagination
+      - data
+      - count
+      - meta
+    GetTransactionData:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '699519475'
+        orderId:
+          type: string
+          example: '217130470'
+        paymentMethodType:
+          type: string
+          enum:
+          - cash
+          - card
+          - cryptocurrency
+          - bank
+          - digital
+          - storeCredit
+          - paypal
+          - prepaid
+          - buyNowPayLater
+          - other
+          - unknown
+          example: digital
+        totalAmount:
+          type: number
+          example: -3.45
+          format: float
+        currencyRef:
+          $ref: '#/components/schemas/CommerceCurrencyRef'
+        transactionSourceRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionSourceRefs'
+        transactionType:
+          type: string
+          enum:
+          - failedPayout
+          - payment
+          - paymentFee
+          - paymentFeeRefund
+          - payout
+          - refund
+          - transfer
+          - dispute
+          - order
+          - other
+          - unknown
+          example: transfer
+        createdDate:
+          format: date-time
+          type: string
+          example: '2022-03-11T11:29:03-05:00'
+        sourceModifiedDate:
+          format: date-time
+          type: string
+          example: '2022-03-11T11:29:03-05:00'
+        status:
+          type: string
+          enum:
+          - success
+          - failed
+          - pending
+          - cancelled
+          - approved
+          - scheduled
+          - other
+          - unknown
+          example: pending
+      required:
+      - id
+      - totalAmount
+      - transactionType
+      - createdDate
+      - status
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    Error400DtoV2:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    TransactionSourceRefs:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1006917261'
+        type:
+          type: string
+          example: payment
+          enum:
+          - failedPayout
+          - payment
+          - paymentFee
+          - paymentFeeRefund
+          - payout
+          - refund
+          - transfer
+          - dispute
+          - order
+          - other
+          - unknown
+      required:
+      - id
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    BasicStartEndDateReportMetaDataV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - reportId
+      - createdAt
+      - updatedAt
+      - startDate
+      - endDate
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    CommerceCurrencyRef:
+      type: object
+      properties:
+        id:
+          type: string
+        symbol:
+          type: string
+          example: CAD
+        name:
+          type: string
+          example: Canadian Dollar
+      required:
+      - symbol
+      - name
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http

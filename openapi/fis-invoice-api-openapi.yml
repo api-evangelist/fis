@@ -1,0 +1,1709 @@
+openapi: 3.2.0
+info:
+  title: FIS® Accounting Data as a Service™ Invoice API
+  description: What's changed in our API
+  version: v2
+  contact: {}
+servers:
+- url: https://api.railz.ai
+  description: Main (production) API server
+tags:
+- name: Invoice
+paths:
+  /invoices:
+    get:
+      description: Gets the latest invoices for a business.
+      operationId: invoices
+      parameters:
+      - name: businessName
+        required: true
+        in: query
+        schema:
+          type: string
+      - name: serviceName
+        required: true
+        in: query
+        schema:
+          type: string
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+      - name: startDate
+        required: false
+        in: query
+        description: 'Transaction date greater than or equal to parameter in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: endDate
+        required: false
+        in: query
+        description: 'Transaction date less than or equal to parameter in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: offset
+        required: false
+        in: query
+        description: The offset is the position in the dataset of a particular record.
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        description: 'This is the size of the results set you would like (default: 100).'
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: status
+        required: false
+        in: query
+        schema:
+          type: string
+          enum:
+          - open
+          - draft
+          - partiallyPaid
+          - paid
+          - unknown
+          - void
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetInvoiceResponseDto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetInvoiceResponseDto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Invoices
+      tags:
+      - Invoice
+      x-summary-source: derived
+    post:
+      description: Creates an individual invoice for a business.
+      operationId: push-invoices
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushInvoiceDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushInvoiceResponseDto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Push invoices
+      tags:
+      - Invoice
+      x-summary-source: derived
+  /invoices/creditNotes:
+    get:
+      description: Gets the latest invoice (customer) credit notes for a business.
+      operationId: invoice-creditNotes
+      parameters:
+      - name: businessName
+        required: true
+        in: query
+        schema:
+          type: string
+      - name: serviceName
+        required: true
+        in: query
+        schema:
+          type: string
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - zohoBooks
+      - name: startDate
+        required: false
+        in: query
+        description: 'Transaction date greater than or equal to parameter in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: endDate
+        required: false
+        in: query
+        description: 'Transaction date less than or equal to parameter in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: offset
+        required: false
+        in: query
+        description: The offset is the position in the dataset of a particular record.
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        description: 'This is the size of the results set you would like (default: 100).'
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: totalAmount
+        required: false
+        in: query
+        description: Total amount of a credit note.
+        schema:
+          format: float
+          type: number
+      - name: remainingCredit
+        required: false
+        in: query
+        description: Remaining credit on a credit note.
+        schema:
+          format: float
+          type: number
+      - name: status
+        required: false
+        in: query
+        schema:
+          type: string
+          enum:
+          - open
+          - paid
+          - partiallyPaid
+          - void
+          - unknown
+          - draft
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetInvoiceCreditNoteResponseDto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetInvoiceCreditNoteResponseDto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Invoice credit notes
+      tags:
+      - Invoice
+      x-summary-source: derived
+    post:
+      description: Posts an individual invoice (customer) credit note for a business.
+      operationId: push-invoices-creditNotes
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushInvoiceCreditNoteV1Dto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushInvoiceCreditNoteV1ResponseDto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Push invoices credit notes
+      tags:
+      - Invoice
+      x-summary-source: derived
+  /invoices/payments:
+    get:
+      description: Gets the latest invoices for a business.
+      operationId: invoicesPayments
+      parameters:
+      - name: businessName
+        required: true
+        in: query
+        schema:
+          type: string
+      - name: serviceName
+        required: true
+        in: query
+        schema:
+          type: string
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - myob
+          - zohoBooks
+      - name: startDate
+        required: false
+        in: query
+        description: 'Transaction date greater than or equal to parameter in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: endDate
+        required: false
+        in: query
+        description: 'Transaction date less than or equal to parameter in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: offset
+        required: false
+        in: query
+        description: The offset is the position in the dataset of a particular record.
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        description: 'This is the size of the results set you would like (default: 100).'
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetInvoicePaymentResponseDto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetInvoicePaymentResponseDto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Invoices payments
+      tags:
+      - Invoice
+      x-summary-source: derived
+    post:
+      description: Creates an individual invoice payment for a business.
+      operationId: push-invoices-payments
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushInvoicePaymentDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushInvoicePaymentResponseDto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Push invoices payments
+      tags:
+      - Invoice
+      x-summary-source: derived
+components:
+  schemas:
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    CustomerRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Railz Financial
+      required:
+      - id
+    InventoryRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Digital Services
+      required:
+      - id
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    PushInvoicePaymentResponseDto:
+      type: object
+      properties:
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: quickbooks
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushInvoicePayment'
+      required:
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - businessName
+      - serviceName
+      - data
+    TaxRateRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: HST
+        effectiveTaxRate:
+          type: number
+          example: 13
+          format: float
+      required:
+      - id
+    PushInvoiceDto:
+      type: object
+      properties:
+        connection:
+          $ref: '#/components/schemas/PushConnection'
+        data:
+          $ref: '#/components/schemas/PushInvoice'
+      required:
+      - connection
+      - data
+    PushInvoiceCreditNoteV1ResponseDto:
+      type: object
+      properties:
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: quickbooks
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushInvoiceCreditNoteV1'
+      required:
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - businessName
+      - serviceName
+      - data
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    PushInvoicePayment:
+      type: object
+      properties:
+        accountRef:
+          type: string
+          example: '132'
+        customerRef:
+          type: string
+          example: '250'
+        invoiceRef:
+          type: string
+          example: '250'
+          deprecated: true
+        totalAmount:
+          type: number
+          format: float
+          example: 200.5
+          deprecated: true
+        currency:
+          type: string
+          example: CAD
+        currencyRate:
+          type: number
+          format: float
+          example: 1.13
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoicePaymentLine'
+        date:
+          type: string
+          format: date
+          example: '2021-03-29'
+        memo:
+          type: string
+          maxLength: 4000
+          example: Invoice payment memo.
+    LocationRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '52'
+        name:
+          type: string
+          example: United States
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    PushInvoiceCreditNoteV1:
+      type: object
+      properties:
+        passThrough:
+          type: object
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+          additionalProperties: true
+        currencyRate:
+          type: number
+          example: '1.13'
+        postedDate:
+          type: string
+          format: date
+          example: '2021-03-29'
+        allocatedOnDate:
+          type: string
+          format: date
+          example: '2021-03-29'
+        memo:
+          type: string
+          maxLength: 4000
+          example: Example memo.
+        customerRef:
+          type: string
+          example: '124'
+        currency:
+          type: string
+          example: CAD
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceCreditNoteLineV1'
+      required:
+      - customerRef
+      - lines
+    GetInvoicePaymentData:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        customerRef:
+          $ref: '#/components/schemas/CustomerRef'
+        accountRef:
+          $ref: '#/components/schemas/AccountRef'
+        currencyRate:
+          type: number
+          example: 1.13
+          format: float
+        memo:
+          type: string
+          example: Invoice payment memo.
+        subsidiaryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubsidiaryRef'
+        sourceModifiedDate:
+          format: date-time
+          type: string
+          example: '2021-03-10T11:17:23.155Z'
+        date:
+          format: date-time
+          type: string
+          example: '2021-03-10T11:17:23.155Z'
+        totalAmount:
+          type: number
+          example: 200.5
+          format: float
+        currencyRef:
+          $ref: '#/components/schemas/CurrencyRef'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoicePaymentLineItem'
+      required:
+      - id
+      - date
+    InvoicePaymentLinks:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - invoice
+          - payment
+          - paymentOnAccount
+          - creditNote
+          - refund
+        id:
+          type: string
+          example: '50'
+      required:
+      - type
+    Payments:
+      type: object
+      properties:
+        amount:
+          type: number
+          example: 50.5
+          format: float
+        paymentId:
+          type: string
+          example: '50'
+        date:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+    PushInvoice:
+      type: object
+      properties:
+        passThrough:
+          type: object
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+          additionalProperties: true
+        invoiceNumber:
+          type: string
+          maxLength: 21
+          example: INV-10546
+        postedDate:
+          type: string
+          format: date
+          example: '2021-03-29'
+        dueDate:
+          type: string
+          format: date
+          example: '2021-03-29'
+        currency:
+          type: string
+          example: CAD
+        currencyRate:
+          type: number
+          format: float
+          example: 1.13
+        memo:
+          type: string
+          maxLength: 4000
+          example: Example invoice memo.
+        customerRef:
+          type: string
+          example: '132'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceLineItem'
+      required:
+      - customerRef
+      - lines
+    AccountRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '145'
+        name:
+          type: string
+          example: Example account
+      required:
+      - id
+    InvoiceLineItem:
+      type: object
+      properties:
+        description:
+          type: string
+          maxLength: 4000
+          example: Services rendered.
+        quantity:
+          type: number
+          format: float
+          example: 3
+        inventoryRef:
+          type: string
+          example: '240'
+        locationRef:
+          type: string
+          example: '3'
+        accountRef:
+          type: string
+          example: '145'
+        discountPercentage:
+          type: number
+          example: 30
+        subTotal:
+          type: number
+          format: float
+          example: 301.5
+          deprecated: true
+        totalAmount:
+          type: number
+          format: float
+          example: 322
+          deprecated: true
+        unitAmount:
+          type: number
+          format: float
+          example: 100.5
+        taxAmount:
+          type: number
+          format: float
+          example: 20.5
+        taxRef:
+          type: string
+          example: '24'
+      required:
+      - quantity
+    PushInvoicePaymentDto:
+      type: object
+      properties:
+        connection:
+          $ref: '#/components/schemas/PushConnection'
+        data:
+          $ref: '#/components/schemas/PushInvoicePayment'
+      required:
+      - connection
+      - data
+    InvoicePaymentLine:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: float
+          example: '342.99'
+        invoiceRef:
+          type: string
+          example: 3n2
+          deprecated: true
+        memo:
+          type: string
+          maxLength: 4000
+          example: Sample memo for transaction
+      required:
+      - amount
+    PushConnection:
+      type: object
+      properties:
+        businessName:
+          type: string
+          example: Railz
+          description: Unique business name identifier.
+        serviceName:
+          type: string
+          example: quickbooks
+          description: Name of accounting platform service.
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - shopify
+          - square
+          - plaid
+          - myob
+          - zohoBooks
+          - byod
+      required:
+      - businessName
+      - serviceName
+    SubsidiaryRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Railz Financial
+    PushInvoiceCreditNoteV1Dto:
+      type: object
+      properties:
+        connection:
+          $ref: '#/components/schemas/PushConnection'
+        data:
+          $ref: '#/components/schemas/PushInvoiceCreditNoteV1'
+      required:
+      - connection
+      - data
+    CurrencyRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: CAD
+        name:
+          type: string
+          example: Canadian Dollar
+        symbol:
+          type: string
+          example: USD,CAD
+      required:
+      - id
+    TrackingCategoryRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4040'
+          readOnly: false
+        name:
+          type: string
+          readOnly: false
+          example: Region
+        option:
+          type: string
+          readOnly: false
+          example: East
+        optionId:
+          type: string
+          readOnly: false
+          example: '40401'
+      required:
+      - id
+    TransactionalReportMetaData:
+      type: object
+      properties:
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          - 5fad8a342a88364234392fb6
+          type: array
+          items:
+            type: string
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
+      required:
+      - reportId
+      - serviceName
+      - businessName
+      - startDate
+      - endDate
+      - createdAt
+      - updatedAt
+    InvoicePaymentLink:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - invoice
+          - payment
+          - paymentOnAccount
+          - creditNote
+          - refund
+        id:
+          type: string
+          example: '50'
+        amount:
+          type: number
+          example: 0
+          format: float
+      required:
+      - type
+    GetInvoiceResponseDto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+          deprecated: true
+        meta:
+          $ref: '#/components/schemas/TransactionalReportMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetInvoiceV1Data'
+      required:
+      - pagination
+      - count
+      - meta
+      - data
+    GetInvoiceV1Data:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        invoiceNumber:
+          type: string
+          example: string
+        customerRef:
+          $ref: '#/components/schemas/CustomerRef'
+        dueDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T15:59:47.118Z'
+        currencyRate:
+          type: number
+          example: 1.13
+          format: float
+        totalAmount:
+          type: number
+          example: 283
+          format: float
+        status:
+          type: string
+          enum:
+          - open
+          - draft
+          - partiallyPaid
+          - paid
+          - unknown
+          - void
+          - reversed
+          - reversal
+        totalDiscount:
+          type: number
+          example: 0
+          format: float
+        subTotal:
+          type: number
+          example: 250.5
+          format: float
+        taxAmount:
+          type: number
+          example: 32.5
+          format: float
+        amountDue:
+          type: number
+          example: 283
+          format: float
+        discountPercentage:
+          type: number
+          example: 0
+          format: float
+        sourceModifiedDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T15:59:47.118Z'
+        memo:
+          type: string
+          example: Example invoice memo.
+        payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Payments'
+        subsidiaryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubsidiaryRef'
+        postedDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T15:59:47.118Z'
+        currencyRef:
+          $ref: '#/components/schemas/CurrencyRef'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceLineItemsV1'
+      required:
+      - id
+      - status
+      - postedDate
+    InvoiceCreditNoteLineV1:
+      type: object
+      properties:
+        description:
+          type: string
+          maxLength: 4000
+          example: Services rendered.
+        discountPercentage:
+          type: number
+          format: float
+          example: '10.0'
+        memo:
+          type: string
+          maxLength: 4000
+          example: Example memo.
+          deprecated: true
+        taxRef:
+          type: string
+          example: '45'
+        accountRef:
+          type: string
+          example: '200'
+        inventoryRef:
+          type: string
+          example: '32'
+        subTotal:
+          type: number
+          format: float
+          example: '202.0'
+          deprecated: true
+        totalAmount:
+          type: number
+          format: float
+          example: '197.05'
+          deprecated: true
+        taxAmount:
+          type: number
+          format: float
+          example: '15.25'
+        quantity:
+          type: number
+          format: float
+          example: '4'
+        unitAmount:
+          type: number
+          format: float
+          example: '50.4'
+      required:
+      - quantity
+      - unitAmount
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    InvoiceBillLineItemsV1:
+      type: object
+      properties:
+        description:
+          type: string
+          example: Services rendered.
+        unitAmount:
+          type: number
+          example: 100.5
+          format: float
+        quantity:
+          type: number
+          example: 3
+          format: float
+        discountAmount:
+          type: number
+          example: 0
+          format: float
+        taxAmount:
+          type: number
+          example: 20.5
+          format: float
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateRef'
+        inventoryRef:
+          $ref: '#/components/schemas/InventoryRef'
+        discountPercentage:
+          type: number
+          example: 10.5
+          format: float
+        id:
+          type: string
+        accountRef:
+          $ref: '#/components/schemas/AccountRef'
+        totalAmount:
+          type: number
+          example: 10.5
+          format: float
+          deprecated: true
+        subTotal:
+          type: number
+          example: 301.5
+          format: float
+          deprecated: true
+        trackingCategoryRef:
+          deprecated: true
+          allOf:
+          - $ref: '#/components/schemas/TrackingCategoryRef'
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    BasicStartEndDateReportMetaData:
+      type: object
+      properties:
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          type: array
+          items:
+            type: string
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+      required:
+      - reportId
+      - serviceName
+      - businessName
+      - createdAt
+      - updatedAt
+      - startDate
+      - endDate
+    PushInvoiceResponseDto:
+      type: object
+      properties:
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: quickbooks
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushInvoice'
+      required:
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - businessName
+      - serviceName
+      - data
+    InvoicePaymentLineItem:
+      type: object
+      properties:
+        allocatedOnDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:57:54.294Z'
+        amount:
+          type: number
+          example: 200.5
+          format: float
+        link:
+          deprecated: true
+          allOf:
+          - $ref: '#/components/schemas/InvoicePaymentLink'
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoicePaymentLinks'
+    GetInvoiceCreditNoteResponseDto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        count:
+          type: number
+          example: 1
+          format: integer
+          readOnly: true
+        meta:
+          readOnly: false
+          allOf:
+          - $ref: '#/components/schemas/BasicStartEndDateReportMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetInvoiceCreditNoteDataV1'
+      required:
+      - pagination
+      - count
+      - meta
+      - data
+    GetInvoiceCreditNoteDataV1:
+      type: object
+      properties:
+        customerRef:
+          $ref: '#/components/schemas/CustomerRef'
+        locationRef:
+          $ref: '#/components/schemas/LocationRef'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceBillLineItemsV1'
+    InvoiceLineItemsV1:
+      type: object
+      properties:
+        description:
+          type: string
+          example: Services rendered.
+        unitAmount:
+          type: number
+          example: 100.5
+          format: float
+        quantity:
+          type: number
+          example: 3
+          format: float
+        discountAmount:
+          type: number
+          example: 0
+          format: float
+        taxAmount:
+          type: number
+          example: 20.5
+          format: float
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateRef'
+        inventoryRef:
+          $ref: '#/components/schemas/InventoryRef'
+        accountRef:
+          $ref: '#/components/schemas/AccountRef'
+        locationRef:
+          $ref: '#/components/schemas/LocationRef'
+        discountPercentage:
+          type: string
+          example: '10.5'
+        totalAmount:
+          type: number
+          example: 10.5
+          format: float
+          deprecated: true
+        subTotal:
+          type: number
+          example: 301.5
+          format: float
+          deprecated: true
+        trackingCategoryRef:
+          deprecated: true
+          allOf:
+          - $ref: '#/components/schemas/TrackingCategoryRef'
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    GetInvoicePaymentResponseDto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+          deprecated: true
+        meta:
+          $ref: '#/components/schemas/TransactionalReportMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetInvoicePaymentData'
+      required:
+      - pagination
+      - count
+      - meta
+      - data
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http

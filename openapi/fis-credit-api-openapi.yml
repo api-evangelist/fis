@@ -1,0 +1,654 @@
+openapi: 3.2.0
+info:
+  title: FIS® Accounting Data as a Service™ Credit API
+  description: What's changed in our API
+  version: v2
+  contact: {}
+servers:
+- url: https://api.railz.ai
+  description: Main (production) API server
+tags:
+- name: Credit
+paths:
+  /creditScores:
+    get:
+      description: Gets a point in time credit score based on a 1-year probability of default and 3 scores based on financial forecast and probability of default projections for a business.
+      operationId: creditScores
+      parameters:
+      - name: businessName
+        required: true
+        in: query
+        description: Unique business name identifier.
+        schema:
+          example: Railz
+          type: string
+      - name: serviceName
+        required: true
+        in: query
+        schema:
+          type: string
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - zohoBooks
+          - byod
+      - name: endDate
+        required: false
+        in: query
+        description: 'The end date of the Transaction report frequency in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditScoresResponseDto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditScoresResponseDto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Credit scores
+      tags:
+      - Credit
+      x-summary-source: derived
+  /creditRatings:
+    get:
+      description: Gets the big 4 US credit agencies and the Railz credit rating for a business.
+      operationId: creditRatings
+      parameters:
+      - name: businessName
+        required: true
+        in: query
+        description: Unique business name identifier.
+        schema:
+          example: Railz
+          type: string
+      - name: serviceName
+        required: true
+        in: query
+        schema:
+          type: string
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - zohoBooks
+          - byod
+      - name: endDate
+        required: false
+        in: query
+        description: 'The end date of the Transaction report frequency in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditRatingsResponseDto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditRatingsResponseDto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Credit ratings
+      tags:
+      - Credit
+      x-summary-source: derived
+components:
+  schemas:
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    CreditRatingsReport:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/CreditRatingsReportMetaData'
+        data:
+          $ref: '#/components/schemas/CreditRatingsData'
+      required:
+      - meta
+      - data
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    CreditScoresData:
+      type: object
+      properties:
+        scorePit:
+          type: number
+          minimum: 300
+          maximum: 850
+          example: 800
+          format: integer
+          readOnly: false
+        score12m:
+          type: number
+          minimum: 300
+          maximum: 850
+          example: 800
+          format: integer
+          readOnly: false
+        score24m:
+          type: number
+          minimum: 300
+          maximum: 850
+          example: 800
+          format: integer
+          readOnly: false
+        score36m:
+          type: number
+          minimum: 300
+          maximum: 850
+          example: 800
+          format: integer
+          readOnly: false
+      required:
+      - scorePit
+      - score12m
+      - score24m
+      - score36m
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    CreditScoresReport:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/CreditScoresReportMetaData'
+        data:
+          $ref: '#/components/schemas/CreditScoresData'
+      required:
+      - meta
+      - data
+    CreditRatingsResponseDto:
+      type: object
+      properties:
+        count:
+          type: number
+          readOnly: true
+          format: integer
+          example: 1
+        reports:
+          readOnly: false
+          type: array
+          items:
+            $ref: '#/components/schemas/CreditRatingsReport'
+      required:
+      - count
+      - reports
+    CreditScoresReportMetaData:
+      type: object
+      properties:
+        reportId:
+          type: string
+          readOnly: true
+          example: 5fad8a342a88364234392fb5
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - quickbooks
+          - xero
+          - freshbooks
+          - quickbooksDesktop
+          - sageIntacct
+          - sageBusinessCloud
+          - oracleNetsuite
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - zohoBooks
+          - myob
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          readOnly: false
+          example: '2020-12-25T01:02:03Z'
+          format: date-time
+      required:
+      - reportId
+      - serviceName
+      - businessName
+      - startDate
+      - endDate
+      - createdAt
+      - updatedAt
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    CreditRatingsReportMetaData:
+      type: object
+      properties:
+        reportId:
+          type: string
+          readOnly: true
+          example: 5fad8a342a88364234392fb5
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - quickbooks
+          - xero
+          - freshbooks
+          - quickbooksDesktop
+          - sageIntacct
+          - sageBusinessCloud
+          - oracleNetsuite
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - zohoBooks
+          - myob
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          readOnly: false
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+      required:
+      - reportId
+      - serviceName
+      - businessName
+      - startDate
+      - endDate
+      - createdAt
+      - updatedAt
+    CreditScoresResponseDto:
+      type: object
+      properties:
+        count:
+          type: number
+          readOnly: true
+          format: integer
+          example: 1
+        reports:
+          readOnly: false
+          type: array
+          items:
+            $ref: '#/components/schemas/CreditScoresReport'
+      required:
+      - count
+      - reports
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    CreditRatingsData:
+      type: object
+      properties:
+        spRating:
+          type: string
+          enum:
+          - AAA
+          - AA+
+          - AA
+          - AA-
+          - A+
+          - A
+          - A-
+          - BBB+
+          - BBB
+          - BBB-
+          - BB+
+          - BB
+          - BB-
+          - B+
+          - B
+          - B-
+          - CCC+
+          - CCC
+          - CCC-
+          - CC
+          - C
+          - D
+          example: AA+
+        moodysRating:
+          type: string
+          enum:
+          - Aaa
+          - Aa1
+          - Aa2
+          - Aa3
+          - A1
+          - A2
+          - A3
+          - Baa1
+          - Baa2
+          - Baa3
+          - Ba1
+          - Ba2
+          - Ba3
+          - B1
+          - B2
+          - B3
+          - Caa1
+          - Caa2
+          - Ca
+          - C
+          example: Aaa
+        fitchRating:
+          type: string
+          enum:
+          - AAA
+          - AA+
+          - AA
+          - AA-
+          - A+
+          - A
+          - A-
+          - BBB+
+          - BBB
+          - BBB-
+          - BB+
+          - BB
+          - BB-
+          - B+
+          - B
+          - B-
+          - CCC
+          - DDD
+          - DD
+          - D
+          example: AA+
+        dbrsRating:
+          type: string
+          enum:
+          - AAA
+          - AA (high)
+          - AA
+          - AA (low)
+          - A (high)
+          - A
+          - A (low)
+          - BBB (high)
+          - BBB
+          - BBB (low)
+          - BB (high)
+          - BB
+          - BB (low)
+          - CCC (high)
+          - CCC
+          - CCC (low)
+          - CC
+          - C
+          - D
+          example: AAA
+        railzRating:
+          type: string
+          enum:
+          - A+
+          - A
+          - A-
+          - B+
+          - B
+          - B-
+          - C+
+          - C
+          - C-
+          - D
+          example: A
+        railzGrade:
+          type: string
+          enum:
+          - Very Poor
+          - Poor
+          - Fair
+          - Good
+          - Very Good
+          - Excellent
+          example: Excellent
+        description:
+          type: string
+          example: Highest quality borrower, minimal credit risk.
+      required:
+      - spRating
+      - moodysRating
+      - fitchRating
+      - dbrsRating
+      - railzRating
+      - railzGrade
+      - description
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http

@@ -1,0 +1,375 @@
+openapi: 3.2.0
+info:
+  title: FIS® Accounting Data as a Service™ Tax Benchmarking API
+  description: What's changed in our API
+  version: v2
+  contact: {}
+servers:
+- url: https://api.railz.ai
+  description: Main (production) API server
+tags:
+- name: TaxBenchmarking
+paths:
+  /taxBenchmarking:
+    get:
+      description: Gets tax benchmarks within the FIS® Accounting Data as a Service™ cohort based on age of business, industry code and region.
+      operationId: taxbenchmarking
+      parameters:
+      - name: industryCode
+        required: true
+        in: query
+        schema:
+          example: '44'
+          type: string
+      - name: region
+        required: false
+        in: query
+        schema:
+          example: CA
+          type: string
+      - name: offset
+        required: false
+        in: query
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxBenchmarkingsResponseDto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxBenchmarkingsResponseDto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Taxbenchmarking
+      tags:
+      - TaxBenchmarking
+      x-summary-source: derived
+components:
+  schemas:
+    TaxBenchmarkingsReport:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/TaxBenchmarkingsReportMetaData'
+        data:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxBenchmarkingsData'
+      required:
+      - meta
+      - data
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    TaxBenchmarkingsResponseDto:
+      type: object
+      properties:
+        count:
+          type: number
+          readOnly: true
+          format: integer
+          example: 1
+        reports:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxBenchmarkingsReport'
+      required:
+      - count
+      - reports
+    TaxBenchmarkingsData:
+      type: object
+      properties:
+        section:
+          oneOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+          allOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+        subSection:
+          oneOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+          allOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+        group:
+          oneOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+          allOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+        subGroup:
+          oneOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+          allOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+        ratios:
+          oneOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+          allOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+      required:
+      - section
+      - subSection
+      - group
+      - subGroup
+      - ratios
+    TaxBenchmarkingsReportMetaData:
+      type: object
+      properties:
+        industryCode:
+          type: string
+          readOnly: true
+          example: '44'
+        region:
+          type: string
+          example: CA
+        numberOfBusinesses:
+          type: number
+          example: 282
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+      required:
+      - industryCode
+      - numberOfBusinesses
+      - createdAt
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    SummaryStatisticsData:
+      type: object
+      properties:
+        min**:
+          type: number
+          format: float
+          example: 301.5
+        max**:
+          type: number
+          format: float
+          example: 22012.5
+        mean**:
+          type: number
+          format: float
+          example: 6279.7
+        median**:
+          type: number
+          format: float
+          example: 3739.89
+        sdev**:
+          type: number
+          format: float
+          example: 21764.54
+        quantile5**:
+          type: number
+          format: float
+          example: 301.5
+        quantile25**:
+          type: number
+          format: float
+          example: 301.5
+        quantile75**:
+          type: number
+          format: float
+          example: 6710.61
+        quantile95**:
+          type: number
+          format: float
+          example: 7649.75
+      required:
+      - min**
+      - max**
+      - mean**
+      - median**
+      - sdev**
+      - quantile5**
+      - quantile25**
+      - quantile75**
+      - quantile95**
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http

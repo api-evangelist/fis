@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: FIS Payments Accounts Wire Transfers API
+  title: FIS Payments Wire Transfers API
   description: FIS (Fidelity National Information Services) Payments API provides programmatic access to payment processing capabilities including ACH transfers, wire payments, card processing, and real-time payment networks. Available through the FIS CodeConnect marketplace for financial institutions and fintech developers.
   version: 1.0.0
   contact:
@@ -44,6 +44,56 @@ paths:
           description: Invalid request
 components:
   schemas:
+    WireTransfer:
+      allOf:
+      - $ref: '#/components/schemas/WireTransferRequest'
+      - type: object
+        properties:
+          wireId:
+            type: string
+          status:
+            type: string
+            enum:
+            - PENDING
+            - SENT
+            - CONFIRMED
+            - RETURNED
+            - FAILED
+          imad:
+            type: string
+            description: Input Message Accountability Data (Fedwire reference)
+          omad:
+            type: string
+            description: Output Message Accountability Data
+          createdAt:
+            type: string
+            format: date-time
+    AccountReference:
+      type: object
+      required:
+      - accountNumber
+      - routingNumber
+      properties:
+        accountNumber:
+          type: string
+          description: Bank account number
+        routingNumber:
+          type: string
+          pattern: ^\d{9}$
+          description: ABA routing transit number (9 digits)
+        accountType:
+          type: string
+          enum:
+          - CHECKING
+          - SAVINGS
+          - LOAN
+        accountHolderName:
+          type: string
+        bankName:
+          type: string
+        swiftCode:
+          type: string
+          description: SWIFT/BIC code for international wires
     WireTransferRequest:
       type: object
       required:
@@ -75,56 +125,6 @@ components:
           maxLength: 140
         instructionForCreditorAgent:
           type: string
-    AccountReference:
-      type: object
-      required:
-      - accountNumber
-      - routingNumber
-      properties:
-        accountNumber:
-          type: string
-          description: Bank account number
-        routingNumber:
-          type: string
-          pattern: ^\d{9}$
-          description: ABA routing transit number (9 digits)
-        accountType:
-          type: string
-          enum:
-          - CHECKING
-          - SAVINGS
-          - LOAN
-        accountHolderName:
-          type: string
-        bankName:
-          type: string
-        swiftCode:
-          type: string
-          description: SWIFT/BIC code for international wires
-    WireTransfer:
-      allOf:
-      - $ref: '#/components/schemas/WireTransferRequest'
-      - type: object
-        properties:
-          wireId:
-            type: string
-          status:
-            type: string
-            enum:
-            - PENDING
-            - SENT
-            - CONFIRMED
-            - RETURNED
-            - FAILED
-          imad:
-            type: string
-            description: Input Message Accountability Data (Fedwire reference)
-          omad:
-            type: string
-            description: Output Message Accountability Data
-          createdAt:
-            type: string
-            format: date-time
   securitySchemes:
     OAuth2ClientCredentials:
       type: oauth2

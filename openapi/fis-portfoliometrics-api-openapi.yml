@@ -1,0 +1,377 @@
+openapi: 3.2.0
+info:
+  title: FIS® Accounting Data as a Service™ Portfolio Metrics API
+  description: What's changed in our API
+  version: v2
+  contact: {}
+servers:
+- url: https://api.railz.ai
+  description: Main (production) API server
+tags:
+- name: PortfolioMetrics
+paths:
+  /portfolioMetrics:
+    get:
+      description: Gets portfolio metrics for connected business.
+      operationId: getPortfolioMetrics
+      parameters:
+      - name: reportFrequency
+        required: true
+        in: query
+        schema:
+          type: string
+          enum:
+          - month
+          - quarter
+          - year
+      - name: startDate
+        required: false
+        in: query
+        schema:
+          example: '2020-11-01'
+          type: string
+      - name: endDate
+        required: false
+        in: query
+        schema:
+          example: '2020-11-30'
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PortfolioMetricsResponseDto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PortfolioMetricsResponseDto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Get portfolio metrics
+      tags:
+      - PortfolioMetrics
+      x-summary-source: derived
+components:
+  schemas:
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    PortfolioMetricsReportMetaData:
+      type: object
+      properties:
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-01T01:02:03Z'
+          format: date-time
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+        reportFrequency:
+          type: string
+          readOnly: true
+          example: month
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+      required:
+      - startDate
+      - endDate
+      - reportFrequency
+      - createdAt
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    PortfolioMetricsResponseDto:
+      type: object
+      properties:
+        count:
+          type: number
+          readOnly: true
+          format: integer
+          example: 1
+        reports:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/PortfolioMetricsReport'
+      required:
+      - count
+      - reports
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    PortfolioMetricsReportData:
+      type: object
+      properties:
+        section:
+          oneOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+          allOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+        subSection:
+          oneOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+          allOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+        group:
+          oneOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+          allOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+        subGroup:
+          oneOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+          allOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+        ratios:
+          oneOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+          allOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+        pds:
+          oneOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+          allOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+        creditScores:
+          oneOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+          allOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+      required:
+      - section
+      - subSection
+      - group
+      - subGroup
+    PortfolioMetricsReport:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/PortfolioMetricsReportMetaData'
+        data:
+          $ref: '#/components/schemas/PortfolioMetricsReportData'
+      required:
+      - meta
+      - data
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    SummaryStatisticsData:
+      type: object
+      properties:
+        min**:
+          type: number
+          format: float
+          example: 301.5
+        max**:
+          type: number
+          format: float
+          example: 22012.5
+        mean**:
+          type: number
+          format: float
+          example: 6279.7
+        median**:
+          type: number
+          format: float
+          example: 3739.89
+        sdev**:
+          type: number
+          format: float
+          example: 21764.54
+        quantile5**:
+          type: number
+          format: float
+          example: 301.5
+        quantile25**:
+          type: number
+          format: float
+          example: 301.5
+        quantile75**:
+          type: number
+          format: float
+          example: 6710.61
+        quantile95**:
+          type: number
+          format: float
+          example: 7649.75
+      required:
+      - min**
+      - max**
+      - mean**
+      - median**
+      - sdev**
+      - quantile5**
+      - quantile25**
+      - quantile75**
+      - quantile95**
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http

@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: FIS Accounts Payments API
+  title: FIS Payments API
   description: FIS (Fidelity National Information Services) Payments API provides programmatic access to payment processing capabilities including ACH transfers, wire payments, card processing, and real-time payment networks. Available through the FIS CodeConnect marketplace for financial institutions and fintech developers.
   version: 1.0.0
   contact:
@@ -101,99 +101,6 @@ paths:
           description: Payment cannot be cancelled in its current status
 components:
   schemas:
-    Error:
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-              issue:
-                type: string
-        requestId:
-          type: string
-    Payment:
-      type: object
-      properties:
-        paymentId:
-          type: string
-          description: Unique payment identifier
-        status:
-          type: string
-          enum:
-          - PENDING
-          - SCHEDULED
-          - PROCESSING
-          - COMPLETED
-          - FAILED
-          - CANCELLED
-          - RETURNED
-        amount:
-          type: number
-          format: double
-        currency:
-          type: string
-        paymentMethod:
-          type: string
-        debtorAccount:
-          $ref: '#/components/schemas/AccountReference'
-        creditorAccount:
-          $ref: '#/components/schemas/AccountReference'
-        remittanceInfo:
-          type: string
-        executionDate:
-          type: string
-          format: date
-        completedAt:
-          type: string
-          format: date-time
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        failureReason:
-          type: string
-        networkTransactionId:
-          type: string
-          description: Reference ID from the payment network (IMAD, OMAD, trace number, etc.)
-    AccountReference:
-      type: object
-      required:
-      - accountNumber
-      - routingNumber
-      properties:
-        accountNumber:
-          type: string
-          description: Bank account number
-        routingNumber:
-          type: string
-          pattern: ^\d{9}$
-          description: ABA routing transit number (9 digits)
-        accountType:
-          type: string
-          enum:
-          - CHECKING
-          - SAVINGS
-          - LOAN
-        accountHolderName:
-          type: string
-        bankName:
-          type: string
-        swiftCode:
-          type: string
-          description: SWIFT/BIC code for international wires
     PaymentRequest:
       type: object
       required:
@@ -240,6 +147,99 @@ components:
           - NORMAL
           - HIGH
           - SAME_DAY
+    AccountReference:
+      type: object
+      required:
+      - accountNumber
+      - routingNumber
+      properties:
+        accountNumber:
+          type: string
+          description: Bank account number
+        routingNumber:
+          type: string
+          pattern: ^\d{9}$
+          description: ABA routing transit number (9 digits)
+        accountType:
+          type: string
+          enum:
+          - CHECKING
+          - SAVINGS
+          - LOAN
+        accountHolderName:
+          type: string
+        bankName:
+          type: string
+        swiftCode:
+          type: string
+          description: SWIFT/BIC code for international wires
+    Payment:
+      type: object
+      properties:
+        paymentId:
+          type: string
+          description: Unique payment identifier
+        status:
+          type: string
+          enum:
+          - PENDING
+          - SCHEDULED
+          - PROCESSING
+          - COMPLETED
+          - FAILED
+          - CANCELLED
+          - RETURNED
+        amount:
+          type: number
+          format: double
+        currency:
+          type: string
+        paymentMethod:
+          type: string
+        debtorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        creditorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        remittanceInfo:
+          type: string
+        executionDate:
+          type: string
+          format: date
+        completedAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        failureReason:
+          type: string
+        networkTransactionId:
+          type: string
+          description: Reference ID from the payment network (IMAD, OMAD, trace number, etc.)
+    Error:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              issue:
+                type: string
+        requestId:
+          type: string
   securitySchemes:
     OAuth2ClientCredentials:
       type: oauth2

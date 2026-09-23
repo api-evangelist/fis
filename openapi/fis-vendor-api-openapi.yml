@@ -1,0 +1,892 @@
+openapi: 3.2.0
+info:
+  title: FIS® Accounting Data as a Service™ Vendor API
+  description: What's changed in our API
+  version: v2
+  contact: {}
+servers:
+- url: https://api.railz.ai
+  description: Main (production) API server
+tags:
+- name: Vendor
+paths:
+  /vendors:
+    get:
+      description: Gets the latest vendors/suppliers for a business.
+      operationId: vendors
+      parameters:
+      - name: businessName
+        required: true
+        in: query
+        schema:
+          type: string
+      - name: serviceName
+        required: true
+        in: query
+        schema:
+          type: string
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+      - name: offset
+        required: false
+        in: query
+        description: The offset is the position in the dataset of a particular record.
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        description: 'This is the size of the results set you would like (default: 100).'
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetVendorResponseDto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetVendorResponseDto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Vendors
+      tags:
+      - Vendor
+      x-summary-source: derived
+    post:
+      description: Creates an individual vendor for a business.
+      operationId: push-vendors
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushVendorV1Dto'
+      responses:
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushVendorV1ResponseDto'
+      security:
+      - bearer: []
+      summary: Push vendors
+      tags:
+      - Vendor
+      x-summary-source: derived
+  /vendors/{id}:
+    put:
+      description: PUT an update to a vendor for a business.
+      operationId: put-vendor
+      parameters:
+      - name: id
+        required: true
+        in: path
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushUpdateVendorV1Dto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PutVendorV1ResponseDto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Put vendor
+      tags:
+      - Vendor
+      x-summary-source: derived
+components:
+  schemas:
+    Address:
+      type: object
+      properties:
+        line1:
+          type: string
+          example: 1234 Park Street
+        line2:
+          type: string
+          example: Suite 1000
+        city:
+          type: string
+          example: Toronto
+        region:
+          type: string
+          example: 'ON'
+        country:
+          type: string
+          example: CAN
+        postalCode:
+          type: string
+          example: A0B1C2
+        type:
+          type: string
+          enum:
+          - billing
+          - shipping
+          - other
+      required:
+      - type
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    PutVendorV1:
+      type: object
+      properties:
+        contactFirstName:
+          type: string
+          maxLength: 100
+          example: Jane
+        contactLastName:
+          type: string
+          maxLength: 100
+          example: Smith
+        emailAddress:
+          type: string
+          maxLength: 100
+          example: email@acme.com
+        phone:
+          type: string
+          maxLength: 30
+          example: '8889990000'
+        website:
+          type: string
+          maxLength: 100
+          format: uri
+          example: www.acme.com
+        isPerson:
+          type: boolean
+        vendorName:
+          type: string
+          maxLength: 500
+          example: ACME Inc.
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Addresses'
+        defaultCurrency:
+          type: string
+          example: CAD
+        subsidiaryRefs:
+          example:
+          - '1'
+          - '3'
+          type: array
+          items:
+            type: string
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    Contact:
+      type: object
+      properties:
+        name:
+          type: string
+          example: John Smith
+        email:
+          type: string
+          example: jsmith@company.com
+        phone:
+          type: string
+          example: '8887779999'
+        address:
+          $ref: '#/components/schemas/Address'
+        status:
+          type: string
+          enum:
+          - unknown
+          - active
+          - archived
+        modifiedDate:
+          type: string
+          example: '2021-03-09T08:49:36.035Z'
+      required:
+      - status
+    PushVendorV1:
+      type: object
+      properties:
+        contactFirstName:
+          type: string
+          maxLength: 100
+          example: Jane
+        contactLastName:
+          type: string
+          maxLength: 100
+          example: Smith
+        emailAddress:
+          type: string
+          maxLength: 100
+          example: email@acme.com
+        phone:
+          type: string
+          maxLength: 30
+          example: '8889990000'
+        website:
+          type: string
+          maxLength: 100
+          format: uri
+          example: www.acme.com
+        isPerson:
+          type: boolean
+        vendorName:
+          type: string
+          maxLength: 500
+          example: ACME Inc.
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Addresses'
+        defaultCurrency:
+          type: string
+          example: CAD
+        subsidiaryRefs:
+          example:
+          - '1'
+          - '3'
+          type: array
+          items:
+            type: string
+      required:
+      - vendorName
+    PushVendorV1Dto:
+      type: object
+      properties:
+        connection:
+          $ref: '#/components/schemas/PushConnection'
+        data:
+          $ref: '#/components/schemas/PushVendorV1'
+      required:
+      - connection
+      - data
+    PushUpdateVendorV1Dto:
+      type: object
+      properties:
+        connection:
+          $ref: '#/components/schemas/PushUpdateVendorConnection'
+        data:
+          $ref: '#/components/schemas/PutVendorV1'
+      required:
+      - connection
+      - data
+    PushVendorV1ResponseDto:
+      type: object
+      properties:
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: quickbooks
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushVendorV1'
+      required:
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - businessName
+      - serviceName
+      - data
+    PushConnection:
+      type: object
+      properties:
+        businessName:
+          type: string
+          example: Railz
+          description: Unique business name identifier.
+        serviceName:
+          type: string
+          example: quickbooks
+          description: Name of accounting platform service.
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - shopify
+          - square
+          - plaid
+          - myob
+          - zohoBooks
+          - byod
+      required:
+      - businessName
+      - serviceName
+    GetVendorResponseDto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+          deprecated: true
+        meta:
+          $ref: '#/components/schemas/ListReportMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetVendorData'
+      required:
+      - pagination
+      - count
+      - meta
+      - data
+    SubsidiaryRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Railz Financial
+    Addresses:
+      type: object
+      properties:
+        type:
+          type: string
+          example: billing
+          description: Only Billing & Shipping types can be used when creating records.
+          enum:
+          - billing
+          - shipping
+        line1:
+          type: string
+          maxLength: 500
+          example: 1234 Park Street
+        line2:
+          type: string
+          maxLength: 500
+          example: Suite 1000
+        city:
+          type: string
+          maxLength: 255
+          example: Toronto
+        region:
+          type: string
+          maxLength: 255
+          example: 'ON'
+          description: Region within a country. For example, state name for USA, province name for Canada.
+        country:
+          type: string
+          example: CAN
+          description: Country name as 3 ISO alpha-3 characters.
+        postalCode:
+          type: string
+          maxLength: 30
+          example: A0B1C2
+          description: Postal code. For example, zip code for USA and Canada.
+      required:
+      - type
+    PutVendorV1ResponseDto:
+      type: object
+      properties:
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: quickbooks
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PutVendorV1'
+      required:
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - businessName
+      - serviceName
+      - data
+    CurrencyRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: CAD
+        name:
+          type: string
+          example: Canadian Dollar
+        symbol:
+          type: string
+          example: USD,CAD
+      required:
+      - id
+    ParentRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '434'
+        name:
+          type: string
+          example: Region
+      required:
+      - id
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    GetVendorData:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        vendorName:
+          type: string
+          example: ACME Inc.
+        contactName:
+          type: string
+          example: Jane Smith
+        emailAddress:
+          type: string
+          example: email@acme.com
+        website:
+          type: string
+          example: www.acme.com
+        phone:
+          type: string
+          example: '8889990000'
+        taxNumber:
+          type: string
+          example: '987654321'
+        balance:
+          type: number
+          example: 0
+          format: float
+        status:
+          type: string
+          enum:
+          - unknown
+          - active
+          - archived
+        subsidiaryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubsidiaryRef'
+        sourceModifiedDate:
+          type: string
+          example: '2021-03-09T08:49:36.035Z'
+        parentRef:
+          $ref: '#/components/schemas/ParentRef'
+        defaultCurrency:
+          $ref: '#/components/schemas/CurrencyRef'
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Contact'
+      required:
+      - id
+      - status
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    ListReportMetaData:
+      type: object
+      properties:
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          - 5fad8a342a88364234392fb6
+          type: array
+          items:
+            type: string
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
+      required:
+      - reportId
+      - serviceName
+      - businessName
+      - createdAt
+      - updatedAt
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    PushUpdateVendorConnection:
+      type: object
+      properties:
+        businessName:
+          type: string
+          example: Railz
+          description: Unique business name identifier.
+        serviceName:
+          type: string
+          example: quickbooks
+          description: Name of accounting platform service.
+          enum:
+          - quickbooks
+          - xero
+          - freshbooks
+          - dynamicsBusinessCentral
+          - oracleNetsuite
+          - sageIntacct
+          - sageBusinessCloud
+      required:
+      - businessName
+      - serviceName
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http

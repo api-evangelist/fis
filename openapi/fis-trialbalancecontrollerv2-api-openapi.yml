@@ -1,0 +1,581 @@
+openapi: 3.2.0
+info:
+  title: FIS® Accounting Data as a Service™ Trial Balance Controller…
+  description: What's changed in our API
+  version: v2
+  contact: {}
+servers:
+- url: https://api.railz.ai
+  description: Main (production) API server
+tags:
+- name: TrialBalanceControllerV2
+paths:
+  /v2/accounting/trialBalances:
+    get:
+      description: '**Supported for:**
+
+
+        `freshbooks` `quickbooks` `quickbooksDesktop` `xero` `oracleNetsuite` `sageBusinessCloud` `sageIntacct` `dynamicsBusinessCentral` `zohoBooks` `byod`'
+      operationId: trialBalance
+      parameters:
+      - name: connectionUuid
+        required: true
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+          type: string
+      - name: reportFrequency
+        required: true
+        in: query
+        schema:
+          type: string
+          enum:
+          - month
+          - quarter
+          - year
+      - name: accountingMethod
+        required: false
+        in: query
+        schema:
+          default: accrual
+          type: string
+          enum:
+          - cash
+          - accrual
+      - name: startDate
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: endDate
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: section
+        required: false
+        in: query
+        schema:
+          type: string
+          enum:
+          - Income
+          - Expenses
+          - Assets
+          - Liabilities
+          - Equity
+      - name: subSection
+        required: false
+        in: query
+        schema:
+          type: string
+          enum:
+          - Income
+          - Cost of Goods Sold
+          - Operating Expenses
+          - Other Income
+          - Other Expenses
+          - Uncategorized Expenses
+          - Uncategorized Income
+          - Expenses
+          - Current Assets
+          - Non-Current Assets
+          - Current Liabilities
+          - Non-Current Liabilities
+          - Equity
+          - Other Assets
+          - Other Liabilities
+      - name: group
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: subGroup
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: accountId
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: subAccountId
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: account
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: debit
+        required: false
+        in: query
+        schema:
+          format: float
+          type: number
+      - name: credit
+        required: false
+        in: query
+        schema:
+          format: float
+          type: number
+      - name: ytdDebit
+        required: false
+        in: query
+        schema:
+          format: float
+          type: number
+      - name: ytdCredit
+        required: false
+        in: query
+        schema:
+          format: float
+          type: number
+      - name: offset
+        required: false
+        in: query
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrialBalancesResponseV2Dto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrialBalancesResponseV2Dto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: List Trial Balances
+      tags:
+      - TrialBalanceControllerV2
+components:
+  schemas:
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    FinancialStatementReportMetaDataV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        reportId:
+          type: string
+          readOnly: true
+          example: 5fad8a342a88364234392fb5
+        status:
+          type: string
+          readOnly: true
+          example: success
+          enum:
+          - success
+          - failed
+          - pending
+          - empty
+        reportFrequency:
+          type: string
+          readOnly: true
+          example: month
+        currency:
+          type: string
+          example: USD
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+        accountingMethod:
+          type: string
+          readOnly: true
+          example: accrual
+          enum:
+          - cash
+          - accrual
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - reportId
+      - status
+      - reportFrequency
+      - createdAt
+      - updatedAt
+      - startDate
+      - endDate
+      - accountingMethod
+    TrialBalancesResponseV2Dto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        reports:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/TrialBalancesReportV2'
+      required:
+      - pagination
+      - reports
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    TrialBalancesReportV2:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/FinancialStatementReportMetaDataV2'
+        data:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/TrialBalancesDataV2'
+      required:
+      - meta
+      - data
+    SubsidiaryRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Railz Financial
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    Error400DtoV2:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    TrialBalancesDataV2:
+      type: object
+      properties:
+        section:
+          type: string
+          example: Expenses
+          enum:
+          - Income
+          - Expenses
+          - Assets
+          - Liabilities
+          - Equity
+        subSection:
+          type: string
+          example: Operating Expenses
+          enum:
+          - Income
+          - Cost of Goods Sold
+          - Operating Expenses
+          - Other Income
+          - Other Expenses
+          - Uncategorized Expenses
+          - Uncategorized Income
+          - Expenses
+          - Current Assets
+          - Non-Current Assets
+          - Current Liabilities
+          - Non-Current Liabilities
+          - Equity
+          - Other Assets
+          - Other Liabilities
+        group:
+          type: string
+          example: Expenses
+        subGroup:
+          type: string
+          example: Utilities
+        subAccountId:
+          type: string
+          example: 203rc
+        depth:
+          type: number
+          example: 3
+          description: The sub account depth, based on it's account hierarchy level. E.g. top parent account would have a depth of 1.
+        account:
+          type: string
+          readOnly: true
+          example: Utilities - Water
+        subAccount:
+          type: string
+          example: Utilities
+        subsidiaryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubsidiaryRef'
+        credit:
+          type: number
+          example: 80
+          format: float
+        debit:
+          type: number
+          example: 0
+          format: float
+        accountId:
+          type: string
+          example: 2s4n2
+        fullyQualifiedName:
+          type: string
+          example: 'Expenses : Transportation : Car Mileage'
+        currency:
+          type: string
+          example: USD
+        classification:
+          type: string
+          example: Asset
+        type:
+          type: string
+          example: Fixed Asset
+        subType:
+          type: string
+          example: Fixed Asset
+        ytdCredit:
+          type: number
+          example: 80
+          format: float
+        ytdDebit:
+          type: number
+          example: 80
+          format: float
+      required:
+      - section
+      - subSection
+      - group
+      - subGroup
+      - depth
+      - account
+      - accountId
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http

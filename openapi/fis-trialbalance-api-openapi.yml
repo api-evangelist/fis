@@ -1,0 +1,603 @@
+openapi: 3.2.0
+info:
+  title: FIS® Accounting Data as a Service™ Trial Balance API
+  description: What's changed in our API
+  version: v2
+  contact: {}
+servers:
+- url: https://api.railz.ai
+  description: Main (production) API server
+tags:
+- name: TrialBalance
+paths:
+  /trialBalances:
+    get:
+      description: Gets a trial balance report for a business.
+      operationId: trialBalance
+      parameters:
+      - name: businessName
+        required: true
+        in: query
+        schema:
+          example: Railz
+          type: string
+      - name: reportFrequency
+        required: true
+        in: query
+        schema:
+          type: string
+          enum:
+          - month
+          - quarter
+          - year
+      - name: serviceName
+        required: true
+        in: query
+        schema:
+          type: string
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - zohoBooks
+          - byod
+      - name: accountingMethod
+        required: false
+        in: query
+        schema:
+          default: accrual
+          type: string
+          enum:
+          - cash
+          - accrual
+      - name: startDate
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: endDate
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: section
+        required: false
+        in: query
+        schema:
+          type: string
+          enum:
+          - Income
+          - Expenses
+          - Assets
+          - Liabilities
+          - Equity
+      - name: subSection
+        required: false
+        in: query
+        schema:
+          type: string
+          enum:
+          - Income
+          - Cost of Goods Sold
+          - Operating Expenses
+          - Other Income
+          - Other Expenses
+          - Uncategorized Expenses
+          - Uncategorized Income
+          - Expenses
+          - Current Assets
+          - Non-Current Assets
+          - Current Liabilities
+          - Non-Current Liabilities
+          - Equity
+          - Other Assets
+          - Other Liabilities
+      - name: group
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: subGroup
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: accountId
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: subAccountId
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: account
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: debit
+        required: false
+        in: query
+        schema:
+          format: float
+          type: number
+      - name: credit
+        required: false
+        in: query
+        schema:
+          format: float
+          type: number
+      - name: ytdDebit
+        required: false
+        in: query
+        schema:
+          format: float
+          type: number
+      - name: ytdCredit
+        required: false
+        in: query
+        schema:
+          format: float
+          type: number
+      - name: offset
+        required: false
+        in: query
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrialBalancesResponseDto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrialBalancesResponseDto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Trial balance
+      tags:
+      - TrialBalance
+      x-summary-source: derived
+components:
+  schemas:
+    FinancialStatementReportMetaData:
+      type: object
+      properties:
+        reportId:
+          type: string
+          readOnly: true
+          example: 5fad8a342a88364234392fb5
+        status:
+          type: string
+          readOnly: true
+          example: success
+          enum:
+          - success
+          - failed
+          - pending
+          - empty
+        reportFrequency:
+          type: string
+          readOnly: true
+          example: month
+        currency:
+          type: string
+          example: USD
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        accountingMethod:
+          type: string
+          readOnly: true
+          example: accrual
+          enum:
+          - cash
+          - accrual
+      required:
+      - reportId
+      - status
+      - reportFrequency
+      - createdAt
+      - updatedAt
+      - startDate
+      - endDate
+      - serviceName
+      - businessName
+      - accountingMethod
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    TrialBalancesResponseDto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+          deprecated: true
+        reports:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/TrialBalancesReport'
+      required:
+      - pagination
+      - count
+      - reports
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    SubsidiaryRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Railz Financial
+    TrialBalancesDataV1:
+      type: object
+      properties:
+        section:
+          type: string
+          example: Expenses
+          enum:
+          - Income
+          - Expenses
+          - Assets
+          - Liabilities
+          - Equity
+        subSection:
+          type: string
+          example: Operating Expenses
+          enum:
+          - Income
+          - Cost of Goods Sold
+          - Operating Expenses
+          - Other Income
+          - Other Expenses
+          - Uncategorized Expenses
+          - Uncategorized Income
+          - Expenses
+          - Current Assets
+          - Non-Current Assets
+          - Current Liabilities
+          - Non-Current Liabilities
+          - Equity
+          - Other Assets
+          - Other Liabilities
+        group:
+          type: string
+          example: Expenses
+        subGroup:
+          type: string
+          example: Utilities
+        subAccountId:
+          type: string
+          example: 203rc
+        depth:
+          type: number
+          example: 3
+          description: The sub account depth, based on it's account hierarchy level. E.g. top parent account would have a depth of 1.
+        account:
+          type: string
+          readOnly: true
+          example: Utilities - Water
+        subAccount:
+          type: string
+          example: Utilities
+        subsidiaryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubsidiaryRef'
+        credit:
+          type: number
+          example: 80
+          format: float
+        debit:
+          type: number
+          example: 0
+          format: float
+        accountId:
+          type: string
+          example: 2s4n2
+        fullyQualifiedName:
+          type: string
+          example: 'Expenses : Transportation : Car Mileage'
+          description: Full name of the account and parent account(s), colon separated.
+        ytdCredit:
+          type: number
+          example: 80
+          format: float
+          deprecated: true
+        ytdDebit:
+          type: number
+          example: 0
+          format: float
+          deprecated: true
+        currencyRef:
+          $ref: '#/components/schemas/CurrencyRef'
+      required:
+      - section
+      - subSection
+      - group
+      - subGroup
+      - depth
+      - account
+      - fullyQualifiedName
+    TrialBalancesReport:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/FinancialStatementReportMetaData'
+        data:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/TrialBalancesDataV1'
+      required:
+      - meta
+      - data
+    CurrencyRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: CAD
+        name:
+          type: string
+          example: Canadian Dollar
+        symbol:
+          type: string
+          example: USD,CAD
+      required:
+      - id
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http

@@ -1,0 +1,962 @@
+openapi: 3.2.0
+info:
+  title: FIS® Accounting Data as a Service™ Journal API
+  description: What's changed in our API
+  version: v2
+  contact: {}
+servers:
+- url: https://api.railz.ai
+  description: Main (production) API server
+tags:
+- name: Journal
+paths:
+  /journalEntries:
+    get:
+      description: Gets the latest journal entries for a business.
+      operationId: journalEntries
+      parameters:
+      - name: businessName
+        required: true
+        in: query
+        schema:
+          type: string
+      - name: serviceName
+        required: true
+        in: query
+        schema:
+          type: string
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - myob
+          - zohoBooks
+      - name: startDate
+        required: false
+        in: query
+        description: 'Transaction date greater than or equal to parameter in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: endDate
+        required: false
+        in: query
+        description: 'Transaction date less than or equal to parameter in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: offset
+        required: false
+        in: query
+        description: The offset is the position in the dataset of a particular record.
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        description: 'This is the size of the results set you would like (default: 100).'
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: totalCredit
+        required: false
+        in: query
+        description: Total amount of an journal entry credit line item.
+        schema:
+          format: float
+          type: number
+      - name: totalDebit
+        required: false
+        in: query
+        description: Total amount of an journal entry debit line item.
+        schema:
+          format: float
+          type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetJournalEntryV1ResponseDto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetJournalEntryV1ResponseDto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Journal entries
+      tags:
+      - Journal
+      x-summary-source: derived
+    post:
+      description: Posts an individual journal entry for a business.
+      operationId: push-journalEntries
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushJournalEntriesV1Dto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushJournalEntriesV1ResponseDto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Push journal entries
+      tags:
+      - Journal
+      x-summary-source: derived
+  /journalEntries/{id}:
+    put:
+      description: Updates an individual journal entry for a business.
+      operationId: put-journalEntries
+      parameters:
+      - name: id
+        required: true
+        in: path
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushUpdateJournalEntriesV1Dto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushUpdateJournalEntriesV1ResponseDto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Put journal entries
+      tags:
+      - Journal
+      x-summary-source: derived
+components:
+  schemas:
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    TaxRateRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: HST
+        effectiveTaxRate:
+          type: number
+          example: 13
+          format: float
+      required:
+      - id
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    GetJournalEntryV1ResponseDto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        count:
+          type: number
+          example: 1
+          format: integer
+          readOnly: true
+        meta:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/BasicStartEndDateReportMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetJournalEntryDataV1'
+      required:
+      - pagination
+      - count
+      - meta
+      - data
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    GetJournalEntryLineItemsV1:
+      type: object
+      properties:
+        description:
+          type: string
+          example: Services rendered.
+        credit:
+          type: number
+          example: 100.5
+          format: float
+        debit:
+          type: number
+          example: 3
+          format: float
+        taxAmount:
+          type: number
+          example: 20.5
+          format: float
+        accountRef:
+          $ref: '#/components/schemas/AccountRef'
+        entityRef:
+          $ref: '#/components/schemas/JournalEntryEntityRef'
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateRef'
+        id:
+          type: string
+          example: '1'
+        trackingCategoryRef:
+          deprecated: true
+          allOf:
+          - $ref: '#/components/schemas/TrackingCategoryRef'
+    PushJournalEntriesV1ResponseDto:
+      type: object
+      properties:
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: quickbooks
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushJournalEntriesV1'
+      required:
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - businessName
+      - serviceName
+      - data
+    AccountRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '145'
+        name:
+          type: string
+          example: Example account
+      required:
+      - id
+    PushJournalEntriesV1:
+      type: object
+      properties:
+        currencyRate:
+          type: number
+          format: float
+          example: 1.13
+        postedDate:
+          type: string
+          format: date
+          example: '2021-03-29'
+        memo:
+          type: string
+          maxLength: 4000
+          example: Services rendered.
+        currency:
+          type: string
+          example: CAD
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalEntryLineItems'
+        subsidiaryRefs:
+          example:
+          - '1'
+          - '3'
+          type: array
+          items:
+            type: string
+        bankAccountNumber:
+          type: string
+          example: '11200'
+      required:
+      - lines
+    PushUpdateJournalEntries:
+      type: object
+      properties:
+        currencyRate:
+          type: number
+          format: float
+          example: 1.13
+        postedDate:
+          type: string
+          format: date
+          example: '2021-03-09'
+        memo:
+          type: string
+          maxLength: 4000
+          example: Services rendered.
+        currency:
+          type: string
+          example: CAD
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/PushUpdateJournalEntryLineItems'
+        subsidiaryRefs:
+          example:
+          - '1'
+          - '3'
+          type: array
+          items:
+            type: string
+    PushUpdateJournalEntryLineItems:
+      type: object
+      properties:
+        description:
+          type: string
+          maxLength: 4000
+          example: Journal Entry description.
+        accountRef:
+          type: string
+          example: '200'
+        customerRef:
+          type: string
+          deprecated: true
+          example: '250'
+        vendorRef:
+          type: string
+          deprecated: true
+          example: '345'
+        trackingCategoryRef:
+          type: string
+          deprecated: true
+          example: '4040'
+        type:
+          type: string
+          deprecated: true
+          enum:
+          - credit
+          - debit
+          example: debit
+        amount:
+          type: number
+          deprecated: true
+          format: float
+          example: 150.5
+        id:
+          type: string
+          example: '200'
+      required:
+      - accountRef
+      - type
+    PushUpdateJournalEntriesConnection:
+      type: object
+      properties:
+        businessName:
+          type: string
+          example: Railz
+          description: Unique business name identifier.
+        serviceName:
+          type: string
+          example: quickbooks
+          description: Name of accounting platform service.
+          enum:
+          - quickbooks
+          - oracleNetsuite
+          - xero
+          - sageIntacct
+      required:
+      - businessName
+      - serviceName
+    PushJournalEntriesV1Dto:
+      type: object
+      properties:
+        connection:
+          $ref: '#/components/schemas/PushConnection'
+        data:
+          $ref: '#/components/schemas/PushJournalEntriesV1'
+      required:
+      - connection
+      - data
+    PushConnection:
+      type: object
+      properties:
+        businessName:
+          type: string
+          example: Railz
+          description: Unique business name identifier.
+        serviceName:
+          type: string
+          example: quickbooks
+          description: Name of accounting platform service.
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - shopify
+          - square
+          - plaid
+          - myob
+          - zohoBooks
+          - byod
+      required:
+      - businessName
+      - serviceName
+    SubsidiaryRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Railz Financial
+    PushUpdateJournalEntriesV1ResponseDto:
+      type: object
+      properties:
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: quickbooks
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushUpdateJournalEntries'
+      required:
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - businessName
+      - serviceName
+      - data
+    TrackingCategoryRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4040'
+          readOnly: false
+        name:
+          type: string
+          readOnly: false
+          example: Region
+        option:
+          type: string
+          readOnly: false
+          example: East
+        optionId:
+          type: string
+          readOnly: false
+          example: '40401'
+      required:
+      - id
+    CurrencyRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: CAD
+        name:
+          type: string
+          example: Canadian Dollar
+        symbol:
+          type: string
+          example: USD,CAD
+      required:
+      - id
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    BasicStartEndDateReportMetaData:
+      type: object
+      properties:
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          type: array
+          items:
+            type: string
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+      required:
+      - reportId
+      - serviceName
+      - businessName
+      - createdAt
+      - updatedAt
+      - startDate
+      - endDate
+    GetJournalEntryDataV1:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        postedDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        createdDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        currencyRate:
+          type: number
+          example: 1.13
+          format: float
+        subsidiaryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubsidiaryRef'
+        memo:
+          type: string
+          example: Example bill memo.
+        sourceModifiedDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        totalCredit:
+          type: number
+          example: 129.99
+          format: float
+        totalDebit:
+          type: number
+          example: 129.99
+          format: float
+        currencyRef:
+          $ref: '#/components/schemas/CurrencyRef'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetJournalEntryLineItemsV1'
+        bankAccountNumber:
+          type: string
+          example: '11200'
+      required:
+      - id
+    JournalEntryEntityRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: ABC Inc.
+        type:
+          type: string
+          example: vendor
+          enum:
+          - customer
+          - employee
+          - vendor
+      required:
+      - id
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    JournalEntryLineItems:
+      type: object
+      properties:
+        description:
+          type: string
+          maxLength: 4000
+          example: Journal Entry description.
+        accountRef:
+          type: string
+          example: '200'
+        customerRef:
+          type: string
+          deprecated: true
+          example: '250'
+        vendorRef:
+          type: string
+          deprecated: true
+          example: '345'
+        trackingCategoryRef:
+          type: string
+          deprecated: true
+          example: '4040'
+        type:
+          type: string
+          deprecated: true
+          enum:
+          - credit
+          - debit
+          example: debit
+        amount:
+          type: number
+          deprecated: true
+          format: float
+          example: 150.5
+      required:
+      - accountRef
+      - type
+      - amount
+    PushUpdateJournalEntriesV1Dto:
+      type: object
+      properties:
+        connection:
+          $ref: '#/components/schemas/PushUpdateJournalEntriesConnection'
+        data:
+          $ref: '#/components/schemas/PushUpdateJournalEntries'
+      required:
+      - connection
+      - data
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http

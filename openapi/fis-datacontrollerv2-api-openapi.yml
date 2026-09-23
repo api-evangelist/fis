@@ -1,0 +1,1576 @@
+openapi: 3.2.0
+info:
+  title: FIS® Accounting Data as a Service™ Data Controller V2 API
+  description: What's changed in our API
+  version: v2
+  contact: {}
+servers:
+- url: https://api.railz.ai
+  description: Main (production) API server
+tags:
+- name: DataControllerV2
+paths:
+  /v2/data/pushStatus:
+    get:
+      description: '**Supported for:**
+
+
+        `freshbooks` `quickbooks` `quickbooksDesktop` `xero` `oracleNetsuite` `sageBusinessCloud` `sageIntacct` `dynamicsBusinessCentral` `dynamics365Finance` `wave` `shopify` `square` `plaid` `myob` `zohoBooks` `byod`'
+      operationId: pushStatus
+      parameters:
+      - name: connectionUuid
+        required: true
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+          type: string
+      - name: pushCommunicationId
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: batchId
+        required: false
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushStatusResponseV2Dto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Fetch Status of Push Requests
+      tags:
+      - DataControllerV2
+  /v2/data/deleteStatus:
+    get:
+      description: '**Supported for:**
+
+
+        `freshbooks` `quickbooks` `quickbooksDesktop` `xero` `oracleNetsuite` `sageBusinessCloud` `sageIntacct` `dynamicsBusinessCentral` `dynamics365Finance` `wave` `shopify` `square` `plaid` `myob` `zohoBooks` `byod`'
+      operationId: deleteStatus
+      parameters:
+      - name: connectionUuid
+        required: true
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+          type: string
+      - name: deleteCommunicationId
+        required: false
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteStatusResponseV2Dto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Fetch Status of Delete Requests
+      tags:
+      - DataControllerV2
+  /v2/data/syncStatus:
+    get:
+      description: '**Supported for:**
+
+
+        `freshbooks` `quickbooks` `xero` `oracleNetsuite` `sageBusinessCloud` `sageIntacct` `dynamicsBusinessCentral` `dynamics365Finance` `wave` `shopify` `square` `plaid` `myob` `zohoBooks` `byod`'
+      operationId: syncStatus
+      parameters:
+      - name: connectionUuid
+        required: true
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+          type: string
+      - name: offset
+        required: false
+        in: query
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: startDate
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: endDate
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: dataType
+        required: false
+        in: query
+        schema:
+          type: string
+          enum:
+          - attachments
+          - accountingTransactions
+          - agedReceivable
+          - agedPayable
+          - billPaymentRequests
+          - bankTransactions
+          - bankAccounts
+          - bankTransfers
+          - bankingReconciliation
+          - balanceSheets
+          - bills
+          - budgets
+          - billCreditNotes
+          - billPayments
+          - businessInfo
+          - businessValuations
+          - cashflowStatements
+          - accounts
+          - creditScore
+          - customers
+          - deposits
+          - estimates
+          - fraudRiskMetrics
+          - financialBenchmarking
+          - portfolioMetrics
+          - financialRatios
+          - financialForecasts
+          - incomeStatements
+          - inventory
+          - invoices
+          - invoiceCreditNotes
+          - invoicePayments
+          - journalEntries
+          - journals
+          - purchaseOrders
+          - probabilityOfDefault
+          - refunds
+          - taxBenchmarking
+          - taxRates
+          - taxAuthority
+          - trackingCategories
+          - trialBalances
+          - vendors
+          - paymentMethods
+          - expenses
+          - contacts
+          - vendorBankAccounts
+          - customerBankAccounts
+          - payrollTransactions
+      - name: reportFrequency
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: currentStatus
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: accountingMethod
+        required: false
+        in: query
+        schema:
+          type: string
+          enum:
+          - cash
+          - accrual
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: requestId
+        required: false
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataStatusResponseV2Dto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Fetch Status of Data Syncs
+      tags:
+      - DataControllerV2
+  /v2/data/syncInfo:
+    get:
+      description: '**Supported for:**
+
+
+        `freshbooks` `quickbooks` `quickbooksDesktop` `xero` `oracleNetsuite` `sageBusinessCloud` `sageIntacct` `dynamicsBusinessCentral` `dynamics365Finance` `wave` `shopify` `square` `plaid` `myob` `zohoBooks` `byod`'
+      operationId: syncInfo
+      parameters:
+      - name: connectionUuid
+        required: true
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+          type: string
+      - name: requestId
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: syncType
+        required: false
+        in: query
+        schema:
+          type: string
+          enum:
+          - partial
+          - full
+          - manual
+      - name: dataType
+        required: false
+        in: query
+        schema:
+          type: string
+          enum:
+          - accountingTransactions
+          - accounts
+          - agedPayable
+          - agedReceivable
+          - attachments
+          - balanceSheets
+          - bankingReconciliation
+          - bankTransactions
+          - bankAccounts
+          - bankTransfers
+          - billCreditNotes
+          - billPayments
+          - bills
+          - budgets
+          - businessInfo
+          - businessValuations
+          - cashflowStatements
+          - creditScore
+          - customers
+          - deposits
+          - estimates
+          - financialBenchmarking
+          - financialForecasts
+          - financialRatios
+          - fraudRiskMetrics
+          - incomeStatements
+          - inventory
+          - invoiceCreditNotes
+          - invoicePayments
+          - invoices
+          - journalEntries
+          - journals
+          - probabilityOfDefault
+          - purchaseOrders
+          - refunds
+          - taxBenchmarking
+          - taxRates
+          - taxAuthority
+          - trackingCategories
+          - trialBalances
+          - vendors
+          - paymentMethods
+          - portfolioMetrics
+          - expenses
+          - contacts
+          - vendorBankAccounts
+          - customerBankAccounts
+          - billPaymentRequests
+          - payrollTransactions
+          - transactions
+          - products
+          - orders
+          - disputes
+          - bankAccounts
+          - bankTransactions
+          - bankAssets
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyncInfoResponseV2Dto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Fetch Latest Sync Information
+      tags:
+      - DataControllerV2
+  /v2/data/sync:
+    post:
+      description: '**Supported for:**
+
+
+        `freshbooks` `quickbooks` `xero` `oracleNetsuite` `sageBusinessCloud` `sageIntacct` `dynamicsBusinessCentral` `dynamics365Finance` `wave` `shopify` `square` `plaid` `myob` `zohoBooks`'
+      operationId: dataSync
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataSyncV2Dto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataSyncResponseV2Dto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Queue a Data Sync
+      tags:
+      - DataControllerV2
+  /v2/data/pushOptions:
+    get:
+      description: '**Supported for:**
+
+
+        `freshbooks` `quickbooks` `quickbooksDesktop` `xero` `oracleNetsuite` `sageBusinessCloud` `sageIntacct` `dynamicsBusinessCentral` `dynamics365Finance` `wave` `shopify` `square` `plaid` `myob` `zohoBooks` `byod`'
+      operationId: pushOptions
+      parameters:
+      - name: connectionUuid
+        required: true
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+          type: string
+      - name: dataType
+        required: false
+        in: query
+        schema:
+          example: accounts
+          type: string
+          enum:
+          - attachments
+          - accountingTransactions
+          - agedReceivable
+          - agedPayable
+          - billPaymentRequests
+          - bankTransactions
+          - bankAccounts
+          - bankTransfers
+          - bankingReconciliation
+          - balanceSheets
+          - bills
+          - budgets
+          - billCreditNotes
+          - billPayments
+          - businessInfo
+          - businessValuations
+          - cashflowStatements
+          - accounts
+          - creditScore
+          - customers
+          - deposits
+          - estimates
+          - fraudRiskMetrics
+          - financialBenchmarking
+          - portfolioMetrics
+          - financialRatios
+          - financialForecasts
+          - incomeStatements
+          - inventory
+          - invoices
+          - invoiceCreditNotes
+          - invoicePayments
+          - journalEntries
+          - journals
+          - purchaseOrders
+          - probabilityOfDefault
+          - refunds
+          - taxBenchmarking
+          - taxRates
+          - taxAuthority
+          - trackingCategories
+          - trialBalances
+          - vendors
+          - paymentMethods
+          - expenses
+          - contacts
+          - vendorBankAccounts
+          - customerBankAccounts
+          - payrollTransactions
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushOptionsResponseDto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Fetch Push Options for Asps
+      tags:
+      - DataControllerV2
+components:
+  schemas:
+    ObjectId:
+      type: object
+      properties: {}
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    SyncInfo:
+      type: object
+      properties:
+        queueTime:
+          type: number
+        syncTime:
+          type: number
+        syncType:
+          type: string
+        percentageCompleted:
+          type: number
+        status:
+          type: string
+          readOnly: true
+          enum:
+          - inProgress
+          - completed
+          - error
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:49:36.035Z'
+        firstSyncDate:
+          format: date-time
+          type: string
+          readOnly: true
+          example: '2021-04-11T08:49:36.035Z'
+        dataType:
+          type: string
+          enum:
+          - accountingTransactions
+          - accounts
+          - agedPayable
+          - agedReceivable
+          - attachments
+          - balanceSheets
+          - bankingReconciliation
+          - bankTransactions
+          - bankAccounts
+          - bankTransfers
+          - billCreditNotes
+          - billPayments
+          - bills
+          - budgets
+          - businessInfo
+          - businessValuations
+          - cashflowStatements
+          - creditScore
+          - customers
+          - deposits
+          - estimates
+          - financialBenchmarking
+          - financialForecasts
+          - financialRatios
+          - fraudRiskMetrics
+          - incomeStatements
+          - inventory
+          - invoiceCreditNotes
+          - invoicePayments
+          - invoices
+          - journalEntries
+          - journals
+          - probabilityOfDefault
+          - purchaseOrders
+          - refunds
+          - taxBenchmarking
+          - taxRates
+          - taxAuthority
+          - trackingCategories
+          - trialBalances
+          - vendors
+          - paymentMethods
+          - portfolioMetrics
+          - expenses
+          - contacts
+          - vendorBankAccounts
+          - customerBankAccounts
+          - billPaymentRequests
+          - payrollTransactions
+          - transactions
+          - products
+          - orders
+          - disputes
+          - bankAccounts
+          - bankTransactions
+          - bankAssets
+      required:
+      - status
+      - createdAt
+      - firstSyncDate
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    PushOptionsData:
+      type: object
+      properties:
+        title:
+          type: string
+          readOnly: true
+        requestType:
+          type: string
+          readOnly: true
+          example: accounts
+          enum:
+          - attachments
+          - accountingTransactions
+          - agedReceivable
+          - agedPayable
+          - billPaymentRequests
+          - bankTransactions
+          - bankAccounts
+          - bankTransfers
+          - bankingReconciliation
+          - balanceSheets
+          - bills
+          - budgets
+          - billCreditNotes
+          - billPayments
+          - businessInfo
+          - businessValuations
+          - cashflowStatements
+          - accounts
+          - creditScore
+          - customers
+          - deposits
+          - estimates
+          - fraudRiskMetrics
+          - financialBenchmarking
+          - portfolioMetrics
+          - financialRatios
+          - financialForecasts
+          - incomeStatements
+          - inventory
+          - invoices
+          - invoiceCreditNotes
+          - invoicePayments
+          - journalEntries
+          - journals
+          - purchaseOrders
+          - probabilityOfDefault
+          - refunds
+          - taxBenchmarking
+          - taxRates
+          - taxAuthority
+          - trackingCategories
+          - trialBalances
+          - vendors
+          - paymentMethods
+          - expenses
+          - contacts
+          - vendorBankAccounts
+          - customerBankAccounts
+          - payrollTransactions
+        serviceName:
+          type: string
+          readOnly: true
+          example: quickbooks
+          enum:
+          - freshbooks
+          - oracleNetsuite
+          - quickbooks
+          - quickbooksDesktop
+          - sageBusinessCloud
+          - sageIntacct
+          - xero
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - shopify
+          - square
+          - plaid
+          - zohoBooks
+          - byod
+        method:
+          type: string
+          readOnly: true
+        properties:
+          $ref: '#/components/schemas/Property'
+      required:
+      - title
+      - requestType
+      - serviceName
+      - method
+      - properties
+    Property:
+      type: object
+      properties:
+        type:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        required:
+          type: boolean
+          readOnly: true
+        enumValues:
+          readOnly: true
+          type: array
+          items:
+            type: string
+      required:
+      - type
+      - description
+      - required
+      - enumValues
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    SyncInfoResponseV2Dto:
+      type: object
+      properties:
+        meta:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/ConnectionMetadata'
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/SyncInfo'
+      required:
+      - meta
+      - data
+    ConnectionMetadata:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+    PushStatusResponseV2Dto:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/PushStatusMetaDataV2'
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        data:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/PushStatusDataV2'
+      required:
+      - meta
+      - pagination
+      - data
+    PushByodFileStatusData:
+      type: object
+      properties:
+        path:
+          type: string
+          readOnly: true
+          example: https://api.railz.ai/Attachments/Image.png
+          format: uri
+        name:
+          type: string
+          readOnly: true
+          example: Image.png
+        status:
+          type: string
+          readOnly: true
+          example: success
+          enum:
+          - success
+          - failed
+          - pending
+      required:
+      - path
+      - name
+      - status
+    DeleteStatusMetaDataV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - count
+    DataSyncV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        dataType:
+          type: string
+          enum:
+          - accountingTransactions
+          - accounts
+          - agedPayable
+          - agedReceivable
+          - attachments
+          - balanceSheets
+          - bankingReconciliation
+          - bankTransactions
+          - bankAccounts
+          - bankTransfers
+          - billCreditNotes
+          - billPayments
+          - bills
+          - budgets
+          - businessInfo
+          - businessValuations
+          - cashflowStatements
+          - creditScore
+          - customers
+          - deposits
+          - estimates
+          - financialBenchmarking
+          - financialForecasts
+          - financialRatios
+          - fraudRiskMetrics
+          - incomeStatements
+          - inventory
+          - invoiceCreditNotes
+          - invoicePayments
+          - invoices
+          - journalEntries
+          - journals
+          - probabilityOfDefault
+          - purchaseOrders
+          - refunds
+          - taxBenchmarking
+          - taxRates
+          - taxAuthority
+          - trackingCategories
+          - trialBalances
+          - vendors
+          - paymentMethods
+          - portfolioMetrics
+          - expenses
+          - contacts
+          - vendorBankAccounts
+          - customerBankAccounts
+          - billPaymentRequests
+          - payrollTransactions
+          - transactions
+          - products
+          - orders
+          - disputes
+          - bankAssets
+        dataTypes:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            enum:
+            - accountingTransactions
+            - accounts
+            - agedPayable
+            - agedReceivable
+            - attachments
+            - balanceSheets
+            - bankingReconciliation
+            - bankTransactions
+            - bankAccounts
+            - bankTransfers
+            - billCreditNotes
+            - billPayments
+            - bills
+            - budgets
+            - businessInfo
+            - businessValuations
+            - cashflowStatements
+            - creditScore
+            - customers
+            - deposits
+            - estimates
+            - financialBenchmarking
+            - financialForecasts
+            - financialRatios
+            - fraudRiskMetrics
+            - incomeStatements
+            - inventory
+            - invoiceCreditNotes
+            - invoicePayments
+            - invoices
+            - journalEntries
+            - journals
+            - probabilityOfDefault
+            - purchaseOrders
+            - refunds
+            - taxBenchmarking
+            - taxRates
+            - taxAuthority
+            - trackingCategories
+            - trialBalances
+            - vendors
+            - paymentMethods
+            - portfolioMetrics
+            - expenses
+            - contacts
+            - vendorBankAccounts
+            - customerBankAccounts
+            - billPaymentRequests
+            - payrollTransactions
+            - transactions
+            - products
+            - orders
+            - disputes
+            - bankAssets
+        fullSync:
+          type: boolean
+          default: false
+      required:
+      - connectionUuid
+    PushStatusMetaDataV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - count
+    PushOptionsResponseDto:
+      type: object
+      properties:
+        data:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/PushOptionsData'
+      required:
+      - data
+    DataSyncMetaV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        syncTime:
+          type: number
+          example: '1.234'
+        percentageCompleted:
+          type: number
+          example: '75.89'
+      required:
+      - connectionUuid
+    Error400DtoV2:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    DataStatusResponseV2Dto:
+      type: object
+      properties:
+        pagination:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PaginationMetaData'
+        meta:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/DataSyncMetaV2'
+        data:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/DataType'
+      required:
+      - pagination
+      - meta
+      - data
+    DataType:
+      type: object
+      properties:
+        dataType:
+          type: string
+          readOnly: true
+          example: BalanceSheet
+        lastSyncDate:
+          type: string
+          example: '2021-04-01T00:31:00Z'
+        lastUpdatedDate:
+          type: string
+          example: '2021-04-01T00:31:00Z'
+        reports:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/Report'
+      required:
+      - dataType
+      - reports
+    PushStatusDataV2:
+      type: object
+      properties:
+        serviceName:
+          type: string
+          readOnly: true
+          example: quickbooks
+          enum:
+          - quickbooks
+          - xero
+          - freshbooks
+          - quickbooksDesktop
+          - sageIntacct
+          - sageBusinessCloud
+          - oracleNetsuite
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - zohoBooks
+          - myob
+        dataType:
+          type: string
+          readOnly: true
+          example: balanceSheet
+        requestedOn:
+          format: date-time
+          type: string
+          readOnly: true
+          example: '2021-03-17T07:58:39.781Z'
+        completedOn:
+          format: date-time
+          type: string
+          readOnly: true
+          example: '2021-03-17T07:58:39.781Z'
+        status:
+          type: string
+          readOnly: true
+          example: success
+          enum:
+          - success
+          - failed
+          - pending
+        responseCode:
+          type: number
+          readOnly: true
+          example: 200
+          format: integer
+        validation:
+          $ref: '#/components/schemas/Validation'
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        batchId:
+          example: 63bf973a0f08e292519d4f5d
+          allOf:
+          - $ref: '#/components/schemas/ObjectId'
+        sourceObjectIds:
+          example:
+          - '144'
+          - '154'
+          type: array
+          items:
+            type: string
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/PushByodFileStatusData'
+      required:
+      - serviceName
+      - dataType
+      - requestedOn
+      - completedOn
+      - status
+      - responseCode
+      - pushCommunicationId
+    DeleteStatusDataV2:
+      type: object
+      properties:
+        serviceName:
+          type: string
+          readOnly: true
+          example: quickbooks
+          enum:
+          - quickbooks
+          - xero
+          - freshbooks
+          - quickbooksDesktop
+          - sageIntacct
+          - sageBusinessCloud
+          - oracleNetsuite
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - zohoBooks
+          - myob
+        dataType:
+          type: string
+          readOnly: true
+          example: balanceSheet
+        requestedOn:
+          format: date-time
+          type: string
+          readOnly: true
+          example: '2021-03-17T07:58:39.781Z'
+        completedOn:
+          format: date-time
+          type: string
+          readOnly: true
+          example: '2021-03-17T07:58:39.781Z'
+        status:
+          type: string
+          readOnly: true
+          example: success
+          enum:
+          - success
+          - failed
+          - pending
+        responseCode:
+          type: number
+          readOnly: true
+          example: 200
+          format: integer
+        validation:
+          $ref: '#/components/schemas/Validation'
+        deleteCommunicationId:
+          type: string
+      required:
+      - serviceName
+      - dataType
+      - requestedOn
+      - completedOn
+      - status
+      - responseCode
+    DeleteStatusResponseV2Dto:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/DeleteStatusMetaDataV2'
+        data:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/DeleteStatusDataV2'
+      required:
+      - meta
+      - data
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    Validation:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    Report:
+      type: object
+      properties:
+        startDate:
+          type: string
+          example: '2021-03-01T00:00:00Z'
+        endDate:
+          type: string
+          example: '2021-03-31T00:00:00Z'
+        lastSuccessfulSync:
+          type: string
+          example: '2021-04-01T00:31:00Z'
+        reportFrequency:
+          type: string
+          example: month
+        currentStatus:
+          type: string
+          example: success
+          enum:
+          - success
+          - failed
+          - pending
+          - empty
+        latestReportId:
+          type: string
+          example: 6070149d1d685e6cf0583e36
+        latestSuccessfulReportId:
+          type: string
+          example: 601077f5914dac670966f660
+        accountingMethod:
+          type: string
+          example: accrual
+        reconstructed:
+          type: boolean
+          example: true
+    Error:
+      type: object
+      properties:
+        field:
+          type: string
+          example: customerName
+        message:
+          type: string
+          example: Must have a length between 1 and 500 characters.
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    DataSyncResponseV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        dataType:
+          type: string
+          example: balanceSheet
+        dataTypes:
+          example:
+          - balanceSheet
+          type: array
+          items:
+            type: string
+        requestedOn:
+          format: date-time
+          type: string
+          readOnly: true
+          example: '2021-03-18T08:16:51.233Z'
+        requestId:
+          type: string
+          readOnly: true
+          example: 94652dff-06ab-4b97-bd1b-f91adf7048c3
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - requestedOn
+      - requestId
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http

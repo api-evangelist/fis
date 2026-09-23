@@ -1,0 +1,555 @@
+openapi: 3.2.0
+info:
+  title: FIS® Accounting Data as a Service™ Accounting Transaction…
+  description: What's changed in our API
+  version: v2
+  contact: {}
+servers:
+- url: https://api.railz.ai
+  description: Main (production) API server
+tags:
+- name: AccountingTransaction
+paths:
+  /accountingTransactions:
+    get:
+      description: Gets an accounting transaction summary report for a business.
+      operationId: accountingTransactions
+      parameters:
+      - name: businessName
+        required: true
+        in: query
+        description: Unique business name identifier.
+        schema:
+          example: Railz
+          type: string
+      - name: serviceName
+        required: true
+        in: query
+        description: Name of accounting service provider.
+        schema:
+          type: string
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - myob
+          - zohoBooks
+      - name: startDate
+        required: false
+        in: query
+        description: 'Date from which the report data begins in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: endDate
+        required: false
+        in: query
+        description: 'Date from which the report data ends in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: offset
+        required: false
+        in: query
+        description: The offset is the position in the dataset of a particular record.
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        description: 'This is the size of the results set you would like (default: 100).'
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountingTransactionsResponseDto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountingTransactionsResponseDto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Accounting transactions
+      tags:
+      - AccountingTransaction
+      x-summary-source: derived
+components:
+  schemas:
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    AccountingTransactionsResponseDto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        meta:
+          $ref: '#/components/schemas/AccountingTransactionsReportMetaData'
+        data:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountingTransactionDataV1'
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+      required:
+      - pagination
+      - meta
+      - data
+      - count
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    AccountingTransactionsReportMetaData:
+      type: object
+      properties:
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          - 5fad8a342a88364234392fb6
+          type: array
+          items:
+            type: string
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - quickbooks
+          - xero
+          - freshbooks
+          - quickbooksDesktop
+          - sageIntacct
+          - sageBusinessCloud
+          - oracleNetsuite
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - zohoBooks
+          - myob
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        startDate:
+          type: string
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        endDate:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+        createdAt:
+          type: string
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
+      required:
+      - reportId
+      - serviceName
+      - businessName
+      - createdAt
+      - updatedAt
+    AccountingTransactionEntityRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '233'
+          readOnly: false
+        name:
+          type: string
+          example: Railz Inc.
+          readOnly: false
+    TrackingCategoryRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4040'
+          readOnly: false
+        name:
+          type: string
+          readOnly: false
+          example: Region
+        option:
+          type: string
+          readOnly: false
+          example: East
+        optionId:
+          type: string
+          readOnly: false
+          example: '40401'
+      required:
+      - id
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    AccountingTransactionDataV1:
+      type: object
+      properties:
+        postedDate:
+          format: date
+          type: string
+          example: '2020-11-25'
+          readOnly: false
+        type:
+          type: string
+          example: invoice
+          enum:
+          - expense
+          - invoice
+          - payment
+          - payroll
+          - journalEntry
+          - bill
+          - vendorCreditNote
+          - creditNote
+          - billPayment
+          - bankTransaction
+          - transfer
+          - deposit
+          - refund
+          - estimate
+          - inventoryAdjustment
+          - purchaseOrder
+          - taxPayment
+          - taxAdjustment
+          - taxRefund
+          - taxReversal
+          - other
+          - unknown
+          readOnly: false
+        isReconciled:
+          type: boolean
+          example: true
+          readOnly: false
+        currencyRate:
+          type: number
+          example: 1.13
+          format: float
+          readOnly: false
+        isSplitTransaction:
+          type: boolean
+          example: true
+          readOnly: false
+        parentTransactionId:
+          type: string
+          example: 1043
+          readOnly: false
+        subTotal:
+          type: number
+          example: 300.5
+          format: float
+          readOnly: false
+        taxAmount:
+          type: number
+          example: 10.5
+          format: float
+          readOnly: false
+        totalAmount:
+          type: number
+          example: 311
+          format: float
+          readOnly: false
+        memo:
+          type: string
+          example: Transaction reference
+          readOnly: false
+        sourceModifiedDate:
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+          format: date
+          readOnly: false
+        id:
+          type: string
+          example: '1045'
+          readOnly: false
+        isPosting:
+          type: boolean
+          example: true
+          readOnly: false
+        transactionNumber:
+          type: string
+          example: INV-001
+          readOnly: false
+        entityRef:
+          $ref: '#/components/schemas/AccountingTransactionEntityRef'
+        trackingCategoryRef:
+          deprecated: true
+          allOf:
+          - $ref: '#/components/schemas/TrackingCategoryRef'
+        accountRef:
+          $ref: '#/components/schemas/AccountingTransactionAccountRef'
+        currencyRef:
+          $ref: '#/components/schemas/AccountingTransactionCurrency'
+      required:
+      - postedDate
+      - type
+      - isPosting
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    AccountingTransactionCurrency:
+      type: object
+      properties:
+        id:
+          type: string
+          example: CAD
+          description: A three letter string representing the ISO-4217 code for the currency. For example, USD.
+          readOnly: false
+        name:
+          type: string
+          example: Canadian Dollar
+          readOnly: false
+        symbol:
+          type: string
+          example: "\tUSD,CAD"
+    AccountingTransactionAccountRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1334'
+          readOnly: false
+        name:
+          type: string
+          example: Account Receivable
+          readOnly: false
+        section:
+          type: string
+          example: Assets
+          readOnly: false
+          enum:
+          - Assets
+          - Expenses
+          - Income
+          - Liabilities
+          - Equity
+        subSection:
+          type: string
+          example: Current Assets
+          readOnly: false
+          enum:
+          - Current Assets
+          - Non-Current Assets
+          - Current Liabilities
+          - Non-Current Liabilities
+          - Equity
+          - Income
+          - Other Income
+          - Operating Expenses
+          - Other Expenses
+          - Cost of Goods Sold
+        group:
+          type: string
+          example: Cash And Cash Equivalents
+          readOnly: false
+        subGroup:
+          type: string
+          example: Cash And Cash Equivalents
+          readOnly: false
+      required:
+      - id
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http

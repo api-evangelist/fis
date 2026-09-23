@@ -1,0 +1,439 @@
+openapi: 3.2.0
+info:
+  title: FIS® Accounting Data as a Service™ Sandbox API
+  description: What's changed in our API
+  version: v2
+  contact: {}
+servers:
+- url: https://api.railz.ai
+  description: Main (production) API server
+tags:
+- name: Sandbox
+paths:
+  /sandbox/fireWebhooks:
+    post:
+      description: Test that your code correctly handles webhook events in Sandbox.
+      operationId: FeederSandboxController_fireWebhook
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FireWebhookV1Dto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FireWebhookResponseV1Dto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Feeder sandbox controller fire webhook
+      tags:
+      - Sandbox
+      x-summary-source: derived
+  /v2/sandbox/fireWebhooks:
+    post:
+      description: '**Supported for:**
+
+
+        `freshbooks` `quickbooks` `quickbooksDesktop` `xero` `oracleNetsuite` `sageBusinessCloud` `sageIntacct` `dynamicsBusinessCentral` `dynamics365Finance` `wave` `shopify` `square` `plaid` `myob` `zohoBooks` `byod`'
+      operationId: FeederSandboxControllerV2_fireWebhook_v2
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FireWebhookV2Dto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FireWebhookResponseV2Dto'
+        '400':
+          description: 'Bad Request Error - Thrown if fields sent via query does not follow specifications
+
+
+            Bad Request Error - Thrown if fields sent via query does not follow specifications'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: 'Unauthorized - Not logged in or log in expired
+
+
+            Unauthorized - Not logged in or log in expired'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: 'Forbidden - Not enough permission
+
+
+            Forbidden - Not enough permission'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: 'Server Error
+
+
+            Server Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      - bearer: []
+      summary: Trigger Sandbox Webhook Events
+      tags:
+      - Sandbox
+components:
+  schemas:
+    FireWebhookConnectionV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          example: CON-004f4cbe-e9ba-46c0-a7ef-2da661fe0e15
+          readOnly: false
+        event:
+          type: string
+          enum:
+          - login
+          - auth
+          - connectionStatus
+          - customerRequest
+          - data
+          - dataPerType
+          - push
+          - batchPush
+          - delete
+          readOnly: false
+        requestType:
+          type: string
+          description: Request types for data per type. Required when dataPerType event is present.
+          example: ACCOUNTING_TRANSACTION,ACCOUNTS,AGED_PAYABLE,AGED_RECEIVABLE,ATTACHMENT,BALANCE_SHEETS,BANKING_RECONCILIATION,BANK_TRANSACTION_ACCOUNTING,BANK_ACCOUNT_ACCOUNTING,BANK_TRANSFERS,BILL_CREDIT_NOTES,BILL_PAYMENTS,BILLS,BUDGET,BUSINESS_INFO,BUSINESS_VALUATION,CASH_FLOW_STATEMENTS,CREDIT_SCORE,CUSTOMERS,DEPOSITS,ESTIMATES,FINANCIAL_BENCHMARKING,FINANCIAL_FORECAST,FINANCIAL_RATIO,FRAUD_RISK_METRICS,INCOME_STATEMENTS,INVENTORY,INVOICE_CREDIT_NOTES,INVOICE_PAYMENTS,INVOICES,JOURNAL_ENTRIES,JOURNAL,PROBABILITY_OF_DEFAULT,PURCHASE_ORDERS,REFUNDS,TAX_BENCHMARKING,TAX_RATES,TAX_AUTHORITY,TRACKING_CATEGORIES,TRIAL_BALANCES,VENDORS,PAYMENT_METHODS,PORTFOLIO_METRICS,EXPENSES,CONTACT,VENDOR_BANK_ACCOUNT,CUSTOMER_BANK_ACCOUNT,BILL_PAYMENT_REQUEST,PAYROLL_TRANSACTION,COMMERCE_TRANSACTION,COMMERCE_PRODUCT,COMMERCE_ORDER,COMMERCE_DISPUTE,BANK_ACCOUNT,BANK_TRANSACTION,BANK_ASSET
+        pushCommunicationId:
+          type: string
+          format: uuid
+          readOnly: false
+        batchId:
+          type: string
+          format: uuid
+          readOnly: false
+        deleteCommunicationId:
+          type: string
+          format: uuid
+          readOnly: false
+        customerRequestType:
+          type: string
+          example: customersDataRequest
+          readOnly: false
+        dataRequestStatus:
+          type: string
+          example: success
+          description: status to be returned for requests of data webhook
+          enum:
+          - empty
+          - success
+          - failed
+        payloadType:
+          type: string
+          description: Webhook payload type.
+          enum:
+          - full
+          - simple
+      required:
+      - connectionUuid
+      - event
+    FireWebhookConnectionV1Dto:
+      type: object
+      properties:
+        businessName:
+          type: string
+          example: Railz
+          readOnly: false
+        serviceName:
+          type: string
+          example: quickbooks
+          enum:
+          - railzSandbox
+          - freshbooks
+          - oracleNetsuite
+          - quickbooks
+          - quickbooksDesktop
+          - sageBusinessCloud
+          - sageIntacct
+          - xero
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - shopify
+          - square
+          - plaid
+          - zohoBooks
+          - byod
+          readOnly: false
+        connectionId:
+          type: string
+          example: CON-004f4cbe-e9ba-46c0-a7ef-2da661fe0e15
+          readOnly: false
+        event:
+          type: string
+          enum:
+          - login
+          - auth
+          - connectionStatus
+          - customerRequest
+          - data
+          - dataPerType
+          - push
+          - batchPush
+          - delete
+          readOnly: false
+        requestType:
+          type: string
+          description: Request types for data per type. Required when dataPerType event is present.
+          example: ACCOUNTING_TRANSACTION,ACCOUNTS,AGED_PAYABLE,AGED_RECEIVABLE,ATTACHMENT,BALANCE_SHEETS,BANKING_RECONCILIATION,BANK_TRANSACTION_ACCOUNTING,BANK_ACCOUNT_ACCOUNTING,BANK_TRANSFERS,BILL_CREDIT_NOTES,BILL_PAYMENTS,BILLS,BUDGET,BUSINESS_INFO,BUSINESS_VALUATION,CASH_FLOW_STATEMENTS,CREDIT_SCORE,CUSTOMERS,DEPOSITS,ESTIMATES,FINANCIAL_BENCHMARKING,FINANCIAL_FORECAST,FINANCIAL_RATIO,FRAUD_RISK_METRICS,INCOME_STATEMENTS,INVENTORY,INVOICE_CREDIT_NOTES,INVOICE_PAYMENTS,INVOICES,JOURNAL_ENTRIES,JOURNAL,PROBABILITY_OF_DEFAULT,PURCHASE_ORDERS,REFUNDS,TAX_BENCHMARKING,TAX_RATES,TAX_AUTHORITY,TRACKING_CATEGORIES,TRIAL_BALANCES,VENDORS,PAYMENT_METHODS,PORTFOLIO_METRICS,EXPENSES,CONTACT,VENDOR_BANK_ACCOUNT,CUSTOMER_BANK_ACCOUNT,BILL_PAYMENT_REQUEST,PAYROLL_TRANSACTION,COMMERCE_TRANSACTION,COMMERCE_PRODUCT,COMMERCE_ORDER,COMMERCE_DISPUTE,BANK_ACCOUNT,BANK_TRANSACTION,BANK_ASSET
+        pushCommunicationId:
+          type: string
+          format: uuid
+          readOnly: false
+        batchId:
+          type: string
+          format: uuid
+          readOnly: false
+        deleteCommunicationId:
+          type: string
+          format: uuid
+          readOnly: false
+        customerRequestType:
+          type: string
+          example: customersDataRequest
+          readOnly: false
+      required:
+      - event
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    FireWebhookResponseV1Dto:
+      type: object
+      properties:
+        webhookFired:
+          type: boolean
+          readOnly: true
+          example: true
+      required:
+      - webhookFired
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    FireWebhookV1Dto:
+      type: object
+      properties:
+        connection:
+          $ref: '#/components/schemas/FireWebhookConnectionV1Dto'
+      required:
+      - connection
+    FireWebhookV2Dto:
+      type: object
+      properties:
+        connection:
+          $ref: '#/components/schemas/FireWebhookConnectionV2Dto'
+      required:
+      - connection
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    FireWebhookResponseV2Dto:
+      type: object
+      properties:
+        webhookFired:
+          type: boolean
+          readOnly: true
+          example: true
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-004f4cbe-e9ba-46c0-a7ef-2da661fe0e15
+        businessUuid:
+          type: string
+          readOnly: true
+          example: BIZ-26bc4510-8c6f-4688-996d-e87acf3e0b3f
+      required:
+      - webhookFired
+      - connectionUuid
+      - businessUuid
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http

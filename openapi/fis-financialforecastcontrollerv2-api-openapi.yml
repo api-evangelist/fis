@@ -1,0 +1,402 @@
+openapi: 3.2.0
+info:
+  title: FIS® Accounting Data as a Service™ Financial Forecast…
+  description: What's changed in our API
+  version: v2
+  contact: {}
+servers:
+- url: https://api.railz.ai
+  description: Main (production) API server
+tags:
+- name: FinancialForecastControllerV2
+paths:
+  /v2/analytics/financialForecasts:
+    get:
+      description: '**Supported for:**
+
+
+        `freshbooks` `quickbooks` `quickbooksDesktop` `xero` `dynamicsBusinessCentral` `zohoBooks` `byod`'
+      operationId: financialForecasts
+      parameters:
+      - name: connectionUuid
+        required: true
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+          type: string
+      - name: startDate
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: endDate
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: financialStatementType
+        required: true
+        in: query
+        schema:
+          type: string
+          enum:
+          - balanceSheets
+          - incomeStatements
+          - cashflowStatements
+      - name: reportFrequency
+        required: true
+        in: query
+        schema:
+          type: string
+          enum:
+          - month
+          - quarter
+          - year
+      - name: percentile
+        required: false
+        in: query
+        schema:
+          format: float
+          example: 0.05
+          type: number
+      - name: reconstruct
+        required: false
+        in: query
+        description: Railz reconstructed Financial Forecast
+        schema:
+          default: 'false'
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinancialForecastResponseV2Dto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinancialForecastResponseV2Dto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: List Financial Forecasts
+      tags:
+      - FinancialForecastControllerV2
+components:
+  schemas:
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    FinancialForecastResponseV2Dto:
+      type: object
+      properties:
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        reports:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/FinancialForecastReportV2'
+      required:
+      - count
+      - reports
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    FinancialForecastDataV2:
+      type: object
+      properties:
+        section:
+          type: string
+          example: Assets
+        subSection:
+          type: string
+          example: Current Assets
+        group:
+          type: string
+          example: Cash And Cash Equivalents
+        subGroup:
+          type: string
+          example: Checking
+        account:
+          type: string
+          example: Bank of America
+        subAccount:
+          type: string
+        endDate:
+          type: string
+          example: '2022-03-31'
+          format: date
+        value:
+          type: number
+          example: 1500000.5
+          format: double
+      required:
+      - section
+      - subSection
+      - group
+      - subGroup
+      - endDate
+      - value
+    Error400DtoV2:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    FinancialForecastMetaDataV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        reportId:
+          type: string
+          readOnly: true
+          example: 5fad8a342a88364234392fb5
+        financialStatementType:
+          type: string
+          readOnly: true
+          example: balanceSheets
+          enum:
+          - balanceSheets
+          - incomeStatements
+          - cashflowStatements
+        reportFrequency:
+          type: string
+          readOnly: true
+          example: month
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-01T00:00:00Z'
+        endDate:
+          type: string
+          readOnly: true
+          example: '2022-03-31T00:00:00Z'
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - reportId
+      - financialStatementType
+      - reportFrequency
+      - startDate
+      - endDate
+      - createdAt
+      - updatedAt
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    FinancialForecastReportV2:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/FinancialForecastMetaDataV2'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/FinancialForecastDataV2'
+      required:
+      - meta
+      - data
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http

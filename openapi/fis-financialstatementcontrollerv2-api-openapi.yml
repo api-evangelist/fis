@@ -1,0 +1,1638 @@
+openapi: 3.2.0
+info:
+  title: FIS® Accounting Data as a Service™ Financial Statement…
+  description: What's changed in our API
+  version: v2
+  contact: {}
+servers:
+- url: https://api.railz.ai
+  description: Main (production) API server
+tags:
+- name: FinancialStatementControllerV2
+paths:
+  /v2/accounting/balanceSheets:
+    get:
+      description: '**Supported for:**
+
+
+        `freshbooks` `quickbooks` `quickbooksDesktop` `xero` `dynamicsBusinessCentral` `zohoBooks` `byod`'
+      operationId: balanceSheets
+      parameters:
+      - name: connectionUuid
+        required: true
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+          type: string
+      - name: accountingMethod
+        required: false
+        in: query
+        schema:
+          default: accrual
+          type: string
+          enum:
+          - cash
+          - accrual
+      - name: reportFrequency
+        required: true
+        in: query
+        schema:
+          type: string
+          enum:
+          - month
+          - quarter
+          - year
+      - name: startDate
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: endDate
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: section
+        required: false
+        in: query
+        schema:
+          type: string
+          enum:
+          - Assets
+          - Liabilities
+          - Equity
+      - name: subSection
+        required: false
+        in: query
+        schema:
+          type: string
+          enum:
+          - Current Assets
+          - Non-Current Assets
+          - Current Liabilities
+          - Non-Current Liabilities
+          - Equity
+          - Other Assets
+          - Other Liabilities
+          - Expenses
+      - name: group
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: subGroup
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: accountId
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: subAccountId
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: account
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: value
+        required: false
+        in: query
+        schema:
+          format: float
+          type: number
+      - name: offset
+        required: false
+        in: query
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BalanceSheetsResponseV2Dto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BalanceSheetsResponseV2Dto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: List Balance Sheets
+      tags:
+      - FinancialStatementControllerV2
+  /v2/accounting/cashflowStatements:
+    get:
+      description: '**Supported for:**
+
+
+        `quickbooks` `dynamicsBusinessCentral` `zohoBooks` `byod`'
+      operationId: cashflowStatements
+      parameters:
+      - name: connectionUuid
+        required: true
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+          type: string
+      - name: accountingMethod
+        required: false
+        in: query
+        schema:
+          default: accrual
+          type: string
+          enum:
+          - cash
+          - accrual
+      - name: reportFrequency
+        required: true
+        in: query
+        schema:
+          type: string
+          enum:
+          - month
+          - quarter
+          - year
+      - name: startDate
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: endDate
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: section
+        required: false
+        in: query
+        schema:
+          type: string
+          enum:
+          - Operating Activities
+          - Financing Activities
+          - Investing Activities
+          - Cash
+      - name: subSection
+        required: false
+        in: query
+        schema:
+          type: string
+          enum:
+          - Payments
+          - Adjustments
+          - Changes
+          - Proceeds
+          - Stock
+          - Intangibles
+          - Property Plant And Equipment
+          - Cash
+      - name: group
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: subGroup
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: accountId
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: subAccountId
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: account
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: value
+        required: false
+        in: query
+        schema:
+          format: float
+          type: number
+      - name: offset
+        required: false
+        in: query
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CashflowStatementsResponseV2Dto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CashflowStatementsResponseV2Dto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: List Cashflow Statements
+      tags:
+      - FinancialStatementControllerV2
+  /v2/accounting/incomeStatements:
+    get:
+      description: '**Supported for:**
+
+
+        `freshbooks` `quickbooks` `quickbooksDesktop` `xero` `dynamicsBusinessCentral` `zohoBooks` `byod`'
+      operationId: incomeStatements
+      parameters:
+      - name: connectionUuid
+        required: true
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+          type: string
+      - name: accountingMethod
+        required: false
+        in: query
+        schema:
+          default: accrual
+          type: string
+          enum:
+          - cash
+          - accrual
+      - name: reportFrequency
+        required: true
+        in: query
+        schema:
+          type: string
+          enum:
+          - month
+          - quarter
+          - year
+      - name: startDate
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: endDate
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: section
+        required: false
+        in: query
+        schema:
+          type: string
+          enum:
+          - Income
+          - Expenses
+      - name: subSection
+        required: false
+        in: query
+        schema:
+          type: string
+          enum:
+          - Income
+          - Cost of Goods Sold
+          - Operating Expenses
+          - Other Income
+          - Other Expenses
+          - Uncategorized Expenses
+          - Uncategorized Income
+          - Expenses
+      - name: group
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: subGroup
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: accountId
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: subAccountId
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: account
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: value
+        required: false
+        in: query
+        schema:
+          format: float
+          type: number
+      - name: offset
+        required: false
+        in: query
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncomeStatementsResponseV2Dto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncomeStatementsResponseV2Dto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: List Income Statements
+      tags:
+      - FinancialStatementControllerV2
+  /v2/accounting/incomeStatements/report:
+    get:
+      description: '**Supported for:**
+
+
+        `freshbooks` `quickbooks` `quickbooksDesktop` `xero` `dynamicsBusinessCentral` `zohoBooks` `byod`'
+      operationId: incomeStatementsReport
+      parameters:
+      - name: connectionUuid
+        required: true
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+          type: string
+      - name: accountingMethod
+        required: false
+        in: query
+        schema:
+          default: accrual
+          type: string
+          enum:
+          - cash
+          - accrual
+      - name: reportFrequency
+        required: true
+        in: query
+        schema:
+          type: string
+          enum:
+          - month
+          - quarter
+          - year
+      - name: startDate
+        required: true
+        in: query
+        schema:
+          type: string
+      - name: endDate
+        required: true
+        in: query
+        schema:
+          type: string
+      - name: offset
+        required: false
+        in: query
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncomeStatementsReportResponseDto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Report Income Statements
+      tags:
+      - FinancialStatementControllerV2
+  /v2/accounting/balanceSheets/report:
+    get:
+      description: '**Supported for:**
+
+
+        `freshbooks` `quickbooks` `quickbooksDesktop` `xero` `dynamicsBusinessCentral` `zohoBooks` `byod`'
+      operationId: balanceSheetsReport
+      parameters:
+      - name: connectionUuid
+        required: true
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+          type: string
+      - name: accountingMethod
+        required: false
+        in: query
+        schema:
+          default: accrual
+          type: string
+          enum:
+          - cash
+          - accrual
+      - name: reportFrequency
+        required: true
+        in: query
+        schema:
+          type: string
+          enum:
+          - month
+          - quarter
+          - year
+      - name: startDate
+        required: true
+        in: query
+        schema:
+          type: string
+      - name: endDate
+        required: true
+        in: query
+        schema:
+          type: string
+      - name: offset
+        required: false
+        in: query
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BalanceSheetsReportResponseDto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Report Balance Sheets
+      tags:
+      - FinancialStatementControllerV2
+  /v2/accounting/cashflowStatements/report:
+    get:
+      description: '**Supported for:**
+
+
+        `quickbooks` `dynamicsBusinessCentral` `zohoBooks` `byod`'
+      operationId: cashflowStatementsReport
+      parameters:
+      - name: connectionUuid
+        required: true
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+          type: string
+      - name: accountingMethod
+        required: false
+        in: query
+        schema:
+          default: accrual
+          type: string
+          enum:
+          - cash
+          - accrual
+      - name: reportFrequency
+        required: true
+        in: query
+        schema:
+          type: string
+          enum:
+          - month
+          - quarter
+          - year
+      - name: startDate
+        required: true
+        in: query
+        schema:
+          type: string
+      - name: endDate
+        required: true
+        in: query
+        schema:
+          type: string
+      - name: offset
+        required: false
+        in: query
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CashflowStatementsReportResponseDto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Report Cashflow Statements
+      tags:
+      - FinancialStatementControllerV2
+components:
+  schemas:
+    IncomeStatementsReportView:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/FinancialStatementReportMetaDataV2'
+        data:
+          $ref: '#/components/schemas/IncomeStatementReportData'
+      required:
+      - meta
+      - data
+    BalanceSheetsReportView:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/FinancialStatementReportMetaDataV2'
+        data:
+          $ref: '#/components/schemas/BalanceSheetReportData'
+      required:
+      - meta
+      - data
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    IncomeStatementsReportResponseDto:
+      type: object
+      properties:
+        reports:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/IncomeStatementsReportView'
+      required:
+      - reports
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    FinancingActivities:
+      type: object
+      properties:
+        stock:
+          type: object
+          additionalProperties: true
+          example:
+            Stocks: 2500
+        totalStock:
+          type: object
+        proceedsFinancing:
+          type: object
+          additionalProperties: true
+          example:
+            Proceeds: 5400
+        totalProceedsFinancing:
+          type: number
+        adjustmentsFinancing:
+          type: object
+          additionalProperties: true
+          example:
+            Adjustments: 1300
+        totalAdjustmentsFinancing:
+          type: number
+        payments:
+          type: object
+          additionalProperties: true
+          example:
+            Payables: 5400
+        totalPayments:
+          type: number
+        netCashByFinancingActivities:
+          type: number
+      required:
+      - stock
+      - totalStock
+      - proceedsFinancing
+      - totalProceedsFinancing
+      - adjustmentsFinancing
+      - totalAdjustmentsFinancing
+      - payments
+      - totalPayments
+      - netCashByFinancingActivities
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    InvestingActivities:
+      type: object
+      properties:
+        propertyPlantAndEquipment:
+          type: object
+          additionalProperties: true
+          example:
+            Equipment: 8000
+        totalPropertyPlantAndEquipment:
+          type: number
+        proceedsInvesting:
+          type: object
+          additionalProperties: true
+          example:
+            Proceeds: 5400
+        totalProceedsInvesting:
+          type: number
+        intangibles:
+          type: object
+          additionalProperties: true
+          example:
+            Intangibles: 5400
+        totalIntangibles:
+          type: number
+        payments:
+          type: object
+          additionalProperties: true
+          example:
+            Payables: 5400
+        totalPayments:
+          type: number
+        netCashByInvestingActivities:
+          type: number
+      required:
+      - propertyPlantAndEquipment
+      - totalPropertyPlantAndEquipment
+      - proceedsInvesting
+      - totalProceedsInvesting
+      - intangibles
+      - totalIntangibles
+      - payments
+      - totalPayments
+      - netCashByInvestingActivities
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    CashflowStatementsV2Data:
+      type: object
+      properties:
+        section:
+          type: string
+          example: Operating Activities
+          enum:
+          - Operating Activities
+          - Financing Activities
+          - Investing Activities
+          - Cash
+        subSection:
+          type: string
+          example: Payments
+          enum:
+          - Payments
+          - Adjustments
+          - Changes
+          - Proceeds
+          - Stock
+          - Intangibles
+          - Property Plant And Equipment
+          - Cash
+        group:
+          type: string
+          example: Financing Activities
+        subGroup:
+          type: string
+          example: Retained Earnings
+        accountId:
+          type: string
+          example: '3928'
+        subAccountId:
+          type: string
+          example: '231'
+        account:
+          type: string
+          readOnly: true
+          example: Financing Activities
+        subAccount:
+          type: string
+          example: Retained Earnings
+        value:
+          type: number
+          readOnly: true
+          example: 13000
+          format: float
+        fullyQualifiedName:
+          type: string
+          example: 'Expenses : Transportation : Car Mileage'
+          description: Full name of the account and parent account(s), colon separated.
+        depth:
+          type: number
+          example: 3
+          description: The sub account depth, based on it's account hierarchy level. E.g. top parent account would have a depth of 1.
+        classification:
+          type: string
+          example: Assets
+        type:
+          type: string
+          example: Fixed Assets
+        subType:
+          type: string
+          example: Fixed Assets
+      required:
+      - section
+      - subSection
+      - account
+      - value
+      - depth
+    Liabilities:
+      type: object
+      properties:
+        currentLiabilities:
+          type: object
+          additionalProperties: true
+          example:
+            Accounts Payable: 5400
+        totalCurrentLiabilities:
+          type: number
+        nonCurrentLiabilities:
+          type: object
+          additionalProperties: true
+          example:
+            Services: 1200
+        totalNonCurrentLiabilities:
+          type: number
+        totalLiabilities:
+          type: number
+      required:
+      - currentLiabilities
+      - totalCurrentLiabilities
+      - nonCurrentLiabilities
+      - totalNonCurrentLiabilities
+      - totalLiabilities
+    CashflowStatementsReportResponseDto:
+      type: object
+      properties:
+        reports:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/CashflowReportView'
+      required:
+      - reports
+    IncomeStatementsResponseV2Dto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        reports:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/IncomeStatementsReportV2'
+      required:
+      - pagination
+      - reports
+    CashflowReportView:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/FinancialStatementReportMetaDataV2'
+        data:
+          $ref: '#/components/schemas/CashflowReportStatementData'
+      required:
+      - meta
+      - data
+    CashflowReportStatementData:
+      type: object
+      properties:
+        operatingActivities:
+          $ref: '#/components/schemas/OperatingActivities'
+        investingActivities:
+          $ref: '#/components/schemas/InvestingActivities'
+        financialActivities:
+          $ref: '#/components/schemas/FinancingActivities'
+        netCashIncreaseForPeriod:
+          type: number
+      required:
+      - operatingActivities
+      - investingActivities
+      - financialActivities
+      - netCashIncreaseForPeriod
+    Error400DtoV2:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    OperatingActivities:
+      type: object
+      properties:
+        changes:
+          type: object
+          additionalProperties: true
+          example:
+            Input Tax: 2000
+        totalChanges:
+          type: number
+        adjustmentsOperating:
+          type: object
+          additionalProperties: true
+          example:
+            Adjustments: 1300
+        totalAdjustmentsOperating:
+          type: number
+        cash:
+          type: object
+          additionalProperties: true
+          example:
+            Accounts Payable: 5400
+        totalCash:
+          type: number
+        netCashByOperatingActivities:
+          type: number
+      required:
+      - changes
+      - totalChanges
+      - adjustmentsOperating
+      - totalAdjustmentsOperating
+      - cash
+      - totalCash
+      - netCashByOperatingActivities
+    BalanceSheetReportData:
+      type: object
+      properties:
+        assets:
+          $ref: '#/components/schemas/Assets'
+        liabilities:
+          $ref: '#/components/schemas/Liabilities'
+        equity:
+          type: object
+          additionalProperties: true
+          example:
+            Drawings: 100
+        totalEquity:
+          type: number
+        totalLiabilitiesAndEquity:
+          type: number
+      required:
+      - assets
+      - liabilities
+      - equity
+      - totalEquity
+      - totalLiabilitiesAndEquity
+    Assets:
+      type: object
+      properties:
+        currentAssets:
+          type: object
+          additionalProperties: true
+          example:
+            Checking Account: 2000
+        totalCurrentAssets:
+          type: number
+        nonCurrentAssets:
+          type: object
+          additionalProperties: true
+          example:
+            Other Assets: 8000
+        totalNonCurrentAssets:
+          type: number
+        totalAssets:
+          type: number
+      required:
+      - currentAssets
+      - totalCurrentAssets
+      - nonCurrentAssets
+      - totalNonCurrentAssets
+      - totalAssets
+    BalanceSheetsReportResponseDto:
+      type: object
+      properties:
+        reports:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/BalanceSheetsReportView'
+      required:
+      - reports
+    IncomeStatementsV2Data:
+      type: object
+      properties:
+        section:
+          type: string
+          example: Expenses
+          enum:
+          - Income
+          - Expenses
+        subSection:
+          type: string
+          example: Operating Expenses
+          enum:
+          - Income
+          - Cost of Goods Sold
+          - Operating Expenses
+          - Other Income
+          - Other Expenses
+          - Uncategorized Expenses
+          - Uncategorized Income
+          - Expenses
+        group:
+          type: string
+          example: Office General Administrative Expenses
+        subGroup:
+          type: string
+          example: Office Supplies & Software
+        accountId:
+          type: string
+          example: '3928'
+        subAccountId:
+          type: string
+          example: '231'
+        account:
+          type: string
+          readOnly: true
+          example: Travel
+        subAccount:
+          type: string
+          example: National
+        value:
+          type: number
+          readOnly: true
+          example: 490
+          format: float
+        fullyQualifiedName:
+          type: string
+          example: 'Expenses : Transportation : Car Mileage'
+          description: Full name of the account and parent account(s), colon separated.
+        depth:
+          type: number
+          example: 3
+          description: The sub account depth, based on it's account hierarchy level. E.g. top parent account would have a depth of 1.
+        classification:
+          type: string
+          example: Assets
+        type:
+          type: string
+          example: Fixed Assets
+        subType:
+          type: string
+          example: Fixed Assets
+      required:
+      - section
+      - subSection
+      - account
+      - value
+      - depth
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    IncomeStatementReportData:
+      type: object
+      properties:
+        income:
+          type: object
+          additionalProperties: true
+          example:
+            Services: 1200
+        totalIncome:
+          type: number
+        costOfGoodsSold:
+          type: object
+          additionalProperties: true
+          example:
+            Cost of sales: 1200
+        totalCostOfGoodsSold:
+          type: number
+        grossIncome:
+          type: number
+        operatingExpenses:
+          type: object
+          additionalProperties: true
+          example:
+            Advertising: 1200
+        totalOperatingExpenses:
+          type: number
+        otherExpenses:
+          type: object
+          additionalProperties: true
+          example:
+            Deprication Expense: 1200
+        totalOtherExpenses:
+          type: number
+        otherIncome:
+          type: object
+          additionalProperties: true
+          example:
+            sales: 1200
+        totalOtherIncome:
+          type: number
+        netIncome:
+          type: number
+      required:
+      - income
+      - totalIncome
+      - costOfGoodsSold
+      - totalCostOfGoodsSold
+      - grossIncome
+      - operatingExpenses
+      - totalOperatingExpenses
+      - otherExpenses
+      - totalOtherExpenses
+      - otherIncome
+      - totalOtherIncome
+      - netIncome
+    FinancialStatementReportMetaDataV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        reportId:
+          type: string
+          readOnly: true
+          example: 5fad8a342a88364234392fb5
+        status:
+          type: string
+          readOnly: true
+          example: success
+          enum:
+          - success
+          - failed
+          - pending
+          - empty
+        reportFrequency:
+          type: string
+          readOnly: true
+          example: month
+        currency:
+          type: string
+          example: USD
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+        accountingMethod:
+          type: string
+          readOnly: true
+          example: accrual
+          enum:
+          - cash
+          - accrual
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - reportId
+      - status
+      - reportFrequency
+      - createdAt
+      - updatedAt
+      - startDate
+      - endDate
+      - accountingMethod
+    BalanceSheetsReportV2:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/FinancialStatementReportMetaDataV2'
+        data:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/BalanceSheetsDataV2'
+      required:
+      - meta
+      - data
+    CashflowStatementsReportV2:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/FinancialStatementReportMetaDataV2'
+        data:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/CashflowStatementsV2Data'
+      required:
+      - meta
+      - data
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    BalanceSheetsResponseV2Dto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        reports:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/BalanceSheetsReportV2'
+      required:
+      - pagination
+      - reports
+    CashflowStatementsResponseV2Dto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        reports:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/CashflowStatementsReportV2'
+      required:
+      - pagination
+      - reports
+    IncomeStatementsReportV2:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/FinancialStatementReportMetaDataV2'
+        data:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/IncomeStatementsV2Data'
+      required:
+      - meta
+      - data
+    BalanceSheetsDataV2:
+      type: object
+      properties:
+        section:
+          type: string
+          example: Assets
+          enum:
+          - Assets
+          - Liabilities
+          - Equity
+        subSection:
+          type: string
+          example: Current Assets
+          enum:
+          - Current Assets
+          - Non-Current Assets
+          - Current Liabilities
+          - Non-Current Liabilities
+          - Equity
+          - Other Assets
+          - Other Liabilities
+          - Expenses
+        fullyQualifiedName:
+          type: string
+          example: 'Expenses : Transportation : Car Mileage'
+          description: Full name of the account and parent account(s), colon separated.
+        depth:
+          type: number
+          example: 3
+          description: The sub account depth, based on it's account hierarchy level. E.g. top parent account would have a depth of 1.
+        group:
+          type: string
+          example: Cash And Cash Equivalents
+        subGroup:
+          type: string
+          example: Utilities
+        accountId:
+          type: string
+          example: '3928'
+        subAccountId:
+          type: string
+          example: '231'
+        account:
+          type: string
+          readOnly: true
+          example: Checking
+        subAccount:
+          type: string
+          example: Checking
+        value:
+          type: number
+          readOnly: true
+          example: 990
+          format: float
+        classification:
+          type: string
+          example: Assets
+        type:
+          type: string
+          example: Fixed Assets
+        subType:
+          type: string
+          example: Fixed Assets
+      required:
+      - section
+      - subSection
+      - depth
+      - value
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http

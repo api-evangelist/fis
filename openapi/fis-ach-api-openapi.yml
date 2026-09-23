@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: FIS Payments Accounts ACH API
+  title: FIS Payments ACH API
   description: FIS (Fidelity National Information Services) Payments API provides programmatic access to payment processing capabilities including ACH transfers, wire payments, card processing, and real-time payment networks. Available through the FIS CodeConnect marketplace for financial institutions and fintech developers.
   version: 1.0.0
   contact:
@@ -96,6 +96,49 @@ components:
           items:
             $ref: '#/components/schemas/AchTransferRequest'
           maxItems: 10000
+    AchTransfer:
+      allOf:
+      - $ref: '#/components/schemas/AchTransferRequest'
+      - type: object
+        properties:
+          transferId:
+            type: string
+          status:
+            type: string
+            enum:
+            - CREATED
+            - SUBMITTED
+            - SETTLED
+            - RETURNED
+            - REJECTED
+          traceNumber:
+            type: string
+            description: NACHA trace number
+          createdAt:
+            type: string
+            format: date-time
+    AchBatch:
+      type: object
+      properties:
+        batchId:
+          type: string
+        status:
+          type: string
+          enum:
+          - RECEIVED
+          - VALIDATED
+          - SUBMITTED
+          - SETTLED
+          - REJECTED
+        transactionCount:
+          type: integer
+        totalDebits:
+          type: number
+        totalCredits:
+          type: number
+        createdAt:
+          type: string
+          format: date-time
     AccountReference:
       type: object
       required:
@@ -122,27 +165,6 @@ components:
         swiftCode:
           type: string
           description: SWIFT/BIC code for international wires
-    AchTransfer:
-      allOf:
-      - $ref: '#/components/schemas/AchTransferRequest'
-      - type: object
-        properties:
-          transferId:
-            type: string
-          status:
-            type: string
-            enum:
-            - CREATED
-            - SUBMITTED
-            - SETTLED
-            - RETURNED
-            - REJECTED
-          traceNumber:
-            type: string
-            description: NACHA trace number
-          createdAt:
-            type: string
-            format: date-time
     AchTransferRequest:
       type: object
       required:
@@ -188,28 +210,6 @@ components:
         sameDayAch:
           type: boolean
           default: false
-    AchBatch:
-      type: object
-      properties:
-        batchId:
-          type: string
-        status:
-          type: string
-          enum:
-          - RECEIVED
-          - VALIDATED
-          - SUBMITTED
-          - SETTLED
-          - REJECTED
-        transactionCount:
-          type: integer
-        totalDebits:
-          type: number
-        totalCredits:
-          type: number
-        createdAt:
-          type: string
-          format: date-time
   securitySchemes:
     OAuth2ClientCredentials:
       type: oauth2

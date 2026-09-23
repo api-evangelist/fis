@@ -1,0 +1,771 @@
+openapi: 3.2.0
+info:
+  title: FIS® Accounting Data as a Service™ Expense Controller V2 API
+  description: What's changed in our API
+  version: v2
+  contact: {}
+servers:
+- url: https://api.railz.ai
+  description: Main (production) API server
+tags:
+- name: ExpenseControllerV2
+paths:
+  /v2/accounting/expenses:
+    get:
+      description: '**Supported for:**
+
+
+        `freshbooks` `quickbooks` `zohoBooks`'
+      operationId: Expense
+      parameters:
+      - name: connectionUuid
+        required: true
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+          type: string
+      - name: startDate
+        required: false
+        in: query
+        description: 'Transaction date greater than or equal to parameter in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: endDate
+        required: false
+        in: query
+        description: 'Transaction date less than or equal to parameter in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: offset
+        required: false
+        in: query
+        description: The offset is the position in the dataset of a particular record.
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        description: 'This is the size of the results set you would like (default: 100).'
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetExpenseResponseV2Dto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetExpenseResponseV2Dto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: List Expenses
+      tags:
+      - ExpenseControllerV2
+    post:
+      description: '**Supported for:**
+
+
+        `freshbooks` `quickbooks` `zohoBooks`'
+      operationId: push-expense
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushExpenseDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushExpenseeResponseDto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Create an Expense
+      tags:
+      - ExpenseControllerV2
+components:
+  schemas:
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    PushExpenseeResponseDto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushExpense'
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - data
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    PushExpense:
+      type: object
+      properties:
+        passThrough:
+          type: object
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+          additionalProperties: true
+        vendorRef:
+          $ref: '#/components/schemas/VendorRefDto'
+        accountRef:
+          $ref: '#/components/schemas/AccountRefDto'
+        currency:
+          type: string
+          example: CAD
+        currencyRate:
+          type: number
+          example: '1.13'
+        postedDate:
+          type: string
+          format: date
+          example: '2021-03-29'
+        paymentMethod:
+          type: string
+          deprecated: true
+          enum:
+          - unknown
+          - cash
+          - check
+          - creditCard
+          - debitCard
+          - bankTransfer
+          - giftCard
+          - other
+          example: creditCard
+        paymentMethodRef:
+          $ref: '#/components/schemas/PaymentMethodRefDto'
+        memo:
+          type: string
+          maxLength: 4000
+          example: Example memo.
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExpenseLineDto'
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    PushExpenseDto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        data:
+          $ref: '#/components/schemas/PushExpense'
+      required:
+      - connectionUuid
+      - data
+    ExpenseLineDto:
+      type: object
+      properties:
+        accountRef:
+          $ref: '#/components/schemas/AccountRefDto'
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateRefDto'
+        trackingCategoryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillTrackingCategoryRefDto'
+        description:
+          type: string
+          maxLength: 4000
+          example: Services rendered.
+        quantity:
+          type: number
+          format: float
+          example: '4'
+        unitAmount:
+          type: number
+          format: float
+          example: '50.4'
+        taxAmount:
+          type: number
+          format: float
+          example: '50.4'
+        amount:
+          type: number
+          format: float
+          example: '50.4'
+    AccountRefV2Dto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '200'
+    PaymentMethodRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Harmonized sales tax
+        type:
+          type: string
+          example: creditCard
+          enum:
+          - unknown
+          - cash
+          - check
+          - creditCard
+          - debitCard
+          - bankTransfer
+          - giftCard
+          - other
+    AccountRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '145'
+        name:
+          type: string
+          example: Example account
+      required:
+      - id
+    VendorRefDtoV2:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    Error400DtoV2:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    BasicStartEndDateReportMetaDataV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - reportId
+      - createdAt
+      - updatedAt
+      - startDate
+      - endDate
+    GetExpenseData:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        vendorRef:
+          $ref: '#/components/schemas/VendorRefDtoV2'
+        accountRef:
+          $ref: '#/components/schemas/AccountRefV2Dto'
+        currency:
+          type: string
+          example: USD
+        totalAmount:
+          type: number
+          example: 100.13
+          format: float
+        currencyRate:
+          type: number
+          example: 1.13
+          format: float
+        postedDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        paymentMethod:
+          type: string
+          enum:
+          - unknown
+          - cash
+          - check
+          - creditCard
+          - debitCard
+          - bankTransfer
+          - giftCard
+          - other
+          example: creditCard
+          deprecated: true
+        paymentMethodRef:
+          $ref: '#/components/schemas/PaymentMethodRefResponse'
+        memo:
+          type: string
+          example: Example expense memo.
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExpenseLineItem'
+        sourceModifiedDate:
+          format: date-time
+          type: string
+          example: '2021-03-10T11:26:06.619Z'
+      required:
+      - id
+      - totalAmount
+      - postedDate
+    ExpenseLineItem:
+      type: object
+      properties:
+        accountRef:
+          $ref: '#/components/schemas/AccountRef'
+        description:
+          type: string
+          example: Services rendered.
+        unitAmount:
+          type: number
+          example: 100.5
+          format: float
+        quantity:
+          type: number
+          example: 3
+          format: integer
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateObjectRefResponse'
+        taxAmount:
+          type: number
+          example: 20.5
+          format: float
+        amount:
+          type: number
+          example: 10.5
+          format: float
+        trackingCategoryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrackingCategoryResponse'
+      required:
+      - amount
+    TaxRateObjectRefResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '124'
+        name:
+          type: string
+          example: Railz
+      required:
+      - id
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    TrackingCategoryResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4040'
+          readOnly: false
+        name:
+          type: string
+          readOnly: false
+          example: Region
+        type:
+          type: string
+          example: class
+          enum:
+          - class
+          - department
+          - location
+          - unknown
+    AccountRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '200'
+      required:
+      - id
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    TaxRateRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '12'
+      required:
+      - id
+    BillTrackingCategoryRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4040'
+        type:
+          type: string
+          example: class
+          enum:
+          - class
+          - department
+          - location
+          - unknown
+      required:
+      - id
+    VendorRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '130'
+      required:
+      - id
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    PaymentMethodRefResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '3'
+        name:
+          type: string
+          example: Harmonized sales tax
+        type:
+          type: string
+          example: creditCard
+          enum:
+          - unknown
+          - cash
+          - check
+          - creditCard
+          - debitCard
+          - bankTransfer
+          - giftCard
+          - other
+    GetExpenseResponseV2Dto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        meta:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/BasicStartEndDateReportMetaDataV2'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetExpenseData'
+      required:
+      - pagination
+      - meta
+      - data
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http

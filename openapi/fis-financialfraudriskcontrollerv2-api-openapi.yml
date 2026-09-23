@@ -1,0 +1,504 @@
+openapi: 3.2.0
+info:
+  title: FIS® Accounting Data as a Service™ Financial Fraud Risk…
+  description: What's changed in our API
+  version: v2
+  contact: {}
+servers:
+- url: https://api.railz.ai
+  description: Main (production) API server
+tags:
+- name: FinancialFraudRiskControllerV2
+paths:
+  /v2/analytics/fraudRiskMetrics:
+    get:
+      description: '**Supported for:**
+
+
+        `freshbooks` `quickbooks` `quickbooksDesktop` `xero` `dynamicsBusinessCentral` `zohoBooks` `byod`'
+      operationId: financialFraudMetrics
+      parameters:
+      - name: connectionUuid
+        required: true
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+          type: string
+      - name: startDate
+        required: false
+        in: query
+        description: 'The start date of the Transaction report frequency in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: endDate
+        required: false
+        in: query
+        description: 'The end date of the Transaction report frequency in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: offset
+        required: false
+        in: query
+        description: The offset is the position in the dataset of a particular record.
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        description: 'This is the size of the results set you would like (default: 100).'
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: reportFrequency
+        required: true
+        in: query
+        schema:
+          default: month
+          type: string
+          enum:
+          - month
+          - quarter
+          - year
+      - name: reconstruct
+        required: false
+        in: query
+        description: Railz reconstructed Fraud Risk Metrics
+        schema:
+          default: 'false'
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinancialFraudRiskResponseV2Dto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinancialFraudRiskResponseV2Dto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: List Fraud Risk Metrics
+      tags:
+      - FinancialFraudRiskControllerV2
+components:
+  schemas:
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    OutlierTransactions:
+      type: object
+      properties:
+        id:
+          type: string
+          example: nt
+          readOnly: true
+      required:
+      - id
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    TransactionKeywords:
+      type: object
+      properties:
+        type:
+          type: string
+          example: bill
+          enum:
+          - bill
+          - billPayment
+          - creditNote
+          - deposit
+          - expense
+          - estimate
+          - inventoryAdjustment
+          - invoice
+          - journalEntry
+          - other
+          - payment
+          - payroll
+          - purchaseOrder
+          - refund
+          - transfer
+          - taxPayment
+          - taxAdjustment
+          - taxRefund
+          - taxReversal
+          - unknown
+          - vendorCreditNote
+          readOnly: true
+        count:
+          type: number
+          example: 1
+          format: integer
+          readOnly: true
+      required:
+      - type
+      - count
+    Error400DtoV2:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    FinancialFraudRiskReportV2:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/FinancialFraudRiskReportMetaDataV2'
+        data:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/FinancialFraudRiskData'
+      required:
+      - meta
+      - data
+    TransactionsSectionStats:
+      type: object
+      properties:
+        section:
+          type: string
+          example: Expenses
+          readOnly: true
+        count:
+          type: number
+          example: 4
+          readOnly: true
+          format: integer
+        sdev:
+          type: number
+          example: 39.82
+          readOnly: true
+          format: float
+      required:
+      - section
+      - count
+      - sdev
+    FinancialFraudRiskReportMetaDataV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        reportId:
+          type: string
+          example: 5fad8a342a88364234392fb5
+          readOnly: true
+        startDate:
+          type: string
+          example: '2020-11-01T01:02:03Z'
+          readOnly: true
+          format: date-time
+        endDate:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          readOnly: true
+          format: date-time
+        createdAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          readOnly: true
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          readOnly: false
+          format: date-time
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - reportId
+      - startDate
+      - endDate
+      - createdAt
+      - updatedAt
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    FinancialFraudRiskData:
+      type: object
+      properties:
+        benfordLawScore:
+          type: number
+          example: 20.92
+          format: float
+          readOnly: true
+        outlierScore:
+          type: number
+          example: 0.659176337
+          format: float
+          readOnly: true
+        outlierRatio:
+          type: number
+          example: 0.093829111
+          format: float
+          readOnly: true
+        outlierTransactions:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/OutlierTransactions'
+        transactionKeywords:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionKeywords'
+        transactionsSectionStats:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionsSectionStats'
+        transactionPatterns:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionPatterns'
+        currentRatioDelta:
+          type: number
+          example: 1
+          format: float
+          readOnly: true
+        quickRatioDelta:
+          type: number
+          example: 1
+          format: float
+          readOnly: true
+        debtToEquityRatioDelta:
+          type: number
+          example: 1
+          format: float
+          readOnly: true
+        netProfitMarginRatioDelta:
+          type: number
+          example: 1
+          format: float
+          readOnly: true
+      required:
+      - benfordLawScore
+    TransactionPatterns:
+      type: object
+      properties:
+        repetitionPattern:
+          type: string
+          example: Accounts Payables 113.71
+          readOnly: true
+        count:
+          type: number
+          example: 3
+          readOnly: true
+      required:
+      - repetitionPattern
+      - count
+    FinancialFraudRiskResponseV2Dto:
+      type: object
+      properties:
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        reports:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/FinancialFraudRiskReportV2'
+      required:
+      - count
+      - reports
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http

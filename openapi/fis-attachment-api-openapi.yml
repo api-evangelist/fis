@@ -1,0 +1,501 @@
+openapi: 3.2.0
+info:
+  title: FIS® Accounting Data as a Service™ Attachment API
+  description: What's changed in our API
+  version: v2
+  contact: {}
+servers:
+- url: https://api.railz.ai
+  description: Main (production) API server
+tags:
+- name: Attachment
+paths:
+  /attachments:
+    get:
+      description: Gets all invoice & bill attachments for a business.
+      operationId: attachments
+      parameters:
+      - name: businessName
+        required: true
+        in: query
+        schema:
+          type: string
+      - name: serviceName
+        required: true
+        in: query
+        schema:
+          type: string
+          enum:
+          - freshbooks
+          - quickbooks
+          - xero
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - zohoBooks
+      - name: offset
+        required: false
+        in: query
+        description: The offset is the position in the dataset of a particular record.
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        description: 'This is the size of the results set you would like (default: 100).'
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: id
+        required: false
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAttachmentResponseV1Dto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAttachmentResponseV1Dto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Attachments
+      tags:
+      - Attachment
+      x-summary-source: derived
+    post:
+      description: Posts an individual invoice or bill attachment to a business.
+      operationId: pushAttachment
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PushAttachmentV1Dto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushAttachmentV1Dto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushAttachmentResponseV1Dto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Push attachment
+      tags:
+      - Attachment
+      x-summary-source: derived
+components:
+  schemas:
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    GetAttachmentData:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        url:
+          type: string
+          example: https://api.railz.ai/Attachments/Image00394.png
+          format: uri
+        fileName:
+          type: string
+          example: image00394.png
+        contentType:
+          type: string
+          example: image/jpeg
+        uploadDate:
+          type: string
+          example: '2020-11-25T01:02:03Z'
+        fileSize:
+          type: number
+          example: 10495
+          format: float
+        sourceModifiedDate:
+          type: string
+          example: '2021-03-09T08:49:36.035Z'
+        link:
+          $ref: '#/components/schemas/AttachmentLink'
+      required:
+      - id
+      - url
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    PushAttachmentV1:
+      type: object
+      properties:
+        link:
+          $ref: '#/components/schemas/PushAttachmentLink'
+      required:
+      - link
+    PushAttachmentLink:
+      type: object
+      properties:
+        type:
+          type: string
+          example: bill
+          enum:
+          - bill
+          - invoice
+          - customer
+          - vendor
+          - deposit
+          - journalEntry
+          - billPayment
+          - invoicePayment
+          - expense
+          - inventory
+          - purchaseOrder
+          - invoiceCreditNote
+          - billCreditNote
+          - bankTransaction
+          - bankTransfer
+          - account
+        id:
+          type: string
+          example: '133'
+      required:
+      - type
+      - id
+    PushAttachmentResponseV1Dto:
+      type: object
+      properties:
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: quickbooks
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushAttachmentV1'
+      required:
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - businessName
+      - serviceName
+      - data
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    AttachmentLink:
+      type: object
+      properties:
+        type:
+          type: string
+          example: bill
+          enum:
+          - bill
+          - invoice
+          - customer
+          - vendor
+          - deposit
+          - journalEntry
+          - billPayment
+          - invoicePayment
+          - expense
+          - inventory
+          - purchaseOrder
+          - invoiceCreditNote
+          - billCreditNote
+          - bankTransaction
+          - bankTransfer
+          - account
+        id:
+          type: string
+          example: '234'
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    GetAttachmentResponseV1Dto:
+      type: object
+      properties:
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetAttachmentData'
+      required:
+      - count
+      - data
+    PushAttachmentV1Dto:
+      type: object
+      properties:
+        connection:
+          $ref: '#/components/schemas/PushAttachmentConnection'
+        file:
+          type: string
+          format: binary
+        data:
+          $ref: '#/components/schemas/PushAttachmentV1'
+      required:
+      - connection
+      - file
+      - data
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    PushAttachmentConnection:
+      type: object
+      properties:
+        businessName:
+          type: string
+          example: Railz
+        serviceName:
+          type: string
+          example: quickbooks
+          description: Name of accounting platform service.
+          enum:
+          - freshbooks
+          - quickbooks
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - zohoBooks
+      required:
+      - businessName
+      - serviceName
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http

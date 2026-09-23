@@ -1,0 +1,682 @@
+openapi: 3.2.0
+info:
+  title: FIS® Accounting Data as a Service™ Account API
+  description: What's changed in our API
+  version: v2
+  contact: {}
+servers:
+- url: https://api.railz.ai
+  description: Main (production) API server
+tags:
+- name: Account
+paths:
+  /accounts:
+    get:
+      description: Gets the latest chart of accounts for a business.
+      operationId: accounts
+      parameters:
+      - name: businessName
+        required: true
+        in: query
+        schema:
+          type: string
+      - name: serviceName
+        required: true
+        in: query
+        schema:
+          type: string
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+      - name: offset
+        required: false
+        in: query
+        description: The offset is the position in the dataset of a particular record.
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        description: 'This is the size of the results set you would like (default: 100).'
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: isActive
+        required: false
+        in: query
+        description: Confirms whether the account is an active account or not.
+        schema:
+          format: boolean
+          example: 'true'
+          type: boolean
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetChartOfAccountsResponseV1Dto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetChartOfAccountsResponseV1Dto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Accounts
+      tags:
+      - Account
+      x-summary-source: derived
+    post:
+      description: Posts an individual account for a business.
+      operationId: push-accounts
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushChartOfAccountV1Dto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushChartOfAccountV1ResponseDto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDto'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Push accounts
+      tags:
+      - Account
+      x-summary-source: derived
+components:
+  schemas:
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    GetChartOfAccountsResponseV1Dto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        meta:
+          $ref: '#/components/schemas/ListReportMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetChartOfAccountsDataV1'
+      required:
+      - pagination
+      - count
+      - meta
+      - data
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    AccountParentRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4'
+        name:
+          type: string
+          example: assets
+    PushConnection:
+      type: object
+      properties:
+        businessName:
+          type: string
+          example: Railz
+          description: Unique business name identifier.
+        serviceName:
+          type: string
+          example: quickbooks
+          description: Name of accounting platform service.
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - shopify
+          - square
+          - plaid
+          - myob
+          - zohoBooks
+          - byod
+      required:
+      - businessName
+      - serviceName
+    SubsidiaryRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Railz Financial
+    PushChartOfAccountV1:
+      type: object
+      properties:
+        nominalCode:
+          type: string
+          example: SALES001
+          maxLength: 10
+          minLength: 6
+        name:
+          type: string
+          example: Consulting Income
+          maxLength: 100
+        description:
+          type: string
+          example: Sales account.
+          maxLength: 100
+        type:
+          type: string
+          enum:
+          - bank
+          - currentAsset
+          - fixedAsset
+          - inventory
+          - nonCurrentAsset
+          - accountReceivable
+          - equity
+          - expense
+          - otherExpense
+          - cogs
+          - accountPayable
+          - creditCard
+          - nonCurrentLiability
+          - currentLiability
+          - income
+          - incomeGeneral
+          - otherIncome
+          - unbilledReceivable
+          - deferredExpense
+          - deferredIncome
+          example: currentAsset
+        currency:
+          type: string
+          example: CAD
+        taxRef:
+          type: string
+          example: '12'
+        classification:
+          type: string
+          enum:
+          - asset
+          - equity
+          - expense
+          - liability
+          - revenue
+          - nonPosting
+          example: asset
+        subsidiaryRefs:
+          example:
+          - '1'
+          - '2'
+          type: array
+          items:
+            type: string
+      required:
+      - name
+      - type
+    GetChartOfAccountsDataV1:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        nominalCode:
+          type: string
+          example: '200'
+        name:
+          type: string
+          example: Bank Account
+        description:
+          type: string
+          example: Account description.
+        group:
+          type: string
+          example: Cash And Cash Equivalents
+        subGroup:
+          type: string
+          example: Checking
+        classification:
+          type: string
+          example: Asset
+        fullyQualifiedName:
+          type: string
+          example: 'Expenses : Transportation : Car Mileage'
+        depth:
+          type: number
+          example: 3
+        currentBalance:
+          type: number
+          example: 0
+          format: float
+        subType:
+          type: string
+          example: Accounts Receivable
+        isBankAccount:
+          type: boolean
+          example: true
+        isSubAccount:
+          type: boolean
+          example: true
+        isActive:
+          type: boolean
+          example: true
+        subsidiaryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubsidiaryRef'
+        parentRef:
+          $ref: '#/components/schemas/AccountParentRef'
+        sourceModifiedDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        type:
+          type: string
+          example: Accounts Receivable
+        section:
+          type: string
+          enum:
+          - Assets
+          - Expenses
+          - Income
+          - Liabilities
+          - Equity
+          - Non-Posting
+        subSection:
+          type: string
+          enum:
+          - Current Assets
+          - Non-Current Assets
+          - Current Liabilities
+          - Non-Current Liabilities
+          - Equity
+          - Income
+          - Other Income
+          - Operating Expenses
+          - Other Expenses
+          - Cost of Goods Sold
+          - Other Assets
+          - Other Liabilities
+          - Expenses
+          - Uncategorized Expenses
+          - Uncategorized Income
+          - Non-Posting
+        currencyRef:
+          $ref: '#/components/schemas/CurrencyRef'
+      required:
+      - id
+      - isActive
+      - type
+      - section
+      - subSection
+    CurrencyRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: CAD
+        name:
+          type: string
+          example: Canadian Dollar
+        symbol:
+          type: string
+          example: USD,CAD
+      required:
+      - id
+    PushChartOfAccountV1ResponseDto:
+      type: object
+      properties:
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: quickbooks
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushChartOfAccountV1'
+      required:
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - businessName
+      - serviceName
+      - data
+    PushChartOfAccountV1Dto:
+      type: object
+      properties:
+        connection:
+          $ref: '#/components/schemas/PushConnection'
+        data:
+          $ref: '#/components/schemas/PushChartOfAccountV1'
+      required:
+      - connection
+      - data
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    ListReportMetaData:
+      type: object
+      properties:
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          - 5fad8a342a88364234392fb6
+          type: array
+          items:
+            type: string
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
+      required:
+      - reportId
+      - serviceName
+      - businessName
+      - createdAt
+      - updatedAt
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http

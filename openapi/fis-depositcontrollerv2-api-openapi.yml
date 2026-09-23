@@ -1,0 +1,824 @@
+openapi: 3.2.0
+info:
+  title: FIS® Accounting Data as a Service™ Deposit Controller V2 API
+  description: What's changed in our API
+  version: v2
+  contact: {}
+servers:
+- url: https://api.railz.ai
+  description: Main (production) API server
+tags:
+- name: DepositControllerV2
+paths:
+  /v2/accounting/deposits:
+    get:
+      description: '**Supported for:**
+
+
+        `quickbooks` `quickbooksDesktop` `xero` `oracleNetsuite` `sageBusinessCloud`'
+      operationId: deposits
+      parameters:
+      - name: connectionUuid
+        required: true
+        in: query
+        description: Unique connection identifier.
+        schema:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+          type: string
+      - name: startDate
+        required: false
+        in: query
+        description: 'Transaction date greater than or equal to parameter in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: endDate
+        required: false
+        in: query
+        description: 'Transaction date less than or equal to parameter in the format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: offset
+        required: false
+        in: query
+        description: The offset is the position in the dataset of a particular record.
+        schema:
+          format: integer
+          type: number
+      - name: limit
+        required: false
+        in: query
+        description: 'This is the size of the results set you would like (default: 100).'
+        schema:
+          format: integer
+          example: 100
+          type: number
+      - name: orderBy
+        required: false
+        in: query
+        schema:
+          type: string
+      - name: totalAmount
+        required: false
+        in: query
+        schema:
+          format: float
+          type: number
+      - name: status
+        required: false
+        in: query
+        schema:
+          type: string
+          enum:
+          - open
+          - paid
+          - void
+          - unknown
+          - draft
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetDepositResponseV2Dto'
+        '202':
+          description: Data in pending state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetDepositResponseV2Dto'
+        '204':
+          description: No data available
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: List Deposits
+      tags:
+      - DepositControllerV2
+    post:
+      description: '**Supported for:**
+
+
+        `quickbooks` `xero` `oracleNetsuite` `sageBusinessCloud`'
+      operationId: push-deposit
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushDepositV2Dto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushDepositV2ResponseDto'
+        '400':
+          description: Bad Request Error - Thrown if fields sent via query does not follow specifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400ResponseDtoV2'
+        '401':
+          description: Unauthorized - Not logged in or log in expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401ResponseDto'
+        '403':
+          description: Forbidden - Not enough permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403ResponseDto'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500ResponseDto'
+      security:
+      - bearer: []
+      summary: Create a Deposit
+      tags:
+      - DepositControllerV2
+components:
+  schemas:
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    DepositLineV2Items:
+      type: object
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+          example: Services rendered.
+        unitAmount:
+          type: number
+          example: 100.5
+          format: float
+        quantity:
+          type: number
+          example: 3
+          format: integer
+        taxAmount:
+          type: number
+          example: 20.5
+          format: float
+        amount:
+          type: number
+          example: 322
+          format: float
+        accountRef:
+          $ref: '#/components/schemas/AccountRef'
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateRef'
+        entityRef:
+          $ref: '#/components/schemas/DepositEntityRef'
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/Links'
+        trackingCategoryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrackingCategoryRefV2'
+      required:
+      - amount
+    BankAccountRefV2Dto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '200'
+        name:
+          type: string
+          example: '200'
+      required:
+      - id
+    PushDepositEntityRefV2:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        type:
+          type: string
+          example: vendor
+          enum:
+          - customer
+          - employee
+          - unknown
+      required:
+      - id
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    TrackingCategoryRefPushDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4040'
+        type:
+          type: string
+          enum:
+          - class
+          - department
+          - location
+          - unknown
+      required:
+      - id
+    TaxRateRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: HST
+        effectiveTaxRate:
+          type: number
+          example: 13
+          format: float
+      required:
+      - id
+    LinksV2:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - billPayment
+          - transfer
+          - journalEntry
+          - paymentOnAccount
+          - other
+        id:
+          type: string
+          example: '560'
+      required:
+      - id
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    PushDepositV2:
+      type: object
+      properties:
+        currencyRate:
+          type: number
+          example: '1.13'
+        memo:
+          type: string
+          maxLength: 4000
+          example: Example memo.
+        currency:
+          type: string
+          example: CAD
+        customerRef:
+          $ref: '#/components/schemas/CustomerRefDto'
+        postedDate:
+          type: string
+          format: date
+          example: '2021-03-29'
+        bankAccountRef:
+          $ref: '#/components/schemas/BankAccountRefDto'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/PushDepositLineV2'
+        passThrough:
+          type: object
+          additionalProperties: true
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+      required:
+      - bankAccountRef
+      - lines
+    AccountRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '145'
+        name:
+          type: string
+          example: Example account
+      required:
+      - id
+    PushDepositV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        data:
+          $ref: '#/components/schemas/PushDepositV2'
+      required:
+      - connectionUuid
+      - data
+    Error400DtoV2:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    GetDepositV2Data:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        postedDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        currency:
+          type: string
+          example: USD
+        currencyRate:
+          type: number
+          example: 1.13
+          format: float
+        bankAccountRef:
+          $ref: '#/components/schemas/BankAccountRefV2Dto'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/DepositLineV2Items'
+        subTotal:
+          type: number
+          example: 301.5
+          format: float
+        taxAmount:
+          type: number
+          example: 20.5
+          format: float
+        totalAmount:
+          type: number
+          example: 322
+          format: float
+        status:
+          type: string
+          enum:
+          - open
+          - paid
+          - void
+          - unknown
+          - draft
+        memo:
+          type: string
+          example: Example bill memo.
+        sourceModifiedDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+      required:
+      - id
+      - postedDate
+      - lines
+      - totalAmount
+      - status
+    BasicStartEndDateReportMetaDataV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - reportId
+      - createdAt
+      - updatedAt
+      - startDate
+      - endDate
+    DepositEntityRef:
+      type: object
+      properties:
+        name:
+          type: string
+          example: ABC Inc.
+        id:
+          type: string
+          example: '1'
+        type:
+          type: string
+          example: vendor
+          enum:
+          - customer
+          - employee
+          - unknown
+      required:
+      - id
+      - type
+    Links:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - billPayment
+          - transfer
+          - journalEntry
+          - paymentOnAccount
+          - other
+        id:
+          type: string
+          example: '560'
+      required:
+      - type
+      - id
+    BankAccountRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '200'
+      required:
+      - id
+    PushDepositLineV2:
+      type: object
+      properties:
+        description:
+          type: string
+          maxLength: 4000
+          example: Services rendered.
+        quantity:
+          type: number
+          format: float
+          example: '4'
+        unitAmount:
+          type: number
+          format: float
+          example: '50.4'
+        id:
+          type: string
+        accountRef:
+          $ref: '#/components/schemas/AccountRefDto'
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateRefDto'
+        entityRef:
+          $ref: '#/components/schemas/PushDepositEntityRefV2'
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinksV2'
+        trackingCategoryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrackingCategoryRefPushDto'
+      required:
+      - quantity
+      - unitAmount
+      - accountRef
+    TrackingCategoryRefV2:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4040'
+          readOnly: false
+        name:
+          type: string
+          readOnly: false
+          example: Region
+        type:
+          type: string
+          example: class
+          enum:
+          - class
+          - department
+          - location
+          - unknown
+      required:
+      - id
+      - type
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    AccountRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '200'
+      required:
+      - id
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    TaxRateRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '12'
+      required:
+      - id
+    GetDepositResponseV2Dto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        meta:
+          $ref: '#/components/schemas/BasicStartEndDateReportMetaDataV2'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetDepositV2Data'
+      required:
+      - pagination
+      - meta
+      - data
+    PushDepositV2ResponseDto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushDepositV2'
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - data
+    CustomerRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '124'
+      required:
+      - id
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
