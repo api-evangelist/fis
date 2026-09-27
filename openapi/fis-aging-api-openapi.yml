@@ -225,42 +225,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    Error400Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - businessName cannot be null
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
     Error401Dto:
       type: object
       properties:
@@ -283,18 +247,102 @@ components:
       - statusCode
       - message
       - error
-    ApAgingReport:
+    ApAgingDataV1:
       type: object
       properties:
-        meta:
-          $ref: '#/components/schemas/ApAgingMetaData'
-        data:
+        vendorRef:
+          $ref: '#/components/schemas/ApAgingVendorRef'
+        current:
+          type: number
+          example: 50000
+          format: float
+          readOnly: false
+        dpd30:
+          type: number
+          example: 25000
+          format: float
+          readOnly: false
+        dpd60:
+          type: number
+          example: 25000
+          format: float
+          readOnly: false
+        dpd90:
+          type: number
+          example: 60000
+          format: float
+          readOnly: false
+        dpd90+:
+          type: number
+          example: 90000
+          format: float
+          readOnly: false
+        total:
+          type: number
+          example: 200000
+          format: float
+          readOnly: false
+        currencyRef:
+          $ref: '#/components/schemas/ApArAgingCurrencyRef'
+      required:
+      - dpd30
+      - dpd60
+      - dpd90
+      - total
+    ApAgingVendorRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '240'
+        name:
+          type: string
+          example: Railz
+    ArAgingResponseDto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        count:
+          type: integer
+          readOnly: true
+          example: 1
+        reports:
+          readOnly: true
           type: array
           items:
-            $ref: '#/components/schemas/ApAgingDataV1'
+            $ref: '#/components/schemas/ArAgingReport'
       required:
-      - meta
-      - data
+      - pagination
+      - count
+      - reports
+    ApArAgingCurrencyRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: CAD
+        name:
+          type: string
+          example: Canadian Dollar
+        symbol:
+          type: string
+          example: USD,CAD
+      required:
+      - id
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
     Error401ResponseDto:
       type: object
       properties:
@@ -309,117 +357,28 @@ components:
       required:
       - error
       - payload
-    PaginationMetaData:
+    Error400Dto:
       type: object
       properties:
-        offset:
-          type: number
-          readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
-          readOnly: true
-      required:
-      - offset
-      - limit
-      - count
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
         statusCode:
           type: number
           readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    ApAgingMetaData:
-      type: object
-      properties:
-        reportId:
+          example: 400
+        message:
           readOnly: true
           example:
-          - 5fad8a342a88364234392fb5
+          - businessName cannot be null
           type: array
           items:
             type: string
-        serviceName:
+        error:
           type: string
           readOnly: true
-          example: xero
-          enum:
-          - quickbooks
-          - xero
-          - freshbooks
-          - quickbooksDesktop
-          - sageIntacct
-          - sageBusinessCloud
-          - oracleNetsuite
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - zohoBooks
-          - myob
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        startDate:
-          type: string
-          readOnly: true
-          example: '2020-11-25T01:02:03Z'
-          format: date-time
-        endDate:
-          type: string
-          readOnly: true
-          example: '2020-11-30T01:02:03Z'
-          format: date-time
-        createdAt:
-          type: string
-          readOnly: true
-          example: '2020-11-25T01:02:03Z'
-          format: date-time
-        updatedAt:
-          type: string
-          example: '2020-11-30T01:02:03Z'
-          format: date-time
-          readOnly: false
-        reportFrequency:
-          type: string
-          example: month
-          readOnly: true
+          example: Bad Request
       required:
-      - reportId
-      - serviceName
-      - businessName
-      - startDate
-      - endDate
-      - createdAt
-      - updatedAt
-      - reportFrequency
-    ArAgingCustomerRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '240'
-        name:
-          type: string
-          example: Railz
+      - statusCode
+      - message
+      - error
     ArAgingMetaData:
       type: object
       properties:
@@ -484,18 +443,6 @@ components:
       - createdAt
       - updatedAt
       - reportFrequency
-    ArAgingReport:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/ArAgingMetaData'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ArAgingDataV1'
-      required:
-      - meta
-      - data
     ArAgingDataV1:
       type: object
       properties:
@@ -539,6 +486,86 @@ components:
       - dpd60
       - dpd90
       - total
+    ApAgingMetaData:
+      type: object
+      properties:
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          type: array
+          items:
+            type: string
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - quickbooks
+          - xero
+          - freshbooks
+          - quickbooksDesktop
+          - sageIntacct
+          - sageBusinessCloud
+          - oracleNetsuite
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - zohoBooks
+          - myob
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
+        reportFrequency:
+          type: string
+          example: month
+          readOnly: true
+      required:
+      - reportId
+      - serviceName
+      - businessName
+      - startDate
+      - endDate
+      - createdAt
+      - updatedAt
+      - reportFrequency
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
     ApAgingResponseDto:
       type: object
       properties:
@@ -557,21 +584,21 @@ components:
       - pagination
       - count
       - reports
-    ApArAgingCurrencyRef:
+    Error403ResponseDto:
       type: object
       properties:
-        id:
-          type: string
-          example: CAD
-        name:
-          type: string
-          example: Canadian Dollar
-        symbol:
-          type: string
-          example: USD,CAD
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
       required:
-      - id
-    ApAgingVendorRef:
+      - error
+      - payload
+    ArAgingCustomerRef:
       type: object
       properties:
         id:
@@ -580,6 +607,40 @@ components:
         name:
           type: string
           example: Railz
+    ApAgingReport:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/ApAgingMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApAgingDataV1'
+      required:
+      - meta
+      - data
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
     Error403Dto:
       type: object
       properties:
@@ -602,61 +663,6 @@ components:
       - statusCode
       - message
       - error
-    Error400ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    ApAgingDataV1:
-      type: object
-      properties:
-        vendorRef:
-          $ref: '#/components/schemas/ApAgingVendorRef'
-        current:
-          type: number
-          example: 50000
-          format: float
-          readOnly: false
-        dpd30:
-          type: number
-          example: 25000
-          format: float
-          readOnly: false
-        dpd60:
-          type: number
-          example: 25000
-          format: float
-          readOnly: false
-        dpd90:
-          type: number
-          example: 60000
-          format: float
-          readOnly: false
-        dpd90+:
-          type: number
-          example: 90000
-          format: float
-          readOnly: false
-        total:
-          type: number
-          example: 200000
-          format: float
-          readOnly: false
-        currencyRef:
-          $ref: '#/components/schemas/ApArAgingCurrencyRef'
-      required:
-      - dpd30
-      - dpd60
-      - dpd90
-      - total
     Error500ResponseDto:
       type: object
       properties:
@@ -670,24 +676,18 @@ components:
       required:
       - error
       - payload
-    ArAgingResponseDto:
+    ArAgingReport:
       type: object
       properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        count:
-          type: integer
-          readOnly: true
-          example: 1
-        reports:
-          readOnly: true
+        meta:
+          $ref: '#/components/schemas/ArAgingMetaData'
+        data:
           type: array
           items:
-            $ref: '#/components/schemas/ArAgingReport'
+            $ref: '#/components/schemas/ArAgingDataV1'
       required:
-      - pagination
-      - count
-      - reports
+      - meta
+      - data
   securitySchemes:
     bearer:
       scheme: bearer

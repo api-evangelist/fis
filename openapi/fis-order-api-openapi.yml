@@ -155,42 +155,17 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    Error400Dto:
+    Balance:
       type: object
       properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - businessName cannot be null
-          type: array
-          items:
-            type: string
-        error:
+        amount:
           type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
+          example: 2.2
+          format: float
+        date:
+          format: date-time
+          type: string
+          example: '2022-03-11T11:29:03-05:00'
     Error401Dto:
       type: object
       properties:
@@ -213,299 +188,6 @@ components:
       - statusCode
       - message
       - error
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    GetOrderResponseDto:
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetOrderData'
-        count:
-          type: number
-          readOnly: true
-          example: 1
-          format: integer
-        meta:
-          $ref: '#/components/schemas/BasicStartEndDateReportMetaData'
-      required:
-      - pagination
-      - data
-      - count
-      - meta
-    Lines:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '466157049'
-        balances:
-          type: array
-          items:
-            $ref: '#/components/schemas/Balance'
-        accountRef:
-          $ref: '#/components/schemas/AccountRef'
-        customerRef:
-          $ref: '#/components/schemas/AccountRef'
-        trackingCategoryRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/TrackingCategoryResponse'
-    PaginationMetaData:
-      type: object
-      properties:
-        offset:
-          type: number
-          readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
-          readOnly: true
-      required:
-      - offset
-      - limit
-      - count
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    AccountRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '145'
-        name:
-          type: string
-          example: Example account
-      required:
-      - id
-    FulfillmentRefs:
-      type: object
-      properties:
-        carrier:
-          type: string
-          example: USPS
-        trackingNumber:
-          type: string
-          example: 1Z2345
-        service:
-          type: string
-          example: manual
-        trackingUrl:
-          type: string
-          example: https://tools.usps.com/go/TrackConfirmAction_input?qtc_tLabels1=1Z2345
-    OrderCustomerRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '207119551'
-        customerName:
-          type: string
-          example: Amelia Earhart
-        email:
-          type: string
-          example: Amelia.Earhart@example.com
-      required:
-      - id
-    Balance:
-      type: object
-      properties:
-        amount:
-          type: string
-          example: 2.2
-          format: float
-        date:
-          format: date-time
-          type: string
-          example: '2022-03-11T11:29:03-05:00'
-    CommerceCurrencyRef:
-      type: object
-      properties:
-        id:
-          type: string
-        symbol:
-          type: string
-          example: CAD
-        name:
-          type: string
-          example: Canadian Dollar
-      required:
-      - symbol
-      - name
-    OrderTransactionSourceRefs:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '699519475'
-        type:
-          type: string
-          example: payment
-          enum:
-          - failedPayout
-          - payment
-          - paymentFee
-          - paymentFeeRefund
-          - payout
-          - refund
-          - transfer
-          - dispute
-          - order
-          - other
-          - unknown
-        totalAmount:
-          type: number
-          example: '50.00'
-          format: float
-      required:
-      - id
-      - totalAmount
-    RefundRefs:
-      type: object
-      properties:
-        id:
-          type: string
-          example: 2
-        totalAmount:
-          type: number
-          example: 2
-          format: float
-      required:
-      - id
-      - totalAmount
-    BillingAddress:
-      type: object
-      properties:
-        line1:
-          type: string
-          example: 1234 Park Street
-        line2:
-          type: string
-          example: Suite 1000
-        city:
-          type: string
-          example: Toronto
-        region:
-          type: string
-          example: 'ON'
-        country:
-          type: string
-          example: CAN
-        postalCode:
-          type: string
-          example: A0B1C2
-    ShippingAddress:
-      type: object
-      properties:
-        line1:
-          type: string
-          example: 1234 Park Street
-        line2:
-          type: string
-          example: Suite 1000
-        city:
-          type: string
-          example: Toronto
-        region:
-          type: string
-          example: 'ON'
-        country:
-          type: string
-          example: CAN
-        postalCode:
-          type: string
-          example: A0B1C2
-    TrackingCategoryResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '4040'
-          readOnly: false
-        name:
-          type: string
-          readOnly: false
-          example: Region
-        type:
-          type: string
-          example: class
-          enum:
-          - class
-          - department
-          - location
-          - unknown
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
-    Error400ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
     BasicStartEndDateReportMetaData:
       type: object
       properties:
@@ -566,6 +248,79 @@ components:
       - updatedAt
       - startDate
       - endDate
+    OrderTransactionSourceRefs:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '699519475'
+        type:
+          type: string
+          example: payment
+          enum:
+          - failedPayout
+          - payment
+          - paymentFee
+          - paymentFeeRefund
+          - payout
+          - refund
+          - transfer
+          - dispute
+          - order
+          - other
+          - unknown
+        totalAmount:
+          type: number
+          example: '50.00'
+          format: float
+      required:
+      - id
+      - totalAmount
+    Lines:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '466157049'
+        balances:
+          type: array
+          items:
+            $ref: '#/components/schemas/Balance'
+        accountRef:
+          $ref: '#/components/schemas/AccountRef'
+        customerRef:
+          $ref: '#/components/schemas/AccountRef'
+        trackingCategoryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrackingCategoryResponse'
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
     GetOrderData:
       type: object
       properties:
@@ -662,6 +417,251 @@ components:
       - status
       - paymentStatus
       - fulfillmentStatus
+    ShippingAddress:
+      type: object
+      properties:
+        line1:
+          type: string
+          example: 1234 Park Street
+        line2:
+          type: string
+          example: Suite 1000
+        city:
+          type: string
+          example: Toronto
+        region:
+          type: string
+          example: 'ON'
+        country:
+          type: string
+          example: CAN
+        postalCode:
+          type: string
+          example: A0B1C2
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    GetOrderResponseDto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetOrderData'
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        meta:
+          $ref: '#/components/schemas/BasicStartEndDateReportMetaData'
+      required:
+      - pagination
+      - data
+      - count
+      - meta
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    CommerceCurrencyRef:
+      type: object
+      properties:
+        id:
+          type: string
+        symbol:
+          type: string
+          example: CAD
+        name:
+          type: string
+          example: Canadian Dollar
+      required:
+      - symbol
+      - name
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    TrackingCategoryResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4040'
+          readOnly: false
+        name:
+          type: string
+          readOnly: false
+          example: Region
+        type:
+          type: string
+          example: class
+          enum:
+          - class
+          - department
+          - location
+          - unknown
+    RefundRefs:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 2
+        totalAmount:
+          type: number
+          example: 2
+          format: float
+      required:
+      - id
+      - totalAmount
+    OrderCustomerRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '207119551'
+        customerName:
+          type: string
+          example: Amelia Earhart
+        email:
+          type: string
+          example: Amelia.Earhart@example.com
+      required:
+      - id
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    FulfillmentRefs:
+      type: object
+      properties:
+        carrier:
+          type: string
+          example: USPS
+        trackingNumber:
+          type: string
+          example: 1Z2345
+        service:
+          type: string
+          example: manual
+        trackingUrl:
+          type: string
+          example: https://tools.usps.com/go/TrackConfirmAction_input?qtc_tLabels1=1Z2345
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    BillingAddress:
+      type: object
+      properties:
+        line1:
+          type: string
+          example: 1234 Park Street
+        line2:
+          type: string
+          example: Suite 1000
+        city:
+          type: string
+          example: Toronto
+        region:
+          type: string
+          example: 'ON'
+        country:
+          type: string
+          example: CAN
+        postalCode:
+          type: string
+          example: A0B1C2
+    AccountRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '145'
+        name:
+          type: string
+          example: Example account
+      required:
+      - id
     Error500ResponseDto:
       type: object
       properties:

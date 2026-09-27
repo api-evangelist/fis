@@ -7,7 +7,7 @@ apis:
   tags:
   - Banking
   - Core Banking
-  - Financial-Services
+  - Financial Services
   - Mainframe
   - SOAP
   tags_raw:
@@ -16,6 +16,7 @@ apis:
   - Financial Services
   - Mainframe
   - SOAP
+  - Financial-Services
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   properties:
@@ -31,7 +32,7 @@ apis:
   name: FIS Wealth Management API
   tags:
   - Banking
-  - Financial-Services
+  - Financial Services
   - REST
   - Wealth Management
   tags_raw:
@@ -39,6 +40,7 @@ apis:
   - Financial Services
   - REST
   - Wealth Management
+  - Financial-Services
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   properties:
@@ -1826,7 +1828,7 @@ accessModel:
 tags:
 - Banking
 - Core Banking
-- Financial-Services
+- Financial Services
 - Payments
 - Fintech
 tags_raw:
@@ -1835,6 +1837,7 @@ tags_raw:
 - Financial Services
 - Payments
 - Fintech
+- Financial-Services
 properties:
 - url: https://codeconnect.fisglobal.com/
   type: Portal

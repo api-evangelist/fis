@@ -503,6 +503,250 @@ paths:
       - JournalControllerV2
 components:
   schemas:
+    GetJournalData:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1234'
+        journalCode:
+          type: string
+          example: GL
+        name:
+          type: string
+          example: General Ledger
+        status:
+          type: string
+          enum:
+          - active
+          - inactive
+          - unknown
+        parentRef:
+          $ref: '#/components/schemas/JournalParentRef'
+        type:
+          type: string
+          example: General
+        hasChildren:
+          type: boolean
+          example: true
+        createdDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        sourceModifiedDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+      required:
+      - id
+      - name
+      - status
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    BaseJournalRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4040'
+      required:
+      - id
+    PushJournalsDto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        data:
+          $ref: '#/components/schemas/PushJournalsData'
+      required:
+      - connectionUuid
+      - data
+    PushUpdateJournalsDto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        data:
+          $ref: '#/components/schemas/PushJournalsData'
+      required:
+      - connectionUuid
+      - data
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    JournalParentRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '434'
+        name:
+          type: string
+          example: GLedger Parent
+      required:
+      - id
+    UpdateJournalEntriesIndividualV2ResponseDto:
+      type: object
+      properties:
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/BatchPushUpdateJournalEntries'
+      required:
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - data
+    SubsidiaryRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Railz Financial
+    TaxRateRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '12'
+      required:
+      - id
+    JournalEntryLineItemsV2:
+      type: object
+      properties:
+        description:
+          type: string
+          maxLength: 4000
+          example: Journal Entry description.
+        accountRef:
+          $ref: '#/components/schemas/AccountRefDto'
+        trackingCategoryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillTrackingCategoryRefDto'
+        entityRef:
+          $ref: '#/components/schemas/EntityRefDto'
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateRefDto'
+        debit:
+          type: number
+          format: float
+          example: 100.3
+        credit:
+          type: number
+          format: float
+          example: 100.3
+        id:
+          type: string
+          example: '1'
+      required:
+      - accountRef
+    GetJournalEntryDataV2:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        postedDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        createdDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        currencyRate:
+          type: number
+          example: 1.13
+          format: float
+        subsidiaryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubsidiaryRef'
+        memo:
+          type: string
+          example: Example bill memo.
+        sourceModifiedDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        totalCredit:
+          type: number
+          example: 129.99
+          format: float
+        totalDebit:
+          type: number
+          example: 129.99
+          format: float
+        journalNumber:
+          type: string
+          example: '123'
+        currency:
+          type: string
+          example: USD
+        journalRef:
+          $ref: '#/components/schemas/JournalRefDto'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetJournalEntryLineItemsV2'
+      required:
+      - id
+      - lines
     PushJournalsResponseDto:
       type: object
       properties:
@@ -561,179 +805,7 @@ components:
       - requestedOn
       - status
       - data
-    GetJournalEntryLineItemsV2:
-      type: object
-      properties:
-        description:
-          type: string
-          example: Services rendered.
-        credit:
-          type: number
-          example: 100.5
-          format: float
-        debit:
-          type: number
-          example: 3
-          format: float
-        taxAmount:
-          type: number
-          example: 20.5
-          format: float
-        accountRef:
-          $ref: '#/components/schemas/AccountRef'
-        entityRef:
-          $ref: '#/components/schemas/JournalEntryEntityRef'
-        taxRateRef:
-          $ref: '#/components/schemas/TaxRateRef'
-        id:
-          type: string
-          example: '1'
-        trackingCategoryRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/TrackingCategoryRefV2'
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
-    GetJournalV2ResponseDto:
-      type: object
-      properties:
-        meta:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/BasicReportMetaDataV2'
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetJournalData'
-      required:
-      - meta
-      - pagination
-      - data
-    PushJournalEntriesIndividualV2ResponseDto:
-      type: object
-      properties:
-        pushCommunicationId:
-          type: string
-          readOnly: true
-          example: 60473b57f0cdd1683ca71f60
-        requestedOn:
-          type: string
-          readOnly: true
-          example: '2021-03-09T08:15:22.035Z'
-          format: date-time
-        status:
-          type: string
-          readOnly: true
-          example: pending
-          enum:
-          - success
-          - failed
-          - pending
-        data:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/PushJournalEntriesV2'
-      required:
-      - pushCommunicationId
-      - requestedOn
-      - status
-      - data
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    PushJournalEntriesV2:
-      type: object
-      properties:
-        currencyRate:
-          type: number
-          format: float
-          example: 1.13
-        postedDate:
-          type: string
-          format: date
-          example: '2021-03-29'
-        memo:
-          type: string
-          maxLength: 4000
-          example: Services rendered.
-        currency:
-          type: string
-          example: CAD
-        subsidiaryRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubsidiaryRefDto'
-        journalRef:
-          $ref: '#/components/schemas/BaseJournalRefDto'
-        createdDate:
-          format: date-time
-          type: string
-          example: '2021-03-09T10:18:29.985Z'
-        journalNumber:
-          type: string
-          example: '1857648'
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/JournalEntryLineItemsV2'
-        passThrough:
-          type: object
-          additionalProperties: true
-          example:
-            CustomField:
-            - DefinitionId: '1'
-              StringValue: my custom value
-              Name: Field One
-      required:
-      - lines
-    TaxRateRef:
+    JournalEntryEntityRef:
       type: object
       properties:
         id:
@@ -741,42 +813,39 @@ components:
           example: '1'
         name:
           type: string
-          example: HST
-        effectiveTaxRate:
-          type: number
-          example: 13
-          format: float
+          example: ABC Inc.
+        type:
+          type: string
+          example: vendor
+          enum:
+          - customer
+          - employee
+          - vendor
       required:
       - id
-    PaginationMetaData:
+    Error400DtoV2:
       type: object
       properties:
-        offset:
+        statusCode:
           type: number
           readOnly: true
-        limit:
-          type: number
+          example: 400
+        message:
           readOnly: true
-        count:
-          type: number
-          readOnly: true
-      required:
-      - offset
-      - limit
-      - count
-    PushJournalsDto:
-      type: object
-      properties:
-        connectionUuid:
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
           type: string
-          description: Unique connection identifier.
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        data:
-          $ref: '#/components/schemas/PushJournalsData'
+          readOnly: true
+          example: Bad Request
       required:
-      - connectionUuid
-      - data
-    PushUpdateJournalEntriesV2ResponseDto:
+      - statusCode
+      - message
+      - error
+    BatchUpdateJournalEntriesV2ResponseDto:
       type: object
       properties:
         connectionUuid:
@@ -805,262 +874,88 @@ components:
           - myob
           - zohoBooks
           - byod
-        pushCommunicationId:
+        batchId:
           type: string
           readOnly: true
           example: 60473b57f0cdd1683ca71f60
-        requestedOn:
-          type: string
+        batch:
           readOnly: true
-          example: '2021-03-09T08:15:22.035Z'
-          format: date-time
-        status:
-          type: string
-          readOnly: true
-          example: pending
-          enum:
-          - success
-          - failed
-          - pending
-        data:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/PushUpdateJournalEntriesV2'
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateJournalEntriesIndividualV2ResponseDto'
       required:
       - connectionUuid
       - businessName
       - serviceName
-      - pushCommunicationId
-      - requestedOn
-      - status
-      - data
-    GetJournalData:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1234'
-        journalCode:
-          type: string
-          example: GL
-        name:
-          type: string
-          example: General Ledger
-        status:
-          type: string
-          enum:
-          - active
-          - inactive
-          - unknown
-        parentRef:
-          $ref: '#/components/schemas/JournalParentRef'
-        type:
-          type: string
-          example: General
-        hasChildren:
-          type: boolean
-          example: true
-        createdDate:
-          format: date-time
-          type: string
-          example: '2021-03-09T10:18:29.985Z'
-        sourceModifiedDate:
-          format: date-time
-          type: string
-          example: '2021-03-09T10:18:29.985Z'
-      required:
-      - id
-      - name
-      - status
-    Error500Dto:
+      - batchId
+      - batch
+    Error401ResponseDto:
       type: object
       properties:
         error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    UpdateJournalEntriesIndividualV2ResponseDto:
-      type: object
-      properties:
-        pushCommunicationId:
-          type: string
-          readOnly: true
-          example: 60473b57f0cdd1683ca71f60
-        requestedOn:
-          type: string
-          readOnly: true
-          example: '2021-03-09T08:15:22.035Z'
-          format: date-time
-        status:
-          type: string
-          readOnly: true
-          example: pending
-          enum:
-          - success
-          - failed
-          - pending
-        data:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/BatchPushUpdateJournalEntries'
-      required:
-      - pushCommunicationId
-      - requestedOn
-      - status
-      - data
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
-    EntityRefDto:
-      type: object
-      properties:
-        type:
-          type: string
-          example: customer
-          enum:
-          - customer
-          - vendor
-        id:
-          type: string
-          example: '130'
-      required:
-      - id
-    PushJournalsData:
-      type: object
-      properties:
-        passThrough:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
           type: object
-          example:
-            CustomField:
-            - DefinitionId: '1'
-              StringValue: my custom value
-              Name: Field One
-          additionalProperties: true
-        journalCode:
-          type: string
-          example: GL
-        name:
-          type: string
-          example: General Ledger
-        status:
-          type: string
-          enum:
-          - active
-          - inactive
-          - unknown
+          readOnly: true
+          example: {}
       required:
-      - journalCode
-      - name
-      - status
-    AccountRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '145'
-        name:
-          type: string
-          example: Example account
-      required:
-      - id
-    PushUpdateJournalEntryLineItemsV2:
-      type: object
-      properties:
-        description:
-          type: string
-          maxLength: 4000
-          example: Journal Entry description.
-        accountRef:
-          $ref: '#/components/schemas/AccountRefDto'
-        trackingCategoryRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/BillTrackingCategoryRefDto'
-        entityRef:
-          $ref: '#/components/schemas/EntityRefDto'
-        taxRateRef:
-          $ref: '#/components/schemas/TaxRateRefDto'
-        debit:
-          type: number
-          format: float
-          example: 100.3
-        credit:
-          type: number
-          format: float
-          example: 100.3
-        id:
-          type: string
-          example: '1'
-      required:
-      - accountRef
-    PushUpdateJournalEntriesV2Dto:
+      - error
+      - payload
+    BasicReportMetaDataV2:
       type: object
       properties:
         connectionUuid:
           type: string
-          description: Unique connection identifier.
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        data:
-          $ref: '#/components/schemas/PushUpdateJournalEntriesV2'
-      required:
-      - connectionUuid
-      - data
-    Error400DtoV2:
-      type: object
-      properties:
-        statusCode:
-          type: number
           readOnly: true
-          example: 400
-        message:
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        reportId:
           readOnly: true
           example:
-          - connectionUuid should not be empty
+          - 5fad8a342a88364234392fb5
           type: array
           items:
             type: string
-        error:
+        createdAt:
           type: string
           readOnly: true
-          example: Bad Request
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
       required:
-      - statusCode
-      - message
-      - error
+      - connectionUuid
+      - businessName
+      - serviceName
+      - reportId
+      - createdAt
+      - updatedAt
     BasicStartEndDateReportMetaDataV2:
       type: object
       properties:
@@ -1126,7 +1021,7 @@ components:
       - updatedAt
       - startDate
       - endDate
-    JournalEntryLineItemsV2:
+    PushUpdateJournalEntryLineItemsV2:
       type: object
       properties:
         description:
@@ -1156,21 +1051,63 @@ components:
           example: '1'
       required:
       - accountRef
-    BatchPushUpdateJournalEntriesV2Dto:
+    GetJournalV2ResponseDto:
+      type: object
+      properties:
+        meta:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/BasicReportMetaDataV2'
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetJournalData'
+      required:
+      - meta
+      - pagination
+      - data
+    PushJournalEntriesV2Dto:
       type: object
       properties:
         connectionUuid:
           type: string
           description: Unique connection identifier.
           example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        batch:
-          type: array
-          items:
-            $ref: '#/components/schemas/BatchPushUpdateJournalEntries'
+        data:
+          $ref: '#/components/schemas/PushJournalEntriesV2'
       required:
       - connectionUuid
-      - batch
-    SubsidiaryRef:
+      - data
+    PushJournalsData:
+      type: object
+      properties:
+        passThrough:
+          type: object
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+          additionalProperties: true
+        journalCode:
+          type: string
+          example: GL
+        name:
+          type: string
+          example: General Ledger
+        status:
+          type: string
+          enum:
+          - active
+          - inactive
+          - unknown
+      required:
+      - journalCode
+      - name
+      - status
+    TaxRateRef:
       type: object
       properties:
         id:
@@ -1178,29 +1115,62 @@ components:
           example: '1'
         name:
           type: string
-          example: Railz Financial
-    JournalRefDto:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '4040'
-        name:
-          type: string
-          example: ABC Inc
+          example: HST
+        effectiveTaxRate:
+          type: number
+          example: 13
+          format: float
       required:
       - id
-    TrackingCategoryRefV2:
+    PushJournalEntriesIndividualV2ResponseDto:
+      type: object
+      properties:
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushJournalEntriesV2'
+      required:
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - data
+    EntityRefDto:
+      type: object
+      properties:
+        type:
+          type: string
+          example: customer
+          enum:
+          - customer
+          - vendor
+        id:
+          type: string
+          example: '130'
+      required:
+      - id
+    BillTrackingCategoryRefDto:
       type: object
       properties:
         id:
           type: string
           example: '4040'
-          readOnly: false
-        name:
-          type: string
-          readOnly: false
-          example: Region
         type:
           type: string
           example: class
@@ -1211,51 +1181,64 @@ components:
           - unknown
       required:
       - id
-      - type
-    GetJournalEntryV2ResponseDto:
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        meta:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/BasicStartEndDateReportMetaDataV2'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetJournalEntryDataV2'
-      required:
-      - pagination
-      - meta
-      - data
-    BatchPushJournalEntriesV2Dto:
+    PushUpdateJournalEntriesV2ResponseDto:
       type: object
       properties:
         connectionUuid:
           type: string
-          description: Unique connection identifier.
+          readOnly: true
           example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        batch:
-          type: array
-          items:
-            $ref: '#/components/schemas/PushJournalEntriesV2'
-      required:
-      - connectionUuid
-      - batch
-    Error400ResponseDtoV2:
-      type: object
-      properties:
-        error:
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        data:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
-        payload:
-          type: object
-          readOnly: true
+          - $ref: '#/components/schemas/PushUpdateJournalEntriesV2'
       required:
-      - error
-      - payload
+      - connectionUuid
+      - businessName
+      - serviceName
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - data
     PushJournalEntriesV2ResponseDto:
       type: object
       properties:
@@ -1314,94 +1297,80 @@ components:
       - requestedOn
       - status
       - data
-    AccountRefDto:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '200'
-      required:
-      - id
-    GetJournalEntryDataV2:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        postedDate:
-          format: date-time
-          type: string
-          example: '2021-03-09T10:18:29.985Z'
-        createdDate:
-          format: date-time
-          type: string
-          example: '2021-03-09T10:18:29.985Z'
-        currencyRate:
-          type: number
-          example: 1.13
-          format: float
-        subsidiaryRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubsidiaryRef'
-        memo:
-          type: string
-          example: Example bill memo.
-        sourceModifiedDate:
-          format: date-time
-          type: string
-          example: '2021-03-09T10:18:29.985Z'
-        totalCredit:
-          type: number
-          example: 129.99
-          format: float
-        totalDebit:
-          type: number
-          example: 129.99
-          format: float
-        journalNumber:
-          type: string
-          example: '123'
-        currency:
-          type: string
-          example: USD
-        journalRef:
-          $ref: '#/components/schemas/JournalRefDto'
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetJournalEntryLineItemsV2'
-      required:
-      - id
-      - lines
-    BaseJournalRefDto:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '4040'
-      required:
-      - id
-    PushUpdateJournalsDto:
+    BatchPushUpdateJournalEntriesV2Dto:
       type: object
       properties:
         connectionUuid:
           type: string
           description: Unique connection identifier.
           example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        data:
-          $ref: '#/components/schemas/PushJournalsData'
+        batch:
+          type: array
+          items:
+            $ref: '#/components/schemas/BatchPushUpdateJournalEntries'
       required:
       - connectionUuid
-      - data
-    TaxRateRefDto:
+      - batch
+    BatchPushJournalEntriesV2ResponseDto:
       type: object
       properties:
-        id:
+        connectionUuid:
           type: string
-          example: '12'
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        batchId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        batch:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/PushJournalEntriesIndividualV2ResponseDto'
       required:
-      - id
+      - connectionUuid
+      - businessName
+      - serviceName
+      - batchId
+      - batch
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
     PushUpdateJournalEntriesV2:
       type: object
       properties:
@@ -1445,103 +1414,6 @@ components:
             - DefinitionId: '1'
               StringValue: my custom value
               Name: Field One
-    BasicReportMetaDataV2:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          readOnly: true
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        reportId:
-          readOnly: true
-          example:
-          - 5fad8a342a88364234392fb5
-          type: array
-          items:
-            type: string
-        createdAt:
-          type: string
-          readOnly: true
-          example: '2020-11-25T01:02:03Z'
-          format: date-time
-        updatedAt:
-          type: string
-          example: '2020-11-30T01:02:03Z'
-          format: date-time
-          readOnly: false
-      required:
-      - connectionUuid
-      - businessName
-      - serviceName
-      - reportId
-      - createdAt
-      - updatedAt
-    BatchUpdateJournalEntriesV2ResponseDto:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          readOnly: true
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        batchId:
-          type: string
-          readOnly: true
-          example: 60473b57f0cdd1683ca71f60
-        batch:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/UpdateJournalEntriesIndividualV2ResponseDto'
-      required:
-      - connectionUuid
-      - businessName
-      - serviceName
-      - batchId
-      - batch
     BatchPushUpdateJournalEntries:
       type: object
       properties:
@@ -1590,6 +1462,51 @@ components:
           description: reference to the journal entry to be updated
       required:
       - journalEntryRef
+    BatchPushJournalEntriesV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        batch:
+          type: array
+          items:
+            $ref: '#/components/schemas/PushJournalEntriesV2'
+      required:
+      - connectionUuid
+      - batch
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    GetJournalEntryV2ResponseDto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        meta:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/BasicStartEndDateReportMetaDataV2'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetJournalEntryDataV2'
+      required:
+      - pagination
+      - meta
+      - data
     SubsidiaryRefDto:
       type: object
       properties:
@@ -1598,12 +1515,118 @@ components:
           example: '4'
       required:
       - id
-    BillTrackingCategoryRefDto:
+    PushJournalEntriesV2:
+      type: object
+      properties:
+        currencyRate:
+          type: number
+          format: float
+          example: 1.13
+        postedDate:
+          type: string
+          format: date
+          example: '2021-03-29'
+        memo:
+          type: string
+          maxLength: 4000
+          example: Services rendered.
+        currency:
+          type: string
+          example: CAD
+        subsidiaryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubsidiaryRefDto'
+        journalRef:
+          $ref: '#/components/schemas/BaseJournalRefDto'
+        createdDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        journalNumber:
+          type: string
+          example: '1857648'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalEntryLineItemsV2'
+        passThrough:
+          type: object
+          additionalProperties: true
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+      required:
+      - lines
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    PushUpdateJournalEntriesV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        data:
+          $ref: '#/components/schemas/PushUpdateJournalEntriesV2'
+      required:
+      - connectionUuid
+      - data
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    TrackingCategoryRefV2:
       type: object
       properties:
         id:
           type: string
           example: '4040'
+          readOnly: false
+        name:
+          type: string
+          readOnly: false
+          example: Region
         type:
           type: string
           example: class
@@ -1614,91 +1637,49 @@ components:
           - unknown
       required:
       - id
-    PushJournalEntriesV2Dto:
+      - type
+    AccountRef:
       type: object
       properties:
-        connectionUuid:
+        id:
           type: string
-          description: Unique connection identifier.
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        data:
-          $ref: '#/components/schemas/PushJournalEntriesV2'
+          example: '145'
+        name:
+          type: string
+          example: Example account
       required:
-      - connectionUuid
-      - data
-    JournalEntryEntityRef:
+      - id
+    GetJournalEntryLineItemsV2:
       type: object
       properties:
+        description:
+          type: string
+          example: Services rendered.
+        credit:
+          type: number
+          example: 100.5
+          format: float
+        debit:
+          type: number
+          example: 3
+          format: float
+        taxAmount:
+          type: number
+          example: 20.5
+          format: float
+        accountRef:
+          $ref: '#/components/schemas/AccountRef'
+        entityRef:
+          $ref: '#/components/schemas/JournalEntryEntityRef'
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateRef'
         id:
           type: string
           example: '1'
-        name:
-          type: string
-          example: ABC Inc.
-        type:
-          type: string
-          example: vendor
-          enum:
-          - customer
-          - employee
-          - vendor
-      required:
-      - id
-    BatchPushJournalEntriesV2ResponseDto:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          readOnly: true
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        batchId:
-          type: string
-          readOnly: true
-          example: 60473b57f0cdd1683ca71f60
-        batch:
-          readOnly: true
+        trackingCategoryRefs:
           type: array
           items:
-            $ref: '#/components/schemas/PushJournalEntriesIndividualV2ResponseDto'
-      required:
-      - connectionUuid
-      - businessName
-      - serviceName
-      - batchId
-      - batch
-    JournalParentRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '434'
-        name:
-          type: string
-          example: GLedger Parent
-      required:
-      - id
+            $ref: '#/components/schemas/TrackingCategoryRefV2'
     Error500ResponseDto:
       type: object
       properties:
@@ -1712,6 +1693,25 @@ components:
       required:
       - error
       - payload
+    AccountRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '200'
+      required:
+      - id
+    JournalRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4040'
+        name:
+          type: string
+          example: ABC Inc
+      required:
+      - id
   securitySchemes:
     bearer:
       scheme: bearer

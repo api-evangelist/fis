@@ -119,103 +119,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    Error400Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - businessName cannot be null
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
-    Error400ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    FinancialForecastReport:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/FinancialForecastMetaData'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/FinancialForecastDataV1'
-      required:
-      - meta
-      - data
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
     FinancialForecastMetaData:
       type: object
       properties:
@@ -284,19 +187,58 @@ components:
       - endDate
       - createdAt
       - updatedAt
-    Error500ResponseDto:
+    Error403ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error500Dto'
+          - $ref: '#/components/schemas/Error403Dto'
         payload:
           type: object
           readOnly: true
+          example: {}
       required:
       - error
       - payload
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    FinancialForecastResponseV1Dto:
+      type: object
+      properties:
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        reports:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/FinancialForecastReport'
+      required:
+      - count
+      - reports
     Error500Dto:
       type: object
       properties:
@@ -319,22 +261,28 @@ components:
       - error
       - message
       - statusCode
-    FinancialForecastResponseV1Dto:
+    Error400Dto:
       type: object
       properties:
-        count:
+        statusCode:
           type: number
           readOnly: true
-          example: 1
-          format: integer
-        reports:
+          example: 400
+        message:
           readOnly: true
+          example:
+          - businessName cannot be null
           type: array
           items:
-            $ref: '#/components/schemas/FinancialForecastReport'
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
       required:
-      - count
-      - reports
+      - statusCode
+      - message
+      - error
     Error403Dto:
       type: object
       properties:
@@ -357,6 +305,33 @@ components:
       - statusCode
       - message
       - error
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
     FinancialForecastDataV1:
       type: object
       properties:
@@ -393,6 +368,31 @@ components:
       - account
       - endDate
       - amount
+    FinancialForecastReport:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/FinancialForecastMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/FinancialForecastDataV1'
+      required:
+      - meta
+      - data
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
   securitySchemes:
     bearer:
       scheme: bearer

@@ -140,20 +140,6 @@ paths:
       - TrackingCategoryControllerV2
 components:
   schemas:
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
     Error401Dto:
       type: object
       properties:
@@ -176,81 +162,28 @@ components:
       - statusCode
       - message
       - error
-    Error401ResponseDto:
+    Error400ResponseDtoV2:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error401Dto'
+          - $ref: '#/components/schemas/Error400DtoV2'
         payload:
           type: object
           readOnly: true
-          example: {}
       required:
       - error
       - payload
-    PaginationMetaData:
-      type: object
-      properties:
-        offset:
-          type: number
-          readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
-          readOnly: true
-      required:
-      - offset
-      - limit
-      - count
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    GetTrackingCategoryResponseV2Dto:
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        meta:
-          $ref: '#/components/schemas/BasicReportMetaDataV2'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetTrackingCategoryDataV2'
-      required:
-      - pagination
-      - meta
-      - data
-    SubsidiaryRefV2Dto:
+    ParentRefDtoV2:
       type: object
       properties:
         id:
           type: string
-          example: '4'
+          example: '32'
         name:
           type: string
+          example: Parent Name
       required:
       - id
     Error400DtoV2:
@@ -275,155 +208,20 @@ components:
       - statusCode
       - message
       - error
-    PushTrackingCategoriesV2:
-      type: object
-      properties:
-        name:
-          type: string
-          example: Region
-          maxLength: 100
-        id:
-          type: string
-          example: '1'
-        parentRef:
-          $ref: '#/components/schemas/ParentRefDtoV2'
-        type:
-          type: string
-          example: class
-          enum:
-          - class
-          - location
-          - department
-          - unknown
-        isEditable:
-          type: boolean
-          example: 'true'
-        hasChildren:
-          type: boolean
-          example: false
-        status:
-          type: string
-          example: active
-          enum:
-          - active
-          - inactive
-          - unknown
-        subsidiaryRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubsidiaryRefV2Dto'
-        passThrough:
-          type: object
-          example:
-            CustomField:
-            - DefinitionId: '1'
-              StringValue: my custom value
-              Name: Field One
-          additionalProperties: true
-      required:
-      - name
-    GetTrackingCategoryDataV2:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '123'
-        name:
-          type: string
-          example: East Coast
-        isEditable:
-          type: boolean
-          example: 'true'
-        parentRef:
-          $ref: '#/components/schemas/ParentRef'
-        status:
-          type: string
-          enum:
-          - active
-          - archived
-          - unknown
-          example: active
-        sourceModifiedDate:
-          format: date-time
-          type: string
-          example: '2021-03-10T11:26:06.619Z'
-        hasChildren:
-          type: boolean
-          example: false
-        type:
-          type: string
-          example: class
-          enum:
-          - class
-          - department
-          - location
-          - unknown
-        subsidiaryRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubsidiaryRefResponse'
-      required:
-      - id
-      - status
-      - type
-    Error400ResponseDtoV2:
+    Error401ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
+          - $ref: '#/components/schemas/Error401Dto'
         payload:
           type: object
           readOnly: true
+          example: {}
       required:
       - error
       - payload
-    PushTrackingCategoriesV2Dto:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          description: Unique connection identifier.
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        data:
-          $ref: '#/components/schemas/PushTrackingCategoriesV2'
-      required:
-      - connectionUuid
-      - data
-    ParentRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '434'
-        name:
-          type: string
-          example: Region
-      required:
-      - id
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
     BasicReportMetaDataV2:
       type: object
       properties:
@@ -477,15 +275,64 @@ components:
       - reportId
       - createdAt
       - updatedAt
-    SubsidiaryRefResponse:
+    PushTrackingCategoriesV2:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Region
+          maxLength: 100
+        id:
+          type: string
+          example: '1'
+        parentRef:
+          $ref: '#/components/schemas/ParentRefDtoV2'
+        type:
+          type: string
+          example: class
+          enum:
+          - class
+          - location
+          - department
+          - unknown
+        isEditable:
+          type: boolean
+          example: 'true'
+        hasChildren:
+          type: boolean
+          example: false
+        status:
+          type: string
+          example: active
+          enum:
+          - active
+          - inactive
+          - unknown
+        subsidiaryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubsidiaryRefV2Dto'
+        passThrough:
+          type: object
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+          additionalProperties: true
+      required:
+      - name
+    ParentRef:
       type: object
       properties:
         id:
           type: string
-          example: '1'
+          example: '434'
         name:
           type: string
-          example: Railz Financial
+          example: Region
+      required:
+      - id
     PushTrackingCategoriesResponseV2Dto:
       type: object
       properties:
@@ -539,6 +386,170 @@ components:
       - businessName
       - serviceName
       - data
+    SubsidiaryRefV2Dto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4'
+        name:
+          type: string
+      required:
+      - id
+    PushTrackingCategoriesV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        data:
+          $ref: '#/components/schemas/PushTrackingCategoriesV2'
+      required:
+      - connectionUuid
+      - data
+    SubsidiaryRefResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Railz Financial
+    GetTrackingCategoryDataV2:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '123'
+        name:
+          type: string
+          example: East Coast
+        isEditable:
+          type: boolean
+          example: 'true'
+        parentRef:
+          $ref: '#/components/schemas/ParentRef'
+        status:
+          type: string
+          enum:
+          - active
+          - archived
+          - unknown
+          example: active
+        sourceModifiedDate:
+          format: date-time
+          type: string
+          example: '2021-03-10T11:26:06.619Z'
+        hasChildren:
+          type: boolean
+          example: false
+        type:
+          type: string
+          example: class
+          enum:
+          - class
+          - department
+          - location
+          - unknown
+        subsidiaryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubsidiaryRefResponse'
+      required:
+      - id
+      - status
+      - type
+    GetTrackingCategoryResponseV2Dto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        meta:
+          $ref: '#/components/schemas/BasicReportMetaDataV2'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetTrackingCategoryDataV2'
+      required:
+      - pagination
+      - meta
+      - data
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
     Error500ResponseDto:
       type: object
       properties:
@@ -552,17 +563,6 @@ components:
       required:
       - error
       - payload
-    ParentRefDtoV2:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '32'
-        name:
-          type: string
-          example: Parent Name
-      required:
-      - id
   securitySchemes:
     bearer:
       scheme: bearer

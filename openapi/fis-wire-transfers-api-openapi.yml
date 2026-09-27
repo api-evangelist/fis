@@ -68,32 +68,6 @@ components:
           createdAt:
             type: string
             format: date-time
-    AccountReference:
-      type: object
-      required:
-      - accountNumber
-      - routingNumber
-      properties:
-        accountNumber:
-          type: string
-          description: Bank account number
-        routingNumber:
-          type: string
-          pattern: ^\d{9}$
-          description: ABA routing transit number (9 digits)
-        accountType:
-          type: string
-          enum:
-          - CHECKING
-          - SAVINGS
-          - LOAN
-        accountHolderName:
-          type: string
-        bankName:
-          type: string
-        swiftCode:
-          type: string
-          description: SWIFT/BIC code for international wires
     WireTransferRequest:
       type: object
       required:
@@ -125,6 +99,32 @@ components:
           maxLength: 140
         instructionForCreditorAgent:
           type: string
+    AccountReference:
+      type: object
+      required:
+      - accountNumber
+      - routingNumber
+      properties:
+        accountNumber:
+          type: string
+          description: Bank account number
+        routingNumber:
+          type: string
+          pattern: ^\d{9}$
+          description: ABA routing transit number (9 digits)
+        accountType:
+          type: string
+          enum:
+          - CHECKING
+          - SAVINGS
+          - LOAN
+        accountHolderName:
+          type: string
+        bankName:
+          type: string
+        swiftCode:
+          type: string
+          description: SWIFT/BIC code for international wires
   securitySchemes:
     OAuth2ClientCredentials:
       type: oauth2

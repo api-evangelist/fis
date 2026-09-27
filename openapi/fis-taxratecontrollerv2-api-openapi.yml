@@ -219,20 +219,6 @@ paths:
       - TaxRateControllerV2
 components:
   schemas:
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
     Error401Dto:
       type: object
       properties:
@@ -255,20 +241,96 @@ components:
       - statusCode
       - message
       - error
-    Error401ResponseDto:
+    GetTaxAuthorityResponseDto:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/ListReportMetaDataV2'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetTaxAuthorityData'
+      required:
+      - meta
+      - data
+    GetTaxRatesDataV2:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Harmonized sales tax
+        code:
+          type: string
+          example: HST
+        effectiveTaxRate:
+          type: number
+          example: 0
+          format: float
+        totalTaxRate:
+          type: number
+          example: 13
+          format: float
+        sourceModifiedDate:
+          format: date-time
+          type: string
+          example: '2021-03-10T11:26:06.619Z'
+        components:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxRateComponentV2'
+        taxAccountRef:
+          $ref: '#/components/schemas/TaxAccountRef'
+        taxType:
+          type: string
+          example: salesTax
+          enum:
+          - salesTax
+          - goodsAndServicesTax
+          - importTax
+          - luxuryCarTax
+          - withholdingsTax
+          - other
+      required:
+      - id
+      - name
+    Error400ResponseDtoV2:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error401Dto'
+          - $ref: '#/components/schemas/Error400DtoV2'
         payload:
           type: object
           readOnly: true
-          example: {}
       required:
       - error
       - payload
+    PushTaxRateComponent:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: HST
+        rate:
+          type: number
+          example: 13
+          format: float
+        isCompound:
+          type: boolean
+          example: false
+        isPurchasesTax:
+          type: boolean
+          example: false
+        isSalesTax:
+          type: boolean
+          example: false
     PushTaxRateResponseDto:
       type: object
       properties:
@@ -327,149 +389,6 @@ components:
       - requestedOn
       - status
       - data
-    GetTaxRatesResponseV2Dto:
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        meta:
-          $ref: '#/components/schemas/ListReportMetaDataV2'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetTaxRatesDataV2'
-      required:
-      - pagination
-      - meta
-      - data
-    PaginationMetaData:
-      type: object
-      properties:
-        offset:
-          type: number
-          readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
-          readOnly: true
-      required:
-      - offset
-      - limit
-      - count
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    PushTaxRateDto:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          description: Unique connection identifier.
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        data:
-          $ref: '#/components/schemas/PushTaxRate'
-      required:
-      - connectionUuid
-      - data
-    TaxAccountRef:
-      type: object
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-          enum:
-          - paid
-          - collected
-        name:
-          type: string
-      required:
-      - id
-      - type
-    Error400DtoV2:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - connectionUuid should not be empty
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
-    GetTaxAuthorityResponseDto:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/ListReportMetaDataV2'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetTaxAuthorityData'
-      required:
-      - meta
-      - data
-    PushTaxRateComponent:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        name:
-          type: string
-          example: HST
-        rate:
-          type: number
-          example: 13
-          format: float
-        isCompound:
-          type: boolean
-          example: false
-        isPurchasesTax:
-          type: boolean
-          example: false
-        isSalesTax:
-          type: boolean
-          example: false
-    TaxAuthority:
-      type: object
-      properties:
-        id:
-          type: string
-      required:
-      - id
     TaxRateComponentV2:
       type: object
       properties:
@@ -492,54 +411,42 @@ components:
         isSalesTax:
           type: boolean
           example: false
-    BaseTaxAccountRef:
-      type: object
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-          enum:
-          - paid
-          - collected
-      required:
-      - id
-      - type
-    Error400ResponseDtoV2:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error403Dto:
+    Error400DtoV2:
       type: object
       properties:
         statusCode:
           type: number
           readOnly: true
-          example: 403
+          example: 400
         message:
           readOnly: true
           example:
-          - Forbidden resource
+          - connectionUuid should not be empty
           type: array
           items:
             type: string
         error:
           type: string
           readOnly: true
-          example: Forbidden
+          example: Bad Request
       required:
       - statusCode
       - message
       - error
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
     ListReportMetaDataV2:
       type: object
       properties:
@@ -594,83 +501,33 @@ components:
       - reportId
       - createdAt
       - updatedAt
-    GetTaxAuthorityData:
+    PushTaxRateDto:
       type: object
       properties:
-        id:
+        connectionUuid:
           type: string
-          example: '1'
-        name:
-          type: string
-          example: Dept. of Revenue
-        memo:
-          type: string
-        registrationNumber:
-          type: string
-          example: '460000000066001'
-        sourceModifiedDate:
-          format: date-time
-          type: string
-          example: '2021-03-10T11:26:06.619Z'
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        data:
+          $ref: '#/components/schemas/PushTaxRate'
       required:
-      - id
-      - name
-    GetTaxRatesDataV2:
+      - connectionUuid
+      - data
+    TaxAccountRef:
       type: object
       properties:
         id:
           type: string
-          example: '1'
-        name:
+        type:
           type: string
-          example: Harmonized sales tax
-        code:
-          type: string
-          example: HST
-        effectiveTaxRate:
-          type: number
-          example: 0
-          format: float
-        totalTaxRate:
-          type: number
-          example: 13
-          format: float
-        sourceModifiedDate:
-          format: date-time
-          type: string
-          example: '2021-03-10T11:26:06.619Z'
-        components:
-          type: array
-          items:
-            $ref: '#/components/schemas/TaxRateComponentV2'
-        taxAccountRef:
-          $ref: '#/components/schemas/TaxAccountRef'
-        taxType:
-          type: string
-          example: salesTax
           enum:
-          - salesTax
-          - goodsAndServicesTax
-          - importTax
-          - luxuryCarTax
-          - withholdingsTax
-          - other
+          - paid
+          - collected
+        name:
+          type: string
       required:
       - id
-      - name
-    Error500ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
+      - type
     PushTaxRate:
       type: object
       properties:
@@ -711,6 +568,149 @@ components:
           - other
       required:
       - name
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    BaseTaxAccountRef:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - paid
+          - collected
+      required:
+      - id
+      - type
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    GetTaxRatesResponseV2Dto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        meta:
+          $ref: '#/components/schemas/ListReportMetaDataV2'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetTaxRatesDataV2'
+      required:
+      - pagination
+      - meta
+      - data
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    GetTaxAuthorityData:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Dept. of Revenue
+        memo:
+          type: string
+        registrationNumber:
+          type: string
+          example: '460000000066001'
+        sourceModifiedDate:
+          format: date-time
+          type: string
+          example: '2021-03-10T11:26:06.619Z'
+      required:
+      - id
+      - name
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    TaxAuthority:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+      - id
   securitySchemes:
     bearer:
       scheme: bearer

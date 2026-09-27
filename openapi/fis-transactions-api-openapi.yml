@@ -65,17 +65,6 @@ paths:
                 $ref: '#/components/schemas/TransactionList'
 components:
   schemas:
-    TransactionList:
-      type: object
-      properties:
-        transactions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Transaction'
-        nextPageToken:
-          type: string
-        totalCount:
-          type: integer
     Transaction:
       type: object
       properties:
@@ -106,6 +95,17 @@ components:
         balanceAfter:
           type: number
           format: double
+    TransactionList:
+      type: object
+      properties:
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+        nextPageToken:
+          type: string
+        totalCount:
+          type: integer
   securitySchemes:
     OAuth2ClientCredentials:
       type: oauth2

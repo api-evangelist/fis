@@ -125,6 +125,14 @@ paths:
       - ProductControllerV2
 components:
   schemas:
+    QuantityPerLocation:
+      type: object
+      properties:
+        quantity:
+          type: number
+          format: float
+        locationRef:
+          $ref: '#/components/schemas/ProductLocationRef'
     Error403ResponseDto:
       type: object
       properties:
@@ -139,6 +147,17 @@ components:
       required:
       - error
       - payload
+    Inventory:
+      type: object
+      properties:
+        totalQuantity:
+          type: number
+          example: 10
+          format: float
+        quantityPerLocation:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuantityPerLocation'
     Error401Dto:
       type: object
       properties:
@@ -161,50 +180,79 @@ components:
       - statusCode
       - message
       - error
-    Error401ResponseDto:
+    Error500Dto:
       type: object
       properties:
         error:
+          type: string
           readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
+          example: Internal Server Error
+        message:
           readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    GetProductResponseV2Dto:
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        data:
+          example:
+          - INTERNAL_ERROR
           type: array
           items:
-            $ref: '#/components/schemas/GetProductData'
-        count:
+            type: string
+        statusCode:
           type: number
           readOnly: true
-          example: 1
-          format: integer
-          deprecated: true
-        meta:
-          $ref: '#/components/schemas/BasicStartEndDateReportMetaDataV2'
+          example: 500
       required:
-      - pagination
-      - data
-      - count
-      - meta
-    QuantityPerLocation:
+      - error
+      - message
+      - statusCode
+    ProductLocationRef:
       type: object
       properties:
-        quantity:
-          type: number
-          format: float
-        locationRef:
-          $ref: '#/components/schemas/ProductLocationRef'
+        id:
+          type: string
+          example: '12323'
+        name:
+          type: string
+    GetProductData:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '632910392'
+        type:
+          type: string
+          example: Speakers
+        name:
+          type: string
+          example: Amazon Echo
+        description:
+          type: string
+          example: Sample product description
+        createdDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        sourceModifiedDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        status:
+          type: string
+          enum:
+          - active
+          - archived
+          - draft
+          example: active
+        isGiftCard:
+          type: boolean
+          example: true
+        productVariants:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductVariants'
+      required:
+      - id
+      - name
+      - createdDate
+      - sourceModifiedDate
+      - status
     ProductVariants:
       type: object
       properties:
@@ -243,33 +291,6 @@ components:
       - name
       - unitPrice
       - createdDate
-    PaginationMetaData:
-      type: object
-      properties:
-        offset:
-          type: number
-          readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
-          readOnly: true
-      required:
-      - offset
-      - limit
-      - count
-    Inventory:
-      type: object
-      properties:
-        totalQuantity:
-          type: number
-          example: 10
-          format: float
-        quantityPerLocation:
-          type: array
-          items:
-            $ref: '#/components/schemas/QuantityPerLocation'
     Error400DtoV2:
       type: object
       properties:
@@ -292,6 +313,108 @@ components:
       - statusCode
       - message
       - error
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    GetProductResponseV2Dto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetProductData'
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+          deprecated: true
+        meta:
+          $ref: '#/components/schemas/BasicStartEndDateReportMetaDataV2'
+      required:
+      - pagination
+      - data
+      - count
+      - meta
+    Weight:
+      type: object
+      properties:
+        value:
+          type: number
+          example: 1.25
+          format: float
+        unitOfMeasure:
+          type: string
+          enum:
+          - g
+          - kg
+          - lb
+          - oz
+          example: lb
     Error500ResponseDto:
       type: object
       properties:
@@ -305,28 +428,6 @@ components:
       required:
       - error
       - payload
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
     BasicStartEndDateReportMetaDataV2:
       type: object
       properties:
@@ -392,107 +493,6 @@ components:
       - updatedAt
       - startDate
       - endDate
-    GetProductData:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '632910392'
-        type:
-          type: string
-          example: Speakers
-        name:
-          type: string
-          example: Amazon Echo
-        description:
-          type: string
-          example: Sample product description
-        createdDate:
-          format: date-time
-          type: string
-          example: '2021-03-09T10:18:29.985Z'
-        sourceModifiedDate:
-          format: date-time
-          type: string
-          example: '2021-03-09T10:18:29.985Z'
-        status:
-          type: string
-          enum:
-          - active
-          - archived
-          - draft
-          example: active
-        isGiftCard:
-          type: boolean
-          example: true
-        productVariants:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductVariants'
-      required:
-      - id
-      - name
-      - createdDate
-      - sourceModifiedDate
-      - status
-    ProductLocationRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '12323'
-        name:
-          type: string
-    Error400ResponseDtoV2:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Weight:
-      type: object
-      properties:
-        value:
-          type: number
-          example: 1.25
-          format: float
-        unitOfMeasure:
-          type: string
-          enum:
-          - g
-          - kg
-          - lb
-          - oz
-          example: lb
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
   securitySchemes:
     bearer:
       scheme: bearer

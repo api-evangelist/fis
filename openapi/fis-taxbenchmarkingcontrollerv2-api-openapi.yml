@@ -103,6 +103,55 @@ paths:
       - TaxBenchmarkingControllerV2
 components:
   schemas:
+    SummaryStatisticsData:
+      type: object
+      properties:
+        min**:
+          type: number
+          format: float
+          example: 301.5
+        max**:
+          type: number
+          format: float
+          example: 22012.5
+        mean**:
+          type: number
+          format: float
+          example: 6279.7
+        median**:
+          type: number
+          format: float
+          example: 3739.89
+        sdev**:
+          type: number
+          format: float
+          example: 21764.54
+        quantile5**:
+          type: number
+          format: float
+          example: 301.5
+        quantile25**:
+          type: number
+          format: float
+          example: 301.5
+        quantile75**:
+          type: number
+          format: float
+          example: 6710.61
+        quantile95**:
+          type: number
+          format: float
+          example: 7649.75
+      required:
+      - min**
+      - max**
+      - mean**
+      - median**
+      - sdev**
+      - quantile5**
+      - quantile25**
+      - quantile75**
+      - quantile95**
     TaxBenchmarkingsReport:
       type: object
       properties:
@@ -116,6 +165,28 @@ components:
       required:
       - meta
       - data
+    TaxBenchmarkingsReportMetaData:
+      type: object
+      properties:
+        industryCode:
+          type: string
+          readOnly: true
+          example: '44'
+        region:
+          type: string
+          example: CA
+        numberOfBusinesses:
+          type: number
+          example: 282
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+      required:
+      - industryCode
+      - numberOfBusinesses
+      - createdAt
     Error403ResponseDto:
       type: object
       properties:
@@ -152,6 +223,72 @@ components:
       - statusCode
       - message
       - error
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    Error400DtoV2:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
     Error401ResponseDto:
       type: object
       properties:
@@ -163,6 +300,19 @@ components:
           type: object
           readOnly: true
           example: {}
+      required:
+      - error
+      - payload
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
       required:
       - error
       - payload
@@ -216,50 +366,6 @@ components:
       - group
       - subGroup
       - ratios
-    Error400DtoV2:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - connectionUuid should not be empty
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
-    TaxBenchmarkingsReportMetaData:
-      type: object
-      properties:
-        industryCode:
-          type: string
-          readOnly: true
-          example: '44'
-        region:
-          type: string
-          example: CA
-        numberOfBusinesses:
-          type: number
-          example: 282
-        createdAt:
-          type: string
-          readOnly: true
-          example: '2020-11-30T01:02:03Z'
-          format: date-time
-      required:
-      - industryCode
-      - numberOfBusinesses
-      - createdAt
     Error500ResponseDto:
       type: object
       properties:
@@ -273,112 +379,6 @@ components:
       required:
       - error
       - payload
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    Error400ResponseDtoV2:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
-    SummaryStatisticsData:
-      type: object
-      properties:
-        min**:
-          type: number
-          format: float
-          example: 301.5
-        max**:
-          type: number
-          format: float
-          example: 22012.5
-        mean**:
-          type: number
-          format: float
-          example: 6279.7
-        median**:
-          type: number
-          format: float
-          example: 3739.89
-        sdev**:
-          type: number
-          format: float
-          example: 21764.54
-        quantile5**:
-          type: number
-          format: float
-          example: 301.5
-        quantile25**:
-          type: number
-          format: float
-          example: 301.5
-        quantile75**:
-          type: number
-          format: float
-          example: 6710.61
-        quantile95**:
-          type: number
-          format: float
-          example: 7649.75
-      required:
-      - min**
-      - max**
-      - mean**
-      - median**
-      - sdev**
-      - quantile5**
-      - quantile25**
-      - quantile75**
-      - quantile95**
   securitySchemes:
     bearer:
       scheme: bearer

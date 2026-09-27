@@ -49,21 +49,6 @@ paths:
       - File
 components:
   schemas:
-    PushFileUploadDto:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          description: Unique connection identifier.
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        files:
-          type: array
-          items:
-            type: string
-            format: binary
-      required:
-      - connectionUuid
-      - files
     PushFileUploadResponseDto:
       type: object
       properties:
@@ -117,6 +102,21 @@ components:
       - pushCommunicationId
       - requestedOn
       - status
+    PushFileUploadDto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        files:
+          type: array
+          items:
+            type: string
+            format: binary
+      required:
+      - connectionUuid
+      - files
   securitySchemes:
     bearer:
       scheme: bearer

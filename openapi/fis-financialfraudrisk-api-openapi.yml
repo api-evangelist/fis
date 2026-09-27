@@ -128,6 +128,124 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    FinancialFraudRiskData:
+      type: object
+      properties:
+        benfordLawScore:
+          type: number
+          example: 20.92
+          format: float
+          readOnly: true
+        outlierScore:
+          type: number
+          example: 0.659176337
+          format: float
+          readOnly: true
+        outlierRatio:
+          type: number
+          example: 0.093829111
+          format: float
+          readOnly: true
+        outlierTransactions:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/OutlierTransactions'
+        transactionKeywords:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionKeywords'
+        transactionsSectionStats:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionsSectionStats'
+        transactionPatterns:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionPatterns'
+        currentRatioDelta:
+          type: number
+          example: 1
+          format: float
+          readOnly: true
+        quickRatioDelta:
+          type: number
+          example: 1
+          format: float
+          readOnly: true
+        debtToEquityRatioDelta:
+          type: number
+          example: 1
+          format: float
+          readOnly: true
+        netProfitMarginRatioDelta:
+          type: number
+          example: 1
+          format: float
+          readOnly: true
+      required:
+      - benfordLawScore
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
     Error400Dto:
       type: object
       properties:
@@ -150,13 +268,64 @@ components:
       - statusCode
       - message
       - error
-    Error403ResponseDto:
+    FinancialFraudRiskResponseDto:
+      type: object
+      properties:
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        reports:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/FinancialFraudRiskReport'
+      required:
+      - count
+      - reports
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    Error400ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error403Dto'
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
         payload:
           type: object
           readOnly: true
@@ -233,6 +402,41 @@ components:
       required:
       - meta
       - data
+    TransactionPatterns:
+      type: object
+      properties:
+        repetitionPattern:
+          type: string
+          example: Accounts Payables 113.71
+          readOnly: true
+        count:
+          type: number
+          example: 3
+          readOnly: true
+      required:
+      - repetitionPattern
+      - count
+    TransactionsSectionStats:
+      type: object
+      properties:
+        section:
+          type: string
+          example: Expenses
+          readOnly: true
+        count:
+          type: number
+          example: 4
+          readOnly: true
+          format: integer
+        sdev:
+          type: number
+          example: 39.82
+          readOnly: true
+          format: float
+      required:
+      - section
+      - count
+      - sdev
     OutlierTransactions:
       type: object
       properties:
@@ -242,77 +446,19 @@ components:
           readOnly: true
       required:
       - id
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
-    Error401ResponseDto:
+    Error500ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    Error400ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400Dto'
+          - $ref: '#/components/schemas/Error500Dto'
         payload:
           type: object
           readOnly: true
       required:
       - error
       - payload
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
     TransactionKeywords:
       type: object
       properties:
@@ -350,152 +496,6 @@ components:
       required:
       - type
       - count
-    Error500ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    TransactionsSectionStats:
-      type: object
-      properties:
-        section:
-          type: string
-          example: Expenses
-          readOnly: true
-        count:
-          type: number
-          example: 4
-          readOnly: true
-          format: integer
-        sdev:
-          type: number
-          example: 39.82
-          readOnly: true
-          format: float
-      required:
-      - section
-      - count
-      - sdev
-    FinancialFraudRiskData:
-      type: object
-      properties:
-        benfordLawScore:
-          type: number
-          example: 20.92
-          format: float
-          readOnly: true
-        outlierScore:
-          type: number
-          example: 0.659176337
-          format: float
-          readOnly: true
-        outlierRatio:
-          type: number
-          example: 0.093829111
-          format: float
-          readOnly: true
-        outlierTransactions:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/OutlierTransactions'
-        transactionKeywords:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/TransactionKeywords'
-        transactionsSectionStats:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/TransactionsSectionStats'
-        transactionPatterns:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/TransactionPatterns'
-        currentRatioDelta:
-          type: number
-          example: 1
-          format: float
-          readOnly: true
-        quickRatioDelta:
-          type: number
-          example: 1
-          format: float
-          readOnly: true
-        debtToEquityRatioDelta:
-          type: number
-          example: 1
-          format: float
-          readOnly: true
-        netProfitMarginRatioDelta:
-          type: number
-          example: 1
-          format: float
-          readOnly: true
-      required:
-      - benfordLawScore
-    TransactionPatterns:
-      type: object
-      properties:
-        repetitionPattern:
-          type: string
-          example: Accounts Payables 113.71
-          readOnly: true
-        count:
-          type: number
-          example: 3
-          readOnly: true
-      required:
-      - repetitionPattern
-      - count
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
-    FinancialFraudRiskResponseDto:
-      type: object
-      properties:
-        count:
-          type: number
-          readOnly: true
-          example: 1
-          format: integer
-        reports:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/FinancialFraudRiskReport'
-      required:
-      - count
-      - reports
   securitySchemes:
     bearer:
       scheme: bearer

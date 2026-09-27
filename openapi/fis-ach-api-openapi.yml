@@ -64,6 +64,99 @@ paths:
                 $ref: '#/components/schemas/AchBatch'
 components:
   schemas:
+    AccountReference:
+      type: object
+      required:
+      - accountNumber
+      - routingNumber
+      properties:
+        accountNumber:
+          type: string
+          description: Bank account number
+        routingNumber:
+          type: string
+          pattern: ^\d{9}$
+          description: ABA routing transit number (9 digits)
+        accountType:
+          type: string
+          enum:
+          - CHECKING
+          - SAVINGS
+          - LOAN
+        accountHolderName:
+          type: string
+        bankName:
+          type: string
+        swiftCode:
+          type: string
+          description: SWIFT/BIC code for international wires
+    AchBatch:
+      type: object
+      properties:
+        batchId:
+          type: string
+        status:
+          type: string
+          enum:
+          - RECEIVED
+          - VALIDATED
+          - SUBMITTED
+          - SETTLED
+          - REJECTED
+        transactionCount:
+          type: integer
+        totalDebits:
+          type: number
+        totalCredits:
+          type: number
+        createdAt:
+          type: string
+          format: date-time
+    AchTransferRequest:
+      type: object
+      required:
+      - amount
+      - entryClassCode
+      - transactionType
+      - debtorAccount
+      - creditorAccount
+      properties:
+        amount:
+          type: number
+          format: double
+          minimum: 0.01
+        entryClassCode:
+          type: string
+          enum:
+          - PPD
+          - CCD
+          - CTX
+          - WEB
+          - TEL
+          - ARC
+          - BOC
+          - POP
+          - RCK
+          description: NACHA Standard Entry Class code
+        transactionType:
+          type: string
+          enum:
+          - CREDIT
+          - DEBIT
+        debtorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        creditorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        description:
+          type: string
+          maxLength: 10
+          description: Company entry description (appears on bank statement)
+        effectiveDate:
+          type: string
+          format: date
+        sameDayAch:
+          type: boolean
+          default: false
     AchBatchRequest:
       type: object
       required:
@@ -117,99 +210,6 @@ components:
           createdAt:
             type: string
             format: date-time
-    AchBatch:
-      type: object
-      properties:
-        batchId:
-          type: string
-        status:
-          type: string
-          enum:
-          - RECEIVED
-          - VALIDATED
-          - SUBMITTED
-          - SETTLED
-          - REJECTED
-        transactionCount:
-          type: integer
-        totalDebits:
-          type: number
-        totalCredits:
-          type: number
-        createdAt:
-          type: string
-          format: date-time
-    AccountReference:
-      type: object
-      required:
-      - accountNumber
-      - routingNumber
-      properties:
-        accountNumber:
-          type: string
-          description: Bank account number
-        routingNumber:
-          type: string
-          pattern: ^\d{9}$
-          description: ABA routing transit number (9 digits)
-        accountType:
-          type: string
-          enum:
-          - CHECKING
-          - SAVINGS
-          - LOAN
-        accountHolderName:
-          type: string
-        bankName:
-          type: string
-        swiftCode:
-          type: string
-          description: SWIFT/BIC code for international wires
-    AchTransferRequest:
-      type: object
-      required:
-      - amount
-      - entryClassCode
-      - transactionType
-      - debtorAccount
-      - creditorAccount
-      properties:
-        amount:
-          type: number
-          format: double
-          minimum: 0.01
-        entryClassCode:
-          type: string
-          enum:
-          - PPD
-          - CCD
-          - CTX
-          - WEB
-          - TEL
-          - ARC
-          - BOC
-          - POP
-          - RCK
-          description: NACHA Standard Entry Class code
-        transactionType:
-          type: string
-          enum:
-          - CREDIT
-          - DEBIT
-        debtorAccount:
-          $ref: '#/components/schemas/AccountReference'
-        creditorAccount:
-          $ref: '#/components/schemas/AccountReference'
-        description:
-          type: string
-          maxLength: 10
-          description: Company entry description (appears on bank statement)
-        effectiveDate:
-          type: string
-          format: date
-        sameDayAch:
-          type: boolean
-          default: false
   securitySchemes:
     OAuth2ClientCredentials:
       type: oauth2

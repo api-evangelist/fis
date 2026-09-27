@@ -133,28 +133,27 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    Error400Dto:
+    Error500ResponseDto:
       type: object
       properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - businessName cannot be null
-          type: array
-          items:
-            type: string
         error:
-          type: string
           readOnly: true
-          example: Bad Request
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
       required:
-      - statusCode
-      - message
       - error
+      - payload
+    QuantityPerLocation:
+      type: object
+      properties:
+        quantity:
+          type: number
+          format: float
+        locationRef:
+          $ref: '#/components/schemas/ProductLocationRef'
     Error403ResponseDto:
       type: object
       properties:
@@ -191,6 +190,139 @@ components:
       - statusCode
       - message
       - error
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    ProductLocationRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '12323'
+        name:
+          type: string
+    GetProductData:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '632910392'
+        type:
+          type: string
+          example: Speakers
+        name:
+          type: string
+          example: Amazon Echo
+        description:
+          type: string
+          example: Sample product description
+        createdDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        sourceModifiedDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        status:
+          type: string
+          enum:
+          - active
+          - archived
+          - draft
+          example: active
+        isGiftCard:
+          type: boolean
+          example: true
+        productVariants:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductVariants'
+      required:
+      - id
+      - name
+      - createdDate
+      - sourceModifiedDate
+      - status
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    ProductVariants:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '808950810'
+        name:
+          type: string
+          example: Pink
+        isTaxEnabled:
+          type: boolean
+          example: true
+        sku:
+          type: string
+          example: IPOD2008PINK
+        barcode:
+          type: string
+          example: 1234_pink
+        weight:
+          $ref: '#/components/schemas/Weight'
+        unitPrice:
+          type: number
+          example: 199
+          format: float
+        inventory:
+          $ref: '#/components/schemas/Inventory'
+        isShippingRequired:
+          type: boolean
+          example: true
+        createdDate:
+          format: date-time
+          type: string
+          example: '2022-03-11T11:29:03-05:00'
+      required:
+      - id
+      - name
+      - unitPrice
+      - createdDate
     BasicStartEndDateReportMetaData:
       type: object
       properties:
@@ -264,27 +396,6 @@ components:
       required:
       - error
       - payload
-    GetProductResponseDto:
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetProductData'
-        count:
-          type: number
-          readOnly: true
-          example: 1
-          format: integer
-        meta:
-          $ref: '#/components/schemas/BasicStartEndDateReportMetaData'
-      required:
-      - pagination
-      - data
-      - count
-      - meta
     Error401ResponseDto:
       type: object
       properties:
@@ -299,180 +410,6 @@ components:
       required:
       - error
       - payload
-    QuantityPerLocation:
-      type: object
-      properties:
-        quantity:
-          type: number
-          format: float
-        locationRef:
-          $ref: '#/components/schemas/ProductLocationRef'
-    ProductVariants:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '808950810'
-        name:
-          type: string
-          example: Pink
-        isTaxEnabled:
-          type: boolean
-          example: true
-        sku:
-          type: string
-          example: IPOD2008PINK
-        barcode:
-          type: string
-          example: 1234_pink
-        weight:
-          $ref: '#/components/schemas/Weight'
-        unitPrice:
-          type: number
-          example: 199
-          format: float
-        inventory:
-          $ref: '#/components/schemas/Inventory'
-        isShippingRequired:
-          type: boolean
-          example: true
-        createdDate:
-          format: date-time
-          type: string
-          example: '2022-03-11T11:29:03-05:00'
-      required:
-      - id
-      - name
-      - unitPrice
-      - createdDate
-    PaginationMetaData:
-      type: object
-      properties:
-        offset:
-          type: number
-          readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
-          readOnly: true
-      required:
-      - offset
-      - limit
-      - count
-    Inventory:
-      type: object
-      properties:
-        totalQuantity:
-          type: number
-          example: 10
-          format: float
-        quantityPerLocation:
-          type: array
-          items:
-            $ref: '#/components/schemas/QuantityPerLocation'
-    Error500ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    GetProductData:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '632910392'
-        type:
-          type: string
-          example: Speakers
-        name:
-          type: string
-          example: Amazon Echo
-        description:
-          type: string
-          example: Sample product description
-        createdDate:
-          format: date-time
-          type: string
-          example: '2021-03-09T10:18:29.985Z'
-        sourceModifiedDate:
-          format: date-time
-          type: string
-          example: '2021-03-09T10:18:29.985Z'
-        status:
-          type: string
-          enum:
-          - active
-          - archived
-          - draft
-          example: active
-        isGiftCard:
-          type: boolean
-          example: true
-        productVariants:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductVariants'
-      required:
-      - id
-      - name
-      - createdDate
-      - sourceModifiedDate
-      - status
-    ProductLocationRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '12323'
-        name:
-          type: string
-    Weight:
-      type: object
-      properties:
-        value:
-          type: number
-          example: 1.25
-          format: float
-        unitOfMeasure:
-          type: string
-          enum:
-          - g
-          - kg
-          - lb
-          - oz
-          example: lb
     Error403Dto:
       type: object
       properties:
@@ -495,6 +432,69 @@ components:
       - statusCode
       - message
       - error
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    Weight:
+      type: object
+      properties:
+        value:
+          type: number
+          example: 1.25
+          format: float
+        unitOfMeasure:
+          type: string
+          enum:
+          - g
+          - kg
+          - lb
+          - oz
+          example: lb
+    Inventory:
+      type: object
+      properties:
+        totalQuantity:
+          type: number
+          example: 10
+          format: float
+        quantityPerLocation:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuantityPerLocation'
+    GetProductResponseDto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetProductData'
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        meta:
+          $ref: '#/components/schemas/BasicStartEndDateReportMetaData'
+      required:
+      - pagination
+      - data
+      - count
+      - meta
   securitySchemes:
     bearer:
       scheme: bearer

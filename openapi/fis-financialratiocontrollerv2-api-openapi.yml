@@ -188,55 +188,6 @@ paths:
       - FinancialRatioControllerV2
 components:
   schemas:
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    FinancialRatiosLiquidityData:
-      type: object
-      properties:
-        quickRatio:
-          type: number
-          example: 0.88811223
-          format: float
-        absoluteLiquidity:
-          type: number
-          example: 530167.93
-          format: float
-        currentRatio:
-          type: number
-          example: 1.10856651
-          format: float
-        grossBurn:
-          type: number
-          example: 382071.92
-          format: float
-        runway:
-          type: number
-          example: 12.84898122
-          format: float
-        cashRatio:
-          type: number
-          example: 0.73314452
-          format: float
-        freeCashflowRatio:
-          type: number
-          example: 0.45151529
-          format: float
-        cashFlowCoverageRatio:
-          type: number
-          example: 0.09030305
-          format: float
     Error401Dto:
       type: object
       properties:
@@ -259,58 +210,110 @@ components:
       - statusCode
       - message
       - error
-    Error401ResponseDto:
+    FinancialRatiosEfficiencyData:
+      type: object
+      properties:
+        grossBurnRate:
+          type: number
+          example: 56223.25
+          format: float
+        inventoryTurnoverRatio:
+          type: number
+          example: 2.78891542
+          format: float
+        assetTurnoverRatio:
+          type: number
+          example: 3.83548112
+          format: float
+        payablesConversionPeriod:
+          type: number
+          example: 83
+          format: float
+        accountsReceivableTurnoverRatio:
+          type: number
+          example: 15.55
+          format: float
+        accountsPayableTurnoverRatio:
+          type: number
+          example: 8.99
+          format: float
+        daysPayableOutstanding:
+          type: number
+          example: 42.26
+          format: float
+        daysSalesOutstanding:
+          type: number
+          example: 34.19
+          format: float
+        averageOutstandingPayablesBalance:
+          type: number
+          example: 100.99
+          format: float
+        averageOutstandingReceivablesBalance:
+          type: number
+          example: 29.01
+          format: float
+        churnRate:
+          type: number
+          example: 1
+          format: float
+    Error400ResponseDtoV2:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error401Dto'
+          - $ref: '#/components/schemas/Error400DtoV2'
         payload:
           type: object
           readOnly: true
-          example: {}
       required:
       - error
       - payload
-    PaginationMetaData:
+    FinancialRatiosReliabilityData:
       type: object
       properties:
-        offset:
+        assetQualityIndex:
           type: number
-          readOnly: true
-        limit:
+          example: 0.608
+          format: float
+        depreciationIndex:
           type: number
-          readOnly: true
-        count:
+          example: 0.801
+          format: float
+        daysSalesReceivablesIndex:
           type: number
-          readOnly: true
-      required:
-      - offset
-      - limit
-      - count
-    Error500Dto:
+          example: 0.814
+          format: float
+    Error400DtoV2:
       type: object
       properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
         statusCode:
           type: number
           readOnly: true
-          example: 500
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
       required:
-      - error
-      - message
       - statusCode
+      - message
+      - error
+    FinancialRatiosMarketData:
+      type: object
+      properties:
+        debtToEnterpriseValue:
+          type: number
+          example: 0.19155987
+          format: float
     FinancialRatiosProfitabilityData:
       type: object
       properties:
@@ -386,6 +389,75 @@ components:
           type: number
           example: 0.389
           format: float
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    FinancialRatiosLiquidityData:
+      type: object
+      properties:
+        quickRatio:
+          type: number
+          example: 0.88811223
+          format: float
+        absoluteLiquidity:
+          type: number
+          example: 530167.93
+          format: float
+        currentRatio:
+          type: number
+          example: 1.10856651
+          format: float
+        grossBurn:
+          type: number
+          example: 382071.92
+          format: float
+        runway:
+          type: number
+          example: 12.84898122
+          format: float
+        cashRatio:
+          type: number
+          example: 0.73314452
+          format: float
+        freeCashflowRatio:
+          type: number
+          example: 0.45151529
+          format: float
+        cashFlowCoverageRatio:
+          type: number
+          example: 0.09030305
+          format: float
+    FinancialRatiosResponseV2Dto:
+      type: object
+      properties:
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+          deprecated: true
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        ratios:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/FinancialRatiosReportV2'
+      required:
+      - count
+      - pagination
+      - ratios
     FinancialRatiosLeverageData:
       type: object
       properties:
@@ -425,13 +497,22 @@ components:
           type: number
           example: 0.067
           format: float
-    FinancialRatiosCreditData:
+    PaginationMetaData:
       type: object
       properties:
-        averageCollectionPeriod:
+        offset:
           type: number
-          example: 36.5
-          format: float
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
     FinancialRatiosData:
       type: object
       properties:
@@ -449,82 +530,20 @@ components:
           $ref: '#/components/schemas/FinancialRatiosProfitabilityData'
         reliability:
           $ref: '#/components/schemas/FinancialRatiosReliabilityData'
-    FinancialRatiosMarketData:
+    Error403ResponseDto:
       type: object
       properties:
-        debtToEnterpriseValue:
-          type: number
-          example: 0.19155987
-          format: float
-    Error400DtoV2:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - connectionUuid should not be empty
-          type: array
-          items:
-            type: string
         error:
-          type: string
           readOnly: true
-          example: Bad Request
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
       required:
-      - statusCode
-      - message
       - error
-    FinancialRatiosEfficiencyData:
-      type: object
-      properties:
-        grossBurnRate:
-          type: number
-          example: 56223.25
-          format: float
-        inventoryTurnoverRatio:
-          type: number
-          example: 2.78891542
-          format: float
-        assetTurnoverRatio:
-          type: number
-          example: 3.83548112
-          format: float
-        payablesConversionPeriod:
-          type: number
-          example: 83
-          format: float
-        accountsReceivableTurnoverRatio:
-          type: number
-          example: 15.55
-          format: float
-        accountsPayableTurnoverRatio:
-          type: number
-          example: 8.99
-          format: float
-        daysPayableOutstanding:
-          type: number
-          example: 42.26
-          format: float
-        daysSalesOutstanding:
-          type: number
-          example: 34.19
-          format: float
-        averageOutstandingPayablesBalance:
-          type: number
-          example: 100.99
-          format: float
-        averageOutstandingReceivablesBalance:
-          type: number
-          example: 29.01
-          format: float
-        churnRate:
-          type: number
-          example: 1
-          format: float
+      - payload
     FinancialRatiosMetaDataV2:
       type: object
       properties:
@@ -590,6 +609,13 @@ components:
       - reportFrequency
       - createdAt
       - updatedAt
+    FinancialRatiosCreditData:
+      type: object
+      properties:
+        averageCollectionPeriod:
+          type: number
+          example: 36.5
+          format: float
     FinancialRatiosReportV2:
       type: object
       properties:
@@ -600,19 +626,28 @@ components:
       required:
       - meta
       - data
-    Error400ResponseDtoV2:
+    Error500Dto:
       type: object
       properties:
         error:
+          type: string
           readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
-        payload:
-          type: object
+          example: Internal Server Error
+        message:
           readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
       required:
       - error
-      - payload
+      - message
+      - statusCode
     Error403Dto:
       type: object
       properties:
@@ -635,41 +670,6 @@ components:
       - statusCode
       - message
       - error
-    FinancialRatiosReliabilityData:
-      type: object
-      properties:
-        assetQualityIndex:
-          type: number
-          example: 0.608
-          format: float
-        depreciationIndex:
-          type: number
-          example: 0.801
-          format: float
-        daysSalesReceivablesIndex:
-          type: number
-          example: 0.814
-          format: float
-    FinancialRatiosResponseV2Dto:
-      type: object
-      properties:
-        count:
-          type: number
-          readOnly: true
-          example: 1
-          format: integer
-          deprecated: true
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        ratios:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/FinancialRatiosReportV2'
-      required:
-      - count
-      - pagination
-      - ratios
     Error500ResponseDto:
       type: object
       properties:

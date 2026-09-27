@@ -152,22 +152,72 @@ components:
       - statusCode
       - message
       - error
-    FinancialForecastResponseV2Dto:
+    Error500Dto:
       type: object
       properties:
-        count:
-          type: number
+        error:
+          type: string
           readOnly: true
-          example: 1
-          format: integer
-        reports:
+          example: Internal Server Error
+        message:
           readOnly: true
+          example:
+          - INTERNAL_ERROR
           type: array
           items:
-            $ref: '#/components/schemas/FinancialForecastReportV2'
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
       required:
-      - count
-      - reports
+      - error
+      - message
+      - statusCode
+    Error400DtoV2:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
     Error401ResponseDto:
       type: object
       properties:
@@ -217,63 +267,19 @@ components:
       - subGroup
       - endDate
       - value
-    Error400DtoV2:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - connectionUuid should not be empty
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
-    Error500ResponseDto:
+    Error400ResponseDtoV2:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error500Dto'
+          - $ref: '#/components/schemas/Error400DtoV2'
         payload:
           type: object
           readOnly: true
       required:
       - error
       - payload
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
     FinancialForecastMetaDataV2:
       type: object
       properties:
@@ -348,13 +354,29 @@ components:
       - endDate
       - createdAt
       - updatedAt
-    Error400ResponseDtoV2:
+    FinancialForecastResponseV2Dto:
+      type: object
+      properties:
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        reports:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/FinancialForecastReportV2'
+      required:
+      - count
+      - reports
+    Error500ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
+          - $ref: '#/components/schemas/Error500Dto'
         payload:
           type: object
           readOnly: true
@@ -373,28 +395,6 @@ components:
       required:
       - meta
       - data
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
   securitySchemes:
     bearer:
       scheme: bearer

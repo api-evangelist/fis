@@ -160,42 +160,95 @@ components:
       - statusCode
       - message
       - error
-    Error401ResponseDto:
+    Error500Dto:
       type: object
       properties:
         error:
+          type: string
           readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
+          example: Internal Server Error
+        message:
           readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    GetTransactionResponseV2Dto:
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        data:
+          example:
+          - INTERNAL_ERROR
           type: array
           items:
-            $ref: '#/components/schemas/GetTransactionData'
-        count:
+            type: string
+        statusCode:
           type: number
           readOnly: true
-          example: 1
-          format: integer
-          deprecated: true
-        meta:
-          $ref: '#/components/schemas/BasicStartEndDateReportMetaDataV2'
+          example: 500
       required:
-      - pagination
-      - data
-      - count
-      - meta
+      - error
+      - message
+      - statusCode
+    TransactionSourceRefs:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1006917261'
+        type:
+          type: string
+          example: payment
+          enum:
+          - failedPayout
+          - payment
+          - paymentFee
+          - paymentFeeRefund
+          - payout
+          - refund
+          - transfer
+          - dispute
+          - order
+          - other
+          - unknown
+      required:
+      - id
+    Error400DtoV2:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
     GetTransactionData:
       type: object
       properties:
@@ -271,6 +324,20 @@ components:
       - transactionType
       - createdDate
       - status
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
     PaginationMetaData:
       type: object
       properties:
@@ -287,51 +354,55 @@ components:
       - offset
       - limit
       - count
-    Error400DtoV2:
+    Error400ResponseDtoV2:
       type: object
       properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - connectionUuid should not be empty
-          type: array
-          items:
-            type: string
         error:
-          type: string
           readOnly: true
-          example: Bad Request
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
       required:
-      - statusCode
-      - message
       - error
-    TransactionSourceRefs:
+      - payload
+    CommerceCurrencyRef:
       type: object
       properties:
         id:
           type: string
-          example: '1006917261'
-        type:
+        symbol:
           type: string
-          example: payment
-          enum:
-          - failedPayout
-          - payment
-          - paymentFee
-          - paymentFeeRefund
-          - payout
-          - refund
-          - transfer
-          - dispute
-          - order
-          - other
-          - unknown
+          example: CAD
+        name:
+          type: string
+          example: Canadian Dollar
       required:
-      - id
+      - symbol
+      - name
+    GetTransactionResponseV2Dto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetTransactionData'
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+          deprecated: true
+        meta:
+          $ref: '#/components/schemas/BasicStartEndDateReportMetaDataV2'
+      required:
+      - pagination
+      - data
+      - count
+      - meta
     Error500ResponseDto:
       type: object
       properties:
@@ -345,28 +416,6 @@ components:
       required:
       - error
       - payload
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
     BasicStartEndDateReportMetaDataV2:
       type: object
       properties:
@@ -432,55 +481,6 @@ components:
       - updatedAt
       - startDate
       - endDate
-    Error400ResponseDtoV2:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    CommerceCurrencyRef:
-      type: object
-      properties:
-        id:
-          type: string
-        symbol:
-          type: string
-          example: CAD
-        name:
-          type: string
-          example: Canadian Dollar
-      required:
-      - symbol
-      - name
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
   securitySchemes:
     bearer:
       scheme: bearer

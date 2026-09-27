@@ -885,20 +885,126 @@ paths:
       - BillControllerV2
 components:
   schemas:
-    Error403ResponseDto:
+    LinkRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 3n2
+        type:
+          type: string
+          example: bill
+          enum:
+          - bill
+          - other
+          - creditNote
+          - billPayment
+          - paymentOnAccount
+          - refund
+      required:
+      - id
+    Error500ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error403Dto'
+          - $ref: '#/components/schemas/Error500Dto'
         payload:
           type: object
           readOnly: true
-          example: {}
       required:
       - error
       - payload
+    UpdateBillLineItemV2:
+      type: object
+      properties:
+        description:
+          type: string
+          maxLength: 4000
+          example: Services rendered.
+        unitAmount:
+          type: number
+          format: float
+          example: 50.5
+        quantity:
+          type: number
+          format: float
+          example: 202
+        billableStatus:
+          type: string
+          example: notBillable
+          enum:
+          - billable
+          - notBillable
+          - hasBeenBilled
+        customerRef:
+          $ref: '#/components/schemas/CustomerObjectRefDto'
+        id:
+          type: string
+          example: 8a3fdcc9-83eb-4fdd-83e0-52ec1b40b072
+        accountRef:
+          $ref: '#/components/schemas/AccountRefDto'
+        trackingCategoryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillTrackingCategoryRefDto'
+        discountPercentage:
+          type: number
+          format: float
+          example: 100.5
+        inventoryRef:
+          $ref: '#/components/schemas/InventoryRefDto'
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateRefDto'
+        taxAmount:
+          type: number
+          format: float
+          example: 20.5
+      required:
+      - unitAmount
+      - quantity
+    PaymentMethodRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Harmonized sales tax
+        type:
+          type: string
+          example: creditCard
+          enum:
+          - unknown
+          - cash
+          - check
+          - creditCard
+          - debitCard
+          - bankTransfer
+          - giftCard
+          - other
+    PurchaseOrderRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '21'
+      required:
+      - id
+    UpdateBillPaymentV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        data:
+          $ref: '#/components/schemas/UpdateBillPaymentV2'
+      required:
+      - connectionUuid
+      - data
     Error401Dto:
       type: object
       properties:
@@ -921,6 +1027,303 @@ components:
       - statusCode
       - message
       - error
+    UpdateBillPaymentV2:
+      type: object
+      properties:
+        currencyRate:
+          type: number
+          format: float
+          example: 1.13
+        memo:
+          type: string
+          maxLength: 4000
+          example: Bill payment memo.
+        date:
+          type: string
+          format: date
+          example: '2021-03-29'
+        totalAmount:
+          type: number
+          format: float
+          example: 200.5
+        vendorRef:
+          $ref: '#/components/schemas/VendorRefDto'
+        accountRef:
+          $ref: '#/components/schemas/AccountRefDto'
+        currency:
+          type: string
+          example: CAD
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillPaymentLineV2'
+        subsidiaryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubsidiaryRefDto'
+        paymentMethod:
+          type: string
+          deprecated: true
+          enum:
+          - unknown
+          - cash
+          - check
+          - creditCard
+          - debitCard
+          - bankTransfer
+          - giftCard
+          - other
+          example: creditCard
+        paymentMethodRef:
+          $ref: '#/components/schemas/PaymentMethodRefDto'
+        passThrough:
+          type: object
+          additionalProperties: true
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+    PushBillResponseV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushBillV2'
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - data
+    InventoryRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Digital Services
+      required:
+      - id
+    CreditNoteTrackingCategoryRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4040'
+        type:
+          type: string
+          example: class
+          enum:
+          - class
+          - department
+          - location
+          - unknown
+      required:
+      - id
+    UpdateBillPaymentRequestV2:
+      type: object
+      properties:
+        state:
+          type: string
+          example: paid
+          enum:
+          - paid
+    GetBillCreditNoteResponseV2Dto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        meta:
+          readOnly: false
+          allOf:
+          - $ref: '#/components/schemas/BasicStartEndDateReportMetaDataV2'
+        count:
+          type: number
+          example: 1
+          format: integer
+          readOnly: true
+          deprecated: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetBillCreditNoteDataV2'
+      required:
+      - pagination
+      - meta
+      - count
+      - data
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    PaymentRequestPaymentMethodRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Harmonized sales tax
+        type:
+          type: string
+          example: creditCard
+          enum:
+          - unknown
+          - cash
+          - printedCheck
+          - manualCheck
+          - creditCard
+          - debitCard
+          - bankTransfer
+          - giftCard
+          - automatedClearingHouse
+          - other
+    PushBillCreditNoteV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        data:
+          $ref: '#/components/schemas/PushBillCreditNoteV2'
+      required:
+      - connectionUuid
+      - data
+    PostBillPaymentRequestV2:
+      type: object
+      properties:
+        vendorRef:
+          $ref: '#/components/schemas/VendorRefDto'
+        paymentNumber:
+          type: string
+          example: '456'
+        paymentCode:
+          type: string
+          example: '1234'
+        paymentDate:
+          type: string
+          format: date
+          example: '2021-03-29'
+        bankAccountRef:
+          $ref: '#/components/schemas/BankAccountRefDto'
+        currency:
+          type: string
+          example: USD
+        totalAmount:
+          type: number
+          format: decimal
+          example: '43.5'
+        paymentMethodRef:
+          $ref: '#/components/schemas/PaymentRequestPaymentMethodRefDto'
+        memo:
+          type: string
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillPaymentRequestLinks'
+      required:
+      - bankAccountRef
+      - links
+    CustomerObjectRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '124'
+      required:
+      - id
+    SubsidiaryRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Railz Financial
+    BillPaymentLineV2Item:
+      type: object
+      properties:
+        amount:
+          type: number
+          example: 200.5
+          format: float
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillPLinks'
+        allocatedOnDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:57:54.294Z'
+    TaxRateRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '12'
+      required:
+      - id
     BillPLinks:
       type: object
       properties:
@@ -939,21 +1342,134 @@ components:
       required:
       - type
       - id
-    BillPaymentLineV2:
+    PushBillPaymentResponseV2Dto:
       type: object
       properties:
-        amount:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushBillPaymentV2'
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - data
+    GetBillPaymentV2Data:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        vendorRef:
+          $ref: '#/components/schemas/VendorRef'
+        accountRef:
+          $ref: '#/components/schemas/AccountRef'
+        totalAmount:
           type: number
+          example: 200.5
           format: float
-          example: '342.99'
-        links:
+        currency:
+          type: string
+          example: USD
+        currencyRate:
+          type: number
+          example: 1.13
+          format: float
+        date:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:57:54.294Z'
+        memo:
+          type: string
+          example: Bill payment memo.
+        paymentMethod:
+          type: string
+          enum:
+          - unknown
+          - cash
+          - check
+          - creditCard
+          - debitCard
+          - bankTransfer
+          - giftCard
+          - other
+          example: creditCard
+          deprecated: true
+        paymentMethodRef:
+          $ref: '#/components/schemas/PaymentMethodRefResponse'
+        lines:
           type: array
           items:
-            $ref: '#/components/schemas/LinkRefDto'
-        allocatedOnDate:
-          format: date
+            $ref: '#/components/schemas/BillPaymentLineV2Item'
+        subsidiaryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubsidiaryRef'
+        sourceModifiedDate:
+          format: date-time
           type: string
-          example: '2021-03-29'
+          example: '2021-03-09T10:18:29.985Z'
+      required:
+      - id
+      - totalAmount
+      - date
+    CustomerObjectRefResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '124'
+        name:
+          type: string
+          example: Railz
+      required:
+      - id
     GetBillPaymentRequestDataV2:
       type: object
       properties:
@@ -1029,32 +1545,7 @@ components:
       - vendorRef
       - paymentAmount
       - state
-    InventoryRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        name:
-          type: string
-          example: Digital Services
-      required:
-      - id
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    PushBillV2Dto:
+    PushBillPaymentV2Dto:
       type: object
       properties:
         connectionUuid:
@@ -1062,341 +1553,10 @@ components:
           description: Unique connection identifier.
           example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
         data:
-          $ref: '#/components/schemas/PushBillV2'
+          $ref: '#/components/schemas/PushBillPaymentV2'
       required:
       - connectionUuid
       - data
-    TaxRateRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        name:
-          type: string
-          example: HST
-        effectiveTaxRate:
-          type: number
-          example: 13
-          format: float
-      required:
-      - id
-    PushBillLineItemV2:
-      type: object
-      properties:
-        id:
-          type: string
-          example: 8a3fdcc9-83eb-4fdd-83e0-52ec1b40b072
-        accountRef:
-          $ref: '#/components/schemas/AccountRefDto'
-        trackingCategoryRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/BillTrackingCategoryRefDto'
-        taxRateRef:
-          $ref: '#/components/schemas/TaxRateRefDto'
-        description:
-          type: string
-          maxLength: 4000
-          example: Services rendered.
-        unitAmount:
-          type: number
-          format: float
-          example: 100.5
-        quantity:
-          type: number
-          format: float
-          example: 3
-        customerRef:
-          $ref: '#/components/schemas/CustomerObjectRefDto'
-        billableStatus:
-          type: string
-          example: notBillable
-          enum:
-          - billable
-          - notBillable
-          - hasBeenBilled
-        discountPercentage:
-          type: number
-          format: float
-          example: 100.5
-        inventoryRef:
-          $ref: '#/components/schemas/InventoryRefDto'
-        taxAmount:
-          type: number
-          format: float
-          example: 100.5
-      required:
-      - unitAmount
-      - quantity
-    GetBillCreditNoteResponseV2Dto:
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        meta:
-          readOnly: false
-          allOf:
-          - $ref: '#/components/schemas/BasicStartEndDateReportMetaDataV2'
-        count:
-          type: number
-          example: 1
-          format: integer
-          readOnly: true
-          deprecated: true
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetBillCreditNoteDataV2'
-      required:
-      - pagination
-      - meta
-      - count
-      - data
-    PaginationMetaData:
-      type: object
-      properties:
-        offset:
-          type: number
-          readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
-          readOnly: true
-      required:
-      - offset
-      - limit
-      - count
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    BillPaymentRequestMetaData:
-      type: object
-      properties:
-        reportId:
-          readOnly: true
-          example:
-          - 5fad8a342a88364234392fb5
-          - 5fad8a342a88364234392fb6
-          type: array
-          items:
-            type: string
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        startDate:
-          type: string
-          example: '2020-11-25T01:02:03Z'
-          format: date-time
-        endDate:
-          type: string
-          example: '2020-11-30T01:02:03Z'
-          format: date-time
-        createdAt:
-          type: string
-          example: '2020-11-25T01:02:03Z'
-          format: date-time
-        updatedAt:
-          type: string
-          example: '2020-11-30T01:02:03Z'
-          format: date-time
-          readOnly: false
-      required:
-      - reportId
-      - serviceName
-      - businessName
-      - createdAt
-      - updatedAt
-    PushBillCreditNoteV2Dto:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          description: Unique connection identifier.
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        data:
-          $ref: '#/components/schemas/PushBillCreditNoteV2'
-      required:
-      - connectionUuid
-      - data
-    PushBillV2:
-      type: object
-      properties:
-        vendorInvoiceNumber:
-          type: string
-          maxLength: 21
-          example: '254'
-        postedDate:
-          type: string
-          format: date
-          example: '2021-03-29'
-        dueDate:
-          type: string
-          format: date
-          example: '2021-03-29'
-        currencyRate:
-          type: number
-          format: float
-          example: 1.13
-        memo:
-          type: string
-          maxLength: 4000
-          example: Example bill memo.
-        vendorRef:
-          $ref: '#/components/schemas/VendorRefDto'
-        currency:
-          type: string
-          example: CAD
-        subsidiaryRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubsidiaryRefDto'
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/PushBillLineItemV2'
-        purchaseOrderRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/PurchaseOrderRefDto'
-        passThrough:
-          type: object
-          additionalProperties: true
-          example:
-            CustomField:
-            - DefinitionId: '1'
-              StringValue: my custom value
-              Name: Field One
-        billType:
-          type: string
-          enum:
-          - item
-          - service
-          - professional
-          - miscellaneous
-          example: item
-      required:
-      - vendorRef
-      - lines
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
-    UpdateBillsV2Dto:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          description: Unique connection identifier.
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        data:
-          $ref: '#/components/schemas/UpdateBillsV2'
-      required:
-      - connectionUuid
-      - data
-    BillCreditNoteLineItemV2:
-      type: object
-      properties:
-        description:
-          type: string
-          maxLength: 4000
-          example: Services rendered.
-        unitAmount:
-          type: number
-          format: float
-          example: 100.5
-        quantity:
-          type: number
-          format: float
-          example: 3
-        billableStatus:
-          type: string
-          example: notBillable
-          enum:
-          - billable
-          - notBillable
-          - hasBeenBilled
-        id:
-          type: string
-        discountPercentage:
-          type: number
-          format: float
-          example: 301.5
-        taxRateRef:
-          $ref: '#/components/schemas/TaxRateRefDto'
-        accountRef:
-          $ref: '#/components/schemas/AccountRefDto'
-        trackingCategoryRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreditNoteTrackingCategoryRefDto'
-        inventoryRef:
-          $ref: '#/components/schemas/InventoryRefDto'
-        taxAmount:
-          type: number
-          format: float
-          example: 301.5
-      required:
-      - unitAmount
-      - quantity
     InvoiceBillLineItemsV2:
       type: object
       properties:
@@ -1439,93 +1599,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TrackingCategoryRefV2'
-    CustomerObjectRefResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '124'
-        name:
-          type: string
-          example: Railz
-      required:
-      - id
-    Payments:
-      type: object
-      properties:
-        amount:
-          type: number
-          example: 50.5
-          format: float
-        paymentId:
-          type: string
-          example: '50'
-        date:
-          format: date-time
-          type: string
-          example: '2021-03-09T10:18:29.985Z'
-    PostBillPaymentRequestV2Dto:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          description: Unique connection identifier.
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        data:
-          $ref: '#/components/schemas/PostBillPaymentRequestV2'
-      required:
-      - connectionUuid
-      - data
-    AccountRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '145'
-        name:
-          type: string
-          example: Example account
-      required:
-      - id
-    PaymentMethodRefDto:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        name:
-          type: string
-          example: Harmonized sales tax
-        type:
-          type: string
-          example: creditCard
-          enum:
-          - unknown
-          - cash
-          - check
-          - creditCard
-          - debitCard
-          - bankTransfer
-          - giftCard
-          - other
-    LinkRefDto:
-      type: object
-      properties:
-        id:
-          type: string
-          example: 3n2
-        type:
-          type: string
-          example: bill
-          enum:
-          - bill
-          - other
-          - creditNote
-          - billPayment
-          - paymentOnAccount
-          - refund
-      required:
-      - id
     GetBillV2Data:
       type: object
       properties:
@@ -1616,51 +1689,42 @@ components:
       - lines
       - status
       - totalAmount
-    BillLineItemsV2:
+    BankAccountRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '200'
+      required:
+      - id
+    PushBillLineItemV2:
       type: object
       properties:
         id:
           type: string
           example: 8a3fdcc9-83eb-4fdd-83e0-52ec1b40b072
         accountRef:
-          $ref: '#/components/schemas/AccountRef'
-        taxRateRef:
-          $ref: '#/components/schemas/TaxRateRef'
-        inventoryRef:
-          $ref: '#/components/schemas/InventoryRef'
+          $ref: '#/components/schemas/AccountRefDto'
         trackingCategoryRefs:
           type: array
           items:
-            $ref: '#/components/schemas/TrackingCategoryResponse'
+            $ref: '#/components/schemas/BillTrackingCategoryRefDto'
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateRefDto'
         description:
           type: string
+          maxLength: 4000
           example: Services rendered.
         unitAmount:
           type: number
-          example: 100.5
           format: float
+          example: 100.5
         quantity:
           type: number
+          format: float
           example: 3
-          format: float
-        discountAmount:
-          type: number
-          example: 0
-          format: float
-        taxAmount:
-          type: number
-          example: 20.5
-          format: float
-        amount:
-          type: number
-          example: 322
-          format: float
-        discountPercentage:
-          type: number
-          example: 10.5
-          format: float
         customerRef:
-          $ref: '#/components/schemas/CustomerObjectRefResponse'
+          $ref: '#/components/schemas/CustomerObjectRefDto'
         billableStatus:
           type: string
           example: notBillable
@@ -1668,79 +1732,19 @@ components:
           - billable
           - notBillable
           - hasBeenBilled
+        discountPercentage:
+          type: number
+          format: float
+          example: 100.5
+        inventoryRef:
+          $ref: '#/components/schemas/InventoryRefDto'
+        taxAmount:
+          type: number
+          format: float
+          example: 100.5
       required:
-      - id
-      - amount
-    UpdateBillPaymentRequestV2Dto:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          description: Unique connection identifier.
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        data:
-          $ref: '#/components/schemas/UpdateBillPaymentRequestV2'
-      required:
-      - connectionUuid
-      - data
-    PushBillCreditNoteResponseV2Dto:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          readOnly: true
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        pushCommunicationId:
-          type: string
-          readOnly: true
-          example: 60473b57f0cdd1683ca71f60
-        requestedOn:
-          type: string
-          readOnly: true
-          example: '2021-03-09T08:15:22.035Z'
-          format: date-time
-        status:
-          type: string
-          readOnly: true
-          example: pending
-          enum:
-          - success
-          - failed
-          - pending
-        data:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/PushBillCreditNoteV2'
-      required:
-      - connectionUuid
-      - businessName
-      - serviceName
-      - pushCommunicationId
-      - requestedOn
-      - status
-      - data
+      - unitAmount
+      - quantity
     Error400DtoV2:
       type: object
       properties:
@@ -1763,6 +1767,32 @@ components:
       - statusCode
       - message
       - error
+    UpdateBillPaymentRequestV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        data:
+          $ref: '#/components/schemas/UpdateBillPaymentRequestV2'
+      required:
+      - connectionUuid
+      - data
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
     BasicStartEndDateReportMetaDataV2:
       type: object
       properties:
@@ -1828,6 +1858,131 @@ components:
       - updatedAt
       - startDate
       - endDate
+    PostBillPaymentRequestResponseV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PostBillPaymentRequestV2'
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - data
+    Payments:
+      type: object
+      properties:
+        amount:
+          type: number
+          example: 50.5
+          format: float
+        paymentId:
+          type: string
+          example: '50'
+        date:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+    VendorRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '130'
+      required:
+      - id
+    BillCreditNoteLineItemV2:
+      type: object
+      properties:
+        description:
+          type: string
+          maxLength: 4000
+          example: Services rendered.
+        unitAmount:
+          type: number
+          format: float
+          example: 100.5
+        quantity:
+          type: number
+          format: float
+          example: 3
+        billableStatus:
+          type: string
+          example: notBillable
+          enum:
+          - billable
+          - notBillable
+          - hasBeenBilled
+        id:
+          type: string
+        discountPercentage:
+          type: number
+          format: float
+          example: 301.5
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateRefDto'
+        accountRef:
+          $ref: '#/components/schemas/AccountRefDto'
+        trackingCategoryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreditNoteTrackingCategoryRefDto'
+        inventoryRef:
+          $ref: '#/components/schemas/InventoryRefDto'
+        taxAmount:
+          type: number
+          format: float
+          example: 301.5
+      required:
+      - unitAmount
+      - quantity
     PurchaseOrderRef:
       type: object
       properties:
@@ -1837,6 +1992,57 @@ components:
         purchaseOrderNumber:
           type: string
           example: '1500'
+      required:
+      - id
+    InventoryRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '32'
+      required:
+      - id
+    TaxRateRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: HST
+        effectiveTaxRate:
+          type: number
+          example: 13
+          format: float
+      required:
+      - id
+    PushBillV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        data:
+          $ref: '#/components/schemas/PushBillV2'
+      required:
+      - connectionUuid
+      - data
+    BillTrackingCategoryRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4040'
+        type:
+          type: string
+          example: class
+          enum:
+          - class
+          - department
+          - location
+          - unknown
       required:
       - id
     PushBillCreditNoteV2:
@@ -1886,22 +2092,206 @@ components:
       required:
       - vendorRef
       - lines
-    CreditNoteTrackingCategoryRefDto:
+    GetBillPaymentRequestV2ResponseDto:
       type: object
       properties:
-        id:
-          type: string
-          example: '4040'
-        type:
-          type: string
-          example: class
-          enum:
-          - class
-          - department
-          - location
-          - unknown
+        meta:
+          $ref: '#/components/schemas/BillPaymentRequestMetaData'
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetBillPaymentRequestDataV2'
       required:
-      - id
+      - meta
+      - pagination
+      - data
+    PushBillV2:
+      type: object
+      properties:
+        vendorInvoiceNumber:
+          type: string
+          maxLength: 21
+          example: '254'
+        postedDate:
+          type: string
+          format: date
+          example: '2021-03-29'
+        dueDate:
+          type: string
+          format: date
+          example: '2021-03-29'
+        currencyRate:
+          type: number
+          format: float
+          example: 1.13
+        memo:
+          type: string
+          maxLength: 4000
+          example: Example bill memo.
+        vendorRef:
+          $ref: '#/components/schemas/VendorRefDto'
+        currency:
+          type: string
+          example: CAD
+        subsidiaryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubsidiaryRefDto'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/PushBillLineItemV2'
+        purchaseOrderRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/PurchaseOrderRefDto'
+        passThrough:
+          type: object
+          additionalProperties: true
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+        billType:
+          type: string
+          enum:
+          - item
+          - service
+          - professional
+          - miscellaneous
+          example: item
+      required:
+      - vendorRef
+      - lines
+    SaveDeleteCommunicationResponseV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        deleteCommunicationId:
+          type: string
+          readOnly: true
+          example: 645102bca1b57c57cc241173
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2022-06-24T09:40:11.088Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - deleteCommunicationId
+      - requestedOn
+      - status
+    PushBillPaymentV2:
+      type: object
+      properties:
+        currencyRate:
+          type: number
+          format: float
+          example: 1.13
+        memo:
+          type: string
+          maxLength: 4000
+          example: Bill payment memo.
+        date:
+          type: string
+          format: date
+          example: '2021-03-29'
+        totalAmount:
+          type: number
+          format: float
+          example: 200.5
+        vendorRef:
+          $ref: '#/components/schemas/VendorRefDto'
+        accountRef:
+          $ref: '#/components/schemas/AccountRefDto'
+        currency:
+          type: string
+          example: CAD
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillPaymentLineV2'
+        subsidiaryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubsidiaryRefDto'
+        paymentMethod:
+          type: string
+          deprecated: true
+          enum:
+          - unknown
+          - cash
+          - check
+          - creditCard
+          - debitCard
+          - bankTransfer
+          - giftCard
+          - other
+          example: creditCard
+        paymentMethodRef:
+          $ref: '#/components/schemas/PaymentMethodRefDto'
+        passThrough:
+          type: object
+          additionalProperties: true
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
     BillPaymentRequestLinks:
       type: object
       properties:
@@ -1913,14 +2303,290 @@ components:
       required:
       - amount
       - id
-    UpdateBillPaymentRequestV2:
+    GetBillPaymentResponseV2Dto:
       type: object
       properties:
-        state:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        meta:
+          $ref: '#/components/schemas/TransactionalReportMetaDataV2'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetBillPaymentV2Data'
+      required:
+      - pagination
+      - meta
+      - data
+    PushBillCreditNoteResponseV2Dto:
+      type: object
+      properties:
+        connectionUuid:
           type: string
-          example: paid
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
           enum:
-          - paid
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushBillCreditNoteV2'
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - data
+    BillPaymentRequestMetaData:
+      type: object
+      properties:
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          - 5fad8a342a88364234392fb6
+          type: array
+          items:
+            type: string
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        startDate:
+          type: string
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        endDate:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+        createdAt:
+          type: string
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
+      required:
+      - reportId
+      - serviceName
+      - businessName
+      - createdAt
+      - updatedAt
+    BillLineItemsV2:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 8a3fdcc9-83eb-4fdd-83e0-52ec1b40b072
+        accountRef:
+          $ref: '#/components/schemas/AccountRef'
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateRef'
+        inventoryRef:
+          $ref: '#/components/schemas/InventoryRef'
+        trackingCategoryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrackingCategoryResponse'
+        description:
+          type: string
+          example: Services rendered.
+        unitAmount:
+          type: number
+          example: 100.5
+          format: float
+        quantity:
+          type: number
+          example: 3
+          format: float
+        discountAmount:
+          type: number
+          example: 0
+          format: float
+        taxAmount:
+          type: number
+          example: 20.5
+          format: float
+        amount:
+          type: number
+          example: 322
+          format: float
+        discountPercentage:
+          type: number
+          example: 10.5
+          format: float
+        customerRef:
+          $ref: '#/components/schemas/CustomerObjectRefResponse'
+        billableStatus:
+          type: string
+          example: notBillable
+          enum:
+          - billable
+          - notBillable
+          - hasBeenBilled
+      required:
+      - id
+      - amount
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    SubsidiaryRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4'
+      required:
+      - id
+    TrackingCategoryResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4040'
+          readOnly: false
+        name:
+          type: string
+          readOnly: false
+          example: Region
+        type:
+          type: string
+          example: class
+          enum:
+          - class
+          - department
+          - location
+          - unknown
+    UpdateBillsV2:
+      type: object
+      properties:
+        vendorInvoiceNumber:
+          type: string
+          maxLength: 21
+          example: '254'
+        postedDate:
+          type: string
+          format: date
+          example: '2021-03-29'
+        dueDate:
+          type: string
+          format: date
+          example: '2021-03-29'
+        currencyRate:
+          type: number
+          format: float
+          example: 1.13
+        memo:
+          type: string
+          maxLength: 4000
+          example: Example bill memo.
+        vendorRef:
+          $ref: '#/components/schemas/VendorRefDto'
+        currency:
+          type: string
+          example: CAD
+        subsidiaryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubsidiaryRefDto'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateBillLineItemV2'
+        purchaseOrderRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/PurchaseOrderRefDto'
+        passThrough:
+          type: object
+          additionalProperties: true
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+        billType:
+          type: string
+          enum:
+          - item
+          - service
+          - professional
+          - miscellaneous
+          example: item
+      required:
+      - vendorRef
+      - lines
     TransactionalReportMetaDataV2:
       type: object
       properties:
@@ -1987,140 +2653,7 @@ components:
       - endDate
       - createdAt
       - updatedAt
-    PushBillResponseV2Dto:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          readOnly: true
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        pushCommunicationId:
-          type: string
-          readOnly: true
-          example: 60473b57f0cdd1683ca71f60
-        requestedOn:
-          type: string
-          readOnly: true
-          example: '2021-03-09T08:15:22.035Z'
-          format: date-time
-        status:
-          type: string
-          readOnly: true
-          example: pending
-          enum:
-          - success
-          - failed
-          - pending
-        data:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/PushBillV2'
-      required:
-      - connectionUuid
-      - businessName
-      - serviceName
-      - pushCommunicationId
-      - requestedOn
-      - status
-      - data
-    SubsidiaryRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        name:
-          type: string
-          example: Railz Financial
-    UpdateBillsResponseV2Dto:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          readOnly: true
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        pushCommunicationId:
-          type: string
-          readOnly: true
-          example: 60473b57f0cdd1683ca71f60
-        requestedOn:
-          type: string
-          readOnly: true
-          example: '2021-03-09T08:15:22.035Z'
-          format: date-time
-        status:
-          type: string
-          readOnly: true
-          example: pending
-          enum:
-          - success
-          - failed
-          - pending
-        data:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/UpdateBillsV2'
-      required:
-      - connectionUuid
-      - businessName
-      - serviceName
-      - pushCommunicationId
-      - requestedOn
-      - status
-      - data
-    BankAccountRefDto:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '200'
-      required:
-      - id
-    UpdateBillPaymentV2Dto:
+    UpdateBillsV2Dto:
       type: object
       properties:
         connectionUuid:
@@ -2128,126 +2661,113 @@ components:
           description: Unique connection identifier.
           example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
         data:
-          $ref: '#/components/schemas/UpdateBillPaymentV2'
+          $ref: '#/components/schemas/UpdateBillsV2'
       required:
       - connectionUuid
       - data
-    BillPaymentLineV2Item:
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    BillPaymentLineV2:
       type: object
       properties:
         amount:
           type: number
-          example: 200.5
           format: float
+          example: '342.99'
         links:
           type: array
           items:
-            $ref: '#/components/schemas/BillPLinks'
+            $ref: '#/components/schemas/LinkRefDto'
         allocatedOnDate:
-          format: date-time
+          format: date
           type: string
-          example: '2021-03-09T10:57:54.294Z'
-    PostBillPaymentRequestV2:
+          example: '2021-03-29'
+    Error403Dto:
       type: object
       properties:
-        vendorRef:
-          $ref: '#/components/schemas/VendorRefDto'
-        paymentNumber:
-          type: string
-          example: '456'
-        paymentCode:
-          type: string
-          example: '1234'
-        paymentDate:
-          type: string
-          format: date
-          example: '2021-03-29'
-        bankAccountRef:
-          $ref: '#/components/schemas/BankAccountRefDto'
-        currency:
-          type: string
-          example: USD
-        totalAmount:
+        statusCode:
           type: number
-          format: decimal
-          example: '43.5'
-        paymentMethodRef:
-          $ref: '#/components/schemas/PaymentRequestPaymentMethodRefDto'
-        memo:
-          type: string
-        links:
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
           type: array
           items:
-            $ref: '#/components/schemas/BillPaymentRequestLinks'
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
       required:
-      - bankAccountRef
-      - links
-    PushBillPaymentResponseV2Dto:
+      - statusCode
+      - message
+      - error
+    PostBillPaymentRequestV2Dto:
       type: object
       properties:
         connectionUuid:
           type: string
-          readOnly: true
+          description: Unique connection identifier.
           example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        pushCommunicationId:
-          type: string
-          readOnly: true
-          example: 60473b57f0cdd1683ca71f60
-        requestedOn:
-          type: string
-          readOnly: true
-          example: '2021-03-09T08:15:22.035Z'
-          format: date-time
-        status:
-          type: string
-          readOnly: true
-          example: pending
-          enum:
-          - success
-          - failed
-          - pending
         data:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/PushBillPaymentV2'
+          $ref: '#/components/schemas/PostBillPaymentRequestV2'
       required:
       - connectionUuid
-      - businessName
-      - serviceName
-      - pushCommunicationId
-      - requestedOn
-      - status
       - data
-    CustomerObjectRefDto:
+    VendorRef:
       type: object
       properties:
         id:
           type: string
-          example: '124'
+          example: '1'
+        name:
+          type: string
+          example: Home Depot
       required:
       - id
+    PaymentMethodRefResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '3'
+        name:
+          type: string
+          example: Harmonized sales tax
+        type:
+          type: string
+          example: creditCard
+          enum:
+          - unknown
+          - cash
+          - check
+          - creditCard
+          - debitCard
+          - bankTransfer
+          - giftCard
+          - other
     GetBillResponseV2Dto:
       type: object
       properties:
@@ -2263,221 +2783,17 @@ components:
       - pagination
       - meta
       - data
-    TrackingCategoryRefV2:
+    AccountRef:
       type: object
       properties:
         id:
           type: string
-          example: '4040'
-          readOnly: false
+          example: '145'
         name:
           type: string
-          readOnly: false
-          example: Region
-        type:
-          type: string
-          example: class
-          enum:
-          - class
-          - department
-          - location
-          - unknown
+          example: Example account
       required:
       - id
-      - type
-    PostBillPaymentRequestResponseV2Dto:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          readOnly: true
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        pushCommunicationId:
-          type: string
-          readOnly: true
-          example: 60473b57f0cdd1683ca71f60
-        requestedOn:
-          type: string
-          readOnly: true
-          example: '2021-03-09T08:15:22.035Z'
-          format: date-time
-        status:
-          type: string
-          readOnly: true
-          example: pending
-          enum:
-          - success
-          - failed
-          - pending
-        data:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/PostBillPaymentRequestV2'
-      required:
-      - connectionUuid
-      - businessName
-      - serviceName
-      - pushCommunicationId
-      - requestedOn
-      - status
-      - data
-    Error400ResponseDtoV2:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    UpdateBillPaymentV2:
-      type: object
-      properties:
-        currencyRate:
-          type: number
-          format: float
-          example: 1.13
-        memo:
-          type: string
-          maxLength: 4000
-          example: Bill payment memo.
-        date:
-          type: string
-          format: date
-          example: '2021-03-29'
-        totalAmount:
-          type: number
-          format: float
-          example: 200.5
-        vendorRef:
-          $ref: '#/components/schemas/VendorRefDto'
-        accountRef:
-          $ref: '#/components/schemas/AccountRefDto'
-        currency:
-          type: string
-          example: CAD
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/BillPaymentLineV2'
-        subsidiaryRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubsidiaryRefDto'
-        paymentMethod:
-          type: string
-          deprecated: true
-          enum:
-          - unknown
-          - cash
-          - check
-          - creditCard
-          - debitCard
-          - bankTransfer
-          - giftCard
-          - other
-          example: creditCard
-        paymentMethodRef:
-          $ref: '#/components/schemas/PaymentMethodRefDto'
-        passThrough:
-          type: object
-          additionalProperties: true
-          example:
-            CustomField:
-            - DefinitionId: '1'
-              StringValue: my custom value
-              Name: Field One
-    AccountRefDto:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '200'
-      required:
-      - id
-    PushBillPaymentV2:
-      type: object
-      properties:
-        currencyRate:
-          type: number
-          format: float
-          example: 1.13
-        memo:
-          type: string
-          maxLength: 4000
-          example: Bill payment memo.
-        date:
-          type: string
-          format: date
-          example: '2021-03-29'
-        totalAmount:
-          type: number
-          format: float
-          example: 200.5
-        vendorRef:
-          $ref: '#/components/schemas/VendorRefDto'
-        accountRef:
-          $ref: '#/components/schemas/AccountRefDto'
-        currency:
-          type: string
-          example: CAD
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/BillPaymentLineV2'
-        subsidiaryRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubsidiaryRefDto'
-        paymentMethod:
-          type: string
-          deprecated: true
-          enum:
-          - unknown
-          - cash
-          - check
-          - creditCard
-          - debitCard
-          - bankTransfer
-          - giftCard
-          - other
-          example: creditCard
-        paymentMethodRef:
-          $ref: '#/components/schemas/PaymentMethodRefDto'
-        passThrough:
-          type: object
-          additionalProperties: true
-          example:
-            CustomField:
-            - DefinitionId: '1'
-              StringValue: my custom value
-              Name: Field One
     UpdateBillPaymentResponseV2Dto:
       type: object
       properties:
@@ -2536,326 +2852,6 @@ components:
       - requestedOn
       - status
       - data
-    TrackingCategoryResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '4040'
-          readOnly: false
-        name:
-          type: string
-          readOnly: false
-          example: Region
-        type:
-          type: string
-          example: class
-          enum:
-          - class
-          - department
-          - location
-          - unknown
-    VendorRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        name:
-          type: string
-          example: Home Depot
-      required:
-      - id
-    UpdateBillsV2:
-      type: object
-      properties:
-        vendorInvoiceNumber:
-          type: string
-          maxLength: 21
-          example: '254'
-        postedDate:
-          type: string
-          format: date
-          example: '2021-03-29'
-        dueDate:
-          type: string
-          format: date
-          example: '2021-03-29'
-        currencyRate:
-          type: number
-          format: float
-          example: 1.13
-        memo:
-          type: string
-          maxLength: 4000
-          example: Example bill memo.
-        vendorRef:
-          $ref: '#/components/schemas/VendorRefDto'
-        currency:
-          type: string
-          example: CAD
-        subsidiaryRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubsidiaryRefDto'
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/UpdateBillLineItemV2'
-        purchaseOrderRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/PurchaseOrderRefDto'
-        passThrough:
-          type: object
-          additionalProperties: true
-          example:
-            CustomField:
-            - DefinitionId: '1'
-              StringValue: my custom value
-              Name: Field One
-        billType:
-          type: string
-          enum:
-          - item
-          - service
-          - professional
-          - miscellaneous
-          example: item
-      required:
-      - vendorRef
-      - lines
-    PurchaseOrderRefDto:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '21'
-      required:
-      - id
-    UpdateBillLineItemV2:
-      type: object
-      properties:
-        description:
-          type: string
-          maxLength: 4000
-          example: Services rendered.
-        unitAmount:
-          type: number
-          format: float
-          example: 50.5
-        quantity:
-          type: number
-          format: float
-          example: 202
-        billableStatus:
-          type: string
-          example: notBillable
-          enum:
-          - billable
-          - notBillable
-          - hasBeenBilled
-        customerRef:
-          $ref: '#/components/schemas/CustomerObjectRefDto'
-        id:
-          type: string
-          example: 8a3fdcc9-83eb-4fdd-83e0-52ec1b40b072
-        accountRef:
-          $ref: '#/components/schemas/AccountRefDto'
-        trackingCategoryRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/BillTrackingCategoryRefDto'
-        discountPercentage:
-          type: number
-          format: float
-          example: 100.5
-        inventoryRef:
-          $ref: '#/components/schemas/InventoryRefDto'
-        taxRateRef:
-          $ref: '#/components/schemas/TaxRateRefDto'
-        taxAmount:
-          type: number
-          format: float
-          example: 20.5
-      required:
-      - unitAmount
-      - quantity
-    InventoryRefDto:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '32'
-      required:
-      - id
-    SubsidiaryRefDto:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '4'
-      required:
-      - id
-    BillTrackingCategoryRefDto:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '4040'
-        type:
-          type: string
-          example: class
-          enum:
-          - class
-          - department
-          - location
-          - unknown
-      required:
-      - id
-    TaxRateRefDto:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '12'
-      required:
-      - id
-    GetBillPaymentV2Data:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        vendorRef:
-          $ref: '#/components/schemas/VendorRef'
-        accountRef:
-          $ref: '#/components/schemas/AccountRef'
-        totalAmount:
-          type: number
-          example: 200.5
-          format: float
-        currency:
-          type: string
-          example: USD
-        currencyRate:
-          type: number
-          example: 1.13
-          format: float
-        date:
-          format: date-time
-          type: string
-          example: '2021-03-09T10:57:54.294Z'
-        memo:
-          type: string
-          example: Bill payment memo.
-        paymentMethod:
-          type: string
-          enum:
-          - unknown
-          - cash
-          - check
-          - creditCard
-          - debitCard
-          - bankTransfer
-          - giftCard
-          - other
-          example: creditCard
-          deprecated: true
-        paymentMethodRef:
-          $ref: '#/components/schemas/PaymentMethodRefResponse'
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/BillPaymentLineV2Item'
-        subsidiaryRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubsidiaryRef'
-        sourceModifiedDate:
-          format: date-time
-          type: string
-          example: '2021-03-09T10:18:29.985Z'
-      required:
-      - id
-      - totalAmount
-      - date
-    PaymentRequestPaymentMethodRefDto:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        name:
-          type: string
-          example: Harmonized sales tax
-        type:
-          type: string
-          example: creditCard
-          enum:
-          - unknown
-          - cash
-          - printedCheck
-          - manualCheck
-          - creditCard
-          - debitCard
-          - bankTransfer
-          - giftCard
-          - automatedClearingHouse
-          - other
-    SaveDeleteCommunicationResponseV2:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          readOnly: true
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        deleteCommunicationId:
-          type: string
-          readOnly: true
-          example: 645102bca1b57c57cc241173
-        requestedOn:
-          type: string
-          readOnly: true
-          example: '2022-06-24T09:40:11.088Z'
-          format: date-time
-        status:
-          type: string
-          readOnly: true
-          example: pending
-          enum:
-          - success
-          - failed
-          - pending
-      required:
-      - connectionUuid
-      - businessName
-      - serviceName
-      - deleteCommunicationId
-      - requestedOn
-      - status
     GetBillCreditNoteDataV2:
       type: object
       properties:
@@ -2941,90 +2937,94 @@ components:
       - status
       - vendorRef
       - lines
-    VendorRefDto:
+    TrackingCategoryRefV2:
       type: object
       properties:
         id:
           type: string
-          example: '130'
-      required:
-      - id
-    Error500ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    PaymentMethodRefResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '3'
+          example: '4040'
+          readOnly: false
         name:
           type: string
-          example: Harmonized sales tax
+          readOnly: false
+          example: Region
         type:
           type: string
-          example: creditCard
+          example: class
           enum:
+          - class
+          - department
+          - location
           - unknown
-          - cash
-          - check
-          - creditCard
-          - debitCard
-          - bankTransfer
-          - giftCard
-          - other
-    GetBillPaymentRequestV2ResponseDto:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/BillPaymentRequestMetaData'
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetBillPaymentRequestDataV2'
       required:
-      - meta
-      - pagination
-      - data
-    PushBillPaymentV2Dto:
+      - id
+      - type
+    UpdateBillsResponseV2Dto:
       type: object
       properties:
         connectionUuid:
           type: string
-          description: Unique connection identifier.
+          readOnly: true
           example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
         data:
-          $ref: '#/components/schemas/PushBillPaymentV2'
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/UpdateBillsV2'
       required:
       - connectionUuid
+      - businessName
+      - serviceName
+      - pushCommunicationId
+      - requestedOn
+      - status
       - data
-    GetBillPaymentResponseV2Dto:
+    AccountRefDto:
       type: object
       properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        meta:
-          $ref: '#/components/schemas/TransactionalReportMetaDataV2'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetBillPaymentV2Data'
+        id:
+          type: string
+          example: '200'
       required:
-      - pagination
-      - meta
-      - data
+      - id
   securitySchemes:
     bearer:
       scheme: bearer
