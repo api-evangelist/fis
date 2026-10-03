@@ -116,42 +116,19 @@ paths:
       - FinancialForecastControllerV2
 components:
   schemas:
-    Error403ResponseDto:
+    Error500ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error403Dto'
+          - $ref: '#/components/schemas/Error500Dto'
         payload:
           type: object
           readOnly: true
-          example: {}
       required:
       - error
       - payload
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
     Error500Dto:
       type: object
       properties:
@@ -174,28 +151,6 @@ components:
       - error
       - message
       - statusCode
-    Error400DtoV2:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - connectionUuid should not be empty
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
     Error403Dto:
       type: object
       properties:
@@ -218,20 +173,44 @@ components:
       - statusCode
       - message
       - error
-    Error401ResponseDto:
+    FinancialForecastResponseV2Dto:
       type: object
       properties:
-        error:
+        count:
+          type: number
           readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
+          example: 1
+          format: integer
+        reports:
           readOnly: true
-          example: {}
+          type: array
+          items:
+            $ref: '#/components/schemas/FinancialForecastReportV2'
       required:
+      - count
+      - reports
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
       - error
-      - payload
     FinancialForecastDataV2:
       type: object
       properties:
@@ -267,16 +246,17 @@ components:
       - subGroup
       - endDate
       - value
-    Error400ResponseDtoV2:
+    Error401ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
+          - $ref: '#/components/schemas/Error401Dto'
         payload:
           type: object
           readOnly: true
+          example: {}
       required:
       - error
       - payload
@@ -354,32 +334,52 @@ components:
       - endDate
       - createdAt
       - updatedAt
-    FinancialForecastResponseV2Dto:
+    Error400DtoV2:
       type: object
       properties:
-        count:
+        statusCode:
           type: number
           readOnly: true
-          example: 1
-          format: integer
-        reports:
+          example: 400
+        message:
           readOnly: true
+          example:
+          - connectionUuid should not be empty
           type: array
           items:
-            $ref: '#/components/schemas/FinancialForecastReportV2'
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
       required:
-      - count
-      - reports
-    Error500ResponseDto:
+      - statusCode
+      - message
+      - error
+    Error400ResponseDtoV2:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error500Dto'
+          - $ref: '#/components/schemas/Error400DtoV2'
         payload:
           type: object
           readOnly: true
+      required:
+      - error
+      - payload
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
       required:
       - error
       - payload

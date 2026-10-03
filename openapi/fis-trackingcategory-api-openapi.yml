@@ -148,118 +148,51 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    PushTrackingCategoriesConnection:
-      type: object
-      properties:
-        businessName:
-          type: string
-          example: Railz
-          description: Unique business name identifier.
-        serviceName:
-          type: string
-          example: quickbooks
-          description: Name of accounting platform service.
-          enum:
-          - quickbooks
-          - xero
-      required:
-      - businessName
-      - serviceName
-    ParentRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '434'
-        name:
-          type: string
-          example: Region
-      required:
-      - id
-    Error403ResponseDto:
+    Error500ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error403Dto'
+          - $ref: '#/components/schemas/Error500Dto'
         payload:
           type: object
           readOnly: true
-          example: {}
       required:
       - error
       - payload
-    BasicReportMetaData:
+    Error500Dto:
       type: object
       properties:
-        reportId:
-          readOnly: true
-          example:
-          - 5fad8a342a88364234392fb5
-          type: array
-          items:
-            type: string
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        createdAt:
-          type: string
-          readOnly: true
-          example: '2020-11-25T01:02:03Z'
-          format: date-time
-        updatedAt:
-          type: string
-          example: '2020-11-30T01:02:03Z'
-          format: date-time
-          readOnly: false
-      required:
-      - reportId
-      - serviceName
-      - businessName
-      - createdAt
-      - updatedAt
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
         error:
           type: string
           readOnly: true
-          example: Unauthorized
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
       required:
-      - statusCode
-      - message
       - error
+      - message
+      - statusCode
+    PushTrackingCategoriesV1Dto:
+      type: object
+      properties:
+        connection:
+          $ref: '#/components/schemas/PushTrackingCategoriesConnection'
+        data:
+          $ref: '#/components/schemas/PushTrackingCategoriesV1'
+      required:
+      - connection
+      - data
     GetTrackingCategoryData:
       type: object
       properties:
@@ -290,81 +223,6 @@ components:
       - name
       - isEditable
       - status
-    PushTrackingCategoriesV1Dto:
-      type: object
-      properties:
-        connection:
-          $ref: '#/components/schemas/PushTrackingCategoriesConnection'
-        data:
-          $ref: '#/components/schemas/PushTrackingCategoriesV1'
-      required:
-      - connection
-      - data
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    Error400Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - businessName cannot be null
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
-    GetTrackingCategoryResponseDto:
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        count:
-          type: number
-          readOnly: true
-          example: 1
-          format: integer
-        meta:
-          $ref: '#/components/schemas/BasicReportMetaData'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetTrackingCategoryData'
-      required:
-      - pagination
-      - count
-      - meta
-      - data
     Error403Dto:
       type: object
       properties:
@@ -387,6 +245,69 @@ components:
       - statusCode
       - message
       - error
+    PushTrackingCategoriesV1:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Region
+          maxLength: 100
+        parentRef:
+          type: string
+          example: '1334'
+      required:
+      - name
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
     PushTrackingCategoriesResponseV1Dto:
       type: object
       properties:
@@ -440,6 +361,23 @@ components:
       - businessName
       - serviceName
       - data
+    PushTrackingCategoriesConnection:
+      type: object
+      properties:
+        businessName:
+          type: string
+          example: Railz
+          description: Unique business name identifier.
+        serviceName:
+          type: string
+          example: quickbooks
+          description: Name of accounting platform service.
+          enum:
+          - quickbooks
+          - xero
+      required:
+      - businessName
+      - serviceName
     Error401ResponseDto:
       type: object
       properties:
@@ -454,57 +392,119 @@ components:
       required:
       - error
       - payload
-    Error400ResponseDto:
+    GetTrackingCategoryResponseDto:
       type: object
       properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    PaginationMetaData:
-      type: object
-      properties:
-        offset:
-          type: number
-          readOnly: true
-        limit:
-          type: number
-          readOnly: true
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
         count:
           type: number
           readOnly: true
+          example: 1
+          format: integer
+        meta:
+          $ref: '#/components/schemas/BasicReportMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetTrackingCategoryData'
       required:
-      - offset
-      - limit
+      - pagination
       - count
-    PushTrackingCategoriesV1:
+      - meta
+      - data
+    Error400Dto:
       type: object
       properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    BasicReportMetaData:
+      type: object
+      properties:
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          type: array
+          items:
+            type: string
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
+      required:
+      - reportId
+      - serviceName
+      - businessName
+      - createdAt
+      - updatedAt
+    ParentRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '434'
         name:
           type: string
           example: Region
-          maxLength: 100
-        parentRef:
-          type: string
-          example: '1334'
       required:
-      - name
-    Error500ResponseDto:
+      - id
+    Error403ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error500Dto'
+          - $ref: '#/components/schemas/Error403Dto'
         payload:
           type: object
           readOnly: true
+          example: {}
       required:
       - error
       - payload

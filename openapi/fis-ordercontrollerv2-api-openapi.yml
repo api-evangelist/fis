@@ -147,80 +147,86 @@ paths:
       - OrderControllerV2
 components:
   schemas:
-    Balance:
+    OrderCustomerRef:
       type: object
       properties:
-        amount:
+        id:
           type: string
-          example: 2.2
-          format: float
-        date:
-          format: date-time
+          example: '207119551'
+        customerName:
           type: string
-          example: '2022-03-11T11:29:03-05:00'
-    Error401Dto:
+          example: Amelia Earhart
+        email:
+          type: string
+          example: Amelia.Earhart@example.com
+      required:
+      - id
+    PaginationMetaData:
       type: object
       properties:
-        statusCode:
+        offset:
           type: number
           readOnly: true
-          example: 401
-        message:
+        limit:
+          type: number
           readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
+        count:
+          type: number
           readOnly: true
-          example: Unauthorized
       required:
-      - statusCode
-      - message
-      - error
-    Error400ResponseDtoV2:
+      - offset
+      - limit
+      - count
+    Error401ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
+          - $ref: '#/components/schemas/Error401Dto'
         payload:
           type: object
           readOnly: true
+          example: {}
       required:
       - error
       - payload
-    OrderTransactionSourceRefs:
+    BillingAddress:
       type: object
       properties:
-        id:
+        line1:
           type: string
-          example: '699519475'
-        type:
+          example: 1234 Park Street
+        line2:
           type: string
-          example: payment
-          enum:
-          - failedPayout
-          - payment
-          - paymentFee
-          - paymentFeeRefund
-          - payout
-          - refund
-          - transfer
-          - dispute
-          - order
-          - other
-          - unknown
-        totalAmount:
-          type: number
-          example: '50.00'
-          format: float
-      required:
-      - id
-      - totalAmount
+          example: Suite 1000
+        city:
+          type: string
+          example: Toronto
+        region:
+          type: string
+          example: 'ON'
+        country:
+          type: string
+          example: CAN
+        postalCode:
+          type: string
+          example: A0B1C2
+    FulfillmentRefs:
+      type: object
+      properties:
+        carrier:
+          type: string
+          example: USPS
+        trackingNumber:
+          type: string
+          example: 1Z2345
+        service:
+          type: string
+          example: manual
+        trackingUrl:
+          type: string
+          example: https://tools.usps.com/go/TrackConfirmAction_input?qtc_tLabels1=1Z2345
     Error400DtoV2:
       type: object
       properties:
@@ -243,6 +249,184 @@ components:
       - statusCode
       - message
       - error
+    RefundRefs:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 2
+        totalAmount:
+          type: number
+          example: 2
+          format: float
+      required:
+      - id
+      - totalAmount
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    BasicStartEndDateReportMetaDataV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - reportId
+      - createdAt
+      - updatedAt
+      - startDate
+      - endDate
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    ShippingAddress:
+      type: object
+      properties:
+        line1:
+          type: string
+          example: 1234 Park Street
+        line2:
+          type: string
+          example: Suite 1000
+        city:
+          type: string
+          example: Toronto
+        region:
+          type: string
+          example: 'ON'
+        country:
+          type: string
+          example: CAN
+        postalCode:
+          type: string
+          example: A0B1C2
     Lines:
       type: object
       properties:
@@ -261,20 +445,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TrackingCategoryResponse'
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
     GetOrderData:
       type: object
       properties:
@@ -371,43 +541,47 @@ components:
       - status
       - paymentStatus
       - fulfillmentStatus
-    ShippingAddress:
+    Error400ResponseDtoV2:
       type: object
       properties:
-        line1:
-          type: string
-          example: 1234 Park Street
-        line2:
-          type: string
-          example: Suite 1000
-        city:
-          type: string
-          example: Toronto
-        region:
-          type: string
-          example: 'ON'
-        country:
-          type: string
-          example: CAN
-        postalCode:
-          type: string
-          example: A0B1C2
-    PaginationMetaData:
-      type: object
-      properties:
-        offset:
-          type: number
+        error:
           readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
           readOnly: true
       required:
-      - offset
-      - limit
-      - count
+      - error
+      - payload
+    OrderTransactionSourceRefs:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '699519475'
+        type:
+          type: string
+          example: payment
+          enum:
+          - failedPayout
+          - payment
+          - paymentFee
+          - paymentFeeRefund
+          - payout
+          - refund
+          - transfer
+          - dispute
+          - order
+          - other
+          - unknown
+        totalAmount:
+          type: number
+          example: '50.00'
+          format: float
+      required:
+      - id
+      - totalAmount
     CommerceCurrencyRef:
       type: object
       properties:
@@ -422,20 +596,6 @@ components:
       required:
       - symbol
       - name
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
     GetOrderResponseV2Dto:
       type: object
       properties:
@@ -477,113 +637,17 @@ components:
           - department
           - location
           - unknown
-    RefundRefs:
+    Balance:
       type: object
       properties:
-        id:
+        amount:
           type: string
-          example: 2
-        totalAmount:
-          type: number
-          example: 2
+          example: 2.2
           format: float
-      required:
-      - id
-      - totalAmount
-    OrderCustomerRef:
-      type: object
-      properties:
-        id:
+        date:
+          format: date-time
           type: string
-          example: '207119551'
-        customerName:
-          type: string
-          example: Amelia Earhart
-        email:
-          type: string
-          example: Amelia.Earhart@example.com
-      required:
-      - id
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    FulfillmentRefs:
-      type: object
-      properties:
-        carrier:
-          type: string
-          example: USPS
-        trackingNumber:
-          type: string
-          example: 1Z2345
-        service:
-          type: string
-          example: manual
-        trackingUrl:
-          type: string
-          example: https://tools.usps.com/go/TrackConfirmAction_input?qtc_tLabels1=1Z2345
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
-    BillingAddress:
-      type: object
-      properties:
-        line1:
-          type: string
-          example: 1234 Park Street
-        line2:
-          type: string
-          example: Suite 1000
-        city:
-          type: string
-          example: Toronto
-        region:
-          type: string
-          example: 'ON'
-        country:
-          type: string
-          example: CAN
-        postalCode:
-          type: string
-          example: A0B1C2
+          example: '2022-03-11T11:29:03-05:00'
     AccountRef:
       type: object
       properties:
@@ -595,84 +659,20 @@ components:
           example: Example account
       required:
       - id
-    Error500ResponseDto:
+    Error403ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error500Dto'
+          - $ref: '#/components/schemas/Error403Dto'
         payload:
           type: object
           readOnly: true
+          example: {}
       required:
       - error
       - payload
-    BasicStartEndDateReportMetaDataV2:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          readOnly: true
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        reportId:
-          readOnly: true
-          example:
-          - 5fad8a342a88364234392fb5
-          type: array
-          items:
-            type: string
-        createdAt:
-          type: string
-          readOnly: true
-          example: '2020-11-25T01:02:03Z'
-          format: date-time
-        updatedAt:
-          type: string
-          example: '2020-11-30T01:02:03Z'
-          format: date-time
-          readOnly: false
-        startDate:
-          type: string
-          readOnly: true
-          example: '2020-11-25T01:02:03Z'
-          format: date-time
-        endDate:
-          type: string
-          readOnly: true
-          example: '2020-11-30T01:02:03Z'
-          format: date-time
-      required:
-      - connectionUuid
-      - businessName
-      - serviceName
-      - reportId
-      - createdAt
-      - updatedAt
-      - startDate
-      - endDate
   securitySchemes:
     bearer:
       scheme: bearer

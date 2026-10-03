@@ -128,6 +128,300 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    FinancialFraudRiskReportMetaData:
+      type: object
+      properties:
+        reportId:
+          type: string
+          example: 5fad8a342a88364234392fb5
+          readOnly: true
+        serviceName:
+          type: string
+          example: xero
+          readOnly: true
+          enum:
+          - quickbooks
+          - xero
+          - freshbooks
+          - quickbooksDesktop
+          - sageIntacct
+          - sageBusinessCloud
+          - oracleNetsuite
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - zohoBooks
+          - myob
+        businessName:
+          type: string
+          example: Railz
+          readOnly: true
+        startDate:
+          type: string
+          example: '2020-11-01T01:02:03Z'
+          readOnly: true
+          format: date-time
+        endDate:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          readOnly: true
+          format: date-time
+        createdAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          readOnly: true
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          readOnly: false
+          format: date-time
+      required:
+      - reportId
+      - serviceName
+      - businessName
+      - startDate
+      - endDate
+      - createdAt
+      - updatedAt
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    TransactionPatterns:
+      type: object
+      properties:
+        repetitionPattern:
+          type: string
+          example: Accounts Payables 113.71
+          readOnly: true
+        count:
+          type: number
+          example: 3
+          readOnly: true
+      required:
+      - repetitionPattern
+      - count
+    TransactionsSectionStats:
+      type: object
+      properties:
+        section:
+          type: string
+          example: Expenses
+          readOnly: true
+        count:
+          type: number
+          example: 4
+          readOnly: true
+          format: integer
+        sdev:
+          type: number
+          example: 39.82
+          readOnly: true
+          format: float
+      required:
+      - section
+      - count
+      - sdev
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    FinancialFraudRiskReport:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/FinancialFraudRiskReportMetaData'
+        data:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/FinancialFraudRiskData'
+      required:
+      - meta
+      - data
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    FinancialFraudRiskResponseDto:
+      type: object
+      properties:
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        reports:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/FinancialFraudRiskReport'
+      required:
+      - count
+      - reports
+    OutlierTransactions:
+      type: object
+      properties:
+        id:
+          type: string
+          example: nt
+          readOnly: true
+      required:
+      - id
+    TransactionKeywords:
+      type: object
+      properties:
+        type:
+          type: string
+          example: bill
+          enum:
+          - bill
+          - billPayment
+          - creditNote
+          - deposit
+          - expense
+          - estimate
+          - inventoryAdjustment
+          - invoice
+          - journalEntry
+          - other
+          - payment
+          - payroll
+          - purchaseOrder
+          - refund
+          - transfer
+          - taxPayment
+          - taxAdjustment
+          - taxRefund
+          - taxReversal
+          - unknown
+          - vendorCreditNote
+          readOnly: true
+        count:
+          type: number
+          example: 1
+          format: integer
+          readOnly: true
+      required:
+      - type
+      - count
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
     FinancialFraudRiskData:
       type: object
       properties:
@@ -202,300 +496,6 @@ components:
       required:
       - error
       - payload
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    Error400Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - businessName cannot be null
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
-    FinancialFraudRiskResponseDto:
-      type: object
-      properties:
-        count:
-          type: number
-          readOnly: true
-          example: 1
-          format: integer
-        reports:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/FinancialFraudRiskReport'
-      required:
-      - count
-      - reports
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
-    Error400ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    FinancialFraudRiskReportMetaData:
-      type: object
-      properties:
-        reportId:
-          type: string
-          example: 5fad8a342a88364234392fb5
-          readOnly: true
-        serviceName:
-          type: string
-          example: xero
-          readOnly: true
-          enum:
-          - quickbooks
-          - xero
-          - freshbooks
-          - quickbooksDesktop
-          - sageIntacct
-          - sageBusinessCloud
-          - oracleNetsuite
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - zohoBooks
-          - myob
-        businessName:
-          type: string
-          example: Railz
-          readOnly: true
-        startDate:
-          type: string
-          example: '2020-11-01T01:02:03Z'
-          readOnly: true
-          format: date-time
-        endDate:
-          type: string
-          example: '2020-11-30T01:02:03Z'
-          readOnly: true
-          format: date-time
-        createdAt:
-          type: string
-          example: '2020-11-30T01:02:03Z'
-          readOnly: true
-          format: date-time
-        updatedAt:
-          type: string
-          example: '2020-11-30T01:02:03Z'
-          readOnly: false
-          format: date-time
-      required:
-      - reportId
-      - serviceName
-      - businessName
-      - startDate
-      - endDate
-      - createdAt
-      - updatedAt
-    FinancialFraudRiskReport:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/FinancialFraudRiskReportMetaData'
-        data:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/FinancialFraudRiskData'
-      required:
-      - meta
-      - data
-    TransactionPatterns:
-      type: object
-      properties:
-        repetitionPattern:
-          type: string
-          example: Accounts Payables 113.71
-          readOnly: true
-        count:
-          type: number
-          example: 3
-          readOnly: true
-      required:
-      - repetitionPattern
-      - count
-    TransactionsSectionStats:
-      type: object
-      properties:
-        section:
-          type: string
-          example: Expenses
-          readOnly: true
-        count:
-          type: number
-          example: 4
-          readOnly: true
-          format: integer
-        sdev:
-          type: number
-          example: 39.82
-          readOnly: true
-          format: float
-      required:
-      - section
-      - count
-      - sdev
-    OutlierTransactions:
-      type: object
-      properties:
-        id:
-          type: string
-          example: nt
-          readOnly: true
-      required:
-      - id
-    Error500ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    TransactionKeywords:
-      type: object
-      properties:
-        type:
-          type: string
-          example: bill
-          enum:
-          - bill
-          - billPayment
-          - creditNote
-          - deposit
-          - expense
-          - estimate
-          - inventoryAdjustment
-          - invoice
-          - journalEntry
-          - other
-          - payment
-          - payroll
-          - purchaseOrder
-          - refund
-          - transfer
-          - taxPayment
-          - taxAdjustment
-          - taxRefund
-          - taxReversal
-          - unknown
-          - vendorCreditNote
-          readOnly: true
-        count:
-          type: number
-          example: 1
-          format: integer
-          readOnly: true
-      required:
-      - type
-      - count
   securitySchemes:
     bearer:
       scheme: bearer

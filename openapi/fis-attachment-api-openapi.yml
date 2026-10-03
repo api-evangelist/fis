@@ -155,137 +155,19 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    PushAttachmentV1:
-      type: object
-      properties:
-        link:
-          $ref: '#/components/schemas/PushAttachmentLink'
-      required:
-      - link
-    Error403ResponseDto:
+    Error500ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error403Dto'
+          - $ref: '#/components/schemas/Error500Dto'
         payload:
           type: object
           readOnly: true
-          example: {}
       required:
       - error
       - payload
-    PushAttachmentLink:
-      type: object
-      properties:
-        type:
-          type: string
-          example: bill
-          enum:
-          - bill
-          - invoice
-          - customer
-          - vendor
-          - deposit
-          - journalEntry
-          - billPayment
-          - invoicePayment
-          - expense
-          - inventory
-          - purchaseOrder
-          - invoiceCreditNote
-          - billCreditNote
-          - bankTransaction
-          - bankTransfer
-          - account
-        id:
-          type: string
-          example: '133'
-      required:
-      - type
-      - id
-    GetAttachmentResponseV1Dto:
-      type: object
-      properties:
-        count:
-          type: number
-          readOnly: true
-          example: 1
-          format: integer
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetAttachmentData'
-      required:
-      - count
-      - data
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    Error400Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - businessName cannot be null
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
     PushAttachmentResponseV1Dto:
       type: object
       properties:
@@ -339,45 +221,20 @@ components:
       - businessName
       - serviceName
       - data
-    AttachmentLink:
+    GetAttachmentResponseV1Dto:
       type: object
       properties:
-        type:
-          type: string
-          example: bill
-          enum:
-          - bill
-          - invoice
-          - customer
-          - vendor
-          - deposit
-          - journalEntry
-          - billPayment
-          - invoicePayment
-          - expense
-          - inventory
-          - purchaseOrder
-          - invoiceCreditNote
-          - billCreditNote
-          - bankTransaction
-          - bankTransfer
-          - account
-        id:
-          type: string
-          example: '234'
-    PushAttachmentV1Dto:
-      type: object
-      properties:
-        connection:
-          $ref: '#/components/schemas/PushAttachmentConnection'
-        file:
-          type: string
-          format: binary
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
         data:
-          $ref: '#/components/schemas/PushAttachmentV1'
+          type: array
+          items:
+            $ref: '#/components/schemas/GetAttachmentData'
       required:
-      - connection
-      - file
+      - count
       - data
     Error403Dto:
       type: object
@@ -401,6 +258,71 @@ components:
       - statusCode
       - message
       - error
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    PushAttachmentV1Dto:
+      type: object
+      properties:
+        connection:
+          $ref: '#/components/schemas/PushAttachmentConnection'
+        file:
+          type: string
+          format: binary
+        data:
+          $ref: '#/components/schemas/PushAttachmentV1'
+      required:
+      - connection
+      - file
+      - data
+    PushAttachmentV1:
+      type: object
+      properties:
+        link:
+          $ref: '#/components/schemas/PushAttachmentLink'
+      required:
+      - link
     Error400ResponseDto:
       type: object
       properties:
@@ -428,6 +350,35 @@ components:
       required:
       - error
       - payload
+    PushAttachmentLink:
+      type: object
+      properties:
+        type:
+          type: string
+          example: bill
+          enum:
+          - bill
+          - invoice
+          - customer
+          - vendor
+          - deposit
+          - journalEntry
+          - billPayment
+          - invoicePayment
+          - expense
+          - inventory
+          - purchaseOrder
+          - invoiceCreditNote
+          - billCreditNote
+          - bankTransaction
+          - bankTransfer
+          - account
+        id:
+          type: string
+          example: '133'
+      required:
+      - type
+      - id
     GetAttachmentData:
       type: object
       properties:
@@ -459,6 +410,54 @@ components:
       required:
       - id
       - url
+    AttachmentLink:
+      type: object
+      properties:
+        type:
+          type: string
+          example: bill
+          enum:
+          - bill
+          - invoice
+          - customer
+          - vendor
+          - deposit
+          - journalEntry
+          - billPayment
+          - invoicePayment
+          - expense
+          - inventory
+          - purchaseOrder
+          - invoiceCreditNote
+          - billCreditNote
+          - bankTransaction
+          - bankTransfer
+          - account
+        id:
+          type: string
+          example: '234'
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
     PushAttachmentConnection:
       type: object
       properties:
@@ -481,16 +480,17 @@ components:
       required:
       - businessName
       - serviceName
-    Error500ResponseDto:
+    Error403ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error500Dto'
+          - $ref: '#/components/schemas/Error403Dto'
         payload:
           type: object
           readOnly: true
+          example: {}
       required:
       - error
       - payload

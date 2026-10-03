@@ -502,155 +502,94 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    GetInvoiceCreditNoteResponseDto:
+    PushInvoiceCreditNoteV1:
       type: object
       properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
+        passThrough:
+          type: object
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+          additionalProperties: true
+        currencyRate:
+          type: number
+          example: '1.13'
+        postedDate:
+          type: string
+          format: date
+          example: '2021-03-29'
+        allocatedOnDate:
+          type: string
+          format: date
+          example: '2021-03-29'
+        memo:
+          type: string
+          maxLength: 4000
+          example: Example memo.
+        customerRef:
+          type: string
+          example: '124'
+        currency:
+          type: string
+          example: CAD
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceCreditNoteLineV1'
+      required:
+      - customerRef
+      - lines
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
         count:
           type: number
-          example: 1
-          format: integer
           readOnly: true
-        meta:
-          readOnly: false
-          allOf:
-          - $ref: '#/components/schemas/BasicStartEndDateReportMetaData'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetInvoiceCreditNoteDataV1'
       required:
-      - pagination
+      - offset
+      - limit
       - count
-      - meta
-      - data
-    Error401Dto:
+    InvoicePaymentLink:
       type: object
       properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
+        type:
           type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
-    TransactionalReportMetaData:
-      type: object
-      properties:
-        reportId:
-          readOnly: true
-          example:
-          - 5fad8a342a88364234392fb5
-          - 5fad8a342a88364234392fb6
-          type: array
-          items:
-            type: string
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
           enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        startDate:
-          type: string
-          readOnly: true
-          example: '2020-11-25T01:02:03Z'
-          format: date-time
-        endDate:
-          type: string
-          readOnly: true
-          example: '2020-11-30T01:02:03Z'
-          format: date-time
-        createdAt:
-          type: string
-          readOnly: true
-          example: '2020-11-25T01:02:03Z'
-          format: date-time
-        updatedAt:
-          type: string
-          example: '2020-11-30T01:02:03Z'
-          format: date-time
-          readOnly: false
-      required:
-      - reportId
-      - serviceName
-      - businessName
-      - startDate
-      - endDate
-      - createdAt
-      - updatedAt
-    PushInvoicePaymentDto:
-      type: object
-      properties:
-        connection:
-          $ref: '#/components/schemas/PushConnection'
-        data:
-          $ref: '#/components/schemas/PushInvoicePayment'
-      required:
-      - connection
-      - data
-    GetInvoicePaymentResponseDto:
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        count:
-          type: number
-          readOnly: true
-          example: 1
-          format: integer
-          deprecated: true
-        meta:
-          $ref: '#/components/schemas/TransactionalReportMetaData'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetInvoicePaymentData'
-      required:
-      - pagination
-      - count
-      - meta
-      - data
-    InventoryRef:
-      type: object
-      properties:
+          - invoice
+          - payment
+          - paymentOnAccount
+          - creditNote
+          - refund
         id:
           type: string
-          example: '1'
-        name:
-          type: string
-          example: Digital Services
+          example: '50'
+        amount:
+          type: number
+          example: 0
+          format: float
       required:
-      - id
+      - type
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
     BasicStartEndDateReportMetaData:
       type: object
       properties:
@@ -711,6 +650,271 @@ components:
       - updatedAt
       - startDate
       - endDate
+    InvoiceLineItemsV1:
+      type: object
+      properties:
+        description:
+          type: string
+          example: Services rendered.
+        unitAmount:
+          type: number
+          example: 100.5
+          format: float
+        quantity:
+          type: number
+          example: 3
+          format: float
+        discountAmount:
+          type: number
+          example: 0
+          format: float
+        taxAmount:
+          type: number
+          example: 20.5
+          format: float
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateRef'
+        inventoryRef:
+          $ref: '#/components/schemas/InventoryRef'
+        accountRef:
+          $ref: '#/components/schemas/AccountRef'
+        locationRef:
+          $ref: '#/components/schemas/LocationRef'
+        discountPercentage:
+          type: string
+          example: '10.5'
+        totalAmount:
+          type: number
+          example: 10.5
+          format: float
+          deprecated: true
+        subTotal:
+          type: number
+          example: 301.5
+          format: float
+          deprecated: true
+        trackingCategoryRef:
+          deprecated: true
+          allOf:
+          - $ref: '#/components/schemas/TrackingCategoryRef'
+    PushInvoicePaymentDto:
+      type: object
+      properties:
+        connection:
+          $ref: '#/components/schemas/PushConnection'
+        data:
+          $ref: '#/components/schemas/PushInvoicePayment'
+      required:
+      - connection
+      - data
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    GetInvoicePaymentData:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        customerRef:
+          $ref: '#/components/schemas/CustomerRef'
+        accountRef:
+          $ref: '#/components/schemas/AccountRef'
+        currencyRate:
+          type: number
+          example: 1.13
+          format: float
+        memo:
+          type: string
+          example: Invoice payment memo.
+        subsidiaryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubsidiaryRef'
+        sourceModifiedDate:
+          format: date-time
+          type: string
+          example: '2021-03-10T11:17:23.155Z'
+        date:
+          format: date-time
+          type: string
+          example: '2021-03-10T11:17:23.155Z'
+        totalAmount:
+          type: number
+          example: 200.5
+          format: float
+        currencyRef:
+          $ref: '#/components/schemas/CurrencyRef'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoicePaymentLineItem'
+      required:
+      - id
+      - date
+    InvoicePaymentLineItem:
+      type: object
+      properties:
+        allocatedOnDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:57:54.294Z'
+        amount:
+          type: number
+          example: 200.5
+          format: float
+        link:
+          deprecated: true
+          allOf:
+          - $ref: '#/components/schemas/InvoicePaymentLink'
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoicePaymentLinks'
+    InvoiceLineItem:
+      type: object
+      properties:
+        description:
+          type: string
+          maxLength: 4000
+          example: Services rendered.
+        quantity:
+          type: number
+          format: float
+          example: 3
+        inventoryRef:
+          type: string
+          example: '240'
+        locationRef:
+          type: string
+          example: '3'
+        accountRef:
+          type: string
+          example: '145'
+        discountPercentage:
+          type: number
+          example: 30
+        subTotal:
+          type: number
+          format: float
+          example: 301.5
+          deprecated: true
+        totalAmount:
+          type: number
+          format: float
+          example: 322
+          deprecated: true
+        unitAmount:
+          type: number
+          format: float
+          example: 100.5
+        taxAmount:
+          type: number
+          format: float
+          example: 20.5
+        taxRef:
+          type: string
+          example: '24'
+      required:
+      - quantity
+    PushInvoiceCreditNoteV1ResponseDto:
+      type: object
+      properties:
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: quickbooks
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushInvoiceCreditNoteV1'
+      required:
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - businessName
+      - serviceName
+      - data
+    GetInvoiceCreditNoteResponseDto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        count:
+          type: number
+          example: 1
+          format: integer
+          readOnly: true
+        meta:
+          readOnly: false
+          allOf:
+          - $ref: '#/components/schemas/BasicStartEndDateReportMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetInvoiceCreditNoteDataV1'
+      required:
+      - pagination
+      - count
+      - meta
+      - data
+    GetInvoiceCreditNoteDataV1:
+      type: object
+      properties:
+        customerRef:
+          $ref: '#/components/schemas/CustomerRef'
+        locationRef:
+          $ref: '#/components/schemas/LocationRef'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceBillLineItemsV1'
     PushInvoicePayment:
       type: object
       properties:
@@ -748,62 +952,6 @@ components:
           type: string
           maxLength: 4000
           example: Invoice payment memo.
-    PushInvoiceDto:
-      type: object
-      properties:
-        connection:
-          $ref: '#/components/schemas/PushConnection'
-        data:
-          $ref: '#/components/schemas/PushInvoice'
-      required:
-      - connection
-      - data
-    SubsidiaryRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        name:
-          type: string
-          example: Railz Financial
-    TrackingCategoryRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '4040'
-          readOnly: false
-        name:
-          type: string
-          readOnly: false
-          example: Region
-        option:
-          type: string
-          readOnly: false
-          example: East
-        optionId:
-          type: string
-          readOnly: false
-          example: '40401'
-      required:
-      - id
-    InvoicePaymentLinks:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - invoice
-          - payment
-          - paymentOnAccount
-          - creditNote
-          - refund
-        id:
-          type: string
-          example: '50'
-      required:
-      - type
     InvoiceBillLineItemsV1:
       type: object
       properties:
@@ -852,6 +1000,52 @@ components:
           deprecated: true
           allOf:
           - $ref: '#/components/schemas/TrackingCategoryRef'
+    SubsidiaryRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Railz Financial
+    TaxRateRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: HST
+        effectiveTaxRate:
+          type: number
+          example: 13
+          format: float
+      required:
+      - id
+    GetInvoiceResponseDto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+          deprecated: true
+        meta:
+          $ref: '#/components/schemas/TransactionalReportMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetInvoiceV1Data'
+      required:
+      - pagination
+      - count
+      - meta
+      - data
     LocationRef:
       type: object
       properties:
@@ -861,33 +1055,50 @@ components:
         name:
           type: string
           example: United States
-    Error400ResponseDto:
+    PushInvoice:
       type: object
       properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400Dto'
-        payload:
+        passThrough:
           type: object
-          readOnly: true
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+          additionalProperties: true
+        invoiceNumber:
+          type: string
+          maxLength: 21
+          example: INV-10546
+        postedDate:
+          type: string
+          format: date
+          example: '2021-03-29'
+        dueDate:
+          type: string
+          format: date
+          example: '2021-03-29'
+        currency:
+          type: string
+          example: CAD
+        currencyRate:
+          type: number
+          format: float
+          example: 1.13
+        memo:
+          type: string
+          maxLength: 4000
+          example: Example invoice memo.
+        customerRef:
+          type: string
+          example: '132'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceLineItem'
       required:
-      - error
-      - payload
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
+      - customerRef
+      - lines
     InvoiceCreditNoteLineV1:
       type: object
       properties:
@@ -938,87 +1149,48 @@ components:
       required:
       - quantity
       - unitAmount
-    InvoicePaymentLink:
+    InvoicePaymentLine:
       type: object
       properties:
-        type:
+        amount:
+          type: number
+          format: float
+          example: '342.99'
+        invoiceRef:
           type: string
-          enum:
-          - invoice
-          - payment
-          - paymentOnAccount
-          - creditNote
-          - refund
+          example: 3n2
+          deprecated: true
+        memo:
+          type: string
+          maxLength: 4000
+          example: Sample memo for transaction
+      required:
+      - amount
+    CurrencyRef:
+      type: object
+      properties:
         id:
           type: string
-          example: '50'
-        amount:
-          type: number
-          example: 0
-          format: float
+          example: CAD
+        name:
+          type: string
+          example: Canadian Dollar
+        symbol:
+          type: string
+          example: USD,CAD
       required:
-      - type
-    Payments:
+      - id
+    PushConnection:
       type: object
       properties:
-        amount:
-          type: number
-          example: 50.5
-          format: float
-        paymentId:
-          type: string
-          example: '50'
-        date:
-          format: date-time
-          type: string
-          example: '2021-03-09T10:18:29.985Z'
-    InvoicePaymentLineItem:
-      type: object
-      properties:
-        allocatedOnDate:
-          format: date-time
-          type: string
-          example: '2021-03-09T10:57:54.294Z'
-        amount:
-          type: number
-          example: 200.5
-          format: float
-        link:
-          deprecated: true
-          allOf:
-          - $ref: '#/components/schemas/InvoicePaymentLink'
-        links:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvoicePaymentLinks'
-    PushInvoicePaymentResponseDto:
-      type: object
-      properties:
-        pushCommunicationId:
-          type: string
-          readOnly: true
-          example: 60473b57f0cdd1683ca71f60
-        requestedOn:
-          type: string
-          readOnly: true
-          example: '2021-03-09T08:15:22.035Z'
-          format: date-time
-        status:
-          type: string
-          readOnly: true
-          example: pending
-          enum:
-          - success
-          - failed
-          - pending
         businessName:
           type: string
-          readOnly: true
           example: Railz
+          description: Unique business name identifier.
         serviceName:
           type: string
-          readOnly: true
           example: quickbooks
+          description: Name of accounting platform service.
           enum:
           - freshbooks
           - quickbooks
@@ -1030,20 +1202,72 @@ components:
           - dynamicsBusinessCentral
           - dynamics365Finance
           - wave
+          - shopify
+          - square
+          - plaid
           - myob
           - zohoBooks
           - byod
-        data:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/PushInvoicePayment'
       required:
-      - pushCommunicationId
-      - requestedOn
-      - status
       - businessName
       - serviceName
-      - data
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
     GetInvoiceV1Data:
       type: object
       properties:
@@ -1127,203 +1351,62 @@ components:
       - id
       - status
       - postedDate
-    TaxRateRef:
+    PushInvoiceCreditNoteV1Dto:
       type: object
       properties:
-        id:
-          type: string
-          example: '1'
-        name:
-          type: string
-          example: HST
-        effectiveTaxRate:
-          type: number
-          example: 13
-          format: float
+        connection:
+          $ref: '#/components/schemas/PushConnection'
+        data:
+          $ref: '#/components/schemas/PushInvoiceCreditNoteV1'
       required:
-      - id
-    PushInvoice:
+      - connection
+      - data
+    PushInvoiceDto:
       type: object
       properties:
-        passThrough:
-          type: object
-          example:
-            CustomField:
-            - DefinitionId: '1'
-              StringValue: my custom value
-              Name: Field One
-          additionalProperties: true
-        invoiceNumber:
-          type: string
-          maxLength: 21
-          example: INV-10546
-        postedDate:
-          type: string
-          format: date
-          example: '2021-03-29'
-        dueDate:
-          type: string
-          format: date
-          example: '2021-03-29'
-        currency:
-          type: string
-          example: CAD
-        currencyRate:
-          type: number
-          format: float
-          example: 1.13
-        memo:
-          type: string
-          maxLength: 4000
-          example: Example invoice memo.
-        customerRef:
-          type: string
-          example: '132'
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvoiceLineItem'
+        connection:
+          $ref: '#/components/schemas/PushConnection'
+        data:
+          $ref: '#/components/schemas/PushInvoice'
       required:
-      - customerRef
-      - lines
-    InvoicePaymentLine:
-      type: object
-      properties:
-        amount:
-          type: number
-          format: float
-          example: '342.99'
-        invoiceRef:
-          type: string
-          example: 3n2
-          deprecated: true
-        memo:
-          type: string
-          maxLength: 4000
-          example: Sample memo for transaction
-      required:
-      - amount
-    GetInvoicePaymentData:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        customerRef:
-          $ref: '#/components/schemas/CustomerRef'
-        accountRef:
-          $ref: '#/components/schemas/AccountRef'
-        currencyRate:
-          type: number
-          example: 1.13
-          format: float
-        memo:
-          type: string
-          example: Invoice payment memo.
-        subsidiaryRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubsidiaryRef'
-        sourceModifiedDate:
-          format: date-time
-          type: string
-          example: '2021-03-10T11:17:23.155Z'
-        date:
-          format: date-time
-          type: string
-          example: '2021-03-10T11:17:23.155Z'
-        totalAmount:
-          type: number
-          example: 200.5
-          format: float
-        currencyRef:
-          $ref: '#/components/schemas/CurrencyRef'
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvoicePaymentLineItem'
-      required:
-      - id
-      - date
-    GetInvoiceCreditNoteDataV1:
-      type: object
-      properties:
-        customerRef:
-          $ref: '#/components/schemas/CustomerRef'
-        locationRef:
-          $ref: '#/components/schemas/LocationRef'
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvoiceBillLineItemsV1'
-    Error400Dto:
+      - connection
+      - data
+    Error401Dto:
       type: object
       properties:
         statusCode:
           type: number
           readOnly: true
-          example: 400
+          example: 401
         message:
           readOnly: true
           example:
-          - businessName cannot be null
+          - Unauthorized
           type: array
           items:
             type: string
         error:
           type: string
           readOnly: true
-          example: Bad Request
+          example: Unauthorized
       required:
       - statusCode
       - message
       - error
-    InvoiceLineItem:
+    Payments:
       type: object
       properties:
-        description:
-          type: string
-          maxLength: 4000
-          example: Services rendered.
-        quantity:
+        amount:
           type: number
+          example: 50.5
           format: float
-          example: 3
-        inventoryRef:
+        paymentId:
           type: string
-          example: '240'
-        locationRef:
+          example: '50'
+        date:
+          format: date-time
           type: string
-          example: '3'
-        accountRef:
-          type: string
-          example: '145'
-        discountPercentage:
-          type: number
-          example: 30
-        subTotal:
-          type: number
-          format: float
-          example: 301.5
-          deprecated: true
-        totalAmount:
-          type: number
-          format: float
-          example: 322
-          deprecated: true
-        unitAmount:
-          type: number
-          format: float
-          example: 100.5
-        taxAmount:
-          type: number
-          format: float
-          example: 20.5
-        taxRef:
-          type: string
-          example: '24'
-      required:
-      - quantity
+          example: '2021-03-09T10:18:29.985Z'
     PushInvoiceResponseDto:
       type: object
       properties:
@@ -1377,33 +1460,91 @@ components:
       - businessName
       - serviceName
       - data
-    PaginationMetaData:
+    TrackingCategoryRef:
       type: object
       properties:
-        offset:
-          type: number
-          readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
-          readOnly: true
-      required:
-      - offset
-      - limit
-      - count
-    PushConnection:
-      type: object
-      properties:
-        businessName:
+        id:
           type: string
-          example: Railz
-          description: Unique business name identifier.
+          example: '4040'
+          readOnly: false
+        name:
+          type: string
+          readOnly: false
+          example: Region
+        option:
+          type: string
+          readOnly: false
+          example: East
+        optionId:
+          type: string
+          readOnly: false
+          example: '40401'
+      required:
+      - id
+    InventoryRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Digital Services
+      required:
+      - id
+    InvoicePaymentLinks:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - invoice
+          - payment
+          - paymentOnAccount
+          - creditNote
+          - refund
+        id:
+          type: string
+          example: '50'
+      required:
+      - type
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    TransactionalReportMetaData:
+      type: object
+      properties:
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          - 5fad8a342a88364234392fb6
+          type: array
+          items:
+            type: string
         serviceName:
           type: string
-          example: quickbooks
-          description: Name of accounting platform service.
+          readOnly: true
+          example: xero
           enum:
           - freshbooks
           - quickbooks
@@ -1415,16 +1556,53 @@ components:
           - dynamicsBusinessCentral
           - dynamics365Finance
           - wave
-          - shopify
-          - square
-          - plaid
           - myob
           - zohoBooks
           - byod
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
       required:
-      - businessName
+      - reportId
       - serviceName
-    PushInvoiceCreditNoteV1ResponseDto:
+      - businessName
+      - startDate
+      - endDate
+      - createdAt
+      - updatedAt
+    CustomerRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Railz Financial
+      required:
+      - id
+    PushInvoicePaymentResponseDto:
       type: object
       properties:
         pushCommunicationId:
@@ -1469,7 +1647,7 @@ components:
         data:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/PushInvoiceCreditNoteV1'
+          - $ref: '#/components/schemas/PushInvoicePayment'
       required:
       - pushCommunicationId
       - requestedOn
@@ -1477,7 +1655,7 @@ components:
       - businessName
       - serviceName
       - data
-    GetInvoiceResponseDto:
+    GetInvoicePaymentResponseDto:
       type: object
       properties:
         pagination:
@@ -1493,165 +1671,11 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/GetInvoiceV1Data'
+            $ref: '#/components/schemas/GetInvoicePaymentData'
       required:
       - pagination
       - count
       - meta
-      - data
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    InvoiceLineItemsV1:
-      type: object
-      properties:
-        description:
-          type: string
-          example: Services rendered.
-        unitAmount:
-          type: number
-          example: 100.5
-          format: float
-        quantity:
-          type: number
-          example: 3
-          format: float
-        discountAmount:
-          type: number
-          example: 0
-          format: float
-        taxAmount:
-          type: number
-          example: 20.5
-          format: float
-        taxRateRef:
-          $ref: '#/components/schemas/TaxRateRef'
-        inventoryRef:
-          $ref: '#/components/schemas/InventoryRef'
-        accountRef:
-          $ref: '#/components/schemas/AccountRef'
-        locationRef:
-          $ref: '#/components/schemas/LocationRef'
-        discountPercentage:
-          type: string
-          example: '10.5'
-        totalAmount:
-          type: number
-          example: 10.5
-          format: float
-          deprecated: true
-        subTotal:
-          type: number
-          example: 301.5
-          format: float
-          deprecated: true
-        trackingCategoryRef:
-          deprecated: true
-          allOf:
-          - $ref: '#/components/schemas/TrackingCategoryRef'
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
-    PushInvoiceCreditNoteV1:
-      type: object
-      properties:
-        passThrough:
-          type: object
-          example:
-            CustomField:
-            - DefinitionId: '1'
-              StringValue: my custom value
-              Name: Field One
-          additionalProperties: true
-        currencyRate:
-          type: number
-          example: '1.13'
-        postedDate:
-          type: string
-          format: date
-          example: '2021-03-29'
-        allocatedOnDate:
-          type: string
-          format: date
-          example: '2021-03-29'
-        memo:
-          type: string
-          maxLength: 4000
-          example: Example memo.
-        customerRef:
-          type: string
-          example: '124'
-        currency:
-          type: string
-          example: CAD
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvoiceCreditNoteLineV1'
-      required:
-      - customerRef
-      - lines
-    PushInvoiceCreditNoteV1Dto:
-      type: object
-      properties:
-        connection:
-          $ref: '#/components/schemas/PushConnection'
-        data:
-          $ref: '#/components/schemas/PushInvoiceCreditNoteV1'
-      required:
-      - connection
       - data
     AccountRef:
       type: object
@@ -1664,41 +1688,17 @@ components:
           example: Example account
       required:
       - id
-    CustomerRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        name:
-          type: string
-          example: Railz Financial
-      required:
-      - id
-    CurrencyRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: CAD
-        name:
-          type: string
-          example: Canadian Dollar
-        symbol:
-          type: string
-          example: USD,CAD
-      required:
-      - id
-    Error500ResponseDto:
+    Error403ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error500Dto'
+          - $ref: '#/components/schemas/Error403Dto'
         payload:
           type: object
           readOnly: true
+          example: {}
       required:
       - error
       - payload

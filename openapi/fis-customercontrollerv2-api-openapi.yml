@@ -422,749 +422,6 @@ paths:
       - CustomerControllerV2
 components:
   schemas:
-    PaymentMethodRefDto:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        name:
-          type: string
-          example: Harmonized sales tax
-        type:
-          type: string
-          example: creditCard
-          enum:
-          - unknown
-          - cash
-          - check
-          - creditCard
-          - debitCard
-          - bankTransfer
-          - giftCard
-          - other
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
-    GetCustomerBankAccountDataV2:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        name:
-          type: string
-          example: Business Bank Account
-        contactName:
-          type: string
-          example: Jane Smith
-        type:
-          type: string
-          enum:
-          - checking
-          - saving
-          - creditCard
-          - loan
-          - investment
-          - unknown
-          example: checking
-        customerRef:
-          $ref: '#/components/schemas/ParentRefDtoV2'
-        accountNumber:
-          type: string
-          example: '11200'
-        routingNumber:
-          type: string
-          example: '123456789'
-        bankName:
-          type: string
-          example: TD Bank
-        supportsAch:
-          type: boolean
-          example: true
-        supportsWire:
-          type: boolean
-          example: true
-        supportsCheck:
-          type: boolean
-          example: true
-        address:
-          $ref: '#/components/schemas/BaseAddress'
-        currency:
-          type: string
-          example: USD
-        sourceModifiedDate:
-          type: string
-          example: '2021-03-09T08:49:36.035Z'
-      required:
-      - id
-    PushCustomerV2ResponseDto:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          readOnly: true
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        pushCommunicationId:
-          type: string
-          readOnly: true
-          example: 60473b57f0cdd1683ca71f60
-        requestedOn:
-          type: string
-          readOnly: true
-          example: '2021-03-09T08:15:22.035Z'
-          format: date-time
-        status:
-          type: string
-          readOnly: true
-          example: pending
-          enum:
-          - success
-          - failed
-          - pending
-        data:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/PushCustomerV2'
-      required:
-      - connectionUuid
-      - businessName
-      - serviceName
-      - pushCommunicationId
-      - requestedOn
-      - status
-      - data
-    ParentRefDto:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '32'
-      required:
-      - id
-    PushUpdateCustomerV2Dto:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          description: Unique connection identifier.
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        data:
-          $ref: '#/components/schemas/PutCustomerV2'
-      required:
-      - connectionUuid
-      - data
-    Error400ResponseDtoV2:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    SubsidiaryRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        name:
-          type: string
-          example: Railz Financial
-    BatchPutCustomer:
-      type: object
-      properties:
-        contactFirstName:
-          type: string
-          maxLength: 100
-          example: Jane
-        contactLastName:
-          type: string
-          maxLength: 100
-          example: Smith
-        emailAddress:
-          type: string
-          maxLength: 100
-          example: email@acme.com
-        phone:
-          type: string
-          maxLength: 30
-          example: '8889990000'
-        website:
-          type: string
-          maxLength: 100
-          format: uri
-          example: www.acme.com
-        isPerson:
-          type: boolean
-        customerName:
-          type: string
-          maxLength: 500
-          example: ACME Inc.
-        contactName:
-          type: string
-          example: Jane Smith
-        taxNumber:
-          type: string
-          example: '987654321'
-        parentRef:
-          $ref: '#/components/schemas/ParentRefDto'
-        billingAddress:
-          $ref: '#/components/schemas/BillingAddressDto'
-        currency:
-          type: string
-          example: CAD
-        shippingAddress:
-          $ref: '#/components/schemas/ShippingAddressDto'
-        subsidiaryRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubsidiaryRefDto'
-        contacts:
-          type: array
-          items:
-            $ref: '#/components/schemas/PushCustomerVendorContactV2'
-        passThrough:
-          type: object
-          additionalProperties: true
-          example:
-            CustomField:
-            - DefinitionId: '1'
-              StringValue: my custom value
-              Name: Field One
-        paymentMethodRef:
-          $ref: '#/components/schemas/PaymentMethodRefDto'
-        customerRef:
-          type: string
-          description: reference to the customer to be updated
-      required:
-      - customerRef
-    PushCustomerV2:
-      type: object
-      properties:
-        contactFirstName:
-          type: string
-          maxLength: 100
-          example: Jane
-        contactLastName:
-          type: string
-          maxLength: 100
-          example: Smith
-        emailAddress:
-          type: string
-          maxLength: 100
-          example: email@acme.com
-        phone:
-          type: string
-          maxLength: 30
-          example: '8889990000'
-        website:
-          type: string
-          maxLength: 100
-          format: uri
-          example: www.acme.com
-        isPerson:
-          type: boolean
-        customerName:
-          type: string
-          maxLength: 500
-          example: ACME Inc.
-        contactName:
-          type: string
-          example: Jane Smith
-        taxNumber:
-          type: string
-          example: '987654321'
-        parentRef:
-          $ref: '#/components/schemas/ParentRefDto'
-        billingAddress:
-          $ref: '#/components/schemas/BillingAddressDto'
-        shippingAddress:
-          $ref: '#/components/schemas/ShippingAddressDto'
-        currency:
-          type: string
-          example: CAD
-        subsidiaryRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubsidiaryRefDto'
-        contacts:
-          type: array
-          items:
-            $ref: '#/components/schemas/PushCustomerVendorContactV2'
-        passThrough:
-          type: object
-          additionalProperties: true
-          example:
-            CustomField:
-            - DefinitionId: '1'
-              StringValue: my custom value
-              Name: Field One
-        paymentMethodRef:
-          $ref: '#/components/schemas/PaymentMethodRefDto'
-    ParentRefDtoV2:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '32'
-        name:
-          type: string
-          example: Parent Name
-      required:
-      - id
-    Error400DtoV2:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - connectionUuid should not be empty
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
-    PushCustomerBankAccountResponseDto:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          readOnly: true
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        pushCommunicationId:
-          type: string
-          readOnly: true
-          example: 60473b57f0cdd1683ca71f60
-        requestedOn:
-          type: string
-          readOnly: true
-          example: '2021-03-09T08:15:22.035Z'
-          format: date-time
-        status:
-          type: string
-          readOnly: true
-          example: pending
-          enum:
-          - success
-          - failed
-          - pending
-        data:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/PushCustomerBankAccount'
-      required:
-      - connectionUuid
-      - businessName
-      - serviceName
-      - pushCommunicationId
-      - requestedOn
-      - status
-      - data
-    BatchPushCustomerResponseV2Dto:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          readOnly: true
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        batchId:
-          type: string
-          readOnly: true
-          example: 60473b57f0cdd1683ca71f60
-        batch:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/PushCustomerIndividualResponseV2Dto'
-      required:
-      - connectionUuid
-      - businessName
-      - serviceName
-      - batchId
-      - batch
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    UpdateCustomerIndividualResponseDto:
-      type: object
-      properties:
-        pushCommunicationId:
-          type: string
-          readOnly: true
-          example: 60473b57f0cdd1683ca71f60
-        requestedOn:
-          type: string
-          readOnly: true
-          example: '2021-03-09T08:15:22.035Z'
-          format: date-time
-        status:
-          type: string
-          readOnly: true
-          example: pending
-          enum:
-          - success
-          - failed
-          - pending
-        data:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/BatchPutCustomer'
-      required:
-      - pushCommunicationId
-      - requestedOn
-      - status
-      - data
-    ListReportMetaDataV2:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          readOnly: true
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        reportId:
-          readOnly: true
-          example:
-          - 5fad8a342a88364234392fb5
-          - 5fad8a342a88364234392fb6
-          type: array
-          items:
-            type: string
-        createdAt:
-          type: string
-          readOnly: true
-          example: '2020-11-25T01:02:03Z'
-          format: date-time
-        updatedAt:
-          type: string
-          example: '2020-11-30T01:02:03Z'
-          format: date-time
-          readOnly: false
-      required:
-      - connectionUuid
-      - businessName
-      - serviceName
-      - reportId
-      - createdAt
-      - updatedAt
-    BatchPushCustomerV2Dto:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          description: Unique connection identifier.
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        batch:
-          type: array
-          items:
-            $ref: '#/components/schemas/PushCustomerV2'
-      required:
-      - connectionUuid
-      - batch
-    PushBaseAddress:
-      type: object
-      properties:
-        line1:
-          type: string
-          example: 1234 Park Street
-        line2:
-          type: string
-          example: Suite 1000
-        city:
-          type: string
-          example: Toronto
-        region:
-          type: string
-          example: 'ON'
-        country:
-          type: string
-          example: CAN
-        postalCode:
-          type: string
-          example: A0B1C2
-    ParentRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '434'
-        name:
-          type: string
-          example: Region
-      required:
-      - id
-    PushCustomerV2Dto:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          description: Unique connection identifier.
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        data:
-          $ref: '#/components/schemas/PushCustomerV2'
-      required:
-      - connectionUuid
-      - data
-    ShippingAddress:
-      type: object
-      properties:
-        line1:
-          type: string
-          example: 1234 Park Street
-        line2:
-          type: string
-          example: Suite 1000
-        city:
-          type: string
-          example: Toronto
-        region:
-          type: string
-          example: 'ON'
-        country:
-          type: string
-          example: CAN
-        postalCode:
-          type: string
-          example: A0B1C2
-    CustomerVendorPushAddressV2:
-      type: object
-      properties:
-        line1:
-          type: string
-          example: 1234 Park Street
-        line2:
-          type: string
-          example: Suite 1000
-        city:
-          type: string
-          example: Toronto
-        region:
-          type: string
-          example: 'ON'
-        country:
-          type: string
-          example: CAN
-        postalCode:
-          type: string
-          example: A0B1C2
-        type:
-          type: string
-          enum:
-          - billing
-          - shipping
-          - other
-          example: billing
-    BaseAddress:
-      type: object
-      properties:
-        line1:
-          type: string
-          example: 1234 Park Street
-        line2:
-          type: string
-          example: Suite 1000
-        city:
-          type: string
-          example: Toronto
-        region:
-          type: string
-          example: 'ON'
-        country:
-          type: string
-          example: CAN
-        postalCode:
-          type: string
-          example: A0B1C2
-    PushCustomerIndividualResponseV2Dto:
-      type: object
-      properties:
-        pushCommunicationId:
-          type: string
-          readOnly: true
-          example: 60473b57f0cdd1683ca71f60
-        requestedOn:
-          type: string
-          readOnly: true
-          example: '2021-03-09T08:15:22.035Z'
-          format: date-time
-        status:
-          type: string
-          readOnly: true
-          example: pending
-          enum:
-          - success
-          - failed
-          - pending
-        data:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/PushCustomerV2'
-      required:
-      - pushCommunicationId
-      - requestedOn
-      - status
-      - data
-    PaginationMetaData:
-      type: object
-      properties:
-        offset:
-          type: number
-          readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
-          readOnly: true
-      required:
-      - offset
-      - limit
-      - count
-    PushCustomerBankAccountDto:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          description: Unique connection identifier.
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        data:
-          $ref: '#/components/schemas/PushCustomerBankAccount'
-      required:
-      - connectionUuid
-      - data
     BatchUpdateCustomerResponseDto:
       type: object
       properties:
@@ -1209,6 +466,131 @@ components:
       - serviceName
       - batchId
       - batch
+    BatchPushCustomerV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        batch:
+          type: array
+          items:
+            $ref: '#/components/schemas/PushCustomerV2'
+      required:
+      - connectionUuid
+      - batch
+    ParentRefDtoV2:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '32'
+        name:
+          type: string
+          example: Parent Name
+      required:
+      - id
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    PushCustomerVendorContactV2:
+      type: object
+      properties:
+        name:
+          type: string
+          example: John Smith
+        email:
+          type: string
+          example: jsmith@company.com
+        phone:
+          type: string
+          example: '8887779999'
+        address:
+          $ref: '#/components/schemas/CustomerVendorPushAddressV2'
+    PushCustomerV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        data:
+          $ref: '#/components/schemas/PushCustomerV2'
+      required:
+      - connectionUuid
+      - data
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    BatchPushCustomerResponseV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        batchId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        batch:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/PushCustomerIndividualResponseV2Dto'
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - batchId
+      - batch
     CustomerVendorAddress:
       type: object
       properties:
@@ -1236,35 +618,196 @@ components:
           - billing
           - shipping
           - other
-    GetCustomerResponseV2Dto:
+    CustomerVendorContactV2:
       type: object
       properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        meta:
-          $ref: '#/components/schemas/ListReportMetaDataV2'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetCustomerDataV2'
-      required:
-      - pagination
-      - meta
-      - data
-    GetCustomerBankAccountResponseV2Dto:
+        name:
+          type: string
+          example: John Smith
+        email:
+          type: string
+          example: jsmith@company.com
+        phone:
+          type: string
+          example: '8887779999'
+        address:
+          $ref: '#/components/schemas/CustomerVendorAddress'
+        status:
+          type: string
+          enum:
+          - unknown
+          - active
+          - archived
+    ShippingAddressDto:
       type: object
       properties:
-        meta:
-          $ref: '#/components/schemas/ListReportMetaDataV2'
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        data:
+        line1:
+          type: string
+          maxLength: 500
+          example: 1234 Park Street
+        line2:
+          type: string
+          maxLength: 500
+          example: Suite 1000
+        city:
+          type: string
+          maxLength: 255
+          example: Toronto
+        region:
+          type: string
+          maxLength: 255
+          example: 'ON'
+          description: Region within a country. For example, state name for USA, province name for Canada.
+        country:
+          type: string
+          example: CAN
+          description: Country name as 3 ISO alpha-3 characters.
+        postalCode:
+          type: string
+          maxLength: 30
+          example: A0B1C2
+          description: Postal code. For example, zip code for USA and Canada.
+    BillingAddress:
+      type: object
+      properties:
+        line1:
+          type: string
+          example: 1234 Park Street
+        line2:
+          type: string
+          example: Suite 1000
+        city:
+          type: string
+          example: Toronto
+        region:
+          type: string
+          example: 'ON'
+        country:
+          type: string
+          example: CAN
+        postalCode:
+          type: string
+          example: A0B1C2
+    BillingAddressDto:
+      type: object
+      properties:
+        line1:
+          type: string
+          maxLength: 500
+          example: 1234 Park Street
+        line2:
+          type: string
+          maxLength: 500
+          example: Suite 1000
+        city:
+          type: string
+          maxLength: 255
+          example: Toronto
+        region:
+          type: string
+          maxLength: 255
+          example: 'ON'
+          description: Region within a country. For example, state name for USA, province name for Canada.
+        country:
+          type: string
+          example: CAN
+          description: Country name as 3 ISO alpha-3 characters.
+        postalCode:
+          type: string
+          maxLength: 30
+          example: A0B1C2
+          description: Postal code. For example, zip code for USA and Canada.
+    PutCustomerV2:
+      type: object
+      properties:
+        contactFirstName:
+          type: string
+          maxLength: 100
+          example: Jane
+        contactLastName:
+          type: string
+          maxLength: 100
+          example: Smith
+        emailAddress:
+          type: string
+          maxLength: 100
+          example: email@acme.com
+        phone:
+          type: string
+          maxLength: 30
+          example: '8889990000'
+        website:
+          type: string
+          maxLength: 100
+          format: uri
+          example: www.acme.com
+        isPerson:
+          type: boolean
+        customerName:
+          type: string
+          maxLength: 500
+          example: ACME Inc.
+        contactName:
+          type: string
+          example: Jane Smith
+        taxNumber:
+          type: string
+          example: '987654321'
+        parentRef:
+          $ref: '#/components/schemas/ParentRefDto'
+        billingAddress:
+          $ref: '#/components/schemas/BillingAddressDto'
+        currency:
+          type: string
+          example: CAD
+        shippingAddress:
+          $ref: '#/components/schemas/ShippingAddressDto'
+        subsidiaryRefs:
           type: array
           items:
-            $ref: '#/components/schemas/GetCustomerBankAccountDataV2'
+            $ref: '#/components/schemas/SubsidiaryRefDto'
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/PushCustomerVendorContactV2'
+        passThrough:
+          type: object
+          additionalProperties: true
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+        paymentMethodRef:
+          $ref: '#/components/schemas/PaymentMethodRefDto'
+    UpdateCustomerIndividualResponseDto:
+      type: object
+      properties:
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/BatchPutCustomer'
       required:
-      - meta
-      - pagination
+      - pushCommunicationId
+      - requestedOn
+      - status
       - data
     PutCustomerV2ResponseDto:
       type: object
@@ -1324,193 +867,69 @@ components:
       - requestedOn
       - status
       - data
-    BatchUpdateCustomerDto:
+    SubsidiaryRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Railz Financial
+    ListReportMetaDataV2:
       type: object
       properties:
         connectionUuid:
           type: string
-          description: Unique connection identifier.
+          readOnly: true
           example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        batch:
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          - 5fad8a342a88364234392fb6
           type: array
           items:
-            $ref: '#/components/schemas/BatchPutCustomer'
+            type: string
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
       required:
       - connectionUuid
-      - batch
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    SubsidiaryRefDto:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '4'
-      required:
-      - id
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    ShippingAddressDto:
-      type: object
-      properties:
-        line1:
-          type: string
-          maxLength: 500
-          example: 1234 Park Street
-        line2:
-          type: string
-          maxLength: 500
-          example: Suite 1000
-        city:
-          type: string
-          maxLength: 255
-          example: Toronto
-        region:
-          type: string
-          maxLength: 255
-          example: 'ON'
-          description: Region within a country. For example, state name for USA, province name for Canada.
-        country:
-          type: string
-          example: CAN
-          description: Country name as 3 ISO alpha-3 characters.
-        postalCode:
-          type: string
-          maxLength: 30
-          example: A0B1C2
-          description: Postal code. For example, zip code for USA and Canada.
-    BillingAddressDto:
-      type: object
-      properties:
-        line1:
-          type: string
-          maxLength: 500
-          example: 1234 Park Street
-        line2:
-          type: string
-          maxLength: 500
-          example: Suite 1000
-        city:
-          type: string
-          maxLength: 255
-          example: Toronto
-        region:
-          type: string
-          maxLength: 255
-          example: 'ON'
-          description: Region within a country. For example, state name for USA, province name for Canada.
-        country:
-          type: string
-          example: CAN
-          description: Country name as 3 ISO alpha-3 characters.
-        postalCode:
-          type: string
-          maxLength: 30
-          example: A0B1C2
-          description: Postal code. For example, zip code for USA and Canada.
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
-    BillingAddress:
-      type: object
-      properties:
-        line1:
-          type: string
-          example: 1234 Park Street
-        line2:
-          type: string
-          example: Suite 1000
-        city:
-          type: string
-          example: Toronto
-        region:
-          type: string
-          example: 'ON'
-        country:
-          type: string
-          example: CAN
-        postalCode:
-          type: string
-          example: A0B1C2
-    CustomerVendorContactV2:
-      type: object
-      properties:
-        name:
-          type: string
-          example: John Smith
-        email:
-          type: string
-          example: jsmith@company.com
-        phone:
-          type: string
-          example: '8887779999'
-        address:
-          $ref: '#/components/schemas/CustomerVendorAddress'
-        status:
-          type: string
-          enum:
-          - unknown
-          - active
-          - archived
-    CustomerRefDto:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '124'
-      required:
-      - id
+      - businessName
+      - serviceName
+      - reportId
+      - createdAt
+      - updatedAt
     GetCustomerDataV2:
       type: object
       properties:
@@ -1580,21 +999,370 @@ components:
       required:
       - id
       - status
-    PushCustomerVendorContactV2:
+    Error400DtoV2:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    PushCustomerBankAccount:
       type: object
       properties:
         name:
           type: string
-          example: John Smith
-        email:
+          example: Business Bank Account
+        type:
           type: string
-          example: jsmith@company.com
+          example: checking
+        accountNumber:
+          type: string
+          example: '11200'
+        routingNumber:
+          type: string
+          example: '123456789'
+        bankName:
+          type: string
+          example: TD Bank
+        supportsAch:
+          type: boolean
+          example: true
+        supportsWire:
+          type: boolean
+          example: true
+        supportsCheck:
+          type: boolean
+          example: true
+        address:
+          $ref: '#/components/schemas/PushBaseAddress'
+        contactName:
+          type: string
+          maxLength: 500
+          example: Jane Smith
+        currency:
+          type: string
+          example: CAD
+        customerRef:
+          $ref: '#/components/schemas/CustomerRefDto'
+      required:
+      - customerRef
+    PushBaseAddress:
+      type: object
+      properties:
+        line1:
+          type: string
+          example: 1234 Park Street
+        line2:
+          type: string
+          example: Suite 1000
+        city:
+          type: string
+          example: Toronto
+        region:
+          type: string
+          example: 'ON'
+        country:
+          type: string
+          example: CAN
+        postalCode:
+          type: string
+          example: A0B1C2
+    BatchUpdateCustomerDto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        batch:
+          type: array
+          items:
+            $ref: '#/components/schemas/BatchPutCustomer'
+      required:
+      - connectionUuid
+      - batch
+    GetCustomerResponseV2Dto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        meta:
+          $ref: '#/components/schemas/ListReportMetaDataV2'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetCustomerDataV2'
+      required:
+      - pagination
+      - meta
+      - data
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    CustomerRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '124'
+      required:
+      - id
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    CustomerVendorPushAddressV2:
+      type: object
+      properties:
+        line1:
+          type: string
+          example: 1234 Park Street
+        line2:
+          type: string
+          example: Suite 1000
+        city:
+          type: string
+          example: Toronto
+        region:
+          type: string
+          example: 'ON'
+        country:
+          type: string
+          example: CAN
+        postalCode:
+          type: string
+          example: A0B1C2
+        type:
+          type: string
+          enum:
+          - billing
+          - shipping
+          - other
+          example: billing
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    ShippingAddress:
+      type: object
+      properties:
+        line1:
+          type: string
+          example: 1234 Park Street
+        line2:
+          type: string
+          example: Suite 1000
+        city:
+          type: string
+          example: Toronto
+        region:
+          type: string
+          example: 'ON'
+        country:
+          type: string
+          example: CAN
+        postalCode:
+          type: string
+          example: A0B1C2
+    PushCustomerV2:
+      type: object
+      properties:
+        contactFirstName:
+          type: string
+          maxLength: 100
+          example: Jane
+        contactLastName:
+          type: string
+          maxLength: 100
+          example: Smith
+        emailAddress:
+          type: string
+          maxLength: 100
+          example: email@acme.com
         phone:
           type: string
-          example: '8887779999'
-        address:
-          $ref: '#/components/schemas/CustomerVendorPushAddressV2'
-    PutCustomerV2:
+          maxLength: 30
+          example: '8889990000'
+        website:
+          type: string
+          maxLength: 100
+          format: uri
+          example: www.acme.com
+        isPerson:
+          type: boolean
+        customerName:
+          type: string
+          maxLength: 500
+          example: ACME Inc.
+        contactName:
+          type: string
+          example: Jane Smith
+        taxNumber:
+          type: string
+          example: '987654321'
+        parentRef:
+          $ref: '#/components/schemas/ParentRefDto'
+        billingAddress:
+          $ref: '#/components/schemas/BillingAddressDto'
+        shippingAddress:
+          $ref: '#/components/schemas/ShippingAddressDto'
+        currency:
+          type: string
+          example: CAD
+        subsidiaryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubsidiaryRefDto'
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/PushCustomerVendorContactV2'
+        passThrough:
+          type: object
+          additionalProperties: true
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+        paymentMethodRef:
+          $ref: '#/components/schemas/PaymentMethodRefDto'
+    ParentRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '32'
+      required:
+      - id
+    PushUpdateCustomerV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        data:
+          $ref: '#/components/schemas/PutCustomerV2'
+      required:
+      - connectionUuid
+      - data
+    ParentRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '434'
+        name:
+          type: string
+          example: Region
+      required:
+      - id
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    SubsidiaryRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4'
+      required:
+      - id
+    BatchPutCustomer:
       type: object
       properties:
         contactFirstName:
@@ -1657,28 +1425,249 @@ components:
               Name: Field One
         paymentMethodRef:
           $ref: '#/components/schemas/PaymentMethodRefDto'
-    Error500ResponseDto:
+        customerRef:
+          type: string
+          description: reference to the customer to be updated
+      required:
+      - customerRef
+    PushCustomerIndividualResponseV2Dto:
       type: object
       properties:
-        error:
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        data:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
+          - $ref: '#/components/schemas/PushCustomerV2'
       required:
-      - error
-      - payload
-    PushCustomerBankAccount:
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - data
+    BaseAddress:
       type: object
       properties:
+        line1:
+          type: string
+          example: 1234 Park Street
+        line2:
+          type: string
+          example: Suite 1000
+        city:
+          type: string
+          example: Toronto
+        region:
+          type: string
+          example: 'ON'
+        country:
+          type: string
+          example: CAN
+        postalCode:
+          type: string
+          example: A0B1C2
+    GetCustomerBankAccountResponseV2Dto:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/ListReportMetaDataV2'
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetCustomerBankAccountDataV2'
+      required:
+      - meta
+      - pagination
+      - data
+    PushCustomerBankAccountResponseDto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushCustomerBankAccount'
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - data
+    PushCustomerBankAccountDto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        data:
+          $ref: '#/components/schemas/PushCustomerBankAccount'
+      required:
+      - connectionUuid
+      - data
+    PushCustomerV2ResponseDto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushCustomerV2'
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - data
+    PaymentMethodRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Harmonized sales tax
+        type:
+          type: string
+          example: creditCard
+          enum:
+          - unknown
+          - cash
+          - check
+          - creditCard
+          - debitCard
+          - bankTransfer
+          - giftCard
+          - other
+    GetCustomerBankAccountDataV2:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
         name:
           type: string
           example: Business Bank Account
+        contactName:
+          type: string
+          example: Jane Smith
         type:
           type: string
+          enum:
+          - checking
+          - saving
+          - creditCard
+          - loan
+          - investment
+          - unknown
           example: checking
+        customerRef:
+          $ref: '#/components/schemas/ParentRefDtoV2'
         accountNumber:
           type: string
           example: '11200'
@@ -1698,18 +1687,29 @@ components:
           type: boolean
           example: true
         address:
-          $ref: '#/components/schemas/PushBaseAddress'
-        contactName:
-          type: string
-          maxLength: 500
-          example: Jane Smith
+          $ref: '#/components/schemas/BaseAddress'
         currency:
           type: string
-          example: CAD
-        customerRef:
-          $ref: '#/components/schemas/CustomerRefDto'
+          example: USD
+        sourceModifiedDate:
+          type: string
+          example: '2021-03-09T08:49:36.035Z'
       required:
-      - customerRef
+      - id
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
   securitySchemes:
     bearer:
       scheme: bearer

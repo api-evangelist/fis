@@ -148,21 +148,119 @@ paths:
       - AttachmentControllerV2
 components:
   schemas:
-    Error403ResponseDto:
+    Error500ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error403Dto'
+          - $ref: '#/components/schemas/Error500Dto'
         payload:
           type: object
           readOnly: true
-          example: {}
       required:
       - error
       - payload
-    PushAttachmentLink:
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    GetAttachmentV2Data:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        url:
+          type: string
+          example: https://api.railz.ai/Attachments/Image00394.png
+          format: uri
+        fileName:
+          type: string
+          example: image00394.png
+        contentType:
+          type: string
+          example: image/jpeg
+        uploadDate:
+          type: string
+          example: '2020-11-25T01:02:03Z'
+        fileSize:
+          type: number
+          example: 10495
+          format: float
+        sourceModifiedDate:
+          type: string
+          example: '2021-03-09T08:49:36.035Z'
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachmentLinkV2'
+      required:
+      - id
+      - url
+    AttachmentLinkV2:
       type: object
       properties:
         type:
@@ -187,10 +285,26 @@ components:
           - account
         id:
           type: string
-          example: '133'
+          example: '234'
       required:
       - type
       - id
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
     PushAttachmentV2ResponseDto:
       type: object
       properties:
@@ -249,7 +363,21 @@ components:
       - requestedOn
       - status
       - data
-    AttachmentLinkV2:
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    PushAttachmentLink:
       type: object
       properties:
         type:
@@ -274,156 +402,10 @@ components:
           - account
         id:
           type: string
-          example: '234'
+          example: '133'
       required:
       - type
       - id
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    Error400DtoV2:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - connectionUuid should not be empty
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    Error400ResponseDtoV2:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    PaginationMetaData:
-      type: object
-      properties:
-        offset:
-          type: number
-          readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
-          readOnly: true
-      required:
-      - offset
-      - limit
-      - count
-    PushAttachmentV2Dto:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          description: Unique connection identifier.
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        file:
-          type: string
-          format: binary
-        data:
-          $ref: '#/components/schemas/PushAttachmentV2'
-      required:
-      - connectionUuid
-      - file
     PushAttachmentV2:
       type: object
       properties:
@@ -493,52 +475,6 @@ components:
       - reportId
       - createdAt
       - updatedAt
-    GetAttachmentV2Data:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        url:
-          type: string
-          example: https://api.railz.ai/Attachments/Image00394.png
-          format: uri
-        fileName:
-          type: string
-          example: image00394.png
-        contentType:
-          type: string
-          example: image/jpeg
-        uploadDate:
-          type: string
-          example: '2020-11-25T01:02:03Z'
-        fileSize:
-          type: number
-          example: 10495
-          format: float
-        sourceModifiedDate:
-          type: string
-          example: '2021-03-09T08:49:36.035Z'
-        links:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttachmentLinkV2'
-      required:
-      - id
-      - url
-    Error500ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
     GetAttachmentV2ResponseDto:
       type: object
       properties:
@@ -554,6 +490,70 @@ components:
       - meta
       - pagination
       - data
+    Error400DtoV2:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    PushAttachmentV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        file:
+          type: string
+          format: binary
+        data:
+          $ref: '#/components/schemas/PushAttachmentV2'
+      required:
+      - connectionUuid
+      - file
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
   securitySchemes:
     bearer:
       scheme: bearer

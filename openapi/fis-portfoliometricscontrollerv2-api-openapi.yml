@@ -94,6 +94,85 @@ paths:
       - PortfolioMetricsControllerV2
 components:
   schemas:
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
     SummaryStatisticsData:
       type: object
       properties:
@@ -143,13 +222,13 @@ components:
       - quantile25**
       - quantile75**
       - quantile95**
-    Error403ResponseDto:
+    Error401ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error403Dto'
+          - $ref: '#/components/schemas/Error401Dto'
         payload:
           type: object
           readOnly: true
@@ -157,60 +236,22 @@ components:
       required:
       - error
       - payload
-    Error401Dto:
+    PortfolioMetricsResponseDto:
       type: object
       properties:
-        statusCode:
+        count:
           type: number
           readOnly: true
-          example: 401
-        message:
+          format: integer
+          example: 1
+        reports:
           readOnly: true
-          example:
-          - Unauthorized
           type: array
           items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
+            $ref: '#/components/schemas/PortfolioMetricsReport'
       required:
-      - statusCode
-      - message
-      - error
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    PortfolioMetricsReport:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/PortfolioMetricsReportMetaData'
-        data:
-          $ref: '#/components/schemas/PortfolioMetricsReportData'
-      required:
-      - meta
-      - data
+      - count
+      - reports
     Error400DtoV2:
       type: object
       properties:
@@ -233,71 +274,6 @@ components:
       - statusCode
       - message
       - error
-    PortfolioMetricsResponseDto:
-      type: object
-      properties:
-        count:
-          type: number
-          readOnly: true
-          format: integer
-          example: 1
-        reports:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/PortfolioMetricsReport'
-      required:
-      - count
-      - reports
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    Error400ResponseDtoV2:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
     PortfolioMetricsReportMetaData:
       type: object
       properties:
@@ -325,6 +301,29 @@ components:
       - endDate
       - reportFrequency
       - createdAt
+    PortfolioMetricsReport:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/PortfolioMetricsReportMetaData'
+        data:
+          $ref: '#/components/schemas/PortfolioMetricsReportData'
+      required:
+      - meta
+      - data
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
     PortfolioMetricsReportData:
       type: object
       properties:
@@ -368,16 +367,17 @@ components:
       - subSection
       - group
       - subGroup
-    Error500ResponseDto:
+    Error403ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error500Dto'
+          - $ref: '#/components/schemas/Error403Dto'
         payload:
           type: object
           readOnly: true
+          example: {}
       required:
       - error
       - payload

@@ -207,68 +207,19 @@ paths:
       x-operation-id-original: disable connection
 components:
   schemas:
-    MetaDataCount:
-      type: object
-      properties:
-        count:
-          type: number
-          readOnly: true
-          example: 1
-          format: integer
-      required:
-      - count
-    Error403ResponseDto:
+    Error500ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error403Dto'
+          - $ref: '#/components/schemas/Error500Dto'
         payload:
           type: object
           readOnly: true
-          example: {}
       required:
       - error
       - payload
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
-    serviceAccountRefType:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '12345'
-        entityRef:
-          type:
-          - object
-          - 'null'
-          example:
-            id: '100'
-          properties:
-            id:
-              type: string
-              example: '100'
     Error500Dto:
       type: object
       properties:
@@ -291,148 +242,6 @@ components:
       - error
       - message
       - statusCode
-    Error400Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - businessName cannot be null
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
-    DisableConnectionDto:
-      type: object
-      properties:
-        connectionId:
-          type: string
-          example: CON-e66400c1-4d2f-4683-9bea-275799943695
-      required:
-      - connectionId
-    DisconnectResponseDto:
-      type: object
-      properties:
-        connectionId:
-          type: string
-          readOnly: true
-          example: CON-e66400c1-4d2f-4683-9bea-275799943695
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - quickbooks
-          - xero
-          - freshbooks
-          - quickbooksDesktop
-          - sageIntacct
-          - sageBusinessCloud
-          - oracleNetsuite
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - zohoBooks
-          - myob
-        status:
-          type: string
-          readOnly: true
-          example: disconnected
-        createdAt:
-          format: date-time
-          type: string
-          readOnly: true
-          example: '2020-12-25T01:02:03Z'
-        updatedAt:
-          format: date-time
-          type: string
-          readOnly: true
-          example: '2020-12-25T01:02:03Z'
-      required:
-      - connectionId
-      - businessName
-      - serviceName
-      - status
-      - createdAt
-      - updatedAt
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
-    Error400ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    ConnectionsInstitutionData:
-      type: object
-      properties:
-        name:
-          type: string
-          readOnly: true
-          example: Citizens bank
-        logo:
-          type: string
-          readOnly: true
-          example: https://serverlogo.url
-      required:
-      - name
-      - logo
     ConnectionsResponseData:
       type: object
       properties:
@@ -522,6 +331,196 @@ components:
       - businessUuid
       - businessName
       - connectionId
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    ConnectionsInstitutionData:
+      type: object
+      properties:
+        name:
+          type: string
+          readOnly: true
+          example: Citizens bank
+        logo:
+          type: string
+          readOnly: true
+          example: https://serverlogo.url
+      required:
+      - name
+      - logo
+    serviceAccountRefType:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '12345'
+        entityRef:
+          type:
+          - object
+          - 'null'
+          example:
+            id: '100'
+          properties:
+            id:
+              type: string
+              example: '100'
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    DisableConnectionDto:
+      type: object
+      properties:
+        connectionId:
+          type: string
+          example: CON-e66400c1-4d2f-4683-9bea-275799943695
+      required:
+      - connectionId
+    DisconnectResponseDto:
+      type: object
+      properties:
+        connectionId:
+          type: string
+          readOnly: true
+          example: CON-e66400c1-4d2f-4683-9bea-275799943695
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - quickbooks
+          - xero
+          - freshbooks
+          - quickbooksDesktop
+          - sageIntacct
+          - sageBusinessCloud
+          - oracleNetsuite
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - zohoBooks
+          - myob
+        status:
+          type: string
+          readOnly: true
+          example: disconnected
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+        updatedAt:
+          format: date-time
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+      required:
+      - connectionId
+      - businessName
+      - serviceName
+      - status
+      - createdAt
+      - updatedAt
+    MetaDataCount:
+      type: object
+      properties:
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+      required:
+      - count
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
     ConnectionsResponseDto:
       type: object
       properties:
@@ -537,16 +536,17 @@ components:
       required:
       - meta
       - data
-    Error500ResponseDto:
+    Error403ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error500Dto'
+          - $ref: '#/components/schemas/Error403Dto'
         payload:
           type: object
           readOnly: true
+          example: {}
       required:
       - error
       - payload

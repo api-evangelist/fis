@@ -174,117 +174,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    Error500ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
-    Link:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - billPayment
-          - transfer
-          - journalEntry
-          - paymentOnAccount
-          - other
-        id:
-          type: string
-          example: '560'
-      required:
-      - id
-    DepositLineItems:
-      type: object
-      properties:
-        description:
-          type: string
-          example: Services rendered.
-        unitAmount:
-          type: number
-          example: 100.5
-          format: float
-        quantity:
-          type: number
-          example: 3
-          format: integer
-        subTotal:
-          type: number
-          example: 301.5
-          format: float
-          deprecated: true
-        taxAmount:
-          type: number
-          example: 20.5
-          format: float
-        totalAmount:
-          type: number
-          example: 322
-          format: float
-        accountRef:
-          $ref: '#/components/schemas/AccountRef'
-        taxRateRef:
-          $ref: '#/components/schemas/TaxRateRef'
-        entityRef:
-          $ref: '#/components/schemas/DepositEntityRef'
-        link:
-          deprecated: true
-          allOf:
-          - $ref: '#/components/schemas/Link'
-        links:
-          type: array
-          items:
-            $ref: '#/components/schemas/Links'
-      required:
-      - totalAmount
-    Links:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - billPayment
-          - transfer
-          - journalEntry
-          - paymentOnAccount
-          - other
-        id:
-          type: string
-          example: '560'
-      required:
-      - type
-      - id
     BasicStartEndDateReportMetaData:
       type: object
       properties:
@@ -345,6 +234,102 @@ components:
       - updatedAt
       - startDate
       - endDate
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    DepositLineItems:
+      type: object
+      properties:
+        description:
+          type: string
+          example: Services rendered.
+        unitAmount:
+          type: number
+          example: 100.5
+          format: float
+        quantity:
+          type: number
+          example: 3
+          format: integer
+        subTotal:
+          type: number
+          example: 301.5
+          format: float
+          deprecated: true
+        taxAmount:
+          type: number
+          example: 20.5
+          format: float
+        totalAmount:
+          type: number
+          example: 322
+          format: float
+        accountRef:
+          $ref: '#/components/schemas/AccountRef'
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateRef'
+        entityRef:
+          $ref: '#/components/schemas/DepositEntityRef'
+        link:
+          deprecated: true
+          allOf:
+          - $ref: '#/components/schemas/Link'
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/Links'
+      required:
+      - totalAmount
+    PushDepositV1Dto:
+      type: object
+      properties:
+        connection:
+          $ref: '#/components/schemas/PushDepositConnection'
+        data:
+          $ref: '#/components/schemas/PushDepositV1'
+      required:
+      - connection
+      - data
     PushDepositV1:
       type: object
       properties:
@@ -376,33 +361,6 @@ components:
       - postedDate
       - bankAccountRef
       - lines
-    Error400ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
     TaxRateRef:
       type: object
       properties:
@@ -435,74 +393,30 @@ components:
       required:
       - businessName
       - serviceName
-    Error400Dto:
+    CurrencyRef:
       type: object
       properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - businessName cannot be null
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
-    PaginationMetaData:
-      type: object
-      properties:
-        offset:
-          type: number
-          readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
-          readOnly: true
-      required:
-      - offset
-      - limit
-      - count
-    DepositEntityRef:
-      type: object
-      properties:
-        name:
-          type: string
-          example: ABC Inc.
         id:
           type: string
-          example: '1'
-        type:
+          example: CAD
+        name:
           type: string
-          example: vendor
-          enum:
-          - customer
-          - employee
-          - unknown
+          example: Canadian Dollar
+        symbol:
+          type: string
+          example: USD,CAD
       required:
       - id
-      - type
-    Error403ResponseDto:
+    Error500ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error403Dto'
+          - $ref: '#/components/schemas/Error500Dto'
         payload:
           type: object
           readOnly: true
-          example: {}
       required:
       - error
       - payload
@@ -602,27 +516,28 @@ components:
       - statusCode
       - message
       - error
-    PushDepositV1Dto:
+    Error401Dto:
       type: object
       properties:
-        connection:
-          $ref: '#/components/schemas/PushDepositConnection'
-        data:
-          $ref: '#/components/schemas/PushDepositV1'
-      required:
-      - connection
-      - data
-    AccountRef:
-      type: object
-      properties:
-        id:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
           type: string
-          example: '145'
-        name:
-          type: string
-          example: Example account
+          readOnly: true
+          example: Unauthorized
       required:
-      - id
+      - statusCode
+      - message
+      - error
     PushDepositV1ResponseDto:
       type: object
       properties:
@@ -676,18 +591,110 @@ components:
       - businessName
       - serviceName
       - data
-    CurrencyRef:
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    Link:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - billPayment
+          - transfer
+          - journalEntry
+          - paymentOnAccount
+          - other
+        id:
+          type: string
+          example: '560'
+      required:
+      - id
+    GetDepositResponseDto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        meta:
+          $ref: '#/components/schemas/BasicStartEndDateReportMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetDepositData'
+      required:
+      - pagination
+      - count
+      - meta
+      - data
+    Links:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - billPayment
+          - transfer
+          - journalEntry
+          - paymentOnAccount
+          - other
+        id:
+          type: string
+          example: '560'
+      required:
+      - type
+      - id
+    DepositEntityRef:
+      type: object
+      properties:
+        name:
+          type: string
+          example: ABC Inc.
+        id:
+          type: string
+          example: '1'
+        type:
+          type: string
+          example: vendor
+          enum:
+          - customer
+          - employee
+          - unknown
+      required:
+      - id
+      - type
+    AccountRef:
       type: object
       properties:
         id:
           type: string
-          example: CAD
+          example: '145'
         name:
           type: string
-          example: Canadian Dollar
-        symbol:
-          type: string
-          example: USD,CAD
+          example: Example account
       required:
       - id
     PushDepositLineV1:
@@ -734,27 +741,20 @@ components:
       - quantity
       - unitAmount
       - accountRef
-    GetDepositResponseDto:
+    Error403ResponseDto:
       type: object
       properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        count:
-          type: number
+        error:
           readOnly: true
-          example: 1
-          format: integer
-        meta:
-          $ref: '#/components/schemas/BasicStartEndDateReportMetaData'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetDepositData'
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
       required:
-      - pagination
-      - count
-      - meta
-      - data
+      - error
+      - payload
   securitySchemes:
     bearer:
       scheme: bearer

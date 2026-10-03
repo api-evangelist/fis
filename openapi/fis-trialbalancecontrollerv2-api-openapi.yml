@@ -198,124 +198,37 @@ paths:
       - TrialBalanceControllerV2
 components:
   schemas:
-    Error403ResponseDto:
+    Error500ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error403Dto'
+          - $ref: '#/components/schemas/Error500Dto'
         payload:
           type: object
           readOnly: true
-          example: {}
       required:
       - error
       - payload
-    FinancialStatementReportMetaDataV2:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          readOnly: true
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        reportId:
-          type: string
-          readOnly: true
-          example: 5fad8a342a88364234392fb5
-        status:
-          type: string
-          readOnly: true
-          example: success
-          enum:
-          - success
-          - failed
-          - pending
-          - empty
-        reportFrequency:
-          type: string
-          readOnly: true
-          example: month
-        currency:
-          type: string
-          example: USD
-        createdAt:
-          type: string
-          readOnly: true
-          example: '2020-11-25T01:02:03Z'
-          format: date-time
-        updatedAt:
-          type: string
-          readOnly: true
-          example: '2020-11-30T01:02:03Z'
-          format: date-time
-        startDate:
-          type: string
-          readOnly: true
-          example: '2020-11-25T01:02:03Z'
-        endDate:
-          type: string
-          readOnly: true
-          example: '2020-12-25T01:02:03Z'
-        accountingMethod:
-          type: string
-          readOnly: true
-          example: accrual
-          enum:
-          - cash
-          - accrual
-      required:
-      - connectionUuid
-      - businessName
-      - serviceName
-      - reportId
-      - status
-      - reportFrequency
-      - createdAt
-      - updatedAt
-      - startDate
-      - endDate
-      - accountingMethod
-    Error401Dto:
+    Error400DtoV2:
       type: object
       properties:
         statusCode:
           type: number
           readOnly: true
-          example: 401
+          example: 400
         message:
           readOnly: true
           example:
-          - Unauthorized
+          - connectionUuid should not be empty
           type: array
           items:
             type: string
         error:
           type: string
           readOnly: true
-          example: Unauthorized
+          example: Bad Request
       required:
       - statusCode
       - message
@@ -342,41 +255,6 @@ components:
       - error
       - message
       - statusCode
-    Error400DtoV2:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - connectionUuid should not be empty
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
-    TrialBalancesReportV2:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/FinancialStatementReportMetaDataV2'
-        data:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/TrialBalancesDataV2'
-      required:
-      - meta
-      - data
     Error403Dto:
       type: object
       properties:
@@ -399,13 +277,13 @@ components:
       - statusCode
       - message
       - error
-    Error401ResponseDto:
+    Error403ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error401Dto'
+          - $ref: '#/components/schemas/Error403Dto'
         payload:
           type: object
           readOnly: true
@@ -413,19 +291,28 @@ components:
       required:
       - error
       - payload
-    Error400ResponseDtoV2:
+    Error401Dto:
       type: object
       properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
         error:
+          type: string
           readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
-        payload:
-          type: object
-          readOnly: true
+          example: Unauthorized
       required:
+      - statusCode
+      - message
       - error
-      - payload
     PaginationMetaData:
       type: object
       properties:
@@ -442,19 +329,29 @@ components:
       - offset
       - limit
       - count
-    TrialBalancesResponseV2Dto:
+    SubsidiaryRef:
       type: object
       properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        reports:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Railz Financial
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
           readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/TrialBalancesReportV2'
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
       required:
-      - pagination
-      - reports
+      - error
+      - payload
     TrialBalancesDataV2:
       type: object
       properties:
@@ -552,28 +449,131 @@ components:
       - depth
       - account
       - accountId
-    SubsidiaryRef:
+    TrialBalancesReportV2:
       type: object
       properties:
-        id:
-          type: string
-          example: '1'
-        name:
-          type: string
-          example: Railz Financial
-    Error500ResponseDto:
+        meta:
+          $ref: '#/components/schemas/FinancialStatementReportMetaDataV2'
+        data:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/TrialBalancesDataV2'
+      required:
+      - meta
+      - data
+    Error400ResponseDtoV2:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error500Dto'
+          - $ref: '#/components/schemas/Error400DtoV2'
         payload:
           type: object
           readOnly: true
       required:
       - error
       - payload
+    TrialBalancesResponseV2Dto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        reports:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/TrialBalancesReportV2'
+      required:
+      - pagination
+      - reports
+    FinancialStatementReportMetaDataV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        reportId:
+          type: string
+          readOnly: true
+          example: 5fad8a342a88364234392fb5
+        status:
+          type: string
+          readOnly: true
+          example: success
+          enum:
+          - success
+          - failed
+          - pending
+          - empty
+        reportFrequency:
+          type: string
+          readOnly: true
+          example: month
+        currency:
+          type: string
+          example: USD
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+        accountingMethod:
+          type: string
+          readOnly: true
+          example: accrual
+          enum:
+          - cash
+          - accrual
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - reportId
+      - status
+      - reportFrequency
+      - createdAt
+      - updatedAt
+      - startDate
+      - endDate
+      - accountingMethod
   securitySchemes:
     bearer:
       scheme: bearer

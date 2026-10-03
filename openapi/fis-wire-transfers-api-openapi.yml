@@ -44,30 +44,6 @@ paths:
           description: Invalid request
 components:
   schemas:
-    WireTransfer:
-      allOf:
-      - $ref: '#/components/schemas/WireTransferRequest'
-      - type: object
-        properties:
-          wireId:
-            type: string
-          status:
-            type: string
-            enum:
-            - PENDING
-            - SENT
-            - CONFIRMED
-            - RETURNED
-            - FAILED
-          imad:
-            type: string
-            description: Input Message Accountability Data (Fedwire reference)
-          omad:
-            type: string
-            description: Output Message Accountability Data
-          createdAt:
-            type: string
-            format: date-time
     WireTransferRequest:
       type: object
       required:
@@ -125,6 +101,30 @@ components:
         swiftCode:
           type: string
           description: SWIFT/BIC code for international wires
+    WireTransfer:
+      allOf:
+      - $ref: '#/components/schemas/WireTransferRequest'
+      - type: object
+        properties:
+          wireId:
+            type: string
+          status:
+            type: string
+            enum:
+            - PENDING
+            - SENT
+            - CONFIRMED
+            - RETURNED
+            - FAILED
+          imad:
+            type: string
+            description: Input Message Accountability Data (Fedwire reference)
+          omad:
+            type: string
+            description: Output Message Accountability Data
+          createdAt:
+            type: string
+            format: date-time
   securitySchemes:
     OAuth2ClientCredentials:
       type: oauth2

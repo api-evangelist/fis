@@ -123,27 +123,82 @@ paths:
       - Sandbox
 components:
   schemas:
-    Error403ResponseDto:
+    Error500ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error403Dto'
+          - $ref: '#/components/schemas/Error500Dto'
         payload:
           type: object
           readOnly: true
-          example: {}
       required:
       - error
       - payload
-    FireWebhookV1Dto:
+    Error500Dto:
       type: object
       properties:
-        connection:
-          $ref: '#/components/schemas/FireWebhookConnectionV1Dto'
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
       required:
-      - connection
+      - error
+      - message
+      - statusCode
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    FireWebhookResponseV2Dto:
+      type: object
+      properties:
+        webhookFired:
+          type: boolean
+          readOnly: true
+          example: true
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-004f4cbe-e9ba-46c0-a7ef-2da661fe0e15
+        businessUuid:
+          type: string
+          readOnly: true
+          example: BIZ-26bc4510-8c6f-4688-996d-e87acf3e0b3f
+      required:
+      - webhookFired
+      - connectionUuid
+      - businessUuid
     Error401Dto:
       type: object
       properties:
@@ -234,28 +289,56 @@ components:
           readOnly: false
       required:
       - event
-    Error500Dto:
+    Error400ResponseDto:
       type: object
       properties:
         error:
-          type: string
           readOnly: true
-          example: Internal Server Error
-        message:
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
           readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
       required:
       - error
-      - message
-      - statusCode
+      - payload
+    FireWebhookV2Dto:
+      type: object
+      properties:
+        connection:
+          $ref: '#/components/schemas/FireWebhookConnectionV2Dto'
+      required:
+      - connection
+    FireWebhookResponseV1Dto:
+      type: object
+      properties:
+        webhookFired:
+          type: boolean
+          readOnly: true
+          example: true
+      required:
+      - webhookFired
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    FireWebhookV1Dto:
+      type: object
+      properties:
+        connection:
+          $ref: '#/components/schemas/FireWebhookConnectionV1Dto'
+      required:
+      - connection
     Error400Dto:
       type: object
       properties:
@@ -335,100 +418,17 @@ components:
       required:
       - connectionUuid
       - event
-    FireWebhookResponseV2Dto:
-      type: object
-      properties:
-        webhookFired:
-          type: boolean
-          readOnly: true
-          example: true
-        connectionUuid:
-          type: string
-          readOnly: true
-          example: CON-004f4cbe-e9ba-46c0-a7ef-2da661fe0e15
-        businessUuid:
-          type: string
-          readOnly: true
-          example: BIZ-26bc4510-8c6f-4688-996d-e87acf3e0b3f
-      required:
-      - webhookFired
-      - connectionUuid
-      - businessUuid
-    FireWebhookResponseV1Dto:
-      type: object
-      properties:
-        webhookFired:
-          type: boolean
-          readOnly: true
-          example: true
-      required:
-      - webhookFired
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
-    Error400ResponseDto:
+    Error403ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error400Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
+          - $ref: '#/components/schemas/Error403Dto'
         payload:
           type: object
           readOnly: true
           example: {}
-      required:
-      - error
-      - payload
-    FireWebhookV2Dto:
-      type: object
-      properties:
-        connection:
-          $ref: '#/components/schemas/FireWebhookConnectionV2Dto'
-      required:
-      - connection
-    Error500ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
       required:
       - error
       - payload
