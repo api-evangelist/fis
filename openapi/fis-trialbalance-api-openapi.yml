@@ -211,54 +211,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    Error500ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    TrialBalancesReport:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/FinancialStatementReportMetaData'
-        data:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/TrialBalancesDataV1'
-      required:
-      - meta
-      - data
     Error403Dto:
       type: object
       properties:
@@ -281,57 +233,6 @@ components:
       - statusCode
       - message
       - error
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
-    PaginationMetaData:
-      type: object
-      properties:
-        offset:
-          type: number
-          readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
-          readOnly: true
-      required:
-      - offset
-      - limit
-      - count
-    Error400ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
     SubsidiaryRef:
       type: object
       properties:
@@ -341,6 +242,52 @@ components:
         name:
           type: string
           example: Railz Financial
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    TrialBalancesResponseDto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+          deprecated: true
+        reports:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/TrialBalancesReport'
+      required:
+      - pagination
+      - count
+      - reports
+    TrialBalancesReport:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/FinancialStatementReportMetaData'
+        data:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/TrialBalancesDataV1'
+      required:
+      - meta
+      - data
     Error401ResponseDto:
       type: object
       properties:
@@ -355,6 +302,28 @@ components:
       required:
       - error
       - payload
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
     FinancialStatementReportMetaData:
       type: object
       properties:
@@ -526,26 +495,6 @@ components:
       - depth
       - account
       - fullyQualifiedName
-    TrialBalancesResponseDto:
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        count:
-          type: number
-          readOnly: true
-          example: 1
-          format: integer
-          deprecated: true
-        reports:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/TrialBalancesReport'
-      required:
-      - pagination
-      - count
-      - reports
     CurrencyRef:
       type: object
       properties:
@@ -560,24 +509,62 @@ components:
           example: USD,CAD
       required:
       - id
-    Error400Dto:
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    Error401Dto:
       type: object
       properties:
         statusCode:
           type: number
           readOnly: true
-          example: 400
+          example: 401
         message:
           readOnly: true
           example:
-          - businessName cannot be null
+          - Unauthorized
           type: array
           items:
             type: string
         error:
           type: string
           readOnly: true
-          example: Bad Request
+          example: Unauthorized
       required:
       - statusCode
       - message
@@ -593,6 +580,19 @@ components:
           type: object
           readOnly: true
           example: {}
+      required:
+      - error
+      - payload
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
       required:
       - error
       - payload

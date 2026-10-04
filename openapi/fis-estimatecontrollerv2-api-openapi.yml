@@ -169,12 +169,271 @@ paths:
       - EstimateControllerV2
 components:
   schemas:
-    AccountRefDto:
+    BasicStartEndDateReportMetaDataV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - reportId
+      - createdAt
+      - updatedAt
+      - startDate
+      - endDate
+    CustomerRefDto:
       type: object
       properties:
         id:
           type: string
-          example: '200'
+          example: '124'
+      required:
+      - id
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    TaxRateRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '12'
+      required:
+      - id
+    BaseAddress:
+      type: object
+      properties:
+        line1:
+          type: string
+          example: 1234 Park Street
+        line2:
+          type: string
+          example: Suite 1000
+        city:
+          type: string
+          example: Toronto
+        region:
+          type: string
+          example: 'ON'
+        country:
+          type: string
+          example: CAN
+        postalCode:
+          type: string
+          example: A0B1C2
+    TrackingCategoryRefV2:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4040'
+          readOnly: false
+        name:
+          type: string
+          readOnly: false
+          example: Region
+        type:
+          type: string
+          example: class
+          enum:
+          - class
+          - department
+          - location
+          - unknown
+      required:
+      - id
+      - type
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    PushEstimateV2ResponseDto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushEstimateV2'
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - data
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    InventoryRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '32'
+      required:
+      - id
+    TaxRateRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: HST
+        effectiveTaxRate:
+          type: number
+          example: 13
+          format: float
       required:
       - id
     PaginationMetaData:
@@ -193,49 +452,6 @@ components:
       - offset
       - limit
       - count
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    ShippingAddressDto:
-      type: object
-      properties:
-        line1:
-          type: string
-          maxLength: 500
-          example: 1234 Park Street
-        line2:
-          type: string
-          maxLength: 500
-          example: Suite 1000
-        city:
-          type: string
-          maxLength: 255
-          example: Toronto
-        region:
-          type: string
-          maxLength: 255
-          example: 'ON'
-          description: Region within a country. For example, state name for USA, province name for Canada.
-        country:
-          type: string
-          example: CAN
-          description: Country name as 3 ISO alpha-3 characters.
-        postalCode:
-          type: string
-          maxLength: 30
-          example: A0B1C2
-          description: Postal code. For example, zip code for USA and Canada.
     GetEstimateDataV2:
       type: object
       properties:
@@ -330,37 +546,6 @@ components:
       - lines
       - totalAmount
       - status
-    TaxRateRefDto:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '12'
-      required:
-      - id
-    TaxRateRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        name:
-          type: string
-          example: HST
-        effectiveTaxRate:
-          type: number
-          example: 13
-          format: float
-      required:
-      - id
-    InventoryRefDto:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '32'
-      required:
-      - id
     Error400DtoV2:
       type: object
       properties:
@@ -383,184 +568,6 @@ components:
       - statusCode
       - message
       - error
-    Error500ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    BasicStartEndDateReportMetaDataV2:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          readOnly: true
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        reportId:
-          readOnly: true
-          example:
-          - 5fad8a342a88364234392fb5
-          type: array
-          items:
-            type: string
-        createdAt:
-          type: string
-          readOnly: true
-          example: '2020-11-25T01:02:03Z'
-          format: date-time
-        updatedAt:
-          type: string
-          example: '2020-11-30T01:02:03Z'
-          format: date-time
-          readOnly: false
-        startDate:
-          type: string
-          readOnly: true
-          example: '2020-11-25T01:02:03Z'
-          format: date-time
-        endDate:
-          type: string
-          readOnly: true
-          example: '2020-11-30T01:02:03Z'
-          format: date-time
-      required:
-      - connectionUuid
-      - businessName
-      - serviceName
-      - reportId
-      - createdAt
-      - updatedAt
-      - startDate
-      - endDate
-    TrackingCategoryRefPushDto:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '4040'
-        type:
-          type: string
-          enum:
-          - class
-          - department
-          - location
-          - unknown
-      required:
-      - id
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
-    CustomerRefDto:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '124'
-      required:
-      - id
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
-    InventoryRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        name:
-          type: string
-          example: Digital Services
-      required:
-      - id
     PushEstimateV2:
       type: object
       properties:
@@ -609,60 +616,74 @@ components:
       required:
       - customerRef
       - lines
-    Error400ResponseDtoV2:
+    EstimateLineV2:
       type: object
       properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    GetEstimateResponseV2Dto:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/BasicStartEndDateReportMetaDataV2'
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        data:
+        id:
+          type: string
+        accountRef:
+          $ref: '#/components/schemas/AccountRefDto'
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateRefDto'
+        inventoryRef:
+          $ref: '#/components/schemas/InventoryRefDto'
+        description:
+          type: string
+          maxLength: 4000
+          example: Services rendered.
+        quantity:
+          type: number
+          format: float
+          example: '4'
+        unitAmount:
+          type: number
+          format: float
+          example: '50.5'
+        discountPercentage:
+          type: number
+          format: float
+          example: '10.0'
+        trackingCategoryRefs:
           type: array
           items:
-            $ref: '#/components/schemas/GetEstimateDataV2'
-      required:
-      - meta
-      - pagination
-      - data
-    PushEstimateV2Dto:
+            $ref: '#/components/schemas/TrackingCategoryRefPushDto'
+    ShippingAddressDto:
       type: object
       properties:
-        connectionUuid:
+        line1:
           type: string
-          description: Unique connection identifier.
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        data:
-          $ref: '#/components/schemas/PushEstimateV2'
-      required:
-      - connectionUuid
-      - data
-    TrackingCategoryRefV2:
+          maxLength: 500
+          example: 1234 Park Street
+        line2:
+          type: string
+          maxLength: 500
+          example: Suite 1000
+        city:
+          type: string
+          maxLength: 255
+          example: Toronto
+        region:
+          type: string
+          maxLength: 255
+          example: 'ON'
+          description: Region within a country. For example, state name for USA, province name for Canada.
+        country:
+          type: string
+          example: CAN
+          description: Country name as 3 ISO alpha-3 characters.
+        postalCode:
+          type: string
+          maxLength: 30
+          example: A0B1C2
+          description: Postal code. For example, zip code for USA and Canada.
+    TrackingCategoryRefPushDto:
       type: object
       properties:
         id:
           type: string
           example: '4040'
-          readOnly: false
-        name:
-          type: string
-          readOnly: false
-          example: Region
         type:
           type: string
-          example: class
           enum:
           - class
           - department
@@ -670,7 +691,86 @@ components:
           - unknown
       required:
       - id
-      - type
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    InventoryRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Digital Services
+      required:
+      - id
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    CustomerRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Railz Financial
+      required:
+      - id
     EstimateLineItemV2:
       type: object
       properties:
@@ -716,127 +816,21 @@ components:
           format: float
       required:
       - amount
-    CustomerRef:
+    GetEstimateResponseV2Dto:
       type: object
       properties:
-        id:
-          type: string
-          example: '1'
-        name:
-          type: string
-          example: Railz Financial
-      required:
-      - id
-    PushEstimateV2ResponseDto:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          readOnly: true
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        pushCommunicationId:
-          type: string
-          readOnly: true
-          example: 60473b57f0cdd1683ca71f60
-        requestedOn:
-          type: string
-          readOnly: true
-          example: '2021-03-09T08:15:22.035Z'
-          format: date-time
-        status:
-          type: string
-          readOnly: true
-          example: pending
-          enum:
-          - success
-          - failed
-          - pending
+        meta:
+          $ref: '#/components/schemas/BasicStartEndDateReportMetaDataV2'
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
         data:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/PushEstimateV2'
-      required:
-      - connectionUuid
-      - businessName
-      - serviceName
-      - pushCommunicationId
-      - requestedOn
-      - status
-      - data
-    BaseAddress:
-      type: object
-      properties:
-        line1:
-          type: string
-          example: 1234 Park Street
-        line2:
-          type: string
-          example: Suite 1000
-        city:
-          type: string
-          example: Toronto
-        region:
-          type: string
-          example: 'ON'
-        country:
-          type: string
-          example: CAN
-        postalCode:
-          type: string
-          example: A0B1C2
-    EstimateLineV2:
-      type: object
-      properties:
-        id:
-          type: string
-        accountRef:
-          $ref: '#/components/schemas/AccountRefDto'
-        taxRateRef:
-          $ref: '#/components/schemas/TaxRateRefDto'
-        inventoryRef:
-          $ref: '#/components/schemas/InventoryRefDto'
-        description:
-          type: string
-          maxLength: 4000
-          example: Services rendered.
-        quantity:
-          type: number
-          format: float
-          example: '4'
-        unitAmount:
-          type: number
-          format: float
-          example: '50.5'
-        discountPercentage:
-          type: number
-          format: float
-          example: '10.0'
-        trackingCategoryRefs:
           type: array
           items:
-            $ref: '#/components/schemas/TrackingCategoryRefPushDto'
+            $ref: '#/components/schemas/GetEstimateDataV2'
+      required:
+      - meta
+      - pagination
+      - data
     AccountRef:
       type: object
       properties:
@@ -848,20 +842,26 @@ components:
           example: Example account
       required:
       - id
-    Error403ResponseDto:
+    AccountRefDto:
       type: object
       properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
+        id:
+          type: string
+          example: '200'
       required:
-      - error
-      - payload
+      - id
+    PushEstimateV2Dto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        data:
+          $ref: '#/components/schemas/PushEstimateV2'
+      required:
+      - connectionUuid
+      - data
   securitySchemes:
     bearer:
       scheme: bearer

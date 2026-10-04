@@ -103,41 +103,33 @@ paths:
       - AccountingTransactionControllerV2
 components:
   schemas:
-    Error500ResponseDto:
+    AccountingTransactionTrackingCategoryRefV2:
       type: object
       properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error500Dto:
-      type: object
-      properties:
-        error:
+        id:
           type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
+          example: '4040'
+          readOnly: false
+        name:
+          type: string
+          readOnly: false
+          example: Region
+        option:
+          type: string
+          readOnly: false
+          example: East
+        optionId:
+          type: string
+          readOnly: false
+          example: '40401'
+        type:
+          type: string
+          example: class
+          enum:
+          - class
+          - department
+          - location
+          - unknown
     Error403Dto:
       type: object
       properties:
@@ -160,29 +152,13 @@ components:
       - statusCode
       - message
       - error
-    AccountingTransactionsResponseV2Dto:
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        meta:
-          $ref: '#/components/schemas/AccountingTransactionsReportMetaDataV2'
-        data:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountingTransactionDataV2'
-      required:
-      - pagination
-      - meta
-      - data
-    Error403ResponseDto:
+    Error401ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error403Dto'
+          - $ref: '#/components/schemas/Error401Dto'
         payload:
           type: object
           readOnly: true
@@ -190,44 +166,19 @@ components:
       required:
       - error
       - payload
-    Error401Dto:
+    Error500ResponseDto:
       type: object
       properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
         error:
-          type: string
           readOnly: true
-          example: Unauthorized
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
       required:
-      - statusCode
-      - message
       - error
-    PaginationMetaData:
-      type: object
-      properties:
-        offset:
-          type: number
-          readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
-          readOnly: true
-      required:
-      - offset
-      - limit
-      - count
+      - payload
     AccountingTransactionsReportMetaDataV2:
       type: object
       properties:
@@ -289,33 +240,91 @@ components:
       - reportId
       - createdAt
       - updatedAt
-    Error401ResponseDto:
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    Error400ResponseDtoV2:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error401Dto'
+          - $ref: '#/components/schemas/Error400DtoV2'
         payload:
           type: object
           readOnly: true
-          example: {}
       required:
       - error
       - payload
-    AccountingTransactionAccountRefV2:
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    AccountingTransactionEntityRefV2:
       type: object
       properties:
         id:
           type: string
-          example: '1334'
+          example: '233'
           readOnly: false
         name:
           type: string
-          example: Account Receivable
+          example: Railz Inc.
           readOnly: false
+        type:
+          type: string
+          example: vendor
+          enum:
+          - vendor
+          - customer
+          - unknown
+    AccountingTransactionsResponseV2Dto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        meta:
+          $ref: '#/components/schemas/AccountingTransactionsReportMetaDataV2'
+        data:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountingTransactionDataV2'
       required:
-      - id
+      - pagination
+      - meta
+      - data
     AccountingTransactionDataV2:
       type: object
       properties:
@@ -453,24 +462,20 @@ components:
       - type
       - section
       - subSection
-    AccountingTransactionEntityRefV2:
+    Error403ResponseDto:
       type: object
       properties:
-        id:
-          type: string
-          example: '233'
-          readOnly: false
-        name:
-          type: string
-          example: Railz Inc.
-          readOnly: false
-        type:
-          type: string
-          example: vendor
-          enum:
-          - vendor
-          - customer
-          - unknown
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
     Error400DtoV2:
       type: object
       properties:
@@ -493,46 +498,41 @@ components:
       - statusCode
       - message
       - error
-    Error400ResponseDtoV2:
+    Error401Dto:
       type: object
       properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
         error:
+          type: string
           readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
-        payload:
-          type: object
-          readOnly: true
+          example: Unauthorized
       required:
+      - statusCode
+      - message
       - error
-      - payload
-    AccountingTransactionTrackingCategoryRefV2:
+    AccountingTransactionAccountRefV2:
       type: object
       properties:
         id:
           type: string
-          example: '4040'
+          example: '1334'
           readOnly: false
         name:
           type: string
+          example: Account Receivable
           readOnly: false
-          example: Region
-        option:
-          type: string
-          readOnly: false
-          example: East
-        optionId:
-          type: string
-          readOnly: false
-          example: '40401'
-        type:
-          type: string
-          example: class
-          enum:
-          - class
-          - department
-          - location
-          - unknown
+      required:
+      - id
   securitySchemes:
     bearer:
       scheme: bearer

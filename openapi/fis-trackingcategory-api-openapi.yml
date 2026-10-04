@@ -148,41 +148,18 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    Error500ResponseDto:
+    PushTrackingCategoriesV1:
       type: object
       properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error500Dto:
-      type: object
-      properties:
-        error:
+        name:
           type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
+          example: Region
+          maxLength: 100
+        parentRef:
+          type: string
+          example: '1334'
       required:
-      - error
-      - message
-      - statusCode
+      - name
     PushTrackingCategoriesV1Dto:
       type: object
       properties:
@@ -193,6 +170,23 @@ components:
       required:
       - connection
       - data
+    PushTrackingCategoriesConnection:
+      type: object
+      properties:
+        businessName:
+          type: string
+          example: Railz
+          description: Unique business name identifier.
+        serviceName:
+          type: string
+          example: quickbooks
+          description: Name of accounting platform service.
+          enum:
+          - quickbooks
+          - xero
+      required:
+      - businessName
+      - serviceName
     GetTrackingCategoryData:
       type: object
       properties:
@@ -245,18 +239,125 @@ components:
       - statusCode
       - message
       - error
-    PushTrackingCategoriesV1:
+    ParentRef:
       type: object
       properties:
+        id:
+          type: string
+          example: '434'
         name:
           type: string
           example: Region
-          maxLength: 100
-        parentRef:
-          type: string
-          example: '1334'
       required:
-      - name
+      - id
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    GetTrackingCategoryResponseDto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        meta:
+          $ref: '#/components/schemas/BasicReportMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetTrackingCategoryData'
+      required:
+      - pagination
+      - count
+      - meta
+      - data
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
     Error401Dto:
       type: object
       properties:
@@ -279,32 +380,17 @@ components:
       - statusCode
       - message
       - error
-    PaginationMetaData:
-      type: object
-      properties:
-        offset:
-          type: number
-          readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
-          readOnly: true
-      required:
-      - offset
-      - limit
-      - count
-    Error400ResponseDto:
+    Error403ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error400Dto'
+          - $ref: '#/components/schemas/Error403Dto'
         payload:
           type: object
           readOnly: true
+          example: {}
       required:
       - error
       - payload
@@ -361,80 +447,19 @@ components:
       - businessName
       - serviceName
       - data
-    PushTrackingCategoriesConnection:
-      type: object
-      properties:
-        businessName:
-          type: string
-          example: Railz
-          description: Unique business name identifier.
-        serviceName:
-          type: string
-          example: quickbooks
-          description: Name of accounting platform service.
-          enum:
-          - quickbooks
-          - xero
-      required:
-      - businessName
-      - serviceName
-    Error401ResponseDto:
+    Error400ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error401Dto'
+          - $ref: '#/components/schemas/Error400Dto'
         payload:
           type: object
           readOnly: true
-          example: {}
       required:
       - error
       - payload
-    GetTrackingCategoryResponseDto:
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        count:
-          type: number
-          readOnly: true
-          example: 1
-          format: integer
-        meta:
-          $ref: '#/components/schemas/BasicReportMetaData'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetTrackingCategoryData'
-      required:
-      - pagination
-      - count
-      - meta
-      - data
-    Error400Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - businessName cannot be null
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
     BasicReportMetaData:
       type: object
       properties:
@@ -483,31 +508,6 @@ components:
       - businessName
       - createdAt
       - updatedAt
-    ParentRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '434'
-        name:
-          type: string
-          example: Region
-      required:
-      - id
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
   securitySchemes:
     bearer:
       scheme: bearer

@@ -91,213 +91,6 @@ paths:
       - ContactControllerV2
 components:
   schemas:
-    Error500ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    GetContactData:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        contactName:
-          type: string
-          example: Jane Smith
-        contactFirstName:
-          type: string
-          example: Jane
-        contactLastName:
-          type: string
-          example: Smith
-        emailAddress:
-          type: string
-          example: email@acme.com
-        bankAccountRef:
-          $ref: '#/components/schemas/BankAccountRef'
-        website:
-          type: string
-          example: www.acme.com
-        currency:
-          type: string
-          example: USD
-        phone:
-          type: string
-          example: '8889990000'
-        billingAddress:
-          $ref: '#/components/schemas/BillingAddress'
-        shippingAddress:
-          $ref: '#/components/schemas/ShippingAddress'
-        contacts:
-          type: array
-          items:
-            $ref: '#/components/schemas/ContactPerson'
-        taxNumber:
-          type: string
-          example: '987654321'
-        status:
-          type: string
-          enum:
-          - unknown
-          - active
-          - archived
-        balance:
-          type: number
-          example: 0
-          format: float
-        contactType:
-          type: string
-          enum:
-          - unknown
-          - customer
-          - vendor
-          example: customer
-        sourceModifiedDate:
-          type: string
-          example: '2021-03-09T08:49:36.035Z'
-      required:
-      - id
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
-    ContactPerson:
-      type: object
-      properties:
-        name:
-          type: string
-          example: John Smith
-        email:
-          type: string
-          example: jsmith@company.com
-    BankAccountRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '200'
-    PaginationMetaData:
-      type: object
-      properties:
-        offset:
-          type: number
-          readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
-          readOnly: true
-      required:
-      - offset
-      - limit
-      - count
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
-    ShippingAddress:
-      type: object
-      properties:
-        line1:
-          type: string
-          example: 1234 Park Street
-        line2:
-          type: string
-          example: Suite 1000
-        city:
-          type: string
-          example: Toronto
-        region:
-          type: string
-          example: 'ON'
-        country:
-          type: string
-          example: CAN
-        postalCode:
-          type: string
-          example: A0B1C2
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
     ListReportMetaDataV2:
       type: object
       properties:
@@ -367,6 +160,252 @@ components:
       - pagination
       - meta
       - data
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    ShippingAddress:
+      type: object
+      properties:
+        line1:
+          type: string
+          example: 1234 Park Street
+        line2:
+          type: string
+          example: Suite 1000
+        city:
+          type: string
+          example: Toronto
+        region:
+          type: string
+          example: 'ON'
+        country:
+          type: string
+          example: CAN
+        postalCode:
+          type: string
+          example: A0B1C2
+    BillingAddress:
+      type: object
+      properties:
+        line1:
+          type: string
+          example: 1234 Park Street
+        line2:
+          type: string
+          example: Suite 1000
+        city:
+          type: string
+          example: Toronto
+        region:
+          type: string
+          example: 'ON'
+        country:
+          type: string
+          example: CAN
+        postalCode:
+          type: string
+          example: A0B1C2
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    GetContactData:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        contactName:
+          type: string
+          example: Jane Smith
+        contactFirstName:
+          type: string
+          example: Jane
+        contactLastName:
+          type: string
+          example: Smith
+        emailAddress:
+          type: string
+          example: email@acme.com
+        bankAccountRef:
+          $ref: '#/components/schemas/BankAccountRef'
+        website:
+          type: string
+          example: www.acme.com
+        currency:
+          type: string
+          example: USD
+        phone:
+          type: string
+          example: '8889990000'
+        billingAddress:
+          $ref: '#/components/schemas/BillingAddress'
+        shippingAddress:
+          $ref: '#/components/schemas/ShippingAddress'
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactPerson'
+        taxNumber:
+          type: string
+          example: '987654321'
+        status:
+          type: string
+          enum:
+          - unknown
+          - active
+          - archived
+        balance:
+          type: number
+          example: 0
+          format: float
+        contactType:
+          type: string
+          enum:
+          - unknown
+          - customer
+          - vendor
+          example: customer
+        sourceModifiedDate:
+          type: string
+          example: '2021-03-09T08:49:36.035Z'
+      required:
+      - id
+    BankAccountRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '200'
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
     Error400DtoV2:
       type: object
       properties:
@@ -389,54 +428,15 @@ components:
       - statusCode
       - message
       - error
-    BillingAddress:
+    ContactPerson:
       type: object
       properties:
-        line1:
+        name:
           type: string
-          example: 1234 Park Street
-        line2:
+          example: John Smith
+        email:
           type: string
-          example: Suite 1000
-        city:
-          type: string
-          example: Toronto
-        region:
-          type: string
-          example: 'ON'
-        country:
-          type: string
-          example: CAN
-        postalCode:
-          type: string
-          example: A0B1C2
-    Error400ResponseDtoV2:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
+          example: jsmith@company.com
   securitySchemes:
     bearer:
       scheme: bearer

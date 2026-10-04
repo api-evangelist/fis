@@ -524,6 +524,149 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    BalanceSheetsReport:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/FinancialStatementReportMetaData'
+        data:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/BalanceSheetsData'
+      required:
+      - meta
+      - data
+    CashflowStatementsData:
+      type: object
+      properties:
+        section:
+          type: string
+          example: Operating Activities
+          enum:
+          - Operating Activities
+          - Financing Activities
+          - Investing Activities
+          - Cash
+        subSection:
+          type: string
+          example: Payments
+          enum:
+          - Payments
+          - Adjustments
+          - Changes
+          - Proceeds
+          - Stock
+          - Intangibles
+          - Property Plant And Equipment
+          - Cash
+        group:
+          type: string
+          example: Financing Activities
+        subGroup:
+          type: string
+          example: Retained Earnings
+        accountId:
+          type: string
+          example: '3928'
+        subAccountId:
+          type: string
+          example: '231'
+        account:
+          type: string
+          readOnly: true
+          example: Financing Activities
+        subAccount:
+          type: string
+          example: Retained Earnings
+        value:
+          type: number
+          readOnly: true
+          example: 13000
+          format: float
+        fullyQualifiedName:
+          type: string
+          example: 'Expenses : Transportation : Car Mileage'
+          description: Full name of the account and parent account(s), colon separated.
+        depth:
+          type: number
+          example: 3
+          description: The sub account depth, based on it's account hierarchy level. E.g. top parent account would have a depth of 1.
+      required:
+      - section
+      - subSection
+      - account
+      - value
+      - fullyQualifiedName
+      - depth
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    BalanceSheetsResponseDto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        reports:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/BalanceSheetsReport'
+      required:
+      - pagination
+      - count
+      - reports
     PaginationMetaData:
       type: object
       properties:
@@ -553,6 +696,86 @@ components:
       required:
       - error
       - payload
+    BalanceSheetsData:
+      type: object
+      properties:
+        section:
+          type: string
+          example: Assets
+          enum:
+          - Assets
+          - Liabilities
+          - Equity
+        subSection:
+          type: string
+          example: Current Assets
+          enum:
+          - Current Assets
+          - Non-Current Assets
+          - Current Liabilities
+          - Non-Current Liabilities
+          - Equity
+          - Other Assets
+          - Other Liabilities
+          - Expenses
+        fullyQualifiedName:
+          type: string
+          example: 'Expenses : Transportation : Car Mileage'
+          description: Full name of the account and parent account(s), colon separated.
+        depth:
+          type: number
+          example: 3
+          description: The sub account depth, based on it's account hierarchy level. E.g. top parent account would have a depth of 1.
+        group:
+          type: string
+          example: Cash And Cash Equivalents
+        subGroup:
+          type: string
+          example: Utilities
+        accountId:
+          type: string
+          example: '3928'
+        subAccountId:
+          type: string
+          example: '231'
+        account:
+          type: string
+          readOnly: true
+          example: Checking
+        subAccount:
+          type: string
+          example: Checking
+        value:
+          type: number
+          readOnly: true
+          example: 990
+          format: float
+      required:
+      - section
+      - subSection
+      - fullyQualifiedName
+      - depth
+      - account
+      - value
+    IncomeStatementsResponseDto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        reports:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/IncomeStatementsReport'
+      required:
+      - pagination
+      - count
+      - reports
     Error401ResponseDto:
       type: object
       properties:
@@ -567,6 +790,19 @@ components:
       required:
       - error
       - payload
+    IncomeStatementsReport:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/FinancialStatementReportMetaData'
+        data:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/IncomeStatementsData'
+      required:
+      - meta
+      - data
     FinancialStatementReportMetaData:
       type: object
       properties:
@@ -648,77 +884,6 @@ components:
       - serviceName
       - businessName
       - accountingMethod
-    BalanceSheetsResponseDto:
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        count:
-          type: number
-          readOnly: true
-          example: 1
-          format: integer
-        reports:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/BalanceSheetsReport'
-      required:
-      - pagination
-      - count
-      - reports
-    CashflowStatementsReport:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/FinancialStatementReportMetaData'
-        data:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/CashflowStatementsData'
-      required:
-      - meta
-      - data
-    BalanceSheetsReport:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/FinancialStatementReportMetaData'
-        data:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/BalanceSheetsData'
-      required:
-      - meta
-      - data
-    IncomeStatementsReport:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/FinancialStatementReportMetaData'
-        data:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/IncomeStatementsData'
-      required:
-      - meta
-      - data
-    Error500ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
     Error500Dto:
       type: object
       properties:
@@ -741,28 +906,25 @@ components:
       - error
       - message
       - statusCode
-    Error403Dto:
+    CashflowStatementsResponseDto:
       type: object
       properties:
-        statusCode:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        count:
           type: number
           readOnly: true
-          example: 403
-        message:
+          example: 1
+          format: integer
+        reports:
           readOnly: true
-          example:
-          - Forbidden resource
           type: array
           items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
+            $ref: '#/components/schemas/CashflowStatementsReport'
       required:
-      - statusCode
-      - message
-      - error
+      - pagination
+      - count
+      - reports
     Error401Dto:
       type: object
       properties:
@@ -785,170 +947,6 @@ components:
       - statusCode
       - message
       - error
-    IncomeStatementsResponseDto:
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        count:
-          type: number
-          readOnly: true
-          example: 1
-          format: integer
-        reports:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/IncomeStatementsReport'
-      required:
-      - pagination
-      - count
-      - reports
-    BalanceSheetsData:
-      type: object
-      properties:
-        section:
-          type: string
-          example: Assets
-          enum:
-          - Assets
-          - Liabilities
-          - Equity
-        subSection:
-          type: string
-          example: Current Assets
-          enum:
-          - Current Assets
-          - Non-Current Assets
-          - Current Liabilities
-          - Non-Current Liabilities
-          - Equity
-          - Other Assets
-          - Other Liabilities
-          - Expenses
-        fullyQualifiedName:
-          type: string
-          example: 'Expenses : Transportation : Car Mileage'
-          description: Full name of the account and parent account(s), colon separated.
-        depth:
-          type: number
-          example: 3
-          description: The sub account depth, based on it's account hierarchy level. E.g. top parent account would have a depth of 1.
-        group:
-          type: string
-          example: Cash And Cash Equivalents
-        subGroup:
-          type: string
-          example: Utilities
-        accountId:
-          type: string
-          example: '3928'
-        subAccountId:
-          type: string
-          example: '231'
-        account:
-          type: string
-          readOnly: true
-          example: Checking
-        subAccount:
-          type: string
-          example: Checking
-        value:
-          type: number
-          readOnly: true
-          example: 990
-          format: float
-      required:
-      - section
-      - subSection
-      - fullyQualifiedName
-      - depth
-      - account
-      - value
-    Error400Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - businessName cannot be null
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
-    CashflowStatementsData:
-      type: object
-      properties:
-        section:
-          type: string
-          example: Operating Activities
-          enum:
-          - Operating Activities
-          - Financing Activities
-          - Investing Activities
-          - Cash
-        subSection:
-          type: string
-          example: Payments
-          enum:
-          - Payments
-          - Adjustments
-          - Changes
-          - Proceeds
-          - Stock
-          - Intangibles
-          - Property Plant And Equipment
-          - Cash
-        group:
-          type: string
-          example: Financing Activities
-        subGroup:
-          type: string
-          example: Retained Earnings
-        accountId:
-          type: string
-          example: '3928'
-        subAccountId:
-          type: string
-          example: '231'
-        account:
-          type: string
-          readOnly: true
-          example: Financing Activities
-        subAccount:
-          type: string
-          example: Retained Earnings
-        value:
-          type: number
-          readOnly: true
-          example: 13000
-          format: float
-        fullyQualifiedName:
-          type: string
-          example: 'Expenses : Transportation : Car Mileage'
-          description: Full name of the account and parent account(s), colon separated.
-        depth:
-          type: number
-          example: 3
-          description: The sub account depth, based on it's account hierarchy level. E.g. top parent account would have a depth of 1.
-      required:
-      - section
-      - subSection
-      - account
-      - value
-      - fullyQualifiedName
-      - depth
     IncomeStatementsData:
       type: object
       properties:
@@ -1009,39 +1007,41 @@ components:
       - value
       - fullyQualifiedName
       - depth
-    CashflowStatementsResponseDto:
+    Error400Dto:
       type: object
       properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        count:
+        statusCode:
           type: number
           readOnly: true
-          example: 1
-          format: integer
-        reports:
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    CashflowStatementsReport:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/FinancialStatementReportMetaData'
+        data:
           readOnly: true
           type: array
           items:
-            $ref: '#/components/schemas/CashflowStatementsReport'
+            $ref: '#/components/schemas/CashflowStatementsData'
       required:
-      - pagination
-      - count
-      - reports
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
+      - meta
+      - data
   securitySchemes:
     bearer:
       scheme: bearer

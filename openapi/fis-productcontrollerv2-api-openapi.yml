@@ -125,19 +125,14 @@ paths:
       - ProductControllerV2
 components:
   schemas:
-    Error500ResponseDto:
+    QuantityPerLocation:
       type: object
       properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
+        quantity:
+          type: number
+          format: float
+        locationRef:
+          $ref: '#/components/schemas/ProductLocationRef'
     BasicStartEndDateReportMetaDataV2:
       type: object
       properties:
@@ -203,28 +198,75 @@ components:
       - updatedAt
       - startDate
       - endDate
-    Error500Dto:
+    GetProductData:
       type: object
       properties:
-        error:
+        id:
           type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
+          example: '632910392'
+        type:
+          type: string
+          example: Speakers
+        name:
+          type: string
+          example: Amazon Echo
+        description:
+          type: string
+          example: Sample product description
+        createdDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        sourceModifiedDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        status:
+          type: string
+          enum:
+          - active
+          - archived
+          - draft
+          example: active
+        isGiftCard:
+          type: boolean
+          example: true
+        productVariants:
           type: array
           items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
+            $ref: '#/components/schemas/ProductVariants'
       required:
-      - error
-      - message
-      - statusCode
+      - id
+      - name
+      - createdDate
+      - sourceModifiedDate
+      - status
+    Inventory:
+      type: object
+      properties:
+        totalQuantity:
+          type: number
+          example: 10
+          format: float
+        quantityPerLocation:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuantityPerLocation'
+    Weight:
+      type: object
+      properties:
+        value:
+          type: number
+          example: 1.25
+          format: float
+        unitOfMeasure:
+          type: string
+          enum:
+          - g
+          - kg
+          - lb
+          - oz
+          example: lb
     Error403Dto:
       type: object
       properties:
@@ -285,52 +327,76 @@ components:
       - name
       - unitPrice
       - createdDate
-    Error401Dto:
+    Error500ResponseDto:
       type: object
       properties:
-        statusCode:
-          type: number
+        error:
           readOnly: true
-          example: 401
-        message:
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
           readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
+      required:
+      - error
+      - payload
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    ProductLocationRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '12323'
+        name:
+          type: string
+    Error500Dto:
+      type: object
+      properties:
         error:
           type: string
           readOnly: true
-          example: Unauthorized
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
       required:
-      - statusCode
-      - message
       - error
-    PaginationMetaData:
+      - message
+      - statusCode
+    Error400ResponseDtoV2:
       type: object
       properties:
-        offset:
-          type: number
+        error:
           readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
           readOnly: true
       required:
-      - offset
-      - limit
-      - count
-    QuantityPerLocation:
-      type: object
-      properties:
-        quantity:
-          type: number
-          format: float
-        locationRef:
-          $ref: '#/components/schemas/ProductLocationRef'
+      - error
+      - payload
     GetProductResponseV2Dto:
       type: object
       properties:
@@ -353,21 +419,51 @@ components:
       - data
       - count
       - meta
-    ProductLocationRef:
+    PaginationMetaData:
       type: object
       properties:
-        id:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
           type: string
-          example: '12323'
-        name:
-          type: string
-    Error401ResponseDto:
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    Error403ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error401Dto'
+          - $ref: '#/components/schemas/Error403Dto'
         payload:
           type: object
           readOnly: true
@@ -375,32 +471,6 @@ components:
       required:
       - error
       - payload
-    Weight:
-      type: object
-      properties:
-        value:
-          type: number
-          example: 1.25
-          format: float
-        unitOfMeasure:
-          type: string
-          enum:
-          - g
-          - kg
-          - lb
-          - oz
-          example: lb
-    Inventory:
-      type: object
-      properties:
-        totalQuantity:
-          type: number
-          example: 10
-          format: float
-        quantityPerLocation:
-          type: array
-          items:
-            $ref: '#/components/schemas/QuantityPerLocation'
     Error400DtoV2:
       type: object
       properties:
@@ -423,76 +493,6 @@ components:
       - statusCode
       - message
       - error
-    GetProductData:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '632910392'
-        type:
-          type: string
-          example: Speakers
-        name:
-          type: string
-          example: Amazon Echo
-        description:
-          type: string
-          example: Sample product description
-        createdDate:
-          format: date-time
-          type: string
-          example: '2021-03-09T10:18:29.985Z'
-        sourceModifiedDate:
-          format: date-time
-          type: string
-          example: '2021-03-09T10:18:29.985Z'
-        status:
-          type: string
-          enum:
-          - active
-          - archived
-          - draft
-          example: active
-        isGiftCard:
-          type: boolean
-          example: true
-        productVariants:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductVariants'
-      required:
-      - id
-      - name
-      - createdDate
-      - sourceModifiedDate
-      - status
-    Error400ResponseDtoV2:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
   securitySchemes:
     bearer:
       scheme: bearer

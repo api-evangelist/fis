@@ -92,41 +92,53 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    Error500ResponseDto:
+    TaxBenchmarkingsData:
       type: object
       properties:
-        error:
-          readOnly: true
+        section:
+          oneOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
           allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+        subSection:
+          oneOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+          allOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+        group:
+          oneOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+          allOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+        subGroup:
+          oneOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+          allOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+        ratios:
+          oneOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+          allOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
       required:
-      - error
-      - payload
-    Error500Dto:
+      - section
+      - subSection
+      - group
+      - subGroup
+      - ratios
+    TaxBenchmarkingsReport:
       type: object
       properties:
-        error:
-          type: string
+        meta:
+          $ref: '#/components/schemas/TaxBenchmarkingsReportMetaData'
+        data:
           readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
           type: array
           items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
+            $ref: '#/components/schemas/TaxBenchmarkingsData'
       required:
-      - error
-      - message
-      - statusCode
+      - meta
+      - data
     Error403Dto:
       type: object
       properties:
@@ -149,6 +161,91 @@ components:
       - statusCode
       - message
       - error
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
     Error401Dto:
       type: object
       properties:
@@ -171,35 +268,28 @@ components:
       - statusCode
       - message
       - error
-    Error400ResponseDto:
+    TaxBenchmarkingsReportMetaData:
       type: object
       properties:
-        error:
+        industryCode:
+          type: string
           readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    TaxBenchmarkingsResponseDto:
-      type: object
-      properties:
-        count:
+          example: '44'
+        region:
+          type: string
+          example: CA
+        numberOfBusinesses:
           type: number
+          example: 282
+        createdAt:
+          type: string
           readOnly: true
-          format: integer
-          example: 1
-        reports:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/TaxBenchmarkingsReport'
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
       required:
-      - count
-      - reports
+      - industryCode
+      - numberOfBusinesses
+      - createdAt
     SummaryStatisticsData:
       type: object
       properties:
@@ -249,122 +339,32 @@ components:
       - quantile25**
       - quantile75**
       - quantile95**
-    Error401ResponseDto:
+    TaxBenchmarkingsResponseDto:
       type: object
       properties:
-        error:
+        count:
+          type: number
           readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    TaxBenchmarkingsData:
-      type: object
-      properties:
-        section:
-          oneOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-          allOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-        subSection:
-          oneOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-          allOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-        group:
-          oneOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-          allOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-        subGroup:
-          oneOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-          allOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-        ratios:
-          oneOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-          allOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-      required:
-      - section
-      - subSection
-      - group
-      - subGroup
-      - ratios
-    TaxBenchmarkingsReport:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/TaxBenchmarkingsReportMetaData'
-        data:
+          format: integer
+          example: 1
+        reports:
           readOnly: true
           type: array
           items:
-            $ref: '#/components/schemas/TaxBenchmarkingsData'
+            $ref: '#/components/schemas/TaxBenchmarkingsReport'
       required:
-      - meta
-      - data
-    TaxBenchmarkingsReportMetaData:
-      type: object
-      properties:
-        industryCode:
-          type: string
-          readOnly: true
-          example: '44'
-        region:
-          type: string
-          example: CA
-        numberOfBusinesses:
-          type: number
-          example: 282
-        createdAt:
-          type: string
-          readOnly: true
-          example: '2020-11-30T01:02:03Z'
-          format: date-time
-      required:
-      - industryCode
-      - numberOfBusinesses
-      - createdAt
-    Error400Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - businessName cannot be null
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
-    Error403ResponseDto:
+      - count
+      - reports
+    Error400ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error403Dto'
+          - $ref: '#/components/schemas/Error400Dto'
         payload:
           type: object
           readOnly: true
-          example: {}
       required:
       - error
       - payload

@@ -155,6 +155,92 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    AttachmentLink:
+      type: object
+      properties:
+        type:
+          type: string
+          example: bill
+          enum:
+          - bill
+          - invoice
+          - customer
+          - vendor
+          - deposit
+          - journalEntry
+          - billPayment
+          - invoicePayment
+          - expense
+          - inventory
+          - purchaseOrder
+          - invoiceCreditNote
+          - billCreditNote
+          - bankTransaction
+          - bankTransfer
+          - account
+        id:
+          type: string
+          example: '234'
+    PushAttachmentV1:
+      type: object
+      properties:
+        link:
+          $ref: '#/components/schemas/PushAttachmentLink'
+      required:
+      - link
+    GetAttachmentData:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        url:
+          type: string
+          example: https://api.railz.ai/Attachments/Image00394.png
+          format: uri
+        fileName:
+          type: string
+          example: image00394.png
+        contentType:
+          type: string
+          example: image/jpeg
+        uploadDate:
+          type: string
+          example: '2020-11-25T01:02:03Z'
+        fileSize:
+          type: number
+          example: 10495
+          format: float
+        sourceModifiedDate:
+          type: string
+          example: '2021-03-09T08:49:36.035Z'
+        link:
+          $ref: '#/components/schemas/AttachmentLink'
+      required:
+      - id
+      - url
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
     Error500ResponseDto:
       type: object
       properties:
@@ -168,6 +254,115 @@ components:
       required:
       - error
       - payload
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    PushAttachmentLink:
+      type: object
+      properties:
+        type:
+          type: string
+          example: bill
+          enum:
+          - bill
+          - invoice
+          - customer
+          - vendor
+          - deposit
+          - journalEntry
+          - billPayment
+          - invoicePayment
+          - expense
+          - inventory
+          - purchaseOrder
+          - invoiceCreditNote
+          - billCreditNote
+          - bankTransaction
+          - bankTransfer
+          - account
+        id:
+          type: string
+          example: '133'
+      required:
+      - type
+      - id
+    PushAttachmentConnection:
+      type: object
+      properties:
+        businessName:
+          type: string
+          example: Railz
+        serviceName:
+          type: string
+          example: quickbooks
+          description: Name of accounting platform service.
+          enum:
+          - freshbooks
+          - quickbooks
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - zohoBooks
+      required:
+      - businessName
+      - serviceName
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
     PushAttachmentResponseV1Dto:
       type: object
       properties:
@@ -221,65 +416,6 @@ components:
       - businessName
       - serviceName
       - data
-    GetAttachmentResponseV1Dto:
-      type: object
-      properties:
-        count:
-          type: number
-          readOnly: true
-          example: 1
-          format: integer
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetAttachmentData'
-      required:
-      - count
-      - data
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
     Error401Dto:
       type: object
       properties:
@@ -316,170 +452,6 @@ components:
       - connection
       - file
       - data
-    PushAttachmentV1:
-      type: object
-      properties:
-        link:
-          $ref: '#/components/schemas/PushAttachmentLink'
-      required:
-      - link
-    Error400ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    PushAttachmentLink:
-      type: object
-      properties:
-        type:
-          type: string
-          example: bill
-          enum:
-          - bill
-          - invoice
-          - customer
-          - vendor
-          - deposit
-          - journalEntry
-          - billPayment
-          - invoicePayment
-          - expense
-          - inventory
-          - purchaseOrder
-          - invoiceCreditNote
-          - billCreditNote
-          - bankTransaction
-          - bankTransfer
-          - account
-        id:
-          type: string
-          example: '133'
-      required:
-      - type
-      - id
-    GetAttachmentData:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        url:
-          type: string
-          example: https://api.railz.ai/Attachments/Image00394.png
-          format: uri
-        fileName:
-          type: string
-          example: image00394.png
-        contentType:
-          type: string
-          example: image/jpeg
-        uploadDate:
-          type: string
-          example: '2020-11-25T01:02:03Z'
-        fileSize:
-          type: number
-          example: 10495
-          format: float
-        sourceModifiedDate:
-          type: string
-          example: '2021-03-09T08:49:36.035Z'
-        link:
-          $ref: '#/components/schemas/AttachmentLink'
-      required:
-      - id
-      - url
-    AttachmentLink:
-      type: object
-      properties:
-        type:
-          type: string
-          example: bill
-          enum:
-          - bill
-          - invoice
-          - customer
-          - vendor
-          - deposit
-          - journalEntry
-          - billPayment
-          - invoicePayment
-          - expense
-          - inventory
-          - purchaseOrder
-          - invoiceCreditNote
-          - billCreditNote
-          - bankTransaction
-          - bankTransfer
-          - account
-        id:
-          type: string
-          example: '234'
-    Error400Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - businessName cannot be null
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
-    PushAttachmentConnection:
-      type: object
-      properties:
-        businessName:
-          type: string
-          example: Railz
-        serviceName:
-          type: string
-          example: quickbooks
-          description: Name of accounting platform service.
-          enum:
-          - freshbooks
-          - quickbooks
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - zohoBooks
-      required:
-      - businessName
-      - serviceName
     Error403ResponseDto:
       type: object
       properties:
@@ -491,6 +463,34 @@ components:
           type: object
           readOnly: true
           example: {}
+      required:
+      - error
+      - payload
+    GetAttachmentResponseV1Dto:
+      type: object
+      properties:
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetAttachmentData'
+      required:
+      - count
+      - data
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
       required:
       - error
       - payload

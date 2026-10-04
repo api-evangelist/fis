@@ -105,41 +105,37 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    Error500ResponseDto:
+    GetTaxRatesDataV1:
       type: object
       properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error500Dto:
-      type: object
-      properties:
-        error:
+        id:
           type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
+          example: '1'
+        name:
+          type: string
+          example: Harmonized sales tax
+        code:
+          type: string
+          example: HST
+        effectiveTaxRate:
+          type: number
+          example: 0
+          format: float
+        totalTaxRate:
+          type: number
+          example: 13
+          format: float
+        sourceModifiedDate:
+          format: date-time
+          type: string
+          example: '2021-03-10T11:26:06.619Z'
+        components:
           type: array
           items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
+            $ref: '#/components/schemas/TaxRateComponentV1'
       required:
-      - error
-      - message
-      - statusCode
+      - id
+      - name
     ListReportMetaData:
       type: object
       properties:
@@ -211,99 +207,16 @@ components:
       - statusCode
       - message
       - error
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
-    PaginationMetaData:
-      type: object
-      properties:
-        offset:
-          type: number
-          readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
-          readOnly: true
-      required:
-      - offset
-      - limit
-      - count
-    Error400ResponseDto:
+    Error500ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error400Dto'
+          - $ref: '#/components/schemas/Error500Dto'
         payload:
           type: object
           readOnly: true
-      required:
-      - error
-      - payload
-    GetTaxRatesDataV1:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        name:
-          type: string
-          example: Harmonized sales tax
-        code:
-          type: string
-          example: HST
-        effectiveTaxRate:
-          type: number
-          example: 0
-          format: float
-        totalTaxRate:
-          type: number
-          example: 13
-          format: float
-        sourceModifiedDate:
-          format: date-time
-          type: string
-          example: '2021-03-10T11:26:06.619Z'
-        components:
-          type: array
-          items:
-            $ref: '#/components/schemas/TaxRateComponentV1'
-      required:
-      - id
-      - name
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
       required:
       - error
       - payload
@@ -328,25 +241,20 @@ components:
       - count
       - meta
       - data
-    TaxRateComponentV1:
+    Error401ResponseDto:
       type: object
       properties:
-        name:
-          type: string
-          example: HST
-        rate:
-          type: number
-          example: 13
-          format: float
-        isCompound:
-          type: boolean
-          example: false
-        isPurchasesTax:
-          type: boolean
-          example: false
-        isSalesTax:
-          type: boolean
-          example: false
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
     Error400Dto:
       type: object
       properties:
@@ -369,6 +277,85 @@ components:
       - statusCode
       - message
       - error
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    TaxRateComponentV1:
+      type: object
+      properties:
+        name:
+          type: string
+          example: HST
+        rate:
+          type: number
+          example: 13
+          format: float
+        isCompound:
+          type: boolean
+          example: false
+        isPurchasesTax:
+          type: boolean
+          example: false
+        isSalesTax:
+          type: boolean
+          example: false
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
     Error403ResponseDto:
       type: object
       properties:
@@ -380,6 +367,19 @@ components:
           type: object
           readOnly: true
           example: {}
+      required:
+      - error
+      - payload
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
       required:
       - error
       - payload

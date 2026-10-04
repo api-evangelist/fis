@@ -64,27 +64,6 @@ paths:
                 $ref: '#/components/schemas/AchBatch'
 components:
   schemas:
-    AchTransfer:
-      allOf:
-      - $ref: '#/components/schemas/AchTransferRequest'
-      - type: object
-        properties:
-          transferId:
-            type: string
-          status:
-            type: string
-            enum:
-            - CREATED
-            - SUBMITTED
-            - SETTLED
-            - RETURNED
-            - REJECTED
-          traceNumber:
-            type: string
-            description: NACHA trace number
-          createdAt:
-            type: string
-            format: date-time
     AccountReference:
       type: object
       required:
@@ -111,38 +90,6 @@ components:
         swiftCode:
           type: string
           description: SWIFT/BIC code for international wires
-    AchBatchRequest:
-      type: object
-      required:
-      - companyName
-      - companyId
-      - transactions
-      properties:
-        companyName:
-          type: string
-          maxLength: 16
-        companyId:
-          type: string
-          maxLength: 10
-        entryClassCode:
-          type: string
-          enum:
-          - PPD
-          - CCD
-          - CTX
-          - WEB
-          - TEL
-        description:
-          type: string
-          maxLength: 10
-        effectiveDate:
-          type: string
-          format: date
-        transactions:
-          type: array
-          items:
-            $ref: '#/components/schemas/AchTransferRequest'
-          maxItems: 10000
     AchBatch:
       type: object
       properties:
@@ -165,6 +112,27 @@ components:
         createdAt:
           type: string
           format: date-time
+    AchTransfer:
+      allOf:
+      - $ref: '#/components/schemas/AchTransferRequest'
+      - type: object
+        properties:
+          transferId:
+            type: string
+          status:
+            type: string
+            enum:
+            - CREATED
+            - SUBMITTED
+            - SETTLED
+            - RETURNED
+            - REJECTED
+          traceNumber:
+            type: string
+            description: NACHA trace number
+          createdAt:
+            type: string
+            format: date-time
     AchTransferRequest:
       type: object
       required:
@@ -210,6 +178,38 @@ components:
         sameDayAch:
           type: boolean
           default: false
+    AchBatchRequest:
+      type: object
+      required:
+      - companyName
+      - companyId
+      - transactions
+      properties:
+        companyName:
+          type: string
+          maxLength: 16
+        companyId:
+          type: string
+          maxLength: 10
+        entryClassCode:
+          type: string
+          enum:
+          - PPD
+          - CCD
+          - CTX
+          - WEB
+          - TEL
+        description:
+          type: string
+          maxLength: 10
+        effectiveDate:
+          type: string
+          format: date
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AchTransferRequest'
+          maxItems: 10000
   securitySchemes:
     OAuth2ClientCredentials:
       type: oauth2

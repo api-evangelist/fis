@@ -103,63 +103,6 @@ paths:
       - PayrollTransaction
 components:
   schemas:
-    Error500ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
     PayrollTransactionsReportMetaData:
       type: object
       properties:
@@ -221,44 +164,6 @@ components:
       - reportId
       - createdAt
       - updatedAt
-    PaginationMetaData:
-      type: object
-      properties:
-        offset:
-          type: number
-          readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
-          readOnly: true
-      required:
-      - offset
-      - limit
-      - count
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
     PayrollTransactionData:
       type: object
       properties:
@@ -378,6 +283,28 @@ components:
       - id
       - postedDate
       - type
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
     Error401ResponseDto:
       type: object
       properties:
@@ -389,6 +316,19 @@ components:
           type: object
           readOnly: true
           example: {}
+      required:
+      - error
+      - payload
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
       required:
       - error
       - payload
@@ -410,19 +350,57 @@ components:
           - department
           - location
           - unknown
-    AccountingTransactionAccountRefV2:
+    Error500Dto:
       type: object
       properties:
-        id:
+        error:
           type: string
-          example: '1334'
-          readOnly: false
-        name:
-          type: string
-          example: Account Receivable
-          readOnly: false
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
       required:
-      - id
+      - error
+      - message
+      - statusCode
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
     AccountingTransactionEntityRefV2:
       type: object
       properties:
@@ -441,6 +419,58 @@ components:
           - vendor
           - customer
           - unknown
+    PayrollTransactionsResponseDto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        meta:
+          $ref: '#/components/schemas/PayrollTransactionsReportMetaData'
+        data:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/PayrollTransactionData'
+      required:
+      - pagination
+      - meta
+      - data
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
     Error400DtoV2:
       type: object
       properties:
@@ -463,49 +493,19 @@ components:
       - statusCode
       - message
       - error
-    PayrollTransactionsResponseDto:
+    AccountingTransactionAccountRefV2:
       type: object
       properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        meta:
-          $ref: '#/components/schemas/PayrollTransactionsReportMetaData'
-        data:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/PayrollTransactionData'
+        id:
+          type: string
+          example: '1334'
+          readOnly: false
+        name:
+          type: string
+          example: Account Receivable
+          readOnly: false
       required:
-      - pagination
-      - meta
-      - data
-    Error400ResponseDtoV2:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
+      - id
   securitySchemes:
     bearer:
       scheme: bearer

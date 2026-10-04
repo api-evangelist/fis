@@ -780,31 +780,61 @@ paths:
       - FinancialStatementControllerV2
 components:
   schemas:
-    Liabilities:
+    IncomeStatementsReportView:
       type: object
       properties:
-        currentLiabilities:
-          type: object
-          additionalProperties: true
-          example:
-            Accounts Payable: 5400
-        totalCurrentLiabilities:
-          type: number
-        nonCurrentLiabilities:
-          type: object
-          additionalProperties: true
-          example:
-            Services: 1200
-        totalNonCurrentLiabilities:
-          type: number
-        totalLiabilities:
-          type: number
+        meta:
+          $ref: '#/components/schemas/FinancialStatementReportMetaDataV2'
+        data:
+          $ref: '#/components/schemas/IncomeStatementReportData'
       required:
-      - currentLiabilities
-      - totalCurrentLiabilities
-      - nonCurrentLiabilities
-      - totalNonCurrentLiabilities
-      - totalLiabilities
+      - meta
+      - data
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    BalanceSheetsReportView:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/FinancialStatementReportMetaDataV2'
+        data:
+          $ref: '#/components/schemas/BalanceSheetReportData'
+      required:
+      - meta
+      - data
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
     BalanceSheetReportData:
       type: object
       properties:
@@ -827,77 +857,19 @@ components:
       - equity
       - totalEquity
       - totalLiabilitiesAndEquity
-    CashflowReportStatementData:
+    IncomeStatementsReportV2:
       type: object
       properties:
-        operatingActivities:
-          $ref: '#/components/schemas/OperatingActivities'
-        investingActivities:
-          $ref: '#/components/schemas/InvestingActivities'
-        financialActivities:
-          $ref: '#/components/schemas/FinancingActivities'
-        netCashIncreaseForPeriod:
-          type: number
+        meta:
+          $ref: '#/components/schemas/FinancialStatementReportMetaDataV2'
+        data:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/IncomeStatementsV2Data'
       required:
-      - operatingActivities
-      - investingActivities
-      - financialActivities
-      - netCashIncreaseForPeriod
-    PaginationMetaData:
-      type: object
-      properties:
-        offset:
-          type: number
-          readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
-          readOnly: true
-      required:
-      - offset
-      - limit
-      - count
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    Assets:
-      type: object
-      properties:
-        currentAssets:
-          type: object
-          additionalProperties: true
-          example:
-            Checking Account: 2000
-        totalCurrentAssets:
-          type: number
-        nonCurrentAssets:
-          type: object
-          additionalProperties: true
-          example:
-            Other Assets: 8000
-        totalNonCurrentAssets:
-          type: number
-        totalAssets:
-          type: number
-      required:
-      - currentAssets
-      - totalCurrentAssets
-      - nonCurrentAssets
-      - totalNonCurrentAssets
-      - totalAssets
+      - meta
+      - data
     FinancialStatementReportMetaDataV2:
       type: object
       properties:
@@ -984,40 +956,6 @@ components:
       - startDate
       - endDate
       - accountingMethod
-    OperatingActivities:
-      type: object
-      properties:
-        changes:
-          type: object
-          additionalProperties: true
-          example:
-            Input Tax: 2000
-        totalChanges:
-          type: number
-        adjustmentsOperating:
-          type: object
-          additionalProperties: true
-          example:
-            Adjustments: 1300
-        totalAdjustmentsOperating:
-          type: number
-        cash:
-          type: object
-          additionalProperties: true
-          example:
-            Accounts Payable: 5400
-        totalCash:
-          type: number
-        netCashByOperatingActivities:
-          type: number
-      required:
-      - changes
-      - totalChanges
-      - adjustmentsOperating
-      - totalAdjustmentsOperating
-      - cash
-      - totalCash
-      - netCashByOperatingActivities
     IncomeStatementsV2Data:
       type: object
       properties:
@@ -1086,29 +1024,148 @@ components:
       - account
       - value
       - depth
-    BalanceSheetsReportResponseDto:
+    Error403ResponseDto:
       type: object
       properties:
-        reports:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    InvestingActivities:
+      type: object
+      properties:
+        propertyPlantAndEquipment:
+          type: object
+          additionalProperties: true
+          example:
+            Equipment: 8000
+        totalPropertyPlantAndEquipment:
+          type: number
+        proceedsInvesting:
+          type: object
+          additionalProperties: true
+          example:
+            Proceeds: 5400
+        totalProceedsInvesting:
+          type: number
+        intangibles:
+          type: object
+          additionalProperties: true
+          example:
+            Intangibles: 5400
+        totalIntangibles:
+          type: number
+        payments:
+          type: object
+          additionalProperties: true
+          example:
+            Payables: 5400
+        totalPayments:
+          type: number
+        netCashByInvestingActivities:
+          type: number
+      required:
+      - propertyPlantAndEquipment
+      - totalPropertyPlantAndEquipment
+      - proceedsInvesting
+      - totalProceedsInvesting
+      - intangibles
+      - totalIntangibles
+      - payments
+      - totalPayments
+      - netCashByInvestingActivities
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    BalanceSheetsReportV2:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/FinancialStatementReportMetaDataV2'
+        data:
           readOnly: true
           type: array
           items:
-            $ref: '#/components/schemas/BalanceSheetsReportView'
+            $ref: '#/components/schemas/BalanceSheetsDataV2'
       required:
-      - reports
-    CashflowStatementsResponseV2Dto:
+      - meta
+      - data
+    FinancingActivities:
       type: object
       properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        reports:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/CashflowStatementsReportV2'
+        stock:
+          type: object
+          additionalProperties: true
+          example:
+            Stocks: 2500
+        totalStock:
+          type: object
+        proceedsFinancing:
+          type: object
+          additionalProperties: true
+          example:
+            Proceeds: 5400
+        totalProceedsFinancing:
+          type: number
+        adjustmentsFinancing:
+          type: object
+          additionalProperties: true
+          example:
+            Adjustments: 1300
+        totalAdjustmentsFinancing:
+          type: number
+        payments:
+          type: object
+          additionalProperties: true
+          example:
+            Payables: 5400
+        totalPayments:
+          type: number
+        netCashByFinancingActivities:
+          type: number
       required:
-      - pagination
-      - reports
+      - stock
+      - totalStock
+      - proceedsFinancing
+      - totalProceedsFinancing
+      - adjustmentsFinancing
+      - totalAdjustmentsFinancing
+      - payments
+      - totalPayments
+      - netCashByFinancingActivities
     Error400DtoV2:
       type: object
       properties:
@@ -1131,6 +1188,110 @@ components:
       - statusCode
       - message
       - error
+    CashflowStatementsReportResponseDto:
+      type: object
+      properties:
+        reports:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/CashflowReportView'
+      required:
+      - reports
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    CashflowReportStatementData:
+      type: object
+      properties:
+        operatingActivities:
+          $ref: '#/components/schemas/OperatingActivities'
+        investingActivities:
+          $ref: '#/components/schemas/InvestingActivities'
+        financialActivities:
+          $ref: '#/components/schemas/FinancingActivities'
+        netCashIncreaseForPeriod:
+          type: number
+      required:
+      - operatingActivities
+      - investingActivities
+      - financialActivities
+      - netCashIncreaseForPeriod
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    IncomeStatementsReportResponseDto:
+      type: object
+      properties:
+        reports:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/IncomeStatementsReportView'
+      required:
+      - reports
+    BalanceSheetsReportResponseDto:
+      type: object
+      properties:
+        reports:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/BalanceSheetsReportView'
+      required:
+      - reports
     IncomeStatementsResponseV2Dto:
       type: object
       properties:
@@ -1144,6 +1305,74 @@ components:
       required:
       - pagination
       - reports
+    BalanceSheetsDataV2:
+      type: object
+      properties:
+        section:
+          type: string
+          example: Assets
+          enum:
+          - Assets
+          - Liabilities
+          - Equity
+        subSection:
+          type: string
+          example: Current Assets
+          enum:
+          - Current Assets
+          - Non-Current Assets
+          - Current Liabilities
+          - Non-Current Liabilities
+          - Equity
+          - Other Assets
+          - Other Liabilities
+          - Expenses
+        fullyQualifiedName:
+          type: string
+          example: 'Expenses : Transportation : Car Mileage'
+          description: Full name of the account and parent account(s), colon separated.
+        depth:
+          type: number
+          example: 3
+          description: The sub account depth, based on it's account hierarchy level. E.g. top parent account would have a depth of 1.
+        group:
+          type: string
+          example: Cash And Cash Equivalents
+        subGroup:
+          type: string
+          example: Utilities
+        accountId:
+          type: string
+          example: '3928'
+        subAccountId:
+          type: string
+          example: '231'
+        account:
+          type: string
+          readOnly: true
+          example: Checking
+        subAccount:
+          type: string
+          example: Checking
+        value:
+          type: number
+          readOnly: true
+          example: 990
+          format: float
+        classification:
+          type: string
+          example: Assets
+        type:
+          type: string
+          example: Fixed Assets
+        subType:
+          type: string
+          example: Fixed Assets
+      required:
+      - section
+      - subSection
+      - depth
+      - value
     CashflowStatementsV2Data:
       type: object
       properties:
@@ -1214,204 +1443,31 @@ components:
       - account
       - value
       - depth
-    BalanceSheetsReportView:
+    Liabilities:
       type: object
       properties:
-        meta:
-          $ref: '#/components/schemas/FinancialStatementReportMetaDataV2'
-        data:
-          $ref: '#/components/schemas/BalanceSheetReportData'
-      required:
-      - meta
-      - data
-    CashflowStatementsReportV2:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/FinancialStatementReportMetaDataV2'
-        data:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/CashflowStatementsV2Data'
-      required:
-      - meta
-      - data
-    IncomeStatementsReportResponseDto:
-      type: object
-      properties:
-        reports:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/IncomeStatementsReportView'
-      required:
-      - reports
-    IncomeStatementsReportView:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/FinancialStatementReportMetaDataV2'
-        data:
-          $ref: '#/components/schemas/IncomeStatementReportData'
-      required:
-      - meta
-      - data
-    BalanceSheetsReportV2:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/FinancialStatementReportMetaDataV2'
-        data:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/BalanceSheetsDataV2'
-      required:
-      - meta
-      - data
-    CashflowStatementsReportResponseDto:
-      type: object
-      properties:
-        reports:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/CashflowReportView'
-      required:
-      - reports
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
-    CashflowReportView:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/FinancialStatementReportMetaDataV2'
-        data:
-          $ref: '#/components/schemas/CashflowReportStatementData'
-      required:
-      - meta
-      - data
-    Error500ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
-    InvestingActivities:
-      type: object
-      properties:
-        propertyPlantAndEquipment:
+        currentLiabilities:
           type: object
           additionalProperties: true
           example:
-            Equipment: 8000
-        totalPropertyPlantAndEquipment:
+            Accounts Payable: 5400
+        totalCurrentLiabilities:
           type: number
-        proceedsInvesting:
+        nonCurrentLiabilities:
           type: object
           additionalProperties: true
           example:
-            Proceeds: 5400
-        totalProceedsInvesting:
+            Services: 1200
+        totalNonCurrentLiabilities:
           type: number
-        intangibles:
-          type: object
-          additionalProperties: true
-          example:
-            Intangibles: 5400
-        totalIntangibles:
-          type: number
-        payments:
-          type: object
-          additionalProperties: true
-          example:
-            Payables: 5400
-        totalPayments:
-          type: number
-        netCashByInvestingActivities:
+        totalLiabilities:
           type: number
       required:
-      - propertyPlantAndEquipment
-      - totalPropertyPlantAndEquipment
-      - proceedsInvesting
-      - totalProceedsInvesting
-      - intangibles
-      - totalIntangibles
-      - payments
-      - totalPayments
-      - netCashByInvestingActivities
+      - currentLiabilities
+      - totalCurrentLiabilities
+      - nonCurrentLiabilities
+      - totalNonCurrentLiabilities
+      - totalLiabilities
     BalanceSheetsResponseV2Dto:
       type: object
       properties:
@@ -1425,87 +1481,66 @@ components:
       required:
       - pagination
       - reports
-    Error400ResponseDtoV2:
+    CashflowStatementsResponseV2Dto:
       type: object
       properties:
-        error:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        reports:
           readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
-        payload:
+          type: array
+          items:
+            $ref: '#/components/schemas/CashflowStatementsReportV2'
+      required:
+      - pagination
+      - reports
+    OperatingActivities:
+      type: object
+      properties:
+        changes:
           type: object
-          readOnly: true
+          additionalProperties: true
+          example:
+            Input Tax: 2000
+        totalChanges:
+          type: number
+        adjustmentsOperating:
+          type: object
+          additionalProperties: true
+          example:
+            Adjustments: 1300
+        totalAdjustmentsOperating:
+          type: number
+        cash:
+          type: object
+          additionalProperties: true
+          example:
+            Accounts Payable: 5400
+        totalCash:
+          type: number
+        netCashByOperatingActivities:
+          type: number
       required:
-      - error
-      - payload
-    BalanceSheetsDataV2:
+      - changes
+      - totalChanges
+      - adjustmentsOperating
+      - totalAdjustmentsOperating
+      - cash
+      - totalCash
+      - netCashByOperatingActivities
+    CashflowStatementsReportV2:
       type: object
       properties:
-        section:
-          type: string
-          example: Assets
-          enum:
-          - Assets
-          - Liabilities
-          - Equity
-        subSection:
-          type: string
-          example: Current Assets
-          enum:
-          - Current Assets
-          - Non-Current Assets
-          - Current Liabilities
-          - Non-Current Liabilities
-          - Equity
-          - Other Assets
-          - Other Liabilities
-          - Expenses
-        fullyQualifiedName:
-          type: string
-          example: 'Expenses : Transportation : Car Mileage'
-          description: Full name of the account and parent account(s), colon separated.
-        depth:
-          type: number
-          example: 3
-          description: The sub account depth, based on it's account hierarchy level. E.g. top parent account would have a depth of 1.
-        group:
-          type: string
-          example: Cash And Cash Equivalents
-        subGroup:
-          type: string
-          example: Utilities
-        accountId:
-          type: string
-          example: '3928'
-        subAccountId:
-          type: string
-          example: '231'
-        account:
-          type: string
+        meta:
+          $ref: '#/components/schemas/FinancialStatementReportMetaDataV2'
+        data:
           readOnly: true
-          example: Checking
-        subAccount:
-          type: string
-          example: Checking
-        value:
-          type: number
-          readOnly: true
-          example: 990
-          format: float
-        classification:
-          type: string
-          example: Assets
-        type:
-          type: string
-          example: Fixed Assets
-        subType:
-          type: string
-          example: Fixed Assets
+          type: array
+          items:
+            $ref: '#/components/schemas/CashflowStatementsV2Data'
       required:
-      - section
-      - subSection
-      - depth
-      - value
+      - meta
+      - data
     IncomeStatementReportData:
       type: object
       properties:
@@ -1561,76 +1596,41 @@ components:
       - otherIncome
       - totalOtherIncome
       - netIncome
-    IncomeStatementsReportV2:
+    Assets:
+      type: object
+      properties:
+        currentAssets:
+          type: object
+          additionalProperties: true
+          example:
+            Checking Account: 2000
+        totalCurrentAssets:
+          type: number
+        nonCurrentAssets:
+          type: object
+          additionalProperties: true
+          example:
+            Other Assets: 8000
+        totalNonCurrentAssets:
+          type: number
+        totalAssets:
+          type: number
+      required:
+      - currentAssets
+      - totalCurrentAssets
+      - nonCurrentAssets
+      - totalNonCurrentAssets
+      - totalAssets
+    CashflowReportView:
       type: object
       properties:
         meta:
           $ref: '#/components/schemas/FinancialStatementReportMetaDataV2'
         data:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/IncomeStatementsV2Data'
+          $ref: '#/components/schemas/CashflowReportStatementData'
       required:
       - meta
       - data
-    FinancingActivities:
-      type: object
-      properties:
-        stock:
-          type: object
-          additionalProperties: true
-          example:
-            Stocks: 2500
-        totalStock:
-          type: object
-        proceedsFinancing:
-          type: object
-          additionalProperties: true
-          example:
-            Proceeds: 5400
-        totalProceedsFinancing:
-          type: number
-        adjustmentsFinancing:
-          type: object
-          additionalProperties: true
-          example:
-            Adjustments: 1300
-        totalAdjustmentsFinancing:
-          type: number
-        payments:
-          type: object
-          additionalProperties: true
-          example:
-            Payables: 5400
-        totalPayments:
-          type: number
-        netCashByFinancingActivities:
-          type: number
-      required:
-      - stock
-      - totalStock
-      - proceedsFinancing
-      - totalProceedsFinancing
-      - adjustmentsFinancing
-      - totalAdjustmentsFinancing
-      - payments
-      - totalPayments
-      - netCashByFinancingActivities
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
   securitySchemes:
     bearer:
       scheme: bearer

@@ -91,41 +91,21 @@ paths:
       - BusinessValuationControllerV2
 components:
   schemas:
-    Error500ResponseDto:
+    BusinessValuationResponseV2Dto:
       type: object
       properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
+        count:
           type: number
           readOnly: true
-          example: 500
+          example: 1
+          format: integer
+        reports:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessValuationReportV2'
       required:
-      - error
-      - message
-      - statusCode
+      - count
+      - reports
     Error403Dto:
       type: object
       properties:
@@ -148,21 +128,33 @@ components:
       - statusCode
       - message
       - error
-    BusinessValuationResponseV2Dto:
+    Error500ResponseDto:
       type: object
       properties:
-        count:
-          type: number
+        error:
           readOnly: true
-          example: 1
-          format: integer
-        reports:
-          type: array
-          items:
-            $ref: '#/components/schemas/BusinessValuationReportV2'
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
       required:
-      - count
-      - reports
+      - error
+      - payload
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
     BusinessValuationReportV2:
       type: object
       properties:
@@ -173,28 +165,6 @@ components:
       required:
       - meta
       - data
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
     BusinessValuationMetaDataV2:
       type: object
       properties:
@@ -257,38 +227,59 @@ components:
       - endDate
       - createdAt
       - updatedAt
-    Error401ResponseDto:
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    Error400ResponseDtoV2:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error401Dto'
+          - $ref: '#/components/schemas/Error400DtoV2'
         payload:
           type: object
           readOnly: true
-          example: {}
       required:
       - error
       - payload
-    Error400DtoV2:
+    Error401Dto:
       type: object
       properties:
         statusCode:
           type: number
           readOnly: true
-          example: 400
+          example: 401
         message:
           readOnly: true
           example:
-          - connectionUuid should not be empty
+          - Unauthorized
           type: array
           items:
             type: string
         error:
           type: string
           readOnly: true
-          example: Bad Request
+          example: Unauthorized
       required:
       - statusCode
       - message
@@ -320,19 +311,6 @@ components:
           type: number
           example: 100000
           format: double
-    Error400ResponseDtoV2:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
     Error403ResponseDto:
       type: object
       properties:
@@ -347,6 +325,28 @@ components:
       required:
       - error
       - payload
+    Error400DtoV2:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
   securitySchemes:
     bearer:
       scheme: bearer

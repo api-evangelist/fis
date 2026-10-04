@@ -162,6 +162,133 @@ paths:
       - CreditControllerV2
 components:
   schemas:
+    CreditRatingsResponseV2Dto:
+      type: object
+      properties:
+        count:
+          type: number
+          readOnly: true
+          format: integer
+          example: 1
+        reports:
+          readOnly: false
+          type: array
+          items:
+            $ref: '#/components/schemas/CreditRatingsReportV2'
+      required:
+      - count
+      - reports
+    CreditScoresReportMetaDataV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        reportId:
+          type: string
+          readOnly: true
+          example: 5fad8a342a88364234392fb5
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          readOnly: false
+          example: '2020-12-25T01:02:03Z'
+          format: date-time
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - reportId
+      - startDate
+      - endDate
+      - createdAt
+      - updatedAt
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
     CreditRatingsData:
       type: object
       properties:
@@ -297,13 +424,49 @@ components:
       - railzRating
       - railzGrade
       - description
-    Error500ResponseDto:
+    CreditScoresResponseV2Dto:
+      type: object
+      properties:
+        count:
+          type: number
+          readOnly: true
+          format: integer
+          example: 1
+        reports:
+          readOnly: false
+          type: array
+          items:
+            $ref: '#/components/schemas/CreditScoresReportV2'
+      required:
+      - count
+      - reports
+    CreditRatingsReportV2:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/CreditRatingsReportMetaDataV2'
+        data:
+          $ref: '#/components/schemas/CreditRatingsData'
+      required:
+      - meta
+      - data
+    CreditScoresReportV2:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/CreditScoresReportMetaDataV2'
+        data:
+          $ref: '#/components/schemas/CreditScoresData'
+      required:
+      - meta
+      - data
+    Error400ResponseDtoV2:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error500Dto'
+          - $ref: '#/components/schemas/Error400DtoV2'
         payload:
           type: object
           readOnly: true
@@ -332,38 +495,6 @@ components:
       - error
       - message
       - statusCode
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
-    CreditScoresReportV2:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/CreditScoresReportMetaDataV2'
-        data:
-          $ref: '#/components/schemas/CreditScoresData'
-      required:
-      - meta
-      - data
     Error401Dto:
       type: object
       properties:
@@ -382,6 +513,78 @@ components:
           type: string
           readOnly: true
           example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    CreditScoresData:
+      type: object
+      properties:
+        scorePit:
+          type: number
+          minimum: 300
+          maximum: 850
+          example: 800
+          format: integer
+          readOnly: false
+        score12m:
+          type: number
+          minimum: 300
+          maximum: 850
+          example: 800
+          format: integer
+          readOnly: false
+        score24m:
+          type: number
+          minimum: 300
+          maximum: 850
+          example: 800
+          format: integer
+          readOnly: false
+        score36m:
+          type: number
+          minimum: 300
+          maximum: 850
+          example: 800
+          format: integer
+          readOnly: false
+      required:
+      - scorePit
+      - score12m
+      - score24m
+      - score36m
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error400DtoV2:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
       required:
       - statusCode
       - message
@@ -448,209 +651,6 @@ components:
       - endDate
       - createdAt
       - updatedAt
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    CreditRatingsResponseV2Dto:
-      type: object
-      properties:
-        count:
-          type: number
-          readOnly: true
-          format: integer
-          example: 1
-        reports:
-          readOnly: false
-          type: array
-          items:
-            $ref: '#/components/schemas/CreditRatingsReportV2'
-      required:
-      - count
-      - reports
-    CreditScoresResponseV2Dto:
-      type: object
-      properties:
-        count:
-          type: number
-          readOnly: true
-          format: integer
-          example: 1
-        reports:
-          readOnly: false
-          type: array
-          items:
-            $ref: '#/components/schemas/CreditScoresReportV2'
-      required:
-      - count
-      - reports
-    Error400DtoV2:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - connectionUuid should not be empty
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
-    CreditScoresReportMetaDataV2:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          readOnly: true
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        reportId:
-          type: string
-          readOnly: true
-          example: 5fad8a342a88364234392fb5
-        startDate:
-          type: string
-          readOnly: true
-          example: '2020-11-25T01:02:03Z'
-          format: date-time
-        endDate:
-          type: string
-          readOnly: true
-          example: '2020-11-25T01:02:03Z'
-          format: date-time
-        createdAt:
-          type: string
-          readOnly: true
-          example: '2020-12-25T01:02:03Z'
-          format: date-time
-        updatedAt:
-          type: string
-          readOnly: false
-          example: '2020-12-25T01:02:03Z'
-          format: date-time
-      required:
-      - connectionUuid
-      - businessName
-      - serviceName
-      - reportId
-      - startDate
-      - endDate
-      - createdAt
-      - updatedAt
-    CreditScoresData:
-      type: object
-      properties:
-        scorePit:
-          type: number
-          minimum: 300
-          maximum: 850
-          example: 800
-          format: integer
-          readOnly: false
-        score12m:
-          type: number
-          minimum: 300
-          maximum: 850
-          example: 800
-          format: integer
-          readOnly: false
-        score24m:
-          type: number
-          minimum: 300
-          maximum: 850
-          example: 800
-          format: integer
-          readOnly: false
-        score36m:
-          type: number
-          minimum: 300
-          maximum: 850
-          example: 800
-          format: integer
-          readOnly: false
-      required:
-      - scorePit
-      - score12m
-      - score24m
-      - score36m
-    Error400ResponseDtoV2:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    CreditRatingsReportV2:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/CreditRatingsReportMetaDataV2'
-        data:
-          $ref: '#/components/schemas/CreditRatingsData'
-      required:
-      - meta
-      - data
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
   securitySchemes:
     bearer:
       scheme: bearer

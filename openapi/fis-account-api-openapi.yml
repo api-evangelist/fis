@@ -160,6 +160,226 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    PushChartOfAccountV1ResponseDto:
+      type: object
+      properties:
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: quickbooks
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushChartOfAccountV1'
+      required:
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - businessName
+      - serviceName
+      - data
+    AccountParentRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4'
+        name:
+          type: string
+          example: assets
+    PushChartOfAccountV1:
+      type: object
+      properties:
+        nominalCode:
+          type: string
+          example: SALES001
+          maxLength: 10
+          minLength: 6
+        name:
+          type: string
+          example: Consulting Income
+          maxLength: 100
+        description:
+          type: string
+          example: Sales account.
+          maxLength: 100
+        type:
+          type: string
+          enum:
+          - bank
+          - currentAsset
+          - fixedAsset
+          - inventory
+          - nonCurrentAsset
+          - accountReceivable
+          - equity
+          - expense
+          - otherExpense
+          - cogs
+          - accountPayable
+          - creditCard
+          - nonCurrentLiability
+          - currentLiability
+          - income
+          - incomeGeneral
+          - otherIncome
+          - unbilledReceivable
+          - deferredExpense
+          - deferredIncome
+          example: currentAsset
+        currency:
+          type: string
+          example: CAD
+        taxRef:
+          type: string
+          example: '12'
+        classification:
+          type: string
+          enum:
+          - asset
+          - equity
+          - expense
+          - liability
+          - revenue
+          - nonPosting
+          example: asset
+        subsidiaryRefs:
+          example:
+          - '1'
+          - '2'
+          type: array
+          items:
+            type: string
+      required:
+      - name
+      - type
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    CurrencyRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: CAD
+        name:
+          type: string
+          example: Canadian Dollar
+        symbol:
+          type: string
+          example: USD,CAD
+      required:
+      - id
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
     ListReportMetaData:
       type: object
       properties:
@@ -209,56 +429,6 @@ components:
       - businessName
       - createdAt
       - updatedAt
-    PaginationMetaData:
-      type: object
-      properties:
-        offset:
-          type: number
-          readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
-          readOnly: true
-      required:
-      - offset
-      - limit
-      - count
-    Error400ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    GetChartOfAccountsResponseV1Dto:
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        count:
-          type: number
-          readOnly: true
-          example: 1
-          format: integer
-        meta:
-          $ref: '#/components/schemas/ListReportMetaData'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetChartOfAccountsDataV1'
-      required:
-      - pagination
-      - count
-      - meta
-      - data
     Error401ResponseDto:
       type: object
       properties:
@@ -273,24 +443,50 @@ components:
       required:
       - error
       - payload
-    AccountParentRef:
+    Error500Dto:
       type: object
       properties:
-        id:
+        error:
           type: string
-          example: '4'
-        name:
-          type: string
-          example: assets
-    SubsidiaryRef:
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    Error401Dto:
       type: object
       properties:
-        id:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
           type: string
-          example: '1'
-        name:
-          type: string
-          example: Railz Financial
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
     PushChartOfAccountV1Dto:
       type: object
       properties:
@@ -301,20 +497,6 @@ components:
       required:
       - connection
       - data
-    CurrencyRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: CAD
-        name:
-          type: string
-          example: Canadian Dollar
-        symbol:
-          type: string
-          example: USD,CAD
-      required:
-      - id
     PushConnection:
       type: object
       properties:
@@ -441,85 +623,36 @@ components:
       - type
       - section
       - subSection
-    Error500ResponseDto:
+    GetChartOfAccountsResponseV1Dto:
       type: object
       properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        count:
           type: number
           readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
+          example: 1
+          format: integer
+        meta:
+          $ref: '#/components/schemas/ListReportMetaData'
+        data:
           type: array
           items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
+            $ref: '#/components/schemas/GetChartOfAccountsDataV1'
       required:
-      - statusCode
-      - message
-      - error
-    Error401Dto:
+      - pagination
+      - count
+      - meta
+      - data
+    SubsidiaryRef:
       type: object
       properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
+        id:
           type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
+          example: '1'
+        name:
+          type: string
+          example: Railz Financial
     Error400Dto:
       type: object
       properties:
@@ -542,139 +675,6 @@ components:
       - statusCode
       - message
       - error
-    PushChartOfAccountV1:
-      type: object
-      properties:
-        nominalCode:
-          type: string
-          example: SALES001
-          maxLength: 10
-          minLength: 6
-        name:
-          type: string
-          example: Consulting Income
-          maxLength: 100
-        description:
-          type: string
-          example: Sales account.
-          maxLength: 100
-        type:
-          type: string
-          enum:
-          - bank
-          - currentAsset
-          - fixedAsset
-          - inventory
-          - nonCurrentAsset
-          - accountReceivable
-          - equity
-          - expense
-          - otherExpense
-          - cogs
-          - accountPayable
-          - creditCard
-          - nonCurrentLiability
-          - currentLiability
-          - income
-          - incomeGeneral
-          - otherIncome
-          - unbilledReceivable
-          - deferredExpense
-          - deferredIncome
-          example: currentAsset
-        currency:
-          type: string
-          example: CAD
-        taxRef:
-          type: string
-          example: '12'
-        classification:
-          type: string
-          enum:
-          - asset
-          - equity
-          - expense
-          - liability
-          - revenue
-          - nonPosting
-          example: asset
-        subsidiaryRefs:
-          example:
-          - '1'
-          - '2'
-          type: array
-          items:
-            type: string
-      required:
-      - name
-      - type
-    PushChartOfAccountV1ResponseDto:
-      type: object
-      properties:
-        pushCommunicationId:
-          type: string
-          readOnly: true
-          example: 60473b57f0cdd1683ca71f60
-        requestedOn:
-          type: string
-          readOnly: true
-          example: '2021-03-09T08:15:22.035Z'
-          format: date-time
-        status:
-          type: string
-          readOnly: true
-          example: pending
-          enum:
-          - success
-          - failed
-          - pending
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        serviceName:
-          type: string
-          readOnly: true
-          example: quickbooks
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        data:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/PushChartOfAccountV1'
-      required:
-      - pushCommunicationId
-      - requestedOn
-      - status
-      - businessName
-      - serviceName
-      - data
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
   securitySchemes:
     bearer:
       scheme: bearer

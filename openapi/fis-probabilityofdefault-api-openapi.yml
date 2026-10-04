@@ -118,111 +118,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    Error500ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    ProbabilityOfDefaultResponseDto:
-      type: object
-      properties:
-        count:
-          type: number
-          readOnly: true
-          format: integer
-          example: 1
-        reports:
-          readOnly: false
-          type: array
-          items:
-            $ref: '#/components/schemas/ProbabilityOfDefaultReport'
-      required:
-      - count
-      - reports
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
-    ProbabilityOfDefaultData:
-      type: object
-      properties:
-        markovPD:
-          type: number
-          example: 0.659176337
-          format: float
-          readOnly: true
-        mertonPD:
-          type: number
-          example: 0.659176337
-          format: float
-          readOnly: true
-        wilcoxPD:
-          type: number
-          example: 0.659176337
-          format: float
-          readOnly: true
-        altmanZScorePD:
-          type: number
-          example: 0.659176337
-          format: float
-          readOnly: true
-        aggregatePD:
-          type: number
-          example: 0.659176337
-          format: float
-          readOnly: true
-        logitPD:
-          type: number
-          example: 0.659176337
-          format: float
     ProbabilityOfDefaultReportMetaData:
       type: object
       properties:
@@ -279,51 +174,73 @@ components:
       - endDate
       - createdAt
       - updatedAt
-    Error401Dto:
+    Error403Dto:
       type: object
       properties:
         statusCode:
           type: number
           readOnly: true
-          example: 401
+          example: 403
         message:
           readOnly: true
           example:
-          - Unauthorized
+          - Forbidden resource
           type: array
           items:
             type: string
         error:
           type: string
           readOnly: true
-          example: Unauthorized
+          example: Forbidden
       required:
       - statusCode
       - message
       - error
-    ProbabilityOfDefaultReport:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/ProbabilityOfDefaultReportMetaData'
-        data:
-          $ref: '#/components/schemas/ProbabilityOfDefaultData'
-      required:
-      - meta
-      - data
-    Error400ResponseDto:
+    Error500ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error400Dto'
+          - $ref: '#/components/schemas/Error500Dto'
         payload:
           type: object
           readOnly: true
       required:
       - error
       - payload
+    ProbabilityOfDefaultData:
+      type: object
+      properties:
+        markovPD:
+          type: number
+          example: 0.659176337
+          format: float
+          readOnly: true
+        mertonPD:
+          type: number
+          example: 0.659176337
+          format: float
+          readOnly: true
+        wilcoxPD:
+          type: number
+          example: 0.659176337
+          format: float
+          readOnly: true
+        altmanZScorePD:
+          type: number
+          example: 0.659176337
+          format: float
+          readOnly: true
+        aggregatePD:
+          type: number
+          example: 0.659176337
+          format: float
+          readOnly: true
+        logitPD:
+          type: number
+          example: 0.659176337
+          format: float
     Error401ResponseDto:
       type: object
       properties:
@@ -360,6 +277,60 @@ components:
       - statusCode
       - message
       - error
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    ProbabilityOfDefaultReport:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/ProbabilityOfDefaultReportMetaData'
+        data:
+          $ref: '#/components/schemas/ProbabilityOfDefaultData'
+      required:
+      - meta
+      - data
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
     Error403ResponseDto:
       type: object
       properties:
@@ -374,6 +345,35 @@ components:
       required:
       - error
       - payload
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    ProbabilityOfDefaultResponseDto:
+      type: object
+      properties:
+        count:
+          type: number
+          readOnly: true
+          format: integer
+          example: 1
+        reports:
+          readOnly: false
+          type: array
+          items:
+            $ref: '#/components/schemas/ProbabilityOfDefaultReport'
+      required:
+      - count
+      - reports
   securitySchemes:
     bearer:
       scheme: bearer

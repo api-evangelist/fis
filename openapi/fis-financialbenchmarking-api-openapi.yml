@@ -105,119 +105,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    Error500ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    FinancialBenchmarkingsData:
-      type: object
-      properties:
-        section:
-          oneOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-          allOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-        subSection:
-          oneOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-          allOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-        group:
-          oneOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-          allOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-        subGroup:
-          oneOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-          allOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-        ratios:
-          oneOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-          allOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-      required:
-      - section
-      - subSection
-      - group
-      - subGroup
-      - ratios
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
     SummaryStatisticsData:
       type: object
       properties:
@@ -267,13 +154,51 @@ components:
       - quantile25**
       - quantile75**
       - quantile95**
-    Error400ResponseDto:
+    FinancialBenchmarkingsResponseDto:
+      type: object
+      properties:
+        count:
+          type: number
+          readOnly: true
+          format: integer
+          example: 1
+        reports:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/FinancialBenchmarkingsReport'
+      required:
+      - count
+      - reports
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    Error500ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error400Dto'
+          - $ref: '#/components/schemas/Error500Dto'
         payload:
           type: object
           readOnly: true
@@ -294,6 +219,72 @@ components:
       required:
       - error
       - payload
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
     FinancialBenchmarkingsReportMetaData:
       type: object
       properties:
@@ -317,22 +308,20 @@ components:
       required:
       - numberOfBusinesses
       - createdAt
-    FinancialBenchmarkingsResponseDto:
+    Error403ResponseDto:
       type: object
       properties:
-        count:
-          type: number
+        error:
           readOnly: true
-          format: integer
-          example: 1
-        reports:
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
           readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/FinancialBenchmarkingsReport'
+          example: {}
       required:
-      - count
-      - reports
+      - error
+      - payload
     FinancialBenchmarkingsReport:
       type: object
       properties:
@@ -346,39 +335,50 @@ components:
       required:
       - meta
       - data
-    Error400Dto:
+    FinancialBenchmarkingsData:
       type: object
       properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - businessName cannot be null
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
+        section:
+          oneOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+          allOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+        subSection:
+          oneOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+          allOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+        group:
+          oneOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+          allOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+        subGroup:
+          oneOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+          allOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+        ratios:
+          oneOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+          allOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
       required:
-      - statusCode
-      - message
-      - error
-    Error403ResponseDto:
+      - section
+      - subSection
+      - group
+      - subGroup
+      - ratios
+    Error400ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error403Dto'
+          - $ref: '#/components/schemas/Error400Dto'
         payload:
           type: object
           readOnly: true
-          example: {}
       required:
       - error
       - payload

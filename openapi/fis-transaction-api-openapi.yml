@@ -132,55 +132,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    Error500ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    CommerceCurrencyRef:
-      type: object
-      properties:
-        id:
-          type: string
-        symbol:
-          type: string
-          example: CAD
-        name:
-          type: string
-          example: Canadian Dollar
-      required:
-      - symbol
-      - name
     Error403Dto:
       type: object
       properties:
@@ -203,88 +154,114 @@ components:
       - statusCode
       - message
       - error
-    Error401Dto:
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    CommerceCurrencyRef:
+      type: object
+      properties:
+        id:
+          type: string
+        symbol:
+          type: string
+          example: CAD
+        name:
+          type: string
+          example: Canadian Dollar
+      required:
+      - symbol
+      - name
+    TransactionSourceRefs:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1006917261'
+        type:
+          type: string
+          example: payment
+          enum:
+          - failedPayout
+          - payment
+          - paymentFee
+          - paymentFeeRefund
+          - payout
+          - refund
+          - transfer
+          - dispute
+          - order
+          - other
+          - unknown
+      required:
+      - id
+    Error400Dto:
       type: object
       properties:
         statusCode:
           type: number
           readOnly: true
-          example: 401
+          example: 400
         message:
           readOnly: true
           example:
-          - Unauthorized
+          - businessName cannot be null
           type: array
           items:
             type: string
         error:
           type: string
           readOnly: true
-          example: Unauthorized
+          example: Bad Request
       required:
       - statusCode
       - message
       - error
-    BasicStartEndDateReportMetaData:
+    Error500Dto:
       type: object
       properties:
-        reportId:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
           readOnly: true
           example:
-          - 5fad8a342a88364234392fb5
+          - INTERNAL_ERROR
           type: array
           items:
             type: string
-        serviceName:
-          type: string
+        statusCode:
+          type: number
           readOnly: true
-          example: xero
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        createdAt:
-          type: string
-          readOnly: true
-          example: '2020-11-25T01:02:03Z'
-          format: date-time
-        updatedAt:
-          type: string
-          example: '2020-11-30T01:02:03Z'
-          format: date-time
-          readOnly: false
-        startDate:
-          type: string
-          readOnly: true
-          example: '2020-11-25T01:02:03Z'
-          format: date-time
-        endDate:
-          type: string
-          readOnly: true
-          example: '2020-11-30T01:02:03Z'
-          format: date-time
+          example: 500
       required:
-      - reportId
-      - serviceName
-      - businessName
-      - createdAt
-      - updatedAt
-      - startDate
-      - endDate
+      - error
+      - message
+      - statusCode
     PaginationMetaData:
       type: object
       properties:
@@ -376,6 +353,102 @@ components:
       - transactionType
       - createdDate
       - status
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    BasicStartEndDateReportMetaData:
+      type: object
+      properties:
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          type: array
+          items:
+            type: string
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+      required:
+      - reportId
+      - serviceName
+      - businessName
+      - createdAt
+      - updatedAt
+      - startDate
+      - endDate
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
     Error400ResponseDto:
       type: object
       properties:
@@ -386,20 +459,6 @@ components:
         payload:
           type: object
           readOnly: true
-      required:
-      - error
-      - payload
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
       required:
       - error
       - payload
@@ -424,65 +483,6 @@ components:
       - data
       - count
       - meta
-    TransactionSourceRefs:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1006917261'
-        type:
-          type: string
-          example: payment
-          enum:
-          - failedPayout
-          - payment
-          - paymentFee
-          - paymentFeeRefund
-          - payout
-          - refund
-          - transfer
-          - dispute
-          - order
-          - other
-          - unknown
-      required:
-      - id
-    Error400Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - businessName cannot be null
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
   securitySchemes:
     bearer:
       scheme: bearer

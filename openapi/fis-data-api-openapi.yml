@@ -311,6 +311,44 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    PushStatusResponseDto:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/PushStatusMetaData'
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        data:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/PushStatusDataV1'
+      required:
+      - meta
+      - pagination
+      - data
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
     PushStatusDataV1:
       type: object
       properties:
@@ -386,19 +424,54 @@ components:
       - status
       - responseCode
       - pushCommunicationId
-    DataStatusResponseDto:
+    Error403ResponseDto:
       type: object
       properties:
-        meta:
+        error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/DataSyncMeta'
-        data:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    DataType:
+      type: object
+      properties:
+        dataType:
+          type: string
+          readOnly: true
+          example: BalanceSheet
+        lastSyncDate:
+          type: string
+          example: '2021-04-01T00:31:00Z'
+        lastUpdatedDate:
+          type: string
+          example: '2021-04-01T00:31:00Z'
+        reports:
+          readOnly: true
           type: array
           items:
-            $ref: '#/components/schemas/DataSyncData'
+            $ref: '#/components/schemas/Report'
       required:
-      - meta
+      - dataType
+      - reports
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
     DataSyncResponseDto:
       type: object
       properties:
@@ -442,19 +515,13 @@ components:
       - serviceName
       - dataType
       - requestedOn
-    Error400ResponseDto:
+    Validation:
       type: object
       properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
     PaginationMetaData:
       type: object
       properties:
@@ -471,6 +538,22 @@ components:
       - offset
       - limit
       - count
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    ObjectId:
+      type: object
+      properties: {}
     Error401ResponseDto:
       type: object
       properties:
@@ -485,55 +568,28 @@ components:
       required:
       - error
       - payload
-    Error:
+    Error500Dto:
       type: object
       properties:
-        field:
+        error:
           type: string
-          example: customerName
+          readOnly: true
+          example: Internal Server Error
         message:
-          type: string
-          example: Must have a length between 1 and 500 characters.
-    DataSyncData:
-      type: object
-      properties:
-        connectionId:
-          type: string
           readOnly: true
-          example: CON-94652dff-06ab-4b97-bd1b-f91adf7048c3
-        dataTypes:
-          readOnly: true
+          example:
+          - INTERNAL_ERROR
           type: array
           items:
-            $ref: '#/components/schemas/DataType'
-        syncTime:
+            type: string
+        statusCode:
           type: number
-          example: '1.234'
-        percentageCompleted:
-          type: number
-          example: '75.89'
-      required:
-      - connectionId
-      - dataTypes
-    PushStatusResponseDto:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/PushStatusMetaData'
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        data:
           readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/PushStatusDataV1'
+          example: 500
       required:
-      - meta
-      - pagination
-      - data
-    ObjectId:
-      type: object
-      properties: {}
+      - error
+      - message
+      - statusCode
     DataSyncMeta:
       type: object
       properties:
@@ -561,98 +617,6 @@ components:
       required:
       - serviceName
       - businessName
-    Report:
-      type: object
-      properties:
-        startDate:
-          type: string
-          example: '2021-03-01T00:00:00Z'
-        endDate:
-          type: string
-          example: '2021-03-31T00:00:00Z'
-        lastSuccessfulSync:
-          type: string
-          example: '2021-04-01T00:31:00Z'
-        reportFrequency:
-          type: string
-          example: month
-        currentStatus:
-          type: string
-          example: success
-          enum:
-          - success
-          - failed
-          - pending
-          - empty
-        latestReportId:
-          type: string
-          example: 6070149d1d685e6cf0583e36
-        latestSuccessfulReportId:
-          type: string
-          example: 601077f5914dac670966f660
-        accountingMethod:
-          type: string
-          example: accrual
-        reconstructed:
-          type: boolean
-          example: true
-    Error500ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
     Error401Dto:
       type: object
       properties:
@@ -675,56 +639,6 @@ components:
       - statusCode
       - message
       - error
-    DataType:
-      type: object
-      properties:
-        dataType:
-          type: string
-          readOnly: true
-          example: BalanceSheet
-        lastSyncDate:
-          type: string
-          example: '2021-04-01T00:31:00Z'
-        lastUpdatedDate:
-          type: string
-          example: '2021-04-01T00:31:00Z'
-        reports:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/Report'
-      required:
-      - dataType
-      - reports
-    Error400Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - businessName cannot be null
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
-    Validation:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
     DataSyncDto:
       type: object
       properties:
@@ -831,20 +745,106 @@ components:
       required:
       - count
       - businessName
-    Error403ResponseDto:
+    DataSyncData:
       type: object
       properties:
-        error:
+        connectionId:
+          type: string
+          readOnly: true
+          example: CON-94652dff-06ab-4b97-bd1b-f91adf7048c3
+        dataTypes:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/DataType'
+        syncTime:
+          type: number
+          example: '1.234'
+        percentageCompleted:
+          type: number
+          example: '75.89'
+      required:
+      - connectionId
+      - dataTypes
+    DataStatusResponseDto:
+      type: object
+      properties:
+        meta:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
+          - $ref: '#/components/schemas/DataSyncMeta'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataSyncData'
       required:
+      - meta
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
       - error
-      - payload
+    Report:
+      type: object
+      properties:
+        startDate:
+          type: string
+          example: '2021-03-01T00:00:00Z'
+        endDate:
+          type: string
+          example: '2021-03-31T00:00:00Z'
+        lastSuccessfulSync:
+          type: string
+          example: '2021-04-01T00:31:00Z'
+        reportFrequency:
+          type: string
+          example: month
+        currentStatus:
+          type: string
+          example: success
+          enum:
+          - success
+          - failed
+          - pending
+          - empty
+        latestReportId:
+          type: string
+          example: 6070149d1d685e6cf0583e36
+        latestSuccessfulReportId:
+          type: string
+          example: 601077f5914dac670966f660
+        accountingMethod:
+          type: string
+          example: accrual
+        reconstructed:
+          type: boolean
+          example: true
+    Error:
+      type: object
+      properties:
+        field:
+          type: string
+          example: customerName
+        message:
+          type: string
+          example: Must have a length between 1 and 500 characters.
   securitySchemes:
     bearer:
       scheme: bearer

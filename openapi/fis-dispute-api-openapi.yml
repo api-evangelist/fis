@@ -134,41 +134,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    Error500ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
     Error403Dto:
       type: object
       properties:
@@ -191,6 +156,123 @@ components:
       - statusCode
       - message
       - error
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    CommerceCurrencyRef:
+      type: object
+      properties:
+        id:
+          type: string
+        symbol:
+          type: string
+          example: CAD
+        name:
+          type: string
+          example: Canadian Dollar
+      required:
+      - symbol
+      - name
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    GetDisputeResponseDto:
+      type: object
+      properties:
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetDisputeData'
+        meta:
+          $ref: '#/components/schemas/BasicStartEndDateReportMetaData'
+      required:
+      - count
+      - pagination
+      - data
+      - meta
+    OrderRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '625362839'
+        orderNumber:
+          type: string
+          example: '1001'
+      required:
+      - id
     GetDisputeData:
       type: object
       properties:
@@ -256,42 +338,22 @@ components:
       - reason
       - dueDate
       - createdDate
-    CommerceCurrencyRef:
+    PaginationMetaData:
       type: object
       properties:
-        id:
-          type: string
-        symbol:
-          type: string
-          example: CAD
-        name:
-          type: string
-          example: Canadian Dollar
-      required:
-      - symbol
-      - name
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
+        offset:
           type: number
           readOnly: true
-          example: 401
-        message:
+        limit:
+          type: number
           readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
+        count:
+          type: number
           readOnly: true
-          example: Unauthorized
       required:
-      - statusCode
-      - message
-      - error
+      - offset
+      - limit
+      - count
     BasicStartEndDateReportMetaData:
       type: object
       properties:
@@ -352,92 +414,6 @@ components:
       - updatedAt
       - startDate
       - endDate
-    PaginationMetaData:
-      type: object
-      properties:
-        offset:
-          type: number
-          readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
-          readOnly: true
-      required:
-      - offset
-      - limit
-      - count
-    Error400ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    GetDisputeResponseDto:
-      type: object
-      properties:
-        count:
-          type: number
-          readOnly: true
-          example: 1
-          format: integer
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetDisputeData'
-        meta:
-          $ref: '#/components/schemas/BasicStartEndDateReportMetaData'
-      required:
-      - count
-      - pagination
-      - data
-      - meta
-    Error400Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - businessName cannot be null
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
     Error403ResponseDto:
       type: object
       properties:
@@ -452,17 +428,41 @@ components:
       required:
       - error
       - payload
-    OrderRef:
+    Error401Dto:
       type: object
       properties:
-        id:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
           type: string
-          example: '625362839'
-        orderNumber:
-          type: string
-          example: '1001'
+          readOnly: true
+          example: Unauthorized
       required:
-      - id
+      - statusCode
+      - message
+      - error
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
   securitySchemes:
     bearer:
       scheme: bearer

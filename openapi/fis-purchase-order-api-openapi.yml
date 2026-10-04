@@ -177,6 +177,267 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    PushPurchaseOrderV1ResponseDto:
+      type: object
+      properties:
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: quickbooks
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushPurchaseOrderV1'
+      required:
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - businessName
+      - serviceName
+      - data
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    BasicContact:
+      type: object
+      properties:
+        name:
+          type: string
+          example: John Smith
+        email:
+          type: string
+          example: jsmith@company.com
+        phone:
+          type: string
+          example: '8884449999'
+    BaseAddress:
+      type: object
+      properties:
+        line1:
+          type: string
+          example: 1234 Park Street
+        line2:
+          type: string
+          example: Suite 1000
+        city:
+          type: string
+          example: Toronto
+        region:
+          type: string
+          example: 'ON'
+        country:
+          type: string
+          example: CAN
+        postalCode:
+          type: string
+          example: A0B1C2
+    PushPurchaseOrderV1Dto:
+      type: object
+      properties:
+        connection:
+          $ref: '#/components/schemas/PushPurchaseOrderConnection'
+        data:
+          $ref: '#/components/schemas/PushPurchaseOrderV1'
+      required:
+      - connection
+      - data
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    PurchaseOrderLineV1:
+      type: object
+      properties:
+        description:
+          type: string
+          maxLength: 4000
+          example: Services rendered.
+        quantity:
+          type: number
+          format: float
+          example: '4'
+        unitAmount:
+          type: number
+          format: float
+          example: '50.4'
+        discountPercentage:
+          type: number
+          format: float
+          example: '10.0'
+        taxAmount:
+          type: number
+          format: float
+          example: '15.25'
+        subTotal:
+          type: number
+          format: float
+          example: '202.0'
+        totalAmount:
+          type: number
+          format: float
+          example: '197.05'
+        accountRef:
+          type: string
+          example: '12'
+        taxRef:
+          type: string
+          example: '45'
+        inventoryRef:
+          type: string
+          example: '32'
+        memo:
+          type: string
+          deprecated: true
+          maxLength: 4000
+          example: Example memo.
+      required:
+      - quantity
+      - unitAmount
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    GetPurchaseOrderResponseDto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        meta:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/BasicStartEndDateReportMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetPurchaseOrderDataV1'
+      required:
+      - pagination
+      - count
+      - meta
+      - data
+    TaxRateRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: HST
+        effectiveTaxRate:
+          type: number
+          example: 13
+          format: float
+      required:
+      - id
+    CurrencyRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: CAD
+        name:
+          type: string
+          example: Canadian Dollar
+        symbol:
+          type: string
+          example: USD,CAD
+      required:
+      - id
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
     BasicStartEndDateReportMetaData:
       type: object
       properties:
@@ -237,22 +498,17 @@ components:
       - updatedAt
       - startDate
       - endDate
-    PaginationMetaData:
+    VendorRef:
       type: object
       properties:
-        offset:
-          type: number
-          readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
-          readOnly: true
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Home Depot
       required:
-      - offset
-      - limit
-      - count
+      - id
     Error400ResponseDto:
       type: object
       properties:
@@ -266,93 +522,6 @@ components:
       required:
       - error
       - payload
-    PushPurchaseOrderConnection:
-      type: object
-      properties:
-        businessName:
-          type: string
-          example: Railz
-          description: Unique business name identifier.
-        serviceName:
-          type: string
-          example: quickbooks
-          description: Name of accounting platform service.
-          enum:
-          - quickbooks
-          - xero
-          - dynamicsBusinessCentral
-          - oracleNetsuite
-      required:
-      - businessName
-      - serviceName
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    PushPurchaseOrderV1:
-      type: object
-      properties:
-        passThrough:
-          type: object
-          example:
-            CustomField:
-            - DefinitionId: '1'
-              StringValue: my custom value
-              Name: Field One
-          additionalProperties: true
-        currencyRate:
-          type: number
-          example: '1.13'
-        postedDate:
-          type: string
-          format: date
-          example: '2021-03-29'
-        dueDate:
-          type: string
-          format: date
-          example: '2021-03-29'
-        deliveryDate:
-          type: string
-          format: date
-          example: '2021-03-29'
-        memo:
-          type: string
-          maxLength: 4000
-          example: Example memo.
-        vendorRef:
-          type: string
-          example: '130'
-        currency:
-          type: string
-          example: CAD
-        billRef:
-          type: string
-          example: '164'
-        expectedDeliveryDate:
-          type: string
-          format: date
-          example: '2021-03-29'
-        shipToAddress:
-          $ref: '#/components/schemas/ShippingAddressDto'
-        shipToContact:
-          $ref: '#/components/schemas/ShippingContact'
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/PurchaseOrderLineV1'
-      required:
-      - vendorRef
-      - lines
     ShippingAddressDto:
       type: object
       properties:
@@ -430,80 +599,92 @@ components:
           deprecated: true
           allOf:
           - $ref: '#/components/schemas/TrackingCategoryRef'
-    TaxRateRef:
+    TrackingCategoryRef:
       type: object
       properties:
         id:
           type: string
-          example: '1'
+          example: '4040'
+          readOnly: false
         name:
           type: string
-          example: HST
-        effectiveTaxRate:
-          type: number
-          example: 13
-          format: float
+          readOnly: false
+          example: Region
+        option:
+          type: string
+          readOnly: false
+          example: East
+        optionId:
+          type: string
+          readOnly: false
+          example: '40401'
       required:
       - id
-    GetPurchaseOrderResponseDto:
+    PushPurchaseOrderV1:
       type: object
       properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        count:
+        passThrough:
+          type: object
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+          additionalProperties: true
+        currencyRate:
           type: number
-          readOnly: true
-          example: 1
-          format: integer
-        meta:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/BasicStartEndDateReportMetaData'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetPurchaseOrderDataV1'
-      required:
-      - pagination
-      - count
-      - meta
-      - data
-    BasicContact:
-      type: object
-      properties:
-        name:
+          example: '1.13'
+        postedDate:
           type: string
-          example: John Smith
-        email:
+          format: date
+          example: '2021-03-29'
+        dueDate:
           type: string
-          example: jsmith@company.com
-        phone:
+          format: date
+          example: '2021-03-29'
+        deliveryDate:
           type: string
-          example: '8884449999'
-    CurrencyRef:
-      type: object
-      properties:
-        id:
+          format: date
+          example: '2021-03-29'
+        memo:
+          type: string
+          maxLength: 4000
+          example: Example memo.
+        vendorRef:
+          type: string
+          example: '130'
+        currency:
           type: string
           example: CAD
-        name:
+        billRef:
           type: string
-          example: Canadian Dollar
-        symbol:
+          example: '164'
+        expectedDeliveryDate:
           type: string
-          example: USD,CAD
+          format: date
+          example: '2021-03-29'
+        shipToAddress:
+          $ref: '#/components/schemas/ShippingAddressDto'
+        shipToContact:
+          $ref: '#/components/schemas/ShippingContact'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/PurchaseOrderLineV1'
       required:
-      - id
-    Error500ResponseDto:
+      - vendorRef
+      - lines
+    Error401ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error500Dto'
+          - $ref: '#/components/schemas/Error401Dto'
         payload:
           type: object
           readOnly: true
+          example: {}
       required:
       - error
       - payload
@@ -529,38 +710,36 @@ components:
       - error
       - message
       - statusCode
-    Error403Dto:
+    PushPurchaseOrderConnection:
       type: object
       properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
+        businessName:
           type: string
-          readOnly: true
-          example: Forbidden
+          example: Railz
+          description: Unique business name identifier.
+        serviceName:
+          type: string
+          example: quickbooks
+          description: Name of accounting platform service.
+          enum:
+          - quickbooks
+          - xero
+          - dynamicsBusinessCentral
+          - oracleNetsuite
       required:
-      - statusCode
-      - message
-      - error
-    PushPurchaseOrderV1Dto:
+      - businessName
+      - serviceName
+    InventoryRef:
       type: object
       properties:
-        connection:
-          $ref: '#/components/schemas/PushPurchaseOrderConnection'
-        data:
-          $ref: '#/components/schemas/PushPurchaseOrderV1'
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Digital Services
       required:
-      - connection
-      - data
+      - id
     Error401Dto:
       type: object
       properties:
@@ -662,84 +841,15 @@ components:
       - postedDate
       - totalAmount
       - status
-    TrackingCategoryRef:
+    AccountRef:
       type: object
       properties:
         id:
           type: string
-          example: '4040'
-          readOnly: false
+          example: '145'
         name:
           type: string
-          readOnly: false
-          example: Region
-        option:
-          type: string
-          readOnly: false
-          example: East
-        optionId:
-          type: string
-          readOnly: false
-          example: '40401'
-      required:
-      - id
-    PurchaseOrderLineV1:
-      type: object
-      properties:
-        description:
-          type: string
-          maxLength: 4000
-          example: Services rendered.
-        quantity:
-          type: number
-          format: float
-          example: '4'
-        unitAmount:
-          type: number
-          format: float
-          example: '50.4'
-        discountPercentage:
-          type: number
-          format: float
-          example: '10.0'
-        taxAmount:
-          type: number
-          format: float
-          example: '15.25'
-        subTotal:
-          type: number
-          format: float
-          example: '202.0'
-        totalAmount:
-          type: number
-          format: float
-          example: '197.05'
-        accountRef:
-          type: string
-          example: '12'
-        taxRef:
-          type: string
-          example: '45'
-        inventoryRef:
-          type: string
-          example: '32'
-        memo:
-          type: string
-          deprecated: true
-          maxLength: 4000
-          example: Example memo.
-      required:
-      - quantity
-      - unitAmount
-    InventoryRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        name:
-          type: string
-          example: Digital Services
+          example: Example account
       required:
       - id
     Error400Dto:
@@ -764,116 +874,6 @@ components:
       - statusCode
       - message
       - error
-    PushPurchaseOrderV1ResponseDto:
-      type: object
-      properties:
-        pushCommunicationId:
-          type: string
-          readOnly: true
-          example: 60473b57f0cdd1683ca71f60
-        requestedOn:
-          type: string
-          readOnly: true
-          example: '2021-03-09T08:15:22.035Z'
-          format: date-time
-        status:
-          type: string
-          readOnly: true
-          example: pending
-          enum:
-          - success
-          - failed
-          - pending
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        serviceName:
-          type: string
-          readOnly: true
-          example: quickbooks
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        data:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/PushPurchaseOrderV1'
-      required:
-      - pushCommunicationId
-      - requestedOn
-      - status
-      - businessName
-      - serviceName
-      - data
-    VendorRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        name:
-          type: string
-          example: Home Depot
-      required:
-      - id
-    BaseAddress:
-      type: object
-      properties:
-        line1:
-          type: string
-          example: 1234 Park Street
-        line2:
-          type: string
-          example: Suite 1000
-        city:
-          type: string
-          example: Toronto
-        region:
-          type: string
-          example: 'ON'
-        country:
-          type: string
-          example: CAN
-        postalCode:
-          type: string
-          example: A0B1C2
-    AccountRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '145'
-        name:
-          type: string
-          example: Example account
-      required:
-      - id
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
     ShippingContact:
       type: object
       properties:

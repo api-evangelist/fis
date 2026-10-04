@@ -195,30 +195,61 @@ paths:
       - InventoryControllerV2
 components:
   schemas:
-    AccountRefDto:
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    TaxRateRefDto:
       type: object
       properties:
         id:
           type: string
-          example: '200'
+          example: '12'
       required:
       - id
-    PaginationMetaData:
+    UpdateInventoryV2Dto:
       type: object
       properties:
-        offset:
-          type: number
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        data:
+          $ref: '#/components/schemas/UpdateInventoryV2'
+      required:
+      - connectionUuid
+      - data
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
           readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
           readOnly: true
       required:
-      - offset
-      - limit
-      - count
+      - error
+      - payload
     UpdateInventoryV2ResponseDto:
       type: object
       properties:
@@ -277,13 +308,13 @@ components:
       - requestedOn
       - status
       - data
-    Error401ResponseDto:
+    Error403ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error401Dto'
+          - $ref: '#/components/schemas/Error403Dto'
         payload:
           type: object
           readOnly: true
@@ -291,29 +322,67 @@ components:
       required:
       - error
       - payload
-    InventoryLocationRef:
+    PushInventoryV2:
       type: object
       properties:
-        id:
+        code:
           type: string
-          example: '9'
+          maxLength: 30
+          example: GOL-W
+        type:
+          type: string
+          enum:
+          - inventory
+          - nonInventory
+          - service
+          example: inventory
         name:
           type: string
-          example: Boston
+          example: White golf balls.
+          maxLength: 50
+        quantityOnHand:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuantityOnHandV2Dto'
+        billItem:
+          $ref: '#/components/schemas/InventoryBillInvoiceLineItemsV2'
+        invoiceItem:
+          $ref: '#/components/schemas/InventoryBillInvoiceLineItemsV2'
+        isBillItem:
+          type: boolean
+          example: true
+        isInvoiceItem:
+          type: boolean
+          example: true
+        subsidiaryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubsidiaryRefDto'
+        passThrough:
+          type: object
+          additionalProperties: true
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
       required:
-      - id
-    QuantityOnHandV2Dto:
+      - name
+    GetInventoryResponseV2Dto:
       type: object
       properties:
-        quantity:
-          type: number
-          example: 2.5
-          format: float
-          maximum: 999999999999
-        locationRef:
-          $ref: '#/components/schemas/InventoryRefDto'
-        accountRef:
-          $ref: '#/components/schemas/AccountRefDto'
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        meta:
+          $ref: '#/components/schemas/ListReportMetaDataV2'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetInventoryDataV2'
+      required:
+      - pagination
+      - meta
+      - data
     InventoryBillInvoiceLineItemsV2:
       type: object
       properties:
@@ -330,25 +399,135 @@ components:
           $ref: '#/components/schemas/AccountRefDto'
         taxRateRef:
           $ref: '#/components/schemas/TaxRateRefDto'
-    TaxRateRefDto:
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    UpdateInventoryV2:
+      type: object
+      properties:
+        code:
+          type: string
+          maxLength: 30
+          example: GOL-W
+        type:
+          type: string
+          enum:
+          - inventory
+          - nonInventory
+          - service
+          example: inventory
+        quantityOnHand:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuantityOnHandV2Dto'
+        name:
+          type: string
+          example: White golf balls.
+          maxLength: 50
+        invoiceItem:
+          $ref: '#/components/schemas/InventoryBillInvoiceLineItemsV2'
+        billItem:
+          $ref: '#/components/schemas/InventoryBillInvoiceLineItemsV2'
+        isBillItem:
+          type: boolean
+          example: true
+        isInvoiceItem:
+          type: boolean
+          example: true
+        subsidiaryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubsidiaryRefDto'
+        passThrough:
+          type: object
+          additionalProperties: true
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+      required:
+      - name
+    InventoryRefDto:
       type: object
       properties:
         id:
           type: string
-          example: '12'
+          example: '32'
       required:
       - id
-    QuantityOnHandData:
+    InventorySubsidiaryRef:
       type: object
       properties:
-        locationRef:
-          $ref: '#/components/schemas/InventoryLocationRef'
-        quantity:
+        id:
+          type: string
+          example: '2'
+        name:
+          type: string
+          example: Company Ltd
+    TaxRateRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: HST
+        effectiveTaxRate:
           type: number
-          example: 2.5
+          example: 13
           format: float
-        accountRef:
-          $ref: '#/components/schemas/AccountRef'
+      required:
+      - id
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    Error400DtoV2:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
     PushInventoryV2ResponseDto:
       type: object
       properties:
@@ -407,21 +586,32 @@ components:
       - requestedOn
       - status
       - data
-    TaxRateRef:
+    BillOrInvoiceItem:
       type: object
       properties:
-        id:
+        description:
           type: string
-          example: '1'
-        name:
-          type: string
-          example: HST
-        effectiveTaxRate:
+          example: Item description
+        unitPrice:
           type: number
-          example: 13
+          example: 100.5
           format: float
-      required:
-      - id
+        accountRef:
+          $ref: '#/components/schemas/AccountRef'
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateRef'
+    QuantityOnHandV2Dto:
+      type: object
+      properties:
+        quantity:
+          type: number
+          example: 2.5
+          format: float
+          maximum: 999999999999
+        locationRef:
+          $ref: '#/components/schemas/InventoryRefDto'
+        accountRef:
+          $ref: '#/components/schemas/AccountRefDto'
     ListReportMetaDataV2:
       type: object
       properties:
@@ -476,49 +666,28 @@ components:
       - reportId
       - createdAt
       - updatedAt
-    InventoryRefDto:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '32'
-      required:
-      - id
-    Error400DtoV2:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - connectionUuid should not be empty
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
-    Error500ResponseDto:
+    Error401ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error500Dto'
+          - $ref: '#/components/schemas/Error401Dto'
         payload:
           type: object
           readOnly: true
+          example: {}
       required:
       - error
       - payload
+    SubsidiaryRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4'
+      required:
+      - id
     Error500Dto:
       type: object
       properties:
@@ -541,169 +710,6 @@ components:
       - error
       - message
       - statusCode
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
-    PushInventoryV2:
-      type: object
-      properties:
-        code:
-          type: string
-          maxLength: 30
-          example: GOL-W
-        type:
-          type: string
-          enum:
-          - inventory
-          - nonInventory
-          - service
-          example: inventory
-        name:
-          type: string
-          example: White golf balls.
-          maxLength: 50
-        quantityOnHand:
-          type: array
-          items:
-            $ref: '#/components/schemas/QuantityOnHandV2Dto'
-        billItem:
-          $ref: '#/components/schemas/InventoryBillInvoiceLineItemsV2'
-        invoiceItem:
-          $ref: '#/components/schemas/InventoryBillInvoiceLineItemsV2'
-        isBillItem:
-          type: boolean
-          example: true
-        isInvoiceItem:
-          type: boolean
-          example: true
-        subsidiaryRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubsidiaryRefDto'
-        passThrough:
-          type: object
-          additionalProperties: true
-          example:
-            CustomField:
-            - DefinitionId: '1'
-              StringValue: my custom value
-              Name: Field One
-      required:
-      - name
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
-    UpdateInventoryV2:
-      type: object
-      properties:
-        code:
-          type: string
-          maxLength: 30
-          example: GOL-W
-        type:
-          type: string
-          enum:
-          - inventory
-          - nonInventory
-          - service
-          example: inventory
-        quantityOnHand:
-          type: array
-          items:
-            $ref: '#/components/schemas/QuantityOnHandV2Dto'
-        name:
-          type: string
-          example: White golf balls.
-          maxLength: 50
-        invoiceItem:
-          $ref: '#/components/schemas/InventoryBillInvoiceLineItemsV2'
-        billItem:
-          $ref: '#/components/schemas/InventoryBillInvoiceLineItemsV2'
-        isBillItem:
-          type: boolean
-          example: true
-        isInvoiceItem:
-          type: boolean
-          example: true
-        subsidiaryRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubsidiaryRefDto'
-        passThrough:
-          type: object
-          additionalProperties: true
-          example:
-            CustomField:
-            - DefinitionId: '1'
-              StringValue: my custom value
-              Name: Field One
-      required:
-      - name
-    UpdateInventoryV2Dto:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          description: Unique connection identifier.
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        data:
-          $ref: '#/components/schemas/UpdateInventoryV2'
-      required:
-      - connectionUuid
-      - data
-    GetInventoryResponseV2Dto:
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        meta:
-          $ref: '#/components/schemas/ListReportMetaDataV2'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetInventoryDataV2'
-      required:
-      - pagination
-      - meta
-      - data
     GetInventoryDataV2:
       type: object
       properties:
@@ -755,20 +761,69 @@ components:
       required:
       - id
       - status
-    BillOrInvoiceItem:
+    Error401Dto:
       type: object
       properties:
-        description:
-          type: string
-          example: Item description
-        unitPrice:
+        statusCode:
           type: number
-          example: 100.5
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    AccountRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '145'
+        name:
+          type: string
+          example: Example account
+      required:
+      - id
+    InventoryLocationRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '9'
+        name:
+          type: string
+          example: Boston
+      required:
+      - id
+    QuantityOnHandData:
+      type: object
+      properties:
+        locationRef:
+          $ref: '#/components/schemas/InventoryLocationRef'
+        quantity:
+          type: number
+          example: 2.5
           format: float
         accountRef:
           $ref: '#/components/schemas/AccountRef'
-        taxRateRef:
-          $ref: '#/components/schemas/TaxRateRef'
+    AccountRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '200'
+      required:
+      - id
     PushInventoryV2Dto:
       type: object
       properties:
@@ -781,61 +836,6 @@ components:
       required:
       - connectionUuid
       - data
-    Error400ResponseDtoV2:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    SubsidiaryRefDto:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '4'
-      required:
-      - id
-    AccountRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '145'
-        name:
-          type: string
-          example: Example account
-      required:
-      - id
-    InventorySubsidiaryRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '2'
-        name:
-          type: string
-          example: Company Ltd
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
   securitySchemes:
     bearer:
       scheme: bearer
