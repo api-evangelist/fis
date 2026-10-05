@@ -1,0 +1,12 @@
+{
+ "url": "https://api.railz.ai/swagger.json",
+ "requested_url": "https://api.railz.ai/swagger.json",
+ "status": 200,
+ "content_type": "application/json; charset=utf-8",
+ "bytes": 985389,
+ "sha256": "1383b9a47ac9209b11ec83423f9fd45f6adc1cf9ce88a9e2aae83152301ea1e4",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the archived file is byte-identical to what the provider serves."
+}
