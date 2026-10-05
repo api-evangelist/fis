@@ -4,6 +4,7 @@ generated_by: planning/capability-mapping/scripts/classify_capabilities.py
 model: claude-opus-5
 frame:
 - Banking & Capital Markets
+- Software & Technology
 min_confidence: 0.7
 capability_model:
   source: https://github.com/vincentmakes/turbo-ea-capabilities
@@ -11,7 +12,7 @@ capability_model:
   attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
     CC BY 4.0
   notice: NOTICE
-edge_count: 3
+edge_count: 36
 edges:
 - tag: Payments
   spec_file: fis-payments-api-openapi.yml
@@ -22,6 +23,122 @@ edges:
   evidence: POST /payments  initiatePayment  Initiate a payment; POST /payments/{paymentId}/cancel  cancelPayment
   reason: Operations capture, query and cancel payment instructions — payment initiation within payments
     & card management.
+- tag: BillControllerV2
+  spec_file: fis-billcontrollerv2-api-openapi.yml
+  capability_id: BC-200.20
+  capability_id_l1: BC-200
+  capability_name: Accounts Payable Management
+  confidence: 0.9
+  evidence: POST /v2/accounting/bills Create a Bill; POST /v2/accounting/bills/payments Create a Bill
+    Payment; POST /v2/accounting/bills/paymentRequests Create a Bill Payment Request
+  reason: Full lifecycle of supplier bills, bill payments, credit notes and payment requests under /v2/accounting
+    — invoice processing and vendor payments, i.e. Accounts Payable Management.
+- tag: Journal
+  spec_file: fis-journal-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.9
+  evidence: GET /journalEntries 'Journal entries', 'Push journal entries', GetJournalEntryLineItemsV1
+  reason: Journal entries with line items, subsidiary and currency references are general-ledger postings;
+    this is General Ledger Management.
+- tag: JournalControllerV2
+  spec_file: fis-journalcontrollerv2-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.9
+  evidence: '''List Journal Entries'', ''Batch Create Journal Entries'', ''List Journals'', ''Create a
+    Journal'''
+  reason: Operations manage journals and journal entries (including batch posting) against account references
+    — unambiguously general ledger / journal management.
+- tag: AccountControllerV2
+  spec_file: fis-accountcontrollerv2-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.88
+  evidence: POST /v2/accounting/accounts push-accounts Create an Account; PushChartOfAccountV2Dto, UpdateChartOfAccountV2Dto
+  reason: V2 CRUD plus batch operations over chart-of-accounts entries under /v2/accounting — squarely
+    chart of accounts maintenance within General Ledger Management.
+- tag: Bill
+  spec_file: fis-bill-api-openapi.yml
+  capability_id: BC-200.20
+  capability_id_l1: BC-200
+  capability_name: Accounts Payable Management
+  confidence: 0.88
+  evidence: GET /bills getBills Get bills; GET /bills/payments billsPayments Bills payments; POST /bills/creditNotes
+    push-bill-creditNotes Push bill credit notes
+  reason: Bills (supplier invoices), bill payments and bill credit notes, with schemas such as InvoiceBillLineItemsV1
+    and PushBillPaymentDto — this is vendor invoice and payment data, i.e. Accounts Payable accounting.
+- tag: PurchaseOrderControllerV2
+  spec_file: fis-purchaseordercontrollerv2-api-openapi.yml
+  capability_id: BC-500.30
+  capability_id_l1: BC-500
+  capability_name: Purchase Order Management
+  confidence: 0.88
+  evidence: POST /v2/accounting/purchaseOrders  push-purchaseOrders  Create a Purchase Order; VendorRefDto,
+    ApAccountRefDto, PurchaseOrderLineV2
+  reason: Lists and creates purchase orders against vendor and AP account references — clearly purchase
+    order creation/management in a procure-to-pay context.
+- tag: Account
+  spec_file: fis-account-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.85
+  evidence: GetChartOfAccountsResponseV1Dto, PushChartOfAccountV1Dto; GET /accounts accounts Accounts
+  reason: Despite the generic 'Account' tag, the schemas show this is chart-of-accounts retrieval and
+    push for an accounting data service — General Ledger Management (chart of accounts), not customer
+    or bank account servicing.
+- tag: Aging
+  spec_file: fis-aging-api-openapi.yml
+  capability_id: BC-200
+  capability_id_l1: BC-200
+  capability_name: Financial Management
+  confidence: 0.85
+  evidence: GET /apAging apAging Ap aging; GET /arAging arAging Ar aging; ApAgingVendorRef, ArAgingCustomerRef
+  reason: Delivers aged payables and aged receivables reports with vendor and customer references. Clearly
+    Financial Management, but it spans both Accounts Payable and Accounts Receivable so no single L2 is
+    named by the evidence.
+- tag: AgingControllerV2
+  spec_file: fis-agingcontrollerv2-api-openapi.yml
+  capability_id: BC-200
+  capability_id_l1: BC-200
+  capability_name: Financial Management
+  confidence: 0.85
+  evidence: GET /v2/accounting/apAging apAging List Aged Payables; GET /v2/accounting/arAging arAging
+    List Aged Receivables
+  reason: V2 aged payables and aged receivables listings — Financial Management, straddling AP and AR
+    so the L1 is the honest level of precision.
+- tag: FinancialStatement
+  spec_file: fis-financialstatement-api-openapi.yml
+  capability_id: BC-200.60
+  capability_id_l1: BC-200
+  capability_name: Financial Reporting Management
+  confidence: 0.85
+  evidence: GET /balanceSheets  balanceSheets  Balance sheets; GET /cashflowStatements; GET /incomeStatements
+  reason: Retrieves balance sheets, income statements and cash-flow statements — core financial reporting
+    of accounting data.
+- tag: FinancialStatementControllerV2
+  spec_file: fis-financialstatementcontrollerv2-api-openapi.yml
+  capability_id: BC-200.60
+  capability_id_l1: BC-200
+  capability_name: Financial Reporting Management
+  confidence: 0.85
+  evidence: GET /v2/accounting/balanceSheets/report  balanceSheetsReport  Report Balance Sheets
+  reason: V2 endpoints list and report balance sheets, income statements and cashflow statements — financial
+    reporting management.
+- tag: Purchase Order
+  spec_file: fis-purchase-order-api-openapi.yml
+  capability_id: BC-500.30
+  capability_id_l1: BC-500
+  capability_name: Purchase Order Management
+  confidence: 0.85
+  evidence: GET /purchaseOrders  purchaseOrder  Purchase order; POST /purchaseOrders  push-purchaseOrders  Push
+    purchase orders; PurchaseOrderLineV1, ShippingAddressDto
+  reason: Operations read and create purchase orders with line items, shipping address and tax rates —
+    purchase order lifecycle data, i.e. Purchase Order Management.
 - tag: ACH
   spec_file: fis-ach-api-openapi.yml
   capability_id: BC-1340.30
@@ -33,6 +150,73 @@ edges:
   reason: Creates and submits ACH transfers and batch files onto the domestic clearing rail, which the
     frame names explicitly ('Domestic clearing - ACH, BACS, SEPA, FPS'); slight ambiguity with payment
     initiation.
+- tag: AccountingTransaction
+  spec_file: fis-accountingtransaction-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.8
+  evidence: GET /accountingTransactions accountingTransactions Accounting transactions; AccountingTransactionAccountRef,
+    TrackingCategoryRef
+  reason: Reads accounting transaction (journal) records with account and tracking-category references
+    from an accounting data service — ledger journal data, i.e. General Ledger Management.
+- tag: AccountingTransactionControllerV2
+  spec_file: fis-accountingtransactioncontrollerv2-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.8
+  evidence: GET /v2/accounting/accountingTransactions accountingTransactions List Accounting Transactions
+  reason: V2 listing of accounting transactions with account refs under /v2/accounting; same general-ledger
+    journal data capability as V1.
+- tag: FinancialForecast
+  spec_file: fis-financialforecast-api-openapi.yml
+  capability_id: BC-230.20
+  capability_id_l1: BC-230
+  capability_name: Forecasting Management
+  confidence: 0.8
+  evidence: GET /financialForecasts  financialForecasts  Financial forecasts; FinancialForecastReport
+  reason: Operations return financial forecast reports, which is Forecasting Management within Financial
+    Planning & Analysis.
+- tag: FinancialForecastControllerV2
+  spec_file: fis-financialforecastcontrollerv2-api-openapi.yml
+  capability_id: BC-230.20
+  capability_id_l1: BC-230
+  capability_name: Forecasting Management
+  confidence: 0.8
+  evidence: GET /v2/analytics/financialForecasts  financialForecasts  List Financial Forecasts
+  reason: V2 forecast analytics endpoint producing FinancialForecastReportV2 — forecasting within FP&A.
+- tag: Invoice
+  spec_file: fis-invoice-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.8
+  evidence: GET /invoices 'Invoices', 'Invoice credit notes', 'Invoices payments' with InvoicePaymentLink,
+    InvoiceLineItem
+  reason: Customer invoices together with credit notes and invoice payments (cash application) are the
+    core of Accounts Receivable accounting, which this accounting-data service reads and pushes.
+- tag: InvoiceControllerV2
+  spec_file: fis-invoicecontrollerv2-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.8
+  evidence: '''Create an Invoice'', ''Create an Invoice Credit Note'', ''List Invoice Payments'', ''Update
+    an Invoice Payment'''
+  reason: Full CRUD over customer invoices, credit notes and invoice payments — receivable invoicing and
+    cash application, i.e. Accounts Receivable Management.
+- tag: Reports
+  spec_file: fis-reports-api-openapi.yml
+  capability_id: BC-200.60
+  capability_id_l1: BC-200
+  capability_name: Financial Reporting Management
+  confidence: 0.8
+  evidence: GET /reports/incomeStatements  reportIncomeStatements; GET /reports/balanceSheets  reportBalanceSheets;
+    GET /reports/cashflowStatements; GET /reports/financialRatios
+  reason: Delivers core financial statements (income statement, balance sheet, cash flow), revenue/expense
+    and ratio reports — financial reporting output. Some overlap with management reporting/analysis, hence
+    0.8.
 - tag: Wire Transfers
   spec_file: fis-wire-transfers-api-openapi.yml
   capability_id: BC-1340.10
@@ -42,3 +226,148 @@ edges:
   evidence: POST /wire-transfers  initiateWireTransfer  Initiate wire transfer
   reason: Initiation of a wire payment instruction; clearly payments management, with payment initiation
     the best-fitting sub-capability (could be cross-border if international wires).
+- tag: FinancialRatio
+  spec_file: fis-financialratio-api-openapi.yml
+  capability_id: BC-230.40
+  capability_id_l1: BC-230
+  capability_name: Performance Analysis Management
+  confidence: 0.75
+  evidence: GET /financialRatios  financialRatios  Financial ratios; FinancialRatiosProfitabilityData,
+    FinancialRatiosLiquidityData
+  reason: Computes liquidity, leverage, profitability and efficiency ratios from accounting data — financial
+    performance analysis.
+- tag: FinancialRatioControllerV2
+  spec_file: fis-financialratiocontrollerv2-api-openapi.yml
+  capability_id: BC-230.40
+  capability_id_l1: BC-230
+  capability_name: Performance Analysis Management
+  confidence: 0.75
+  evidence: GET /v2/analytics/financialRatios  financialRatios  List Financial Ratios; FinancialRatiosProfitabilityData
+  reason: V2 financial ratio analytics — profitability/liquidity analysis of financial data, i.e. performance
+    analysis.
+- tag: Budget
+  spec_file: fis-budget-api-openapi.yml
+  capability_id: BC-230.10
+  capability_id_l1: BC-230
+  capability_name: Budgeting Management
+  confidence: 0.72
+  evidence: GET /v2/accounting/budgets budget List Budgets; schemas BudgetReportMetaDataV2, GetBudgetData,
+    Lines, AccountRef, Balance
+  reason: Read access to accounting budgets with budget lines, account references and balances — budget
+    data for planning/variance use. Single read-only operation keeps confidence moderate, but Budgeting
+    Management is the clear fit.
+- tag: Visualizations
+  spec_file: fis-visualizations-api-openapi.yml
+  capability_id: BC-200.60
+  capability_id_l1: BC-200
+  capability_name: Financial Reporting Management
+  confidence: 0.72
+  evidence: GET /v2/visualizations/incomeStatements 'List Income Statements report'; GET /v2/visualizations/balanceSheets
+    'List Balance Sheets report'; GET /v2/visualizations/cashflowStatements 'List Cashflow report'; GET
+    /v2/visualizations/financialRatios 'List Financial Ratios report'
+  reason: The endpoints deliver prepared financial statements, ratios and revenue/expense reports — internal
+    financial reporting content. Some overlap with Analytics & BI delivery, hence 0.72 rather than higher.
+- tag: Customer
+  spec_file: fis-customer-api-openapi.yml
+  capability_id: BC-420.10
+  capability_id_l1: BC-420
+  capability_name: Customer Data Management
+  confidence: 0.7
+  evidence: GET /customers customers Customers; POST /customers push-customers Push customers; PUT /customers/{id}
+    put-customer Put customer; schemas Address, PushCustomerV1, GetCustomerData
+  reason: CRUD over customer master records (addresses, parent/subsidiary refs, currency) synced with
+    an accounting system — this is customer data/master-record maintenance rather than any sales or service
+    process. Moderate confidence since the records sit inside an accounting ledger context and could alternatively
+    be read as master data management.
+- tag: CustomerControllerV2
+  spec_file: fis-customercontrollerv2-api-openapi.yml
+  capability_id: BC-420.10
+  capability_id_l1: BC-420
+  capability_name: Customer Data Management
+  confidence: 0.7
+  evidence: POST /v2/accounting/customers push-customers Create a Customer; PUT /v2/accounting/customers/{id}
+    Update a Customer; GET /v2/accounting/customers/bankAccounts List Customer Bank Accounts
+  reason: Create/update/list of customer records plus billing/shipping addresses, contacts and customer
+    bank accounts — customer master data maintenance. Batch endpoints are plumbing; the core surface is
+    the customer record itself.
+- tag: Deposit
+  spec_file: fis-deposit-api-openapi.yml
+  capability_id: BC-200
+  capability_id_l1: BC-200
+  capability_name: Financial Management
+  confidence: 0.7
+  evidence: GET /deposits deposits Deposits; POST /deposits push-deposit Push deposit; schemas DepositLineItems,
+    TaxRateRef, GetDepositData
+  reason: Read and write of accounting deposit transactions (deposit line items, tax rate and currency
+    references) in a bookkeeping ledger — financial accounting. Left at L1 because a deposit record spans
+    cash receipt/cash application and general-ledger posting without the evidence naming either.
+- tag: DepositControllerV2
+  spec_file: fis-depositcontrollerv2-api-openapi.yml
+  capability_id: BC-200
+  capability_id_l1: BC-200
+  capability_name: Financial Management
+  confidence: 0.7
+  evidence: POST /v2/accounting/deposits push-deposit Create a Deposit; schemas AccountRefDto, CustomerRefDto,
+    PushDepositLineV2
+  reason: Creates and lists deposit entries against ledger accounts with customer and tracking-category
+    references — accounting transaction recording. L2 left null as the surface does not clearly distinguish
+    AR cash application from GL posting.
+- tag: ExpenseControllerV2
+  spec_file: fis-expensecontrollerv2-api-openapi.yml
+  capability_id: BC-200.20
+  capability_id_l1: BC-200
+  capability_name: Accounts Payable Management
+  confidence: 0.7
+  evidence: POST /v2/accounting/expenses  push-expense  Create an Expense; schemas VendorRefDto, TaxRateRefDto,
+    ExpenseLineItem
+  reason: Accounting-data API that lists and creates expense records with vendor, payment method and tax-rate
+    references — expense/vendor accounting, closest to Accounts Payable Management within Financial Management.
+    Some ambiguity (could be general ledger expense capture), hence moderate confidence.
+- tag: FinancialBenchmarking
+  spec_file: fis-financialbenchmarking-api-openapi.yml
+  capability_id: BC-230.40
+  capability_id_l1: BC-230
+  capability_name: Performance Analysis Management
+  confidence: 0.7
+  evidence: GET /financialBenchmarking  benchmarking  Benchmarking; schemas FinancialBenchmarkingsReport,
+    SummaryStatisticsData
+  reason: Delivers benchmarking reports and summary statistics over accounting data — financial performance
+    analysis. Reasonably clear as FP&A performance analysis though sub-capability choice is somewhat arguable.
+- tag: FinancialBenchmarkingControllerV2
+  spec_file: fis-financialbenchmarkingcontrollerv2-api-openapi.yml
+  capability_id: BC-230.40
+  capability_id_l1: BC-230
+  capability_name: Performance Analysis Management
+  confidence: 0.7
+  evidence: GET /v2/analytics/financialBenchmarking  financialBenchmarking  List of Financial Benchmarks
+  reason: V2 of the same benchmarking analytics surface; comparative financial performance analysis under
+    FP&A.
+- tag: TrialBalance
+  spec_file: fis-trialbalance-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.7
+  evidence: GET /trialBalances 'Trial balance'; schemas TrialBalancesReport, FinancialStatementReportMetaData,
+    SubsidiaryRef, CurrencyRef
+  reason: Trial balance is the account-balance extract of the general ledger, so General Ledger Management
+    is the closest fit; some chance the intended sub-capability is Financial Reporting, hence 0.7.
+- tag: TrialBalanceControllerV2
+  spec_file: fis-trialbalancecontrollerv2-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.7
+  evidence: GET /v2/accounting/trialBalances 'List Trial Balances'; schemas TrialBalancesReportV2, FinancialStatementReportMetaDataV2
+  reason: V2 of the same trial-balance retrieval over accounting data; grounded in the general ledger,
+    with residual ambiguity versus financial reporting.
+- tag: VendorControllerV2
+  spec_file: fis-vendorcontrollerv2-api-openapi.yml
+  capability_id: BC-200.20
+  capability_id_l1: BC-200
+  capability_name: Accounts Payable Management
+  confidence: 0.7
+  evidence: POST /v2/accounting/vendors 'Create a Vendor'; GET /v2/accounting/vendors/bankAccounts 'List
+    Vendor Bank Accounts'; schemas PushVendorBankAccount, BillingAddress, PaymentMethodRefResponse
+  reason: Vendor records plus vendor bank accounts and payment method references under /v2/accounting
+    are the payables vendor-master and payment-detail surface, supporting Accounts Payable Management.
