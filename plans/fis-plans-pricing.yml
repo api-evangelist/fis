@@ -84,3 +84,22 @@ evidence:
 - url: https://railz.ai/pricing
   status: 301
   detail: Redirects to the FIS product page above — further confirmation that the Railz commercial surface is now FIS's.
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - negotiated
+  units: []
+  plans:
+  - name: Freemium
+    access: freemium
+    model: unstated
+    model_how: derived
+    units: []
+    periods: []
+  - name: Enterprise
+    access: enterprise
+    model: negotiated
+    model_how: derived
+    units: []
+    periods: []
