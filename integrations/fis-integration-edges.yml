@@ -1,0 +1,18 @@
+generated: '2026-10-12'
+method: none
+source:
+- https://zapier.com/apps/fis/integrations
+- https://zapier.com/apps/fis-global/integrations
+- https://n8n.io/integrations/fis/
+- https://composio.dev/toolkits/fis
+- https://monid.ai/tools/fis
+checked:
+- https://composio.dev/toolkits/fis
+- https://monid.ai/tools/fis
+- https://n8n.io/integrations/fis/
+- https://zapier.com/apps/fis-global/integrations
+- https://zapier.com/apps/fis/integrations
+summary: null
+marketplace_apps: []
+edges: []
+templates: []
