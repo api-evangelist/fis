@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-get-attachment-response-v1-dto-schema.json",
+  "title": "GetAttachmentResponseV1Dto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-attachment-api-openapi.yml#/components/schemas/GetAttachmentResponseV1Dto",
+  "type": "object",
+  "properties": {
+    "count": {
+      "type": "number",
+      "readOnly": true,
+      "format": "integer"
+    },
+    "data": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/GetAttachmentData"
+      }
+    }
+  },
+  "required": [
+    "count",
+    "data"
+  ],
+  "$defs": {
+    "AttachmentLink": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "bill",
+            "invoice",
+            "customer",
+            "vendor",
+            "deposit",
+            "journalEntry",
+            "billPayment",
+            "invoicePayment",
+            "expense",
+            "inventory",
+            "purchaseOrder",
+            "invoiceCreditNote",
+            "billCreditNote",
+            "bankTransaction",
+            "bankTransfer",
+            "account"
+          ]
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "GetAttachmentData": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "fileName": {
+          "type": "string"
+        },
+        "contentType": {
+          "type": "string"
+        },
+        "uploadDate": {
+          "type": "string"
+        },
+        "fileSize": {
+          "type": "number",
+          "format": "float"
+        },
+        "sourceModifiedDate": {
+          "type": "string"
+        },
+        "link": {
+          "$ref": "#/$defs/AttachmentLink"
+        }
+      },
+      "required": [
+        "id",
+        "url"
+      ]
+    }
+  }
+}

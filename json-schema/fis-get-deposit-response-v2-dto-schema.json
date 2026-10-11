@@ -1,0 +1,354 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-get-deposit-response-v2-dto-schema.json",
+  "title": "GetDepositResponseV2Dto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-depositcontrollerv2-api-openapi.yml#/components/schemas/GetDepositResponseV2Dto",
+  "type": "object",
+  "properties": {
+    "pagination": {
+      "$ref": "#/$defs/PaginationMetaData"
+    },
+    "meta": {
+      "$ref": "#/$defs/BasicStartEndDateReportMetaDataV2"
+    },
+    "data": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/GetDepositV2Data"
+      }
+    }
+  },
+  "required": [
+    "pagination",
+    "meta",
+    "data"
+  ],
+  "$defs": {
+    "AccountRef": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "BankAccountRefV2Dto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "BasicStartEndDateReportMetaDataV2": {
+      "type": "object",
+      "properties": {
+        "connectionUuid": {
+          "type": "string",
+          "readOnly": true
+        },
+        "businessName": {
+          "type": "string",
+          "readOnly": true
+        },
+        "serviceName": {
+          "type": "string",
+          "readOnly": true,
+          "enum": [
+            "freshbooks",
+            "quickbooks",
+            "quickbooksDesktop",
+            "xero",
+            "oracleNetsuite",
+            "sageBusinessCloud",
+            "sageIntacct",
+            "dynamicsBusinessCentral",
+            "dynamics365Finance",
+            "wave",
+            "myob",
+            "zohoBooks",
+            "byod"
+          ]
+        },
+        "reportId": {
+          "readOnly": true,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "readOnly": true,
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": false
+        },
+        "startDate": {
+          "type": "string",
+          "readOnly": true,
+          "format": "date-time"
+        },
+        "endDate": {
+          "type": "string",
+          "readOnly": true,
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "connectionUuid",
+        "businessName",
+        "serviceName",
+        "reportId",
+        "createdAt",
+        "updatedAt",
+        "startDate",
+        "endDate"
+      ]
+    },
+    "DepositEntityRef": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "customer",
+            "employee",
+            "unknown"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "type"
+      ]
+    },
+    "DepositLineV2Items": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "unitAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "quantity": {
+          "type": "number",
+          "format": "integer"
+        },
+        "taxAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "amount": {
+          "type": "number",
+          "format": "float"
+        },
+        "accountRef": {
+          "$ref": "#/$defs/AccountRef"
+        },
+        "taxRateRef": {
+          "$ref": "#/$defs/TaxRateRef"
+        },
+        "entityRef": {
+          "$ref": "#/$defs/DepositEntityRef"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Links"
+          }
+        },
+        "trackingCategoryRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TrackingCategoryRefV2"
+          }
+        }
+      },
+      "required": [
+        "amount"
+      ]
+    },
+    "GetDepositV2Data": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "postedDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "currencyRate": {
+          "type": "number",
+          "format": "float"
+        },
+        "bankAccountRef": {
+          "$ref": "#/$defs/BankAccountRefV2Dto"
+        },
+        "lines": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DepositLineV2Items"
+          }
+        },
+        "subTotal": {
+          "type": "number",
+          "format": "float"
+        },
+        "taxAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "totalAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "open",
+            "paid",
+            "void",
+            "unknown",
+            "draft"
+          ]
+        },
+        "memo": {
+          "type": "string"
+        },
+        "sourceModifiedDate": {
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "postedDate",
+        "lines",
+        "totalAmount",
+        "status"
+      ]
+    },
+    "Links": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "billPayment",
+            "transfer",
+            "journalEntry",
+            "paymentOnAccount",
+            "other"
+          ]
+        },
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "id"
+      ]
+    },
+    "PaginationMetaData": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "type": "number",
+          "readOnly": true
+        },
+        "limit": {
+          "type": "number",
+          "readOnly": true
+        },
+        "count": {
+          "type": "number",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "offset",
+        "limit",
+        "count"
+      ]
+    },
+    "TaxRateRef": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "effectiveTaxRate": {
+          "type": "number",
+          "format": "float"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "TrackingCategoryRefV2": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "readOnly": false
+        },
+        "name": {
+          "type": "string",
+          "readOnly": false
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "class",
+            "department",
+            "location",
+            "unknown"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "type"
+      ]
+    }
+  }
+}

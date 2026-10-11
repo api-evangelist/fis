@@ -1,0 +1,171 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-connections-response-dto-v2-schema.json",
+  "title": "ConnectionsResponseDtoV2",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-connectioncontrollerv2-api-openapi.yml#/components/schemas/ConnectionsResponseDtoV2",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "readOnly": true,
+      "allOf": [
+        {
+          "$ref": "#/$defs/MetaDataCount"
+        }
+      ]
+    },
+    "data": {
+      "readOnly": true,
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ConnectionsResponseDataV2"
+      }
+    }
+  },
+  "required": [
+    "meta",
+    "data"
+  ],
+  "$defs": {
+    "ConnectionsInstitutionData": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "readOnly": true
+        },
+        "logo": {
+          "type": "string",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "name",
+        "logo"
+      ]
+    },
+    "ConnectionsResponseDataV2": {
+      "type": "object",
+      "properties": {
+        "connectionUuid": {
+          "type": "string",
+          "readOnly": true
+        },
+        "firstRecordDate": {
+          "type": "string",
+          "format": "date-time",
+          "deprecated": true
+        },
+        "serviceName": {
+          "type": "string",
+          "readOnly": true,
+          "enum": [
+            "quickbooks",
+            "xero",
+            "freshbooks",
+            "quickbooksDesktop",
+            "sageIntacct",
+            "sageBusinessCloud",
+            "oracleNetsuite",
+            "dynamicsBusinessCentral",
+            "dynamics365Finance",
+            "wave",
+            "zohoBooks",
+            "myob"
+          ]
+        },
+        "description": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "readOnly": true
+        },
+        "createdAt": {
+          "type": "string",
+          "readOnly": true,
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "readOnly": true,
+          "format": "date-time"
+        },
+        "disconnectReason": {
+          "type": "string"
+        },
+        "syncTime": {
+          "type": "number"
+        },
+        "institution": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/ConnectionsInstitutionData"
+            }
+          ]
+        },
+        "isMockData": {
+          "type": "boolean"
+        },
+        "serviceAccountRef": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/serviceAccountRefType"
+            }
+          ]
+        },
+        "businessUuid": {
+          "type": "string",
+          "readOnly": true
+        },
+        "businessName": {
+          "type": "string",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "connectionUuid",
+        "serviceName",
+        "status",
+        "createdAt",
+        "updatedAt",
+        "businessUuid",
+        "businessName"
+      ]
+    },
+    "MetaDataCount": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "number",
+          "readOnly": true,
+          "format": "integer"
+        }
+      },
+      "required": [
+        "count"
+      ]
+    },
+    "serviceAccountRefType": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "entityRef": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

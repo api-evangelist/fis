@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-push-status-response-dto-schema.json",
+  "title": "PushStatusResponseDto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-data-api-openapi.yml#/components/schemas/PushStatusResponseDto",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "$ref": "#/$defs/PushStatusMetaData"
+    },
+    "pagination": {
+      "$ref": "#/$defs/PaginationMetaData"
+    },
+    "data": {
+      "readOnly": true,
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/PushStatusDataV1"
+      }
+    }
+  },
+  "required": [
+    "meta",
+    "pagination",
+    "data"
+  ],
+  "$defs": {
+    "Error": {
+      "type": "object",
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "ObjectId": {
+      "type": "object",
+      "properties": {}
+    },
+    "PaginationMetaData": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "type": "number",
+          "readOnly": true
+        },
+        "limit": {
+          "type": "number",
+          "readOnly": true
+        },
+        "count": {
+          "type": "number",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "offset",
+        "limit",
+        "count"
+      ]
+    },
+    "PushStatusDataV1": {
+      "type": "object",
+      "properties": {
+        "serviceName": {
+          "type": "string",
+          "readOnly": true,
+          "enum": [
+            "quickbooks",
+            "xero",
+            "freshbooks",
+            "quickbooksDesktop",
+            "sageIntacct",
+            "sageBusinessCloud",
+            "oracleNetsuite",
+            "dynamicsBusinessCentral",
+            "dynamics365Finance",
+            "wave",
+            "zohoBooks",
+            "myob"
+          ]
+        },
+        "dataType": {
+          "type": "string",
+          "readOnly": true
+        },
+        "requestedOn": {
+          "format": "date-time",
+          "type": "string",
+          "readOnly": true
+        },
+        "completedOn": {
+          "format": "date-time",
+          "type": "string",
+          "readOnly": true
+        },
+        "status": {
+          "type": "string",
+          "readOnly": true,
+          "enum": [
+            "success",
+            "failed",
+            "pending"
+          ]
+        },
+        "responseCode": {
+          "type": "number",
+          "readOnly": true,
+          "format": "integer"
+        },
+        "validation": {
+          "$ref": "#/$defs/Validation"
+        },
+        "pushCommunicationId": {
+          "type": "string",
+          "readOnly": true
+        },
+        "batchId": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/ObjectId"
+            }
+          ]
+        },
+        "sourceObjectId": {
+          "type": "string"
+        },
+        "sourceObjectIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "serviceName",
+        "dataType",
+        "requestedOn",
+        "completedOn",
+        "status",
+        "responseCode",
+        "pushCommunicationId"
+      ]
+    },
+    "PushStatusMetaData": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "number",
+          "readOnly": true,
+          "format": "integer"
+        },
+        "businessName": {
+          "type": "string",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "count",
+        "businessName"
+      ]
+    },
+    "Validation": {
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Error"
+          }
+        }
+      }
+    }
+  }
+}

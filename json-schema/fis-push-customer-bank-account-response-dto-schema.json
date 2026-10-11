@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-push-customer-bank-account-response-dto-schema.json",
+  "title": "PushCustomerBankAccountResponseDto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-customercontrollerv2-api-openapi.yml#/components/schemas/PushCustomerBankAccountResponseDto",
+  "type": "object",
+  "properties": {
+    "connectionUuid": {
+      "type": "string",
+      "readOnly": true
+    },
+    "businessName": {
+      "type": "string",
+      "readOnly": true
+    },
+    "serviceName": {
+      "type": "string",
+      "readOnly": true,
+      "enum": [
+        "freshbooks",
+        "quickbooks",
+        "quickbooksDesktop",
+        "xero",
+        "oracleNetsuite",
+        "sageBusinessCloud",
+        "sageIntacct",
+        "dynamicsBusinessCentral",
+        "dynamics365Finance",
+        "wave",
+        "myob",
+        "zohoBooks",
+        "byod"
+      ]
+    },
+    "pushCommunicationId": {
+      "type": "string",
+      "readOnly": true
+    },
+    "requestedOn": {
+      "type": "string",
+      "readOnly": true,
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "readOnly": true,
+      "enum": [
+        "success",
+        "failed",
+        "pending"
+      ]
+    },
+    "data": {
+      "readOnly": true,
+      "allOf": [
+        {
+          "$ref": "#/$defs/PushCustomerBankAccount"
+        }
+      ]
+    }
+  },
+  "required": [
+    "connectionUuid",
+    "businessName",
+    "serviceName",
+    "pushCommunicationId",
+    "requestedOn",
+    "status",
+    "data"
+  ],
+  "$defs": {
+    "CustomerRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "PushBaseAddress": {
+      "type": "object",
+      "properties": {
+        "line1": {
+          "type": "string"
+        },
+        "line2": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "postalCode": {
+          "type": "string"
+        }
+      }
+    },
+    "PushCustomerBankAccount": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "accountNumber": {
+          "type": "string"
+        },
+        "routingNumber": {
+          "type": "string"
+        },
+        "bankName": {
+          "type": "string"
+        },
+        "supportsAch": {
+          "type": "boolean"
+        },
+        "supportsWire": {
+          "type": "boolean"
+        },
+        "supportsCheck": {
+          "type": "boolean"
+        },
+        "address": {
+          "$ref": "#/$defs/PushBaseAddress"
+        },
+        "contactName": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "currency": {
+          "type": "string"
+        },
+        "customerRef": {
+          "$ref": "#/$defs/CustomerRefDto"
+        }
+      },
+      "required": [
+        "customerRef"
+      ]
+    }
+  }
+}

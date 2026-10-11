@@ -1,0 +1,265 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-get-bank-transactions-response-dto-schema.json",
+  "title": "GetBankTransactionsResponseDto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-bank-api-openapi.yml#/components/schemas/GetBankTransactionsResponseDto",
+  "type": "object",
+  "properties": {
+    "pagination": {
+      "$ref": "#/$defs/PaginationMetaData"
+    },
+    "count": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "reports": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/BankTransactionsReport"
+      }
+    }
+  },
+  "required": [
+    "pagination",
+    "count",
+    "reports"
+  ],
+  "$defs": {
+    "BankLocationData": {
+      "type": "object",
+      "properties": {
+        "line1": {
+          "type": "string"
+        },
+        "line2": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "postalCode": {
+          "type": "string"
+        }
+      }
+    },
+    "BankTransactionsReport": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "#/$defs/BankTransactionsReportMetaData"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/GetBankTransactionsData"
+          }
+        }
+      },
+      "required": [
+        "meta",
+        "data"
+      ]
+    },
+    "BankTransactionsReportMetaData": {
+      "type": "object",
+      "properties": {
+        "reportId": {
+          "type": "string",
+          "readOnly": true
+        },
+        "serviceName": {
+          "type": "string",
+          "readOnly": true,
+          "enum": [
+            "quickbooks",
+            "xero",
+            "freshbooks",
+            "quickbooksDesktop",
+            "sageIntacct",
+            "sageBusinessCloud",
+            "oracleNetsuite",
+            "dynamicsBusinessCentral",
+            "dynamics365Finance",
+            "wave",
+            "zohoBooks",
+            "myob"
+          ]
+        },
+        "businessName": {
+          "type": "string",
+          "readOnly": true
+        },
+        "startDate": {
+          "type": "string",
+          "readOnly": true
+        },
+        "endDate": {
+          "type": "string",
+          "readOnly": true
+        },
+        "createdAt": {
+          "type": "string",
+          "readOnly": true,
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "reportId",
+        "serviceName",
+        "businessName",
+        "startDate",
+        "endDate",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "GetBankTransactionsData": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "accountId": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "authorizedOnDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "isPending": {
+          "type": "boolean"
+        },
+        "amount": {
+          "type": "number",
+          "format": "float"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "transactionType": {
+          "type": "string",
+          "enum": [
+            "adjustment",
+            "atm",
+            "bankCharge",
+            "billPayment",
+            "cash",
+            "cashback",
+            "cheque",
+            "directDebit",
+            "interest",
+            "purchase",
+            "standingOrder",
+            "transfer"
+          ]
+        },
+        "paymentChannel": {
+          "type": "string",
+          "enum": [
+            "online",
+            "inStore",
+            "other"
+          ]
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "merchantName": {
+          "type": "string"
+        },
+        "merchantStoreNumber": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "location": {
+          "$ref": "#/$defs/BankLocationData"
+        },
+        "section": {
+          "type": "string",
+          "enum": [
+            "Assets",
+            "Expenses",
+            "Income",
+            "Liabilities",
+            "Equity"
+          ]
+        },
+        "subSection": {
+          "type": "string",
+          "enum": [
+            "Current Assets",
+            "Non-Current Assets",
+            "Current Liabilities",
+            "Non-Current Liabilities",
+            "Equity",
+            "Income",
+            "Other Income",
+            "Operating Expenses",
+            "Other Expenses",
+            "Cost of Goods Sold"
+          ]
+        },
+        "group": {
+          "type": "string"
+        },
+        "subGroup": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "accountId",
+        "date",
+        "isPending",
+        "amount",
+        "currency",
+        "paymentChannel",
+        "description"
+      ]
+    },
+    "PaginationMetaData": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "type": "number",
+          "readOnly": true
+        },
+        "limit": {
+          "type": "number",
+          "readOnly": true
+        },
+        "count": {
+          "type": "number",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "offset",
+        "limit",
+        "count"
+      ]
+    }
+  }
+}

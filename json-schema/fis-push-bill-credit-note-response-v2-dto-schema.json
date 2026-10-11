@@ -1,0 +1,258 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-push-bill-credit-note-response-v2-dto-schema.json",
+  "title": "PushBillCreditNoteResponseV2Dto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-billcontrollerv2-api-openapi.yml#/components/schemas/PushBillCreditNoteResponseV2Dto",
+  "type": "object",
+  "properties": {
+    "connectionUuid": {
+      "type": "string",
+      "readOnly": true
+    },
+    "businessName": {
+      "type": "string",
+      "readOnly": true
+    },
+    "serviceName": {
+      "type": "string",
+      "readOnly": true,
+      "enum": [
+        "freshbooks",
+        "quickbooks",
+        "quickbooksDesktop",
+        "xero",
+        "oracleNetsuite",
+        "sageBusinessCloud",
+        "sageIntacct",
+        "dynamicsBusinessCentral",
+        "dynamics365Finance",
+        "wave",
+        "myob",
+        "zohoBooks",
+        "byod"
+      ]
+    },
+    "pushCommunicationId": {
+      "type": "string",
+      "readOnly": true
+    },
+    "requestedOn": {
+      "type": "string",
+      "readOnly": true,
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "readOnly": true,
+      "enum": [
+        "success",
+        "failed",
+        "pending"
+      ]
+    },
+    "data": {
+      "readOnly": true,
+      "allOf": [
+        {
+          "$ref": "#/$defs/PushBillCreditNoteV2"
+        }
+      ]
+    }
+  },
+  "required": [
+    "connectionUuid",
+    "businessName",
+    "serviceName",
+    "pushCommunicationId",
+    "requestedOn",
+    "status",
+    "data"
+  ],
+  "$defs": {
+    "AccountRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "BillCreditNoteLineItemV2": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "maxLength": 4000
+        },
+        "unitAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "quantity": {
+          "type": "number",
+          "format": "float"
+        },
+        "billableStatus": {
+          "type": "string",
+          "enum": [
+            "billable",
+            "notBillable",
+            "hasBeenBilled"
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "discountPercentage": {
+          "type": "number",
+          "format": "float"
+        },
+        "taxRateRef": {
+          "$ref": "#/$defs/TaxRateRefDto"
+        },
+        "accountRef": {
+          "$ref": "#/$defs/AccountRefDto"
+        },
+        "trackingCategoryRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CreditNoteTrackingCategoryRefDto"
+          }
+        },
+        "inventoryRef": {
+          "$ref": "#/$defs/InventoryRefDto"
+        },
+        "taxAmount": {
+          "type": "number",
+          "format": "float"
+        }
+      },
+      "required": [
+        "unitAmount",
+        "quantity"
+      ]
+    },
+    "CreditNoteTrackingCategoryRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "class",
+            "department",
+            "location",
+            "unknown"
+          ]
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "InventoryRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "PushBillCreditNoteV2": {
+      "type": "object",
+      "properties": {
+        "currencyRate": {
+          "type": "number",
+          "format": "float"
+        },
+        "postedDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "allocatedOnDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "memo": {
+          "type": "string",
+          "maxLength": 4000
+        },
+        "vendorRef": {
+          "$ref": "#/$defs/VendorRefDto"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "lines": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/BillCreditNoteLineItemV2"
+          }
+        },
+        "subsidiaryRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SubsidiaryRefDto"
+          }
+        },
+        "passThrough": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "billCreditNoteNumber": {
+          "type": "string",
+          "description": "The buyer facing document number of the bill credit note."
+        }
+      },
+      "required": [
+        "vendorRef",
+        "lines"
+      ]
+    },
+    "SubsidiaryRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "TaxRateRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "VendorRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  }
+}

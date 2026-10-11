@@ -1,0 +1,206 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-push-chart-of-account-v2-response-dto-schema.json",
+  "title": "PushChartOfAccountV2ResponseDto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-accountcontrollerv2-api-openapi.yml#/components/schemas/PushChartOfAccountV2ResponseDto",
+  "type": "object",
+  "properties": {
+    "connectionUuid": {
+      "type": "string",
+      "readOnly": true
+    },
+    "businessName": {
+      "type": "string",
+      "readOnly": true
+    },
+    "serviceName": {
+      "type": "string",
+      "readOnly": true,
+      "enum": [
+        "freshbooks",
+        "quickbooks",
+        "quickbooksDesktop",
+        "xero",
+        "oracleNetsuite",
+        "sageBusinessCloud",
+        "sageIntacct",
+        "dynamicsBusinessCentral",
+        "dynamics365Finance",
+        "wave",
+        "myob",
+        "zohoBooks",
+        "byod"
+      ]
+    },
+    "pushCommunicationId": {
+      "type": "string",
+      "readOnly": true
+    },
+    "requestedOn": {
+      "type": "string",
+      "readOnly": true,
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "readOnly": true,
+      "enum": [
+        "success",
+        "failed",
+        "pending"
+      ]
+    },
+    "data": {
+      "readOnly": true,
+      "allOf": [
+        {
+          "$ref": "#/$defs/PushChartOfAccountV2"
+        }
+      ]
+    }
+  },
+  "required": [
+    "connectionUuid",
+    "businessName",
+    "serviceName",
+    "pushCommunicationId",
+    "requestedOn",
+    "status",
+    "data"
+  ],
+  "$defs": {
+    "ParentRefDtoV2": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "PushChartOfAccountV2": {
+      "type": "object",
+      "properties": {
+        "nominalCode": {
+          "type": "string",
+          "maxLength": 10,
+          "minLength": 4
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "bank",
+            "currentAsset",
+            "fixedAsset",
+            "inventory",
+            "nonCurrentAsset",
+            "accountReceivable",
+            "equity",
+            "expense",
+            "otherExpense",
+            "cogs",
+            "accountPayable",
+            "creditCard",
+            "nonCurrentLiability",
+            "currentLiability",
+            "income",
+            "incomeGeneral",
+            "otherIncome",
+            "unbilledReceivable",
+            "deferredExpense",
+            "deferredIncome"
+          ]
+        },
+        "currency": {
+          "type": "string"
+        },
+        "taxRateRef": {
+          "$ref": "#/$defs/TaxRateRefDto"
+        },
+        "bankAccountNumber": {
+          "type": "string"
+        },
+        "subType": {
+          "type": "string",
+          "enum": [
+            "cash&Bank",
+            "currentAsset",
+            "propertyPlantAndEquipment",
+            "longTermAsset",
+            "currentLiability",
+            "longTermLiability",
+            "equity",
+            "income",
+            "costOfGoodsSold",
+            "operatingExpense"
+          ]
+        },
+        "classification": {
+          "type": "string",
+          "enum": [
+            "asset",
+            "equity",
+            "expense",
+            "liability",
+            "revenue",
+            "nonPosting"
+          ]
+        },
+        "subsidiaryRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SubsidiaryRefDto"
+          }
+        },
+        "parentRef": {
+          "$ref": "#/$defs/ParentRefDtoV2"
+        },
+        "passThrough": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "SubsidiaryRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "TaxRateRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  }
+}

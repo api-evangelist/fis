@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-push-expense-dto-schema.json",
+  "title": "PushExpenseDto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-expensecontrollerv2-api-openapi.yml#/components/schemas/PushExpenseDto",
+  "type": "object",
+  "properties": {
+    "connectionUuid": {
+      "type": "string",
+      "description": "Unique connection identifier."
+    },
+    "data": {
+      "$ref": "#/$defs/PushExpense"
+    }
+  },
+  "required": [
+    "connectionUuid",
+    "data"
+  ],
+  "$defs": {
+    "AccountRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "BillTrackingCategoryRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "class",
+            "department",
+            "location",
+            "unknown"
+          ]
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "ExpenseLineDto": {
+      "type": "object",
+      "properties": {
+        "accountRef": {
+          "$ref": "#/$defs/AccountRefDto"
+        },
+        "taxRateRef": {
+          "$ref": "#/$defs/TaxRateRefDto"
+        },
+        "trackingCategoryRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/BillTrackingCategoryRefDto"
+          }
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 4000
+        },
+        "quantity": {
+          "type": "number",
+          "format": "float"
+        },
+        "unitAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "taxAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "amount": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "PaymentMethodRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "cash",
+            "check",
+            "creditCard",
+            "debitCard",
+            "bankTransfer",
+            "giftCard",
+            "other"
+          ]
+        }
+      }
+    },
+    "PushExpense": {
+      "type": "object",
+      "properties": {
+        "passThrough": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "vendorRef": {
+          "$ref": "#/$defs/VendorRefDto"
+        },
+        "accountRef": {
+          "$ref": "#/$defs/AccountRefDto"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "currencyRate": {
+          "type": "number"
+        },
+        "postedDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "paymentMethod": {
+          "type": "string",
+          "deprecated": true,
+          "enum": [
+            "unknown",
+            "cash",
+            "check",
+            "creditCard",
+            "debitCard",
+            "bankTransfer",
+            "giftCard",
+            "other"
+          ]
+        },
+        "paymentMethodRef": {
+          "$ref": "#/$defs/PaymentMethodRefDto"
+        },
+        "memo": {
+          "type": "string",
+          "maxLength": 4000
+        },
+        "lines": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ExpenseLineDto"
+          }
+        }
+      }
+    },
+    "TaxRateRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "VendorRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  }
+}

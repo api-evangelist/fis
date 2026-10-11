@@ -1,0 +1,172 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-push-estimate-v1-dto-schema.json",
+  "title": "PushEstimateV1Dto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-estimate-api-openapi.yml#/components/schemas/PushEstimateV1Dto",
+  "type": "object",
+  "properties": {
+    "connection": {
+      "$ref": "#/$defs/PushEstimateConnection"
+    },
+    "data": {
+      "$ref": "#/$defs/PushEstimateV1"
+    }
+  },
+  "required": [
+    "connection",
+    "data"
+  ],
+  "$defs": {
+    "EstimateLineV1": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "maxLength": 4000
+        },
+        "quantity": {
+          "type": "number",
+          "format": "float"
+        },
+        "unitAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "discountPercentage": {
+          "type": "number",
+          "format": "float"
+        },
+        "subTotal": {
+          "type": "number",
+          "deprecated": true,
+          "format": "float"
+        },
+        "taxAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "totalAmount": {
+          "type": "number",
+          "deprecated": true,
+          "format": "float"
+        },
+        "accountRef": {
+          "type": "string"
+        },
+        "taxRef": {
+          "type": "string"
+        },
+        "inventoryRef": {
+          "type": "string"
+        }
+      }
+    },
+    "PushEstimateConnection": {
+      "type": "object",
+      "properties": {
+        "businessName": {
+          "type": "string",
+          "description": "Unique business name identifier."
+        },
+        "serviceName": {
+          "type": "string",
+          "description": "Name of accounting platform service.",
+          "enum": [
+            "quickbooks",
+            "xero",
+            "freshbooks"
+          ]
+        }
+      },
+      "required": [
+        "businessName",
+        "serviceName"
+      ]
+    },
+    "PushEstimateV1": {
+      "type": "object",
+      "properties": {
+        "passThrough": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "currencyRate": {
+          "type": "number"
+        },
+        "dueDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "postedDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "acceptedDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "expiryDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "customerRef": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "lines": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/EstimateLineV1"
+          }
+        },
+        "shipToAddress": {
+          "$ref": "#/$defs/ShippingAddressDto"
+        },
+        "memo": {
+          "type": "string",
+          "maxLength": 4000
+        }
+      },
+      "required": [
+        "customerRef",
+        "lines"
+      ]
+    },
+    "ShippingAddressDto": {
+      "type": "object",
+      "properties": {
+        "line1": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "line2": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "city": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "region": {
+          "type": "string",
+          "maxLength": 255,
+          "description": "Region within a country. For example, state name for USA, province name for Canada."
+        },
+        "country": {
+          "type": "string",
+          "description": "Country name as 3 ISO alpha-3 characters."
+        },
+        "postalCode": {
+          "type": "string",
+          "maxLength": 30,
+          "description": "Postal code. For example, zip code for USA and Canada."
+        }
+      }
+    }
+  }
+}

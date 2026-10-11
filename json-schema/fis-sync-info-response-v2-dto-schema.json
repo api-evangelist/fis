@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-sync-info-response-v2-dto-schema.json",
+  "title": "SyncInfoResponseV2Dto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-datacontrollerv2-api-openapi.yml#/components/schemas/SyncInfoResponseV2Dto",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "readOnly": true,
+      "allOf": [
+        {
+          "$ref": "#/$defs/ConnectionMetadata"
+        }
+      ]
+    },
+    "data": {
+      "readOnly": true,
+      "allOf": [
+        {
+          "$ref": "#/$defs/SyncInfo"
+        }
+      ]
+    }
+  },
+  "required": [
+    "meta",
+    "data"
+  ],
+  "$defs": {
+    "ConnectionMetadata": {
+      "type": "object",
+      "properties": {
+        "connectionUuid": {
+          "type": "string",
+          "readOnly": true
+        },
+        "businessName": {
+          "type": "string",
+          "readOnly": true
+        },
+        "serviceName": {
+          "type": "string",
+          "readOnly": true,
+          "enum": [
+            "freshbooks",
+            "quickbooks",
+            "quickbooksDesktop",
+            "xero",
+            "oracleNetsuite",
+            "sageBusinessCloud",
+            "sageIntacct",
+            "dynamicsBusinessCentral",
+            "dynamics365Finance",
+            "wave",
+            "myob",
+            "zohoBooks",
+            "byod"
+          ]
+        }
+      },
+      "required": [
+        "connectionUuid",
+        "businessName",
+        "serviceName"
+      ]
+    },
+    "SyncInfo": {
+      "type": "object",
+      "properties": {
+        "queueTime": {
+          "type": "number"
+        },
+        "syncTime": {
+          "type": "number"
+        },
+        "syncType": {
+          "type": "string"
+        },
+        "percentageCompleted": {
+          "type": "number"
+        },
+        "status": {
+          "type": "string",
+          "readOnly": true,
+          "enum": [
+            "inProgress",
+            "completed",
+            "error"
+          ]
+        },
+        "createdAt": {
+          "format": "date-time",
+          "type": "string",
+          "readOnly": true
+        },
+        "firstSyncDate": {
+          "format": "date-time",
+          "type": "string",
+          "readOnly": true
+        },
+        "dataType": {
+          "type": "string",
+          "enum": [
+            "accountingTransactions",
+            "accounts",
+            "agedPayable",
+            "agedReceivable",
+            "attachments",
+            "balanceSheets",
+            "bankingReconciliation",
+            "bankTransactions",
+            "bankAccounts",
+            "bankTransfers",
+            "billCreditNotes",
+            "billPayments",
+            "bills",
+            "budgets",
+            "businessInfo",
+            "businessValuations",
+            "cashflowStatements",
+            "creditScore",
+            "customers",
+            "deposits",
+            "estimates",
+            "financialBenchmarking",
+            "financialForecasts",
+            "financialRatios",
+            "fraudRiskMetrics",
+            "incomeStatements",
+            "inventory",
+            "invoiceCreditNotes",
+            "invoicePayments",
+            "invoices",
+            "journalEntries",
+            "journals",
+            "probabilityOfDefault",
+            "purchaseOrders",
+            "refunds",
+            "taxBenchmarking",
+            "taxRates",
+            "taxAuthority",
+            "trackingCategories",
+            "trialBalances",
+            "vendors",
+            "paymentMethods",
+            "portfolioMetrics",
+            "expenses",
+            "contacts",
+            "vendorBankAccounts",
+            "customerBankAccounts",
+            "billPaymentRequests",
+            "payrollTransactions",
+            "transactions",
+            "products",
+            "orders",
+            "disputes",
+            "bankAccounts",
+            "bankTransactions",
+            "bankAssets"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "createdAt",
+        "firstSyncDate"
+      ]
+    }
+  }
+}

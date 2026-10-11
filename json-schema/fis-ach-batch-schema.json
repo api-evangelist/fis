@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-ach-batch-schema.json",
+  "title": "AchBatch",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-ach-api-openapi.yml#/components/schemas/AchBatch",
+  "type": "object",
+  "properties": {
+    "batchId": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "RECEIVED",
+        "VALIDATED",
+        "SUBMITTED",
+        "SETTLED",
+        "REJECTED"
+      ]
+    },
+    "transactionCount": {
+      "type": "integer"
+    },
+    "totalDebits": {
+      "type": "number"
+    },
+    "totalCredits": {
+      "type": "number"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

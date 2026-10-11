@@ -1,0 +1,205 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-ap-aging-response-v2-dto-schema.json",
+  "title": "ApAgingResponseV2Dto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-agingcontrollerv2-api-openapi.yml#/components/schemas/ApAgingResponseV2Dto",
+  "type": "object",
+  "properties": {
+    "pagination": {
+      "$ref": "#/$defs/PaginationMetaData"
+    },
+    "reports": {
+      "readOnly": true,
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ApAgingReportV2"
+      }
+    }
+  },
+  "required": [
+    "pagination",
+    "reports"
+  ],
+  "$defs": {
+    "ApAgingDataV2": {
+      "type": "object",
+      "properties": {
+        "vendorRef": {
+          "$ref": "#/$defs/ApAgingVendorRefV2"
+        },
+        "current": {
+          "type": "number",
+          "format": "float",
+          "readOnly": false
+        },
+        "dpd30": {
+          "type": "number",
+          "format": "float",
+          "readOnly": false
+        },
+        "dpd60": {
+          "type": "number",
+          "format": "float",
+          "readOnly": false
+        },
+        "dpd90": {
+          "type": "number",
+          "format": "float",
+          "readOnly": false
+        },
+        "dpd90+": {
+          "type": "number",
+          "format": "float",
+          "readOnly": false
+        },
+        "total": {
+          "type": "number",
+          "format": "float",
+          "readOnly": false
+        },
+        "currency": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "current",
+        "dpd30",
+        "dpd60",
+        "dpd90",
+        "dpd90+",
+        "total"
+      ]
+    },
+    "ApAgingMetaDataV2": {
+      "type": "object",
+      "properties": {
+        "connectionUuid": {
+          "type": "string",
+          "readOnly": true
+        },
+        "businessName": {
+          "type": "string",
+          "readOnly": true
+        },
+        "serviceName": {
+          "type": "string",
+          "readOnly": true,
+          "enum": [
+            "freshbooks",
+            "quickbooks",
+            "quickbooksDesktop",
+            "xero",
+            "oracleNetsuite",
+            "sageBusinessCloud",
+            "sageIntacct",
+            "dynamicsBusinessCentral",
+            "dynamics365Finance",
+            "wave",
+            "myob",
+            "zohoBooks",
+            "byod"
+          ]
+        },
+        "reportId": {
+          "readOnly": true,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "startDate": {
+          "type": "string",
+          "readOnly": true,
+          "format": "date-time"
+        },
+        "endDate": {
+          "type": "string",
+          "readOnly": true,
+          "format": "date-time"
+        },
+        "createdAt": {
+          "type": "string",
+          "readOnly": true,
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": false
+        },
+        "reportFrequency": {
+          "type": "string",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "connectionUuid",
+        "businessName",
+        "serviceName",
+        "reportId",
+        "startDate",
+        "endDate",
+        "createdAt",
+        "updatedAt",
+        "reportFrequency"
+      ]
+    },
+    "ApAgingReportV2": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "#/$defs/ApAgingMetaDataV2"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ApAgingDataV2"
+          }
+        }
+      },
+      "required": [
+        "meta",
+        "data"
+      ]
+    },
+    "ApAgingVendorRefV2": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "PaginationMetaData": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "type": "number",
+          "readOnly": true
+        },
+        "limit": {
+          "type": "number",
+          "readOnly": true
+        },
+        "count": {
+          "type": "number",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "offset",
+        "limit",
+        "count"
+      ]
+    }
+  }
+}

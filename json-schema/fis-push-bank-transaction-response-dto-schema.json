@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-push-bank-transaction-response-dto-schema.json",
+  "title": "PushBankTransactionResponseDto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-bank-api-openapi.yml#/components/schemas/PushBankTransactionResponseDto",
+  "type": "object",
+  "properties": {
+    "businessName": {
+      "type": "string",
+      "readOnly": true
+    },
+    "serviceName": {
+      "type": "string",
+      "readOnly": true,
+      "enum": [
+        "quickbooks",
+        "xero",
+        "freshbooks",
+        "quickbooksDesktop",
+        "sageIntacct",
+        "sageBusinessCloud",
+        "oracleNetsuite",
+        "dynamicsBusinessCentral",
+        "dynamics365Finance",
+        "wave",
+        "zohoBooks",
+        "myob"
+      ]
+    },
+    "data": {
+      "readOnly": true,
+      "allOf": [
+        {
+          "$ref": "#/$defs/PushBankTransaction"
+        }
+      ]
+    }
+  },
+  "required": [
+    "businessName",
+    "serviceName",
+    "data"
+  ],
+  "$defs": {
+    "PushBankTransaction": {
+      "type": "object",
+      "properties": {
+        "currencyRate": {
+          "type": "number"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "transactionType": {
+          "type": "string",
+          "enum": [
+            "payment",
+            "overpayment",
+            "deposit",
+            "expense"
+          ]
+        },
+        "customerRef": {
+          "type": "string",
+          "deprecated": true
+        },
+        "vendorRef": {
+          "type": "string",
+          "deprecated": true
+        },
+        "bankAccountRef": {
+          "type": "string"
+        },
+        "lines": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PushBankTransactionLine"
+          }
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "required": [
+        "transactionType",
+        "bankAccountRef",
+        "lines"
+      ]
+    },
+    "PushBankTransactionLine": {
+      "type": "object",
+      "properties": {
+        "quantity": {
+          "type": "number",
+          "format": "float"
+        },
+        "unitAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 4000
+        },
+        "accountRef": {
+          "type": "string"
+        },
+        "subTotal": {
+          "type": "number",
+          "deprecated": true,
+          "format": "float"
+        },
+        "totalAmount": {
+          "type": "number",
+          "deprecated": true,
+          "format": "float"
+        },
+        "taxRef": {
+          "type": "string"
+        },
+        "memo": {
+          "type": "string",
+          "deprecated": true,
+          "maxLength": 4000
+        },
+        "taxAmount": {
+          "type": "number",
+          "format": "float"
+        }
+      },
+      "required": [
+        "quantity",
+        "unitAmount",
+        "description",
+        "accountRef"
+      ]
+    }
+  }
+}

@@ -1,0 +1,210 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-push-estimate-v2-dto-schema.json",
+  "title": "PushEstimateV2Dto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-estimatecontrollerv2-api-openapi.yml#/components/schemas/PushEstimateV2Dto",
+  "type": "object",
+  "properties": {
+    "connectionUuid": {
+      "type": "string",
+      "description": "Unique connection identifier."
+    },
+    "data": {
+      "$ref": "#/$defs/PushEstimateV2"
+    }
+  },
+  "required": [
+    "connectionUuid",
+    "data"
+  ],
+  "$defs": {
+    "AccountRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "CustomerRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "EstimateLineV2": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "accountRef": {
+          "$ref": "#/$defs/AccountRefDto"
+        },
+        "taxRateRef": {
+          "$ref": "#/$defs/TaxRateRefDto"
+        },
+        "inventoryRef": {
+          "$ref": "#/$defs/InventoryRefDto"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 4000
+        },
+        "quantity": {
+          "type": "number",
+          "format": "float"
+        },
+        "unitAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "discountPercentage": {
+          "type": "number",
+          "format": "float"
+        },
+        "trackingCategoryRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TrackingCategoryRefPushDto"
+          }
+        }
+      }
+    },
+    "InventoryRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "PushEstimateV2": {
+      "type": "object",
+      "properties": {
+        "passThrough": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "currencyRate": {
+          "type": "number"
+        },
+        "dueDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "postedDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "acceptedDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "expiryDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "customerRef": {
+          "$ref": "#/$defs/CustomerRefDto"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "lines": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/EstimateLineV2"
+          }
+        },
+        "shippingAddress": {
+          "$ref": "#/$defs/ShippingAddressDto"
+        },
+        "memo": {
+          "type": "string",
+          "maxLength": 4000
+        }
+      },
+      "required": [
+        "customerRef",
+        "lines"
+      ]
+    },
+    "ShippingAddressDto": {
+      "type": "object",
+      "properties": {
+        "line1": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "line2": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "city": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "region": {
+          "type": "string",
+          "maxLength": 255,
+          "description": "Region within a country. For example, state name for USA, province name for Canada."
+        },
+        "country": {
+          "type": "string",
+          "description": "Country name as 3 ISO alpha-3 characters."
+        },
+        "postalCode": {
+          "type": "string",
+          "maxLength": 30,
+          "description": "Postal code. For example, zip code for USA and Canada."
+        }
+      }
+    },
+    "TaxRateRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "TrackingCategoryRefPushDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "class",
+            "department",
+            "location",
+            "unknown"
+          ]
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  }
+}

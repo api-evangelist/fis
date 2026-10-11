@@ -1,0 +1,56 @@
+generated: '2026-10-12'
+method: probed
+source: pre-flight dossier (docs platform, portal detections) + CNAME chains and response headers of the hosts apis.yml names
+registry: all/0-working/vendors.yml
+areas_vocabulary:
+- documentation
+- developer-portal
+- api-gateway
+- cdn
+- hosting
+- sdk-generation
+- api-collections
+- status-page
+- support
+- community
+- identity
+- mcp-hosting
+vendors:
+- vendor: akamai
+  name: Akamai
+  area: cdn
+  host: www.fisglobal.com
+  evidence: cname:akamaiedge.net
+  signal: cname
+  confidence: high
+  kin_score: []
+- vendor: cloudflare
+  name: Cloudflare
+  area: cdn
+  host: docs.railz.ai
+  evidence: header:cf-ray
+  signal: header
+  confidence: high
+  kin_score:
+  - https_enforced
+  - hsts
+reliance:
+  areas_vendor_served:
+  - cdn
+  vendor_count: 2
+  areas_observed: 12
+  share_of_observable_areas: 0.083
+  note: areas where a third party was DETECTED serving this provider; an area absent here was either self-run or not observed, and this script
+    cannot tell those apart
+checked:
+- 'docs-platform: not probed'
+- www.fisglobal.com (Website)
+- status.railz.ai (StatusPage)
+- codeconnect.fisglobal.com (DeveloperPortal)
+- docs.railz.ai (Documentation)
+- docs.railz.ai (APIReference)
+- codeconnect.fisglobal.com (GettingStarted)
+- codeconnect.fisglobal.com (SignUp)
+- codeconnect.fisglobal.com (Support)
+- api.fisglobal.com (baseURL)
+- docs.railz.ai (mcp)

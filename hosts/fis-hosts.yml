@@ -1,0 +1,107 @@
+generated: '2026-10-12'
+method: derived
+source: the pre-flight dossier, apis.yml pointers, spec servers, well-known, vendors -- nothing fetched here
+generator: derive-hosts.py
+summary:
+  hosts: 8
+  own: 4
+  other_domain: 2
+  platform: 2
+  roles:
+  - api
+  - docs
+  - other
+  - portal
+  - source
+  - status
+  - website
+hosts:
+- host: api.fisglobal.com
+  found_by:
+  - apis[]
+  types: []
+  serves:
+  - api
+  registrable_domain: fisglobal.com
+  role: api
+  relation: own
+- host: codeconnect.fisglobal.com
+  found_by:
+  - pointer
+  - apis[]
+  types:
+  - DeveloperPortal
+  - GettingStarted
+  - SignUp
+  - Support
+  serves:
+  - docs
+  registrable_domain: fisglobal.com
+  role: portal
+  relation: own
+- host: docs.railz.ai
+  found_by:
+  - pointer
+  - vendor-detect
+  types:
+  - Documentation
+  - APIReference
+  serves:
+  - cdn
+  vendor: cloudflare
+  registrable_domain: railz.ai
+  role: docs
+  relation: other-domain
+- host: github.com
+  found_by:
+  - pointer
+  types:
+  - GitHubOrganization
+  serves: []
+  registrable_domain: github.com
+  role: source
+  relation: platform
+- host: investor.fisglobal.com
+  found_by:
+  - pointer
+  types:
+  - InvestorRelations
+  serves: []
+  registrable_domain: fisglobal.com
+  role: other
+  relation: own
+- host: status.railz.ai
+  found_by:
+  - pointer
+  types:
+  - StatusPage
+  serves: []
+  registrable_domain: railz.ai
+  role: status
+  relation: other-domain
+- host: www.fisglobal.com
+  found_by:
+  - pointer
+  - vendor-detect
+  types:
+  - Website
+  - Security
+  - Pricing
+  - TermsOfService
+  - PrivacyPolicy
+  - Blog
+  serves:
+  - cdn
+  vendor: akamai
+  registrable_domain: fisglobal.com
+  role: website
+  relation: own
+- host: www.linkedin.com
+  found_by:
+  - pointer
+  types:
+  - LinkedIn
+  serves: []
+  registrable_domain: linkedin.com
+  role: other
+  relation: platform

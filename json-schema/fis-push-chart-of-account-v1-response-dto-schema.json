@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-push-chart-of-account-v1-response-dto-schema.json",
+  "title": "PushChartOfAccountV1ResponseDto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-account-api-openapi.yml#/components/schemas/PushChartOfAccountV1ResponseDto",
+  "type": "object",
+  "properties": {
+    "pushCommunicationId": {
+      "type": "string",
+      "readOnly": true
+    },
+    "requestedOn": {
+      "type": "string",
+      "readOnly": true,
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "readOnly": true,
+      "enum": [
+        "success",
+        "failed",
+        "pending"
+      ]
+    },
+    "businessName": {
+      "type": "string",
+      "readOnly": true
+    },
+    "serviceName": {
+      "type": "string",
+      "readOnly": true,
+      "enum": [
+        "freshbooks",
+        "quickbooks",
+        "quickbooksDesktop",
+        "xero",
+        "oracleNetsuite",
+        "sageBusinessCloud",
+        "sageIntacct",
+        "dynamicsBusinessCentral",
+        "dynamics365Finance",
+        "wave",
+        "myob",
+        "zohoBooks",
+        "byod"
+      ]
+    },
+    "data": {
+      "readOnly": true,
+      "allOf": [
+        {
+          "$ref": "#/$defs/PushChartOfAccountV1"
+        }
+      ]
+    }
+  },
+  "required": [
+    "pushCommunicationId",
+    "requestedOn",
+    "status",
+    "businessName",
+    "serviceName",
+    "data"
+  ],
+  "$defs": {
+    "PushChartOfAccountV1": {
+      "type": "object",
+      "properties": {
+        "nominalCode": {
+          "type": "string",
+          "maxLength": 10,
+          "minLength": 6
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "bank",
+            "currentAsset",
+            "fixedAsset",
+            "inventory",
+            "nonCurrentAsset",
+            "accountReceivable",
+            "equity",
+            "expense",
+            "otherExpense",
+            "cogs",
+            "accountPayable",
+            "creditCard",
+            "nonCurrentLiability",
+            "currentLiability",
+            "income",
+            "incomeGeneral",
+            "otherIncome",
+            "unbilledReceivable",
+            "deferredExpense",
+            "deferredIncome"
+          ]
+        },
+        "currency": {
+          "type": "string"
+        },
+        "taxRef": {
+          "type": "string"
+        },
+        "classification": {
+          "type": "string",
+          "enum": [
+            "asset",
+            "equity",
+            "expense",
+            "liability",
+            "revenue",
+            "nonPosting"
+          ]
+        },
+        "subsidiaryRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "name",
+        "type"
+      ]
+    }
+  }
+}

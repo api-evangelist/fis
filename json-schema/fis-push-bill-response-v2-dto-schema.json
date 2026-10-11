@@ -1,0 +1,297 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-push-bill-response-v2-dto-schema.json",
+  "title": "PushBillResponseV2Dto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-billcontrollerv2-api-openapi.yml#/components/schemas/PushBillResponseV2Dto",
+  "type": "object",
+  "properties": {
+    "connectionUuid": {
+      "type": "string",
+      "readOnly": true
+    },
+    "businessName": {
+      "type": "string",
+      "readOnly": true
+    },
+    "serviceName": {
+      "type": "string",
+      "readOnly": true,
+      "enum": [
+        "freshbooks",
+        "quickbooks",
+        "quickbooksDesktop",
+        "xero",
+        "oracleNetsuite",
+        "sageBusinessCloud",
+        "sageIntacct",
+        "dynamicsBusinessCentral",
+        "dynamics365Finance",
+        "wave",
+        "myob",
+        "zohoBooks",
+        "byod"
+      ]
+    },
+    "pushCommunicationId": {
+      "type": "string",
+      "readOnly": true
+    },
+    "requestedOn": {
+      "type": "string",
+      "readOnly": true,
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "readOnly": true,
+      "enum": [
+        "success",
+        "failed",
+        "pending"
+      ]
+    },
+    "data": {
+      "readOnly": true,
+      "allOf": [
+        {
+          "$ref": "#/$defs/PushBillV2"
+        }
+      ]
+    }
+  },
+  "required": [
+    "connectionUuid",
+    "businessName",
+    "serviceName",
+    "pushCommunicationId",
+    "requestedOn",
+    "status",
+    "data"
+  ],
+  "$defs": {
+    "AccountRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "BillTrackingCategoryRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "class",
+            "department",
+            "location",
+            "unknown"
+          ]
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "CustomerObjectRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "InventoryRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "PurchaseOrderRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "PushBillLineItemV2": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "accountRef": {
+          "$ref": "#/$defs/AccountRefDto"
+        },
+        "trackingCategoryRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/BillTrackingCategoryRefDto"
+          }
+        },
+        "taxRateRef": {
+          "$ref": "#/$defs/TaxRateRefDto"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 4000
+        },
+        "unitAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "quantity": {
+          "type": "number",
+          "format": "float"
+        },
+        "customerRef": {
+          "$ref": "#/$defs/CustomerObjectRefDto"
+        },
+        "billableStatus": {
+          "type": "string",
+          "enum": [
+            "billable",
+            "notBillable",
+            "hasBeenBilled"
+          ]
+        },
+        "discountPercentage": {
+          "type": "number",
+          "format": "float"
+        },
+        "inventoryRef": {
+          "$ref": "#/$defs/InventoryRefDto"
+        },
+        "taxAmount": {
+          "type": "number",
+          "format": "float"
+        }
+      },
+      "required": [
+        "unitAmount",
+        "quantity"
+      ]
+    },
+    "PushBillV2": {
+      "type": "object",
+      "properties": {
+        "vendorInvoiceNumber": {
+          "type": "string",
+          "maxLength": 21
+        },
+        "postedDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "dueDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "currencyRate": {
+          "type": "number",
+          "format": "float"
+        },
+        "memo": {
+          "type": "string",
+          "maxLength": 4000
+        },
+        "vendorRef": {
+          "$ref": "#/$defs/VendorRefDto"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "subsidiaryRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SubsidiaryRefDto"
+          }
+        },
+        "lines": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PushBillLineItemV2"
+          }
+        },
+        "purchaseOrderRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PurchaseOrderRefDto"
+          }
+        },
+        "passThrough": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "billType": {
+          "type": "string",
+          "enum": [
+            "item",
+            "service",
+            "professional",
+            "miscellaneous"
+          ]
+        }
+      },
+      "required": [
+        "vendorRef",
+        "lines"
+      ]
+    },
+    "SubsidiaryRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "TaxRateRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "VendorRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  }
+}

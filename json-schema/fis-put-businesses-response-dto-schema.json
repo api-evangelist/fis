@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-put-businesses-response-dto-schema.json",
+  "title": "PutBusinessesResponseDto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-businesses-api-openapi.yml#/components/schemas/PutBusinessesResponseDto",
+  "type": "object",
+  "properties": {
+    "businessName": {
+      "type": "string",
+      "readOnly": true
+    },
+    "url": {
+      "type": "string",
+      "readOnly": true
+    },
+    "metadata": {
+      "readOnly": true,
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/MetadataObjectDto"
+      }
+    },
+    "status": {
+      "type": "string",
+      "readOnly": true
+    },
+    "createdAt": {
+      "format": "date-time",
+      "type": "string",
+      "readOnly": true
+    },
+    "businessUUID": {
+      "type": "string",
+      "readOnly": true
+    },
+    "updatedAt": {
+      "format": "date-time",
+      "type": "string",
+      "readOnly": true
+    }
+  },
+  "required": [
+    "businessName",
+    "url",
+    "metadata",
+    "status",
+    "createdAt",
+    "businessUUID",
+    "updatedAt"
+  ],
+  "$defs": {
+    "MetadataObjectDto": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "webhookLocation": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "header",
+              "body",
+              "query"
+            ]
+          }
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ]
+    }
+  }
+}

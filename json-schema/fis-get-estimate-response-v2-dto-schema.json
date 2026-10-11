@@ -1,0 +1,384 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-get-estimate-response-v2-dto-schema.json",
+  "title": "GetEstimateResponseV2Dto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-estimatecontrollerv2-api-openapi.yml#/components/schemas/GetEstimateResponseV2Dto",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "$ref": "#/$defs/BasicStartEndDateReportMetaDataV2"
+    },
+    "pagination": {
+      "$ref": "#/$defs/PaginationMetaData"
+    },
+    "data": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/GetEstimateDataV2"
+      }
+    }
+  },
+  "required": [
+    "meta",
+    "pagination",
+    "data"
+  ],
+  "$defs": {
+    "AccountRef": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "BaseAddress": {
+      "type": "object",
+      "properties": {
+        "line1": {
+          "type": "string"
+        },
+        "line2": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "postalCode": {
+          "type": "string"
+        }
+      }
+    },
+    "BasicStartEndDateReportMetaDataV2": {
+      "type": "object",
+      "properties": {
+        "connectionUuid": {
+          "type": "string",
+          "readOnly": true
+        },
+        "businessName": {
+          "type": "string",
+          "readOnly": true
+        },
+        "serviceName": {
+          "type": "string",
+          "readOnly": true,
+          "enum": [
+            "freshbooks",
+            "quickbooks",
+            "quickbooksDesktop",
+            "xero",
+            "oracleNetsuite",
+            "sageBusinessCloud",
+            "sageIntacct",
+            "dynamicsBusinessCentral",
+            "dynamics365Finance",
+            "wave",
+            "myob",
+            "zohoBooks",
+            "byod"
+          ]
+        },
+        "reportId": {
+          "readOnly": true,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "readOnly": true,
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": false
+        },
+        "startDate": {
+          "type": "string",
+          "readOnly": true,
+          "format": "date-time"
+        },
+        "endDate": {
+          "type": "string",
+          "readOnly": true,
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "connectionUuid",
+        "businessName",
+        "serviceName",
+        "reportId",
+        "createdAt",
+        "updatedAt",
+        "startDate",
+        "endDate"
+      ]
+    },
+    "CustomerRef": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "EstimateLineItemV2": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "accountRef": {
+          "$ref": "#/$defs/AccountRef"
+        },
+        "taxRateRef": {
+          "$ref": "#/$defs/TaxRateRef"
+        },
+        "inventoryRef": {
+          "$ref": "#/$defs/InventoryRef"
+        },
+        "trackingCategoryRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TrackingCategoryRefV2"
+          }
+        },
+        "description": {
+          "type": "string"
+        },
+        "unitAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "quantity": {
+          "type": "number",
+          "format": "integer"
+        },
+        "discountAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "taxAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "amount": {
+          "type": "number",
+          "format": "float"
+        },
+        "discountPercentage": {
+          "type": "number",
+          "format": "float"
+        }
+      },
+      "required": [
+        "amount"
+      ]
+    },
+    "GetEstimateDataV2": {
+      "type": "object",
+      "properties": {
+        "passThrough": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "id": {
+          "type": "string"
+        },
+        "customerRef": {
+          "$ref": "#/$defs/CustomerRef"
+        },
+        "postedDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "dueDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "acceptedDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "expiryDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "currencyRate": {
+          "type": "number",
+          "format": "float"
+        },
+        "estimateType": {
+          "type": "string",
+          "enum": [
+            "item",
+            "service",
+            "professional",
+            "miscellaneous"
+          ]
+        },
+        "lines": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/EstimateLineItemV2"
+          }
+        },
+        "totalDiscount": {
+          "type": "number",
+          "format": "float"
+        },
+        "discountPercentage": {
+          "type": "number",
+          "format": "float"
+        },
+        "subTotal": {
+          "type": "number",
+          "format": "float"
+        },
+        "taxAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "totalAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "open",
+            "closed",
+            "void",
+            "unknown",
+            "draft"
+          ]
+        },
+        "memo": {
+          "type": "string"
+        },
+        "shippingAddress": {
+          "$ref": "#/$defs/BaseAddress"
+        },
+        "sourceModifiedDate": {
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "postedDate",
+        "lines",
+        "totalAmount",
+        "status"
+      ]
+    },
+    "InventoryRef": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "PaginationMetaData": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "type": "number",
+          "readOnly": true
+        },
+        "limit": {
+          "type": "number",
+          "readOnly": true
+        },
+        "count": {
+          "type": "number",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "offset",
+        "limit",
+        "count"
+      ]
+    },
+    "TaxRateRef": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "effectiveTaxRate": {
+          "type": "number",
+          "format": "float"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "TrackingCategoryRefV2": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "readOnly": false
+        },
+        "name": {
+          "type": "string",
+          "readOnly": false
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "class",
+            "department",
+            "location",
+            "unknown"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "type"
+      ]
+    }
+  }
+}

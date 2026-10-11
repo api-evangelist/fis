@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-push-update-customer-v1-dto-schema.json",
+  "title": "PushUpdateCustomerV1Dto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-customer-api-openapi.yml#/components/schemas/PushUpdateCustomerV1Dto",
+  "type": "object",
+  "properties": {
+    "connection": {
+      "$ref": "#/$defs/PushUpdateCustomerConnection"
+    },
+    "data": {
+      "$ref": "#/$defs/PutCustomerV1"
+    }
+  },
+  "required": [
+    "connection",
+    "data"
+  ],
+  "$defs": {
+    "Addresses": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Only Billing & Shipping types can be used when creating records.",
+          "enum": [
+            "billing",
+            "shipping"
+          ]
+        },
+        "line1": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "line2": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "city": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "region": {
+          "type": "string",
+          "maxLength": 255,
+          "description": "Region within a country. For example, state name for USA, province name for Canada."
+        },
+        "country": {
+          "type": "string",
+          "description": "Country name as 3 ISO alpha-3 characters."
+        },
+        "postalCode": {
+          "type": "string",
+          "maxLength": 30,
+          "description": "Postal code. For example, zip code for USA and Canada."
+        }
+      },
+      "required": [
+        "type"
+      ]
+    },
+    "PushUpdateCustomerConnection": {
+      "type": "object",
+      "properties": {
+        "businessName": {
+          "type": "string",
+          "description": "Unique business name identifier."
+        },
+        "serviceName": {
+          "type": "string",
+          "description": "Name of accounting platform service.",
+          "enum": [
+            "quickbooks",
+            "xero",
+            "freshbooks",
+            "dynamicsBusinessCentral",
+            "oracleNetsuite",
+            "wave",
+            "sageIntacct",
+            "sageBusinessCloud"
+          ]
+        }
+      },
+      "required": [
+        "businessName",
+        "serviceName"
+      ]
+    },
+    "PutCustomerV1": {
+      "type": "object",
+      "properties": {
+        "contactFirstName": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "contactLastName": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "emailAddress": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "phone": {
+          "type": "string",
+          "maxLength": 30
+        },
+        "website": {
+          "type": "string",
+          "maxLength": 100,
+          "format": "uri"
+        },
+        "isPerson": {
+          "type": "boolean"
+        },
+        "customerName": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "addresses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Addresses"
+          }
+        },
+        "defaultCurrency": {
+          "type": "string"
+        },
+        "subsidiaryRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

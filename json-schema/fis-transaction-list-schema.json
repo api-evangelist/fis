@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-transaction-list-schema.json",
+  "title": "TransactionList",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-transactions-api-openapi.yml#/components/schemas/TransactionList",
+  "type": "object",
+  "properties": {
+    "transactions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Transaction"
+      }
+    },
+    "nextPageToken": {
+      "type": "string"
+    },
+    "totalCount": {
+      "type": "integer"
+    }
+  },
+  "$defs": {
+    "Transaction": {
+      "type": "object",
+      "properties": {
+        "transactionId": {
+          "type": "string"
+        },
+        "accountId": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "DEBIT",
+            "CREDIT"
+          ]
+        },
+        "status": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "postedDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "effectiveDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "balanceAfter": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    }
+  }
+}

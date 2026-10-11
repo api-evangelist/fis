@@ -1,0 +1,195 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-update-bills-response-v1-dto-schema.json",
+  "title": "UpdateBillsResponseV1Dto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-bill-api-openapi.yml#/components/schemas/UpdateBillsResponseV1Dto",
+  "type": "object",
+  "properties": {
+    "pushCommunicationId": {
+      "type": "string",
+      "readOnly": true
+    },
+    "requestedOn": {
+      "type": "string",
+      "readOnly": true,
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "readOnly": true,
+      "enum": [
+        "success",
+        "failed",
+        "pending"
+      ]
+    },
+    "businessName": {
+      "type": "string",
+      "readOnly": true
+    },
+    "serviceName": {
+      "type": "string",
+      "readOnly": true,
+      "enum": [
+        "freshbooks",
+        "quickbooks",
+        "quickbooksDesktop",
+        "xero",
+        "oracleNetsuite",
+        "sageBusinessCloud",
+        "sageIntacct",
+        "dynamicsBusinessCentral",
+        "dynamics365Finance",
+        "wave",
+        "myob",
+        "zohoBooks",
+        "byod"
+      ]
+    },
+    "data": {
+      "readOnly": true,
+      "allOf": [
+        {
+          "$ref": "#/$defs/UpdateBillsV1"
+        }
+      ]
+    }
+  },
+  "required": [
+    "pushCommunicationId",
+    "requestedOn",
+    "status",
+    "businessName",
+    "serviceName",
+    "data"
+  ],
+  "$defs": {
+    "CustomerObjectRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "UpdateBillLineItemV1": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "maxLength": 4000
+        },
+        "unitAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "quantity": {
+          "type": "number",
+          "format": "float"
+        },
+        "billableStatus": {
+          "type": "string",
+          "enum": [
+            "billable",
+            "notBillable",
+            "hasBeenBilled"
+          ]
+        },
+        "customerRef": {
+          "$ref": "#/$defs/CustomerObjectRefDto"
+        },
+        "id": {
+          "type": "string"
+        },
+        "taxAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "taxRef": {
+          "type": "string"
+        },
+        "accountRef": {
+          "type": "string"
+        },
+        "trackingCategoryRef": {
+          "type": "string",
+          "deprecated": true
+        },
+        "subTotal": {
+          "type": "number",
+          "format": "float",
+          "deprecated": true
+        },
+        "totalAmount": {
+          "type": "number",
+          "format": "float",
+          "deprecated": true
+        }
+      },
+      "required": [
+        "unitAmount",
+        "quantity"
+      ]
+    },
+    "UpdateBillsV1": {
+      "type": "object",
+      "properties": {
+        "vendorInvoiceNumber": {
+          "type": "string",
+          "maxLength": 21
+        },
+        "postedDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "dueDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "currencyRate": {
+          "type": "number",
+          "format": "float"
+        },
+        "memo": {
+          "type": "string",
+          "maxLength": 4000
+        },
+        "vendorRef": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "locationRef": {
+          "type": "string",
+          "deprecated": true
+        },
+        "subsidiaryRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "trackingCategoryRef": {
+          "type": "string",
+          "deprecated": true
+        },
+        "lines": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/UpdateBillLineItemV1"
+          }
+        }
+      },
+      "required": [
+        "vendorRef"
+      ]
+    }
+  }
+}

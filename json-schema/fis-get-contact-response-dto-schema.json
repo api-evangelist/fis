@@ -1,0 +1,248 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-get-contact-response-dto-schema.json",
+  "title": "GetContactResponseDto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-contactcontrollerv2-api-openapi.yml#/components/schemas/GetContactResponseDto",
+  "type": "object",
+  "properties": {
+    "pagination": {
+      "$ref": "#/$defs/PaginationMetaData"
+    },
+    "meta": {
+      "$ref": "#/$defs/ListReportMetaDataV2"
+    },
+    "data": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/GetContactData"
+      }
+    }
+  },
+  "required": [
+    "pagination",
+    "meta",
+    "data"
+  ],
+  "$defs": {
+    "BankAccountRef": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "BillingAddress": {
+      "type": "object",
+      "properties": {
+        "line1": {
+          "type": "string"
+        },
+        "line2": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "postalCode": {
+          "type": "string"
+        }
+      }
+    },
+    "ContactPerson": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "GetContactData": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "contactName": {
+          "type": "string"
+        },
+        "contactFirstName": {
+          "type": "string"
+        },
+        "contactLastName": {
+          "type": "string"
+        },
+        "emailAddress": {
+          "type": "string"
+        },
+        "bankAccountRef": {
+          "$ref": "#/$defs/BankAccountRef"
+        },
+        "website": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "billingAddress": {
+          "$ref": "#/$defs/BillingAddress"
+        },
+        "shippingAddress": {
+          "$ref": "#/$defs/ShippingAddress"
+        },
+        "contacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ContactPerson"
+          }
+        },
+        "taxNumber": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "active",
+            "archived"
+          ]
+        },
+        "balance": {
+          "type": "number",
+          "format": "float"
+        },
+        "contactType": {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "customer",
+            "vendor"
+          ]
+        },
+        "sourceModifiedDate": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "ListReportMetaDataV2": {
+      "type": "object",
+      "properties": {
+        "connectionUuid": {
+          "type": "string",
+          "readOnly": true
+        },
+        "businessName": {
+          "type": "string",
+          "readOnly": true
+        },
+        "serviceName": {
+          "type": "string",
+          "readOnly": true,
+          "enum": [
+            "freshbooks",
+            "quickbooks",
+            "quickbooksDesktop",
+            "xero",
+            "oracleNetsuite",
+            "sageBusinessCloud",
+            "sageIntacct",
+            "dynamicsBusinessCentral",
+            "dynamics365Finance",
+            "wave",
+            "myob",
+            "zohoBooks",
+            "byod"
+          ]
+        },
+        "reportId": {
+          "readOnly": true,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "readOnly": true,
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": false
+        }
+      },
+      "required": [
+        "connectionUuid",
+        "businessName",
+        "serviceName",
+        "reportId",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "PaginationMetaData": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "type": "number",
+          "readOnly": true
+        },
+        "limit": {
+          "type": "number",
+          "readOnly": true
+        },
+        "count": {
+          "type": "number",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "offset",
+        "limit",
+        "count"
+      ]
+    },
+    "ShippingAddress": {
+      "type": "object",
+      "properties": {
+        "line1": {
+          "type": "string"
+        },
+        "line2": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "postalCode": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

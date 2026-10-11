@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-wire-transfer-request-schema.json",
+  "title": "WireTransferRequest",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-wire-transfers-api-openapi.yml#/components/schemas/WireTransferRequest",
+  "type": "object",
+  "required": [
+    "amount",
+    "currency",
+    "debtorAccount",
+    "creditorAccount"
+  ],
+  "properties": {
+    "amount": {
+      "type": "number",
+      "format": "double",
+      "minimum": 0.01
+    },
+    "currency": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 3
+    },
+    "wireType": {
+      "type": "string",
+      "enum": [
+        "DOMESTIC_FEDWIRE",
+        "INTERNATIONAL_SWIFT"
+      ],
+      "default": "DOMESTIC_FEDWIRE"
+    },
+    "debtorAccount": {
+      "$ref": "#/$defs/AccountReference"
+    },
+    "creditorAccount": {
+      "$ref": "#/$defs/AccountReference"
+    },
+    "remittanceInfo": {
+      "type": "string",
+      "maxLength": 140
+    },
+    "instructionForCreditorAgent": {
+      "type": "string"
+    }
+  },
+  "$defs": {
+    "AccountReference": {
+      "type": "object",
+      "required": [
+        "accountNumber",
+        "routingNumber"
+      ],
+      "properties": {
+        "accountNumber": {
+          "type": "string",
+          "description": "Bank account number"
+        },
+        "routingNumber": {
+          "type": "string",
+          "pattern": "^\\d{9}$",
+          "description": "ABA routing transit number (9 digits)"
+        },
+        "accountType": {
+          "type": "string",
+          "enum": [
+            "CHECKING",
+            "SAVINGS",
+            "LOAN"
+          ]
+        },
+        "accountHolderName": {
+          "type": "string"
+        },
+        "bankName": {
+          "type": "string"
+        },
+        "swiftCode": {
+          "type": "string",
+          "description": "SWIFT/BIC code for international wires"
+        }
+      }
+    }
+  }
+}

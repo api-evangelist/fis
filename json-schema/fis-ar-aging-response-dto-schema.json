@@ -1,0 +1,217 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-ar-aging-response-dto-schema.json",
+  "title": "ArAgingResponseDto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-aging-api-openapi.yml#/components/schemas/ArAgingResponseDto",
+  "type": "object",
+  "properties": {
+    "pagination": {
+      "$ref": "#/$defs/PaginationMetaData"
+    },
+    "count": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "reports": {
+      "readOnly": true,
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ArAgingReport"
+      }
+    }
+  },
+  "required": [
+    "pagination",
+    "count",
+    "reports"
+  ],
+  "$defs": {
+    "ApArAgingCurrencyRef": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "symbol": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "ArAgingCustomerRef": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "ArAgingDataV1": {
+      "type": "object",
+      "properties": {
+        "customerRef": {
+          "$ref": "#/$defs/ArAgingCustomerRef"
+        },
+        "current": {
+          "type": "number",
+          "format": "float",
+          "readOnly": false
+        },
+        "dpd30": {
+          "type": "number",
+          "format": "float",
+          "readOnly": false
+        },
+        "dpd60": {
+          "type": "number",
+          "format": "float",
+          "readOnly": false
+        },
+        "dpd90": {
+          "type": "number",
+          "format": "float",
+          "readOnly": false
+        },
+        "dpd90+": {
+          "type": "number",
+          "format": "float",
+          "readOnly": false
+        },
+        "total": {
+          "type": "number",
+          "format": "float",
+          "readOnly": false
+        },
+        "currencyRef": {
+          "$ref": "#/$defs/ApArAgingCurrencyRef"
+        }
+      },
+      "required": [
+        "customerRef",
+        "dpd30",
+        "dpd60",
+        "dpd90",
+        "total"
+      ]
+    },
+    "ArAgingMetaData": {
+      "type": "object",
+      "properties": {
+        "reportId": {
+          "readOnly": true,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "serviceName": {
+          "type": "string",
+          "readOnly": true,
+          "enum": [
+            "quickbooks",
+            "xero",
+            "freshbooks",
+            "quickbooksDesktop",
+            "sageIntacct",
+            "sageBusinessCloud",
+            "oracleNetsuite",
+            "dynamicsBusinessCentral",
+            "dynamics365Finance",
+            "wave",
+            "zohoBooks",
+            "myob"
+          ]
+        },
+        "businessName": {
+          "type": "string",
+          "readOnly": true
+        },
+        "startDate": {
+          "type": "string",
+          "readOnly": true,
+          "format": "date-time"
+        },
+        "endDate": {
+          "type": "string",
+          "readOnly": true,
+          "format": "date-time"
+        },
+        "createdAt": {
+          "type": "string",
+          "readOnly": true,
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": false
+        },
+        "reportFrequency": {
+          "type": "string",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "reportId",
+        "serviceName",
+        "businessName",
+        "startDate",
+        "endDate",
+        "createdAt",
+        "updatedAt",
+        "reportFrequency"
+      ]
+    },
+    "ArAgingReport": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "#/$defs/ArAgingMetaData"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ArAgingDataV1"
+          }
+        }
+      },
+      "required": [
+        "meta",
+        "data"
+      ]
+    },
+    "PaginationMetaData": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "type": "number",
+          "readOnly": true
+        },
+        "limit": {
+          "type": "number",
+          "readOnly": true
+        },
+        "count": {
+          "type": "number",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "offset",
+        "limit",
+        "count"
+      ]
+    }
+  }
+}

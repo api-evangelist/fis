@@ -1,0 +1,302 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-put-customer-v2-response-dto-schema.json",
+  "title": "PutCustomerV2ResponseDto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-customercontrollerv2-api-openapi.yml#/components/schemas/PutCustomerV2ResponseDto",
+  "type": "object",
+  "properties": {
+    "connectionUuid": {
+      "type": "string",
+      "readOnly": true
+    },
+    "businessName": {
+      "type": "string",
+      "readOnly": true
+    },
+    "serviceName": {
+      "type": "string",
+      "readOnly": true,
+      "enum": [
+        "freshbooks",
+        "quickbooks",
+        "quickbooksDesktop",
+        "xero",
+        "oracleNetsuite",
+        "sageBusinessCloud",
+        "sageIntacct",
+        "dynamicsBusinessCentral",
+        "dynamics365Finance",
+        "wave",
+        "myob",
+        "zohoBooks",
+        "byod"
+      ]
+    },
+    "pushCommunicationId": {
+      "type": "string",
+      "readOnly": true
+    },
+    "requestedOn": {
+      "type": "string",
+      "readOnly": true,
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "readOnly": true,
+      "enum": [
+        "success",
+        "failed",
+        "pending"
+      ]
+    },
+    "data": {
+      "readOnly": true,
+      "allOf": [
+        {
+          "$ref": "#/$defs/PutCustomerV2"
+        }
+      ]
+    }
+  },
+  "required": [
+    "connectionUuid",
+    "businessName",
+    "serviceName",
+    "pushCommunicationId",
+    "requestedOn",
+    "status",
+    "data"
+  ],
+  "$defs": {
+    "BillingAddressDto": {
+      "type": "object",
+      "properties": {
+        "line1": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "line2": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "city": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "region": {
+          "type": "string",
+          "maxLength": 255,
+          "description": "Region within a country. For example, state name for USA, province name for Canada."
+        },
+        "country": {
+          "type": "string",
+          "description": "Country name as 3 ISO alpha-3 characters."
+        },
+        "postalCode": {
+          "type": "string",
+          "maxLength": 30,
+          "description": "Postal code. For example, zip code for USA and Canada."
+        }
+      }
+    },
+    "CustomerVendorPushAddressV2": {
+      "type": "object",
+      "properties": {
+        "line1": {
+          "type": "string"
+        },
+        "line2": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "postalCode": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "billing",
+            "shipping",
+            "other"
+          ]
+        }
+      }
+    },
+    "ParentRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "PaymentMethodRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "cash",
+            "check",
+            "creditCard",
+            "debitCard",
+            "bankTransfer",
+            "giftCard",
+            "other"
+          ]
+        }
+      }
+    },
+    "PushCustomerVendorContactV2": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "address": {
+          "$ref": "#/$defs/CustomerVendorPushAddressV2"
+        }
+      }
+    },
+    "PutCustomerV2": {
+      "type": "object",
+      "properties": {
+        "contactFirstName": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "contactLastName": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "emailAddress": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "phone": {
+          "type": "string",
+          "maxLength": 30
+        },
+        "website": {
+          "type": "string",
+          "maxLength": 100,
+          "format": "uri"
+        },
+        "isPerson": {
+          "type": "boolean"
+        },
+        "customerName": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "contactName": {
+          "type": "string"
+        },
+        "taxNumber": {
+          "type": "string"
+        },
+        "parentRef": {
+          "$ref": "#/$defs/ParentRefDto"
+        },
+        "billingAddress": {
+          "$ref": "#/$defs/BillingAddressDto"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "shippingAddress": {
+          "$ref": "#/$defs/ShippingAddressDto"
+        },
+        "subsidiaryRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SubsidiaryRefDto"
+          }
+        },
+        "contacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PushCustomerVendorContactV2"
+          }
+        },
+        "passThrough": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "paymentMethodRef": {
+          "$ref": "#/$defs/PaymentMethodRefDto"
+        }
+      }
+    },
+    "ShippingAddressDto": {
+      "type": "object",
+      "properties": {
+        "line1": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "line2": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "city": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "region": {
+          "type": "string",
+          "maxLength": 255,
+          "description": "Region within a country. For example, state name for USA, province name for Canada."
+        },
+        "country": {
+          "type": "string",
+          "description": "Country name as 3 ISO alpha-3 characters."
+        },
+        "postalCode": {
+          "type": "string",
+          "maxLength": 30,
+          "description": "Postal code. For example, zip code for USA and Canada."
+        }
+      }
+    },
+    "SubsidiaryRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  }
+}

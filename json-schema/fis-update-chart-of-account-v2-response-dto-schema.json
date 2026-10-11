@@ -1,0 +1,188 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-update-chart-of-account-v2-response-dto-schema.json",
+  "title": "UpdateChartOfAccountV2ResponseDto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-accountcontrollerv2-api-openapi.yml#/components/schemas/UpdateChartOfAccountV2ResponseDto",
+  "type": "object",
+  "properties": {
+    "connectionUuid": {
+      "type": "string",
+      "readOnly": true
+    },
+    "businessName": {
+      "type": "string",
+      "readOnly": true
+    },
+    "serviceName": {
+      "type": "string",
+      "readOnly": true,
+      "enum": [
+        "freshbooks",
+        "quickbooks",
+        "quickbooksDesktop",
+        "xero",
+        "oracleNetsuite",
+        "sageBusinessCloud",
+        "sageIntacct",
+        "dynamicsBusinessCentral",
+        "dynamics365Finance",
+        "wave",
+        "myob",
+        "zohoBooks",
+        "byod"
+      ]
+    },
+    "pushCommunicationId": {
+      "type": "string",
+      "readOnly": true
+    },
+    "requestedOn": {
+      "type": "string",
+      "readOnly": true,
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "readOnly": true,
+      "enum": [
+        "success",
+        "failed",
+        "pending"
+      ]
+    },
+    "data": {
+      "readOnly": true,
+      "allOf": [
+        {
+          "$ref": "#/$defs/UpdateChartOfAccountV2"
+        }
+      ]
+    }
+  },
+  "required": [
+    "connectionUuid",
+    "businessName",
+    "serviceName",
+    "pushCommunicationId",
+    "requestedOn",
+    "status",
+    "data"
+  ],
+  "$defs": {
+    "ParentRefDtoV2": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "SubsidiaryRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "TaxRateRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "UpdateChartOfAccountV2": {
+      "type": "object",
+      "properties": {
+        "nominalCode": {
+          "type": "string",
+          "maxLength": 10,
+          "minLength": 5
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "classification": {
+          "type": "string",
+          "enum": [
+            "asset",
+            "equity",
+            "expense",
+            "liability",
+            "revenue",
+            "nonPosting"
+          ]
+        },
+        "currency": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "bank",
+            "currentAsset",
+            "fixedAsset",
+            "inventory",
+            "nonCurrentAsset",
+            "accountReceivable",
+            "equity",
+            "expense",
+            "otherExpense",
+            "cogs",
+            "accountPayable",
+            "creditCard",
+            "nonCurrentLiability",
+            "currentLiability",
+            "income",
+            "incomeGeneral",
+            "otherIncome",
+            "unbilledReceivable",
+            "deferredExpense",
+            "deferredIncome"
+          ]
+        },
+        "bankAccountNumber": {
+          "type": "string"
+        },
+        "taxRateRef": {
+          "$ref": "#/$defs/TaxRateRefDto"
+        },
+        "parentRef": {
+          "$ref": "#/$defs/ParentRefDtoV2"
+        },
+        "subsidiaryRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SubsidiaryRefDto"
+          }
+        },
+        "passThrough": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    }
+  }
+}

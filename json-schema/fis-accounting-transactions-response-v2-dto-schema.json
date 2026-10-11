@@ -1,0 +1,332 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-accounting-transactions-response-v2-dto-schema.json",
+  "title": "AccountingTransactionsResponseV2Dto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-accountingtransactioncontrollerv2-api-openapi.yml#/components/schemas/AccountingTransactionsResponseV2Dto",
+  "type": "object",
+  "properties": {
+    "pagination": {
+      "$ref": "#/$defs/PaginationMetaData"
+    },
+    "meta": {
+      "$ref": "#/$defs/AccountingTransactionsReportMetaDataV2"
+    },
+    "data": {
+      "readOnly": true,
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/AccountingTransactionDataV2"
+      }
+    }
+  },
+  "required": [
+    "pagination",
+    "meta",
+    "data"
+  ],
+  "$defs": {
+    "AccountingTransactionAccountRefV2": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "readOnly": false
+        },
+        "name": {
+          "type": "string",
+          "readOnly": false
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "AccountingTransactionDataV2": {
+      "type": "object",
+      "properties": {
+        "postedDate": {
+          "format": "date",
+          "type": "string",
+          "readOnly": false
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "expense",
+            "invoice",
+            "payment",
+            "payroll",
+            "journalEntry",
+            "bill",
+            "vendorCreditNote",
+            "creditNote",
+            "billPayment",
+            "bankTransaction",
+            "transfer",
+            "deposit",
+            "refund",
+            "estimate",
+            "inventoryAdjustment",
+            "purchaseOrder",
+            "taxPayment",
+            "taxAdjustment",
+            "taxRefund",
+            "taxReversal",
+            "other",
+            "unknown"
+          ],
+          "readOnly": false
+        },
+        "isReconciled": {
+          "type": "boolean",
+          "readOnly": false
+        },
+        "currencyRate": {
+          "type": "number",
+          "format": "float",
+          "readOnly": false
+        },
+        "isSplitTransaction": {
+          "type": "boolean",
+          "readOnly": false
+        },
+        "parentTransactionId": {
+          "type": "string",
+          "readOnly": false
+        },
+        "subTotal": {
+          "type": "number",
+          "format": "float",
+          "readOnly": false
+        },
+        "taxAmount": {
+          "type": "number",
+          "format": "float",
+          "readOnly": false
+        },
+        "totalAmount": {
+          "type": "number",
+          "format": "float",
+          "readOnly": false
+        },
+        "memo": {
+          "type": "string",
+          "readOnly": false
+        },
+        "sourceModifiedDate": {
+          "type": "string",
+          "format": "date",
+          "readOnly": false
+        },
+        "id": {
+          "type": "string",
+          "readOnly": false
+        },
+        "isPosting": {
+          "type": "boolean",
+          "readOnly": false
+        },
+        "sourceId": {
+          "type": "string",
+          "readOnly": false
+        },
+        "entityRef": {
+          "$ref": "#/$defs/AccountingTransactionEntityRefV2"
+        },
+        "section": {
+          "type": "string",
+          "readOnly": false,
+          "enum": [
+            "Assets",
+            "Expenses",
+            "Income",
+            "Liabilities",
+            "Equity"
+          ]
+        },
+        "subSection": {
+          "type": "string",
+          "readOnly": false,
+          "enum": [
+            "Current Assets",
+            "Non-Current Assets",
+            "Current Liabilities",
+            "Non-Current Liabilities",
+            "Equity",
+            "Income",
+            "Other Income",
+            "Operating Expenses",
+            "Other Expenses",
+            "Cost of Goods Sold"
+          ]
+        },
+        "group": {
+          "type": "string",
+          "readOnly": false
+        },
+        "subGroup": {
+          "type": "string",
+          "readOnly": false
+        },
+        "trackingCategoryRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AccountingTransactionTrackingCategoryRefV2"
+          }
+        },
+        "accountRef": {
+          "$ref": "#/$defs/AccountingTransactionAccountRefV2"
+        },
+        "currency": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "postedDate",
+        "type",
+        "section",
+        "subSection"
+      ]
+    },
+    "AccountingTransactionEntityRefV2": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "readOnly": false
+        },
+        "name": {
+          "type": "string",
+          "readOnly": false
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "vendor",
+            "customer",
+            "unknown"
+          ]
+        }
+      }
+    },
+    "AccountingTransactionTrackingCategoryRefV2": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "readOnly": false
+        },
+        "name": {
+          "type": "string",
+          "readOnly": false
+        },
+        "option": {
+          "type": "string",
+          "readOnly": false
+        },
+        "optionId": {
+          "type": "string",
+          "readOnly": false
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "class",
+            "department",
+            "location",
+            "unknown"
+          ]
+        }
+      }
+    },
+    "AccountingTransactionsReportMetaDataV2": {
+      "type": "object",
+      "properties": {
+        "connectionUuid": {
+          "type": "string",
+          "readOnly": true
+        },
+        "businessName": {
+          "type": "string",
+          "readOnly": true
+        },
+        "serviceName": {
+          "type": "string",
+          "readOnly": true,
+          "enum": [
+            "freshbooks",
+            "quickbooks",
+            "quickbooksDesktop",
+            "xero",
+            "oracleNetsuite",
+            "sageBusinessCloud",
+            "sageIntacct",
+            "dynamicsBusinessCentral",
+            "dynamics365Finance",
+            "wave",
+            "myob",
+            "zohoBooks",
+            "byod"
+          ]
+        },
+        "reportId": {
+          "readOnly": true,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": false
+        }
+      },
+      "required": [
+        "connectionUuid",
+        "businessName",
+        "serviceName",
+        "reportId",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "PaginationMetaData": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "type": "number",
+          "readOnly": true
+        },
+        "limit": {
+          "type": "number",
+          "readOnly": true
+        },
+        "count": {
+          "type": "number",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "offset",
+        "limit",
+        "count"
+      ]
+    }
+  }
+}

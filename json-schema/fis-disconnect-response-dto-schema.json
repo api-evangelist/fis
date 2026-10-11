@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-disconnect-response-dto-schema.json",
+  "title": "DisconnectResponseDto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-connection-api-openapi.yml#/components/schemas/DisconnectResponseDto",
+  "type": "object",
+  "properties": {
+    "connectionId": {
+      "type": "string",
+      "readOnly": true
+    },
+    "businessName": {
+      "type": "string",
+      "readOnly": true
+    },
+    "serviceName": {
+      "type": "string",
+      "readOnly": true,
+      "enum": [
+        "quickbooks",
+        "xero",
+        "freshbooks",
+        "quickbooksDesktop",
+        "sageIntacct",
+        "sageBusinessCloud",
+        "oracleNetsuite",
+        "dynamicsBusinessCentral",
+        "dynamics365Finance",
+        "wave",
+        "zohoBooks",
+        "myob"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "readOnly": true
+    },
+    "createdAt": {
+      "format": "date-time",
+      "type": "string",
+      "readOnly": true
+    },
+    "updatedAt": {
+      "format": "date-time",
+      "type": "string",
+      "readOnly": true
+    }
+  },
+  "required": [
+    "connectionId",
+    "businessName",
+    "serviceName",
+    "status",
+    "createdAt",
+    "updatedAt"
+  ]
+}

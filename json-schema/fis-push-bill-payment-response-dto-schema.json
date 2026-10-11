@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-push-bill-payment-response-dto-schema.json",
+  "title": "PushBillPaymentResponseDto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-bill-api-openapi.yml#/components/schemas/PushBillPaymentResponseDto",
+  "type": "object",
+  "properties": {
+    "pushCommunicationId": {
+      "type": "string",
+      "readOnly": true
+    },
+    "requestedOn": {
+      "type": "string",
+      "readOnly": true,
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "readOnly": true,
+      "enum": [
+        "success",
+        "failed",
+        "pending"
+      ]
+    },
+    "businessName": {
+      "type": "string",
+      "readOnly": true
+    },
+    "serviceName": {
+      "type": "string",
+      "readOnly": true,
+      "enum": [
+        "freshbooks",
+        "quickbooks",
+        "quickbooksDesktop",
+        "xero",
+        "oracleNetsuite",
+        "sageBusinessCloud",
+        "sageIntacct",
+        "dynamicsBusinessCentral",
+        "dynamics365Finance",
+        "wave",
+        "myob",
+        "zohoBooks",
+        "byod"
+      ]
+    },
+    "data": {
+      "readOnly": true,
+      "allOf": [
+        {
+          "$ref": "#/$defs/PushBillPayment"
+        }
+      ]
+    }
+  },
+  "required": [
+    "pushCommunicationId",
+    "requestedOn",
+    "status",
+    "businessName",
+    "serviceName",
+    "data"
+  ],
+  "$defs": {
+    "BillPaymentLine": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "number",
+          "format": "float"
+        },
+        "memo": {
+          "type": "string",
+          "maxLength": 4000
+        },
+        "billRef": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "billRef"
+      ]
+    },
+    "PushBillPayment": {
+      "type": "object",
+      "properties": {
+        "currencyRate": {
+          "type": "number",
+          "format": "float"
+        },
+        "memo": {
+          "type": "string",
+          "maxLength": 4000
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "locationRef": {
+          "type": "string"
+        },
+        "totalAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "trackingCategoryRef": {
+          "type": "string"
+        },
+        "accountRef": {
+          "type": "string"
+        },
+        "vendorRef": {
+          "type": "string"
+        },
+        "billRef": {
+          "type": "string",
+          "deprecated": true
+        },
+        "currency": {
+          "type": "string"
+        },
+        "lines": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/BillPaymentLine"
+          }
+        },
+        "subsidiaryRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

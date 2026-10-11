@@ -1,0 +1,427 @@
+generated: '2026-10-12'
+method: derived
+generator: derive-vocabulary.py
+source:
+- openapi/fis-account-api-openapi.yml
+- openapi/fis-accountcontrollerv2-api-openapi.yml
+- openapi/fis-accountingtransaction-api-openapi.yml
+- openapi/fis-accountingtransactioncontrollerv2-api-openapi.yml
+- openapi/fis-accounts-api-openapi.yml
+vocabulary:
+  name: FIS Global Domain Vocabulary
+  description: 'Terms declared by FIS Global''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions.
+    Derived, not authored.'
+  version: '2026-10-12'
+  terms:
+  - term: Accounts
+    definition: Account information and balance inquiries
+    tags:
+    - Resource Group
+    source: openapi/fis-accounts-api-openapi.yml
+  - term: ACH
+    definition: ACH (Automated Clearing House) payment operations
+    tags:
+    - Resource Group
+    source: openapi/fis-ach-api-openapi.yml
+  - term: Payments
+    definition: Initiate and manage payment transactions
+    tags:
+    - Resource Group
+    source: openapi/fis-payments-api-openapi.yml
+  - term: Transactions
+    definition: Transaction history and status
+    tags:
+    - Resource Group
+    source: openapi/fis-transactions-api-openapi.yml
+  - term: Wire Transfers
+    definition: Domestic and international wire transfer operations
+    tags:
+    - Resource Group
+    source: openapi/fis-wire-transfers-api-openapi.yml
+  - term: Error403Dto
+    definition: 'Object declared by the contract with fields: statusCode, message, error.'
+    tags:
+    - Object
+    source: openapi/fis-account-api-openapi.yml#/components/schemas/Error403Dto
+  - term: Error403ResponseDto
+    definition: 'Object declared by the contract with fields: error, payload.'
+    tags:
+    - Object
+    source: openapi/fis-account-api-openapi.yml#/components/schemas/Error403ResponseDto
+  - term: PushChartOfAccountV1ResponseDto
+    definition: 'Object declared by the contract with fields: pushCommunicationId, requestedOn, status, businessName, serviceName, data.'
+    tags:
+    - Object
+    source: openapi/fis-account-api-openapi.yml#/components/schemas/PushChartOfAccountV1ResponseDto
+  - term: AccountParentRef
+    definition: 'Object declared by the contract with fields: id, name.'
+    tags:
+    - Object
+    source: openapi/fis-account-api-openapi.yml#/components/schemas/AccountParentRef
+  - term: PushChartOfAccountV1
+    definition: 'Object declared by the contract with fields: nominalCode, name, description, type, currency, taxRef, classification, subsidiaryRefs.'
+    tags:
+    - Object
+    source: openapi/fis-account-api-openapi.yml#/components/schemas/PushChartOfAccountV1
+  - term: Error500ResponseDto
+    definition: 'Object declared by the contract with fields: error, payload.'
+    tags:
+    - Object
+    source: openapi/fis-account-api-openapi.yml#/components/schemas/Error500ResponseDto
+  - term: CurrencyRef
+    definition: 'Object declared by the contract with fields: id, name, symbol.'
+    tags:
+    - Object
+    source: openapi/fis-account-api-openapi.yml#/components/schemas/CurrencyRef
+  - term: PaginationMetaData
+    definition: 'Object declared by the contract with fields: offset, limit, count.'
+    tags:
+    - Object
+    source: openapi/fis-account-api-openapi.yml#/components/schemas/PaginationMetaData
+  - term: Error400ResponseDto
+    definition: 'Object declared by the contract with fields: error, payload.'
+    tags:
+    - Object
+    source: openapi/fis-account-api-openapi.yml#/components/schemas/Error400ResponseDto
+  - term: ListReportMetaData
+    definition: 'Object declared by the contract with fields: reportId, serviceName, businessName, createdAt, updatedAt.'
+    tags:
+    - Object
+    source: openapi/fis-account-api-openapi.yml#/components/schemas/ListReportMetaData
+  - term: Error401ResponseDto
+    definition: 'Object declared by the contract with fields: error, payload.'
+    tags:
+    - Object
+    source: openapi/fis-account-api-openapi.yml#/components/schemas/Error401ResponseDto
+  - term: Error500Dto
+    definition: 'Object declared by the contract with fields: error, message, statusCode.'
+    tags:
+    - Object
+    source: openapi/fis-account-api-openapi.yml#/components/schemas/Error500Dto
+  - term: Error401Dto
+    definition: 'Object declared by the contract with fields: statusCode, message, error.'
+    tags:
+    - Object
+    source: openapi/fis-account-api-openapi.yml#/components/schemas/Error401Dto
+  - term: PushChartOfAccountV1Dto
+    definition: 'Object declared by the contract with fields: connection, data.'
+    tags:
+    - Object
+    source: openapi/fis-account-api-openapi.yml#/components/schemas/PushChartOfAccountV1Dto
+  - term: PushConnection
+    definition: 'Object declared by the contract with fields: businessName, serviceName.'
+    tags:
+    - Object
+    source: openapi/fis-account-api-openapi.yml#/components/schemas/PushConnection
+  - term: GetChartOfAccountsDataV1
+    definition: 'Object declared by the contract with fields: id, nominalCode, name, description, group, subGroup, classification, fullyQualifiedName,
+      depth, currentBalance, subType, isBankAccount. (9 more)'
+    tags:
+    - Object
+    source: openapi/fis-account-api-openapi.yml#/components/schemas/GetChartOfAccountsDataV1
+  - term: GetChartOfAccountsResponseV1Dto
+    definition: 'Object declared by the contract with fields: pagination, count, meta, data.'
+    tags:
+    - Object
+    source: openapi/fis-account-api-openapi.yml#/components/schemas/GetChartOfAccountsResponseV1Dto
+  - term: SubsidiaryRef
+    definition: 'Object declared by the contract with fields: id, name.'
+    tags:
+    - Object
+    source: openapi/fis-account-api-openapi.yml#/components/schemas/SubsidiaryRef
+  - term: Error400Dto
+    definition: 'Object declared by the contract with fields: statusCode, message, error.'
+    tags:
+    - Object
+    source: openapi/fis-account-api-openapi.yml#/components/schemas/Error400Dto
+  - term: GetChartOfAccountsDataV2
+    definition: 'Object declared by the contract with fields: id, nominalCode, name, description, group, subGroup, classification, fullyQualifiedName,
+      depth, currentBalance, subType, isBankAccount. (14 more)'
+    tags:
+    - Object
+    source: openapi/fis-accountcontrollerv2-api-openapi.yml#/components/schemas/GetChartOfAccountsDataV2
+  - term: UpdateChartOfAccountIndividualResponseV2Dto
+    definition: 'Object declared by the contract with fields: pushCommunicationId, requestedOn, status, data.'
+    tags:
+    - Object
+    source: openapi/fis-accountcontrollerv2-api-openapi.yml#/components/schemas/UpdateChartOfAccountIndividualResponseV2Dto
+  - term: TaxRateRefDto
+    definition: 'Object declared by the contract with fields: id.'
+    tags:
+    - Object
+    source: openapi/fis-accountcontrollerv2-api-openapi.yml#/components/schemas/TaxRateRefDto
+  - term: BatchPushChartOfAccountV2ResponseDto
+    definition: 'Object declared by the contract with fields: connectionUuid, businessName, serviceName, batchId, batch.'
+    tags:
+    - Object
+    source: openapi/fis-accountcontrollerv2-api-openapi.yml#/components/schemas/BatchPushChartOfAccountV2ResponseDto
+  - term: Error400ResponseDtoV2
+    definition: 'Object declared by the contract with fields: error, payload.'
+    tags:
+    - Object
+    source: openapi/fis-accountcontrollerv2-api-openapi.yml#/components/schemas/Error400ResponseDtoV2
+  - term: PushChartOfAccountV2
+    definition: 'Object declared by the contract with fields: nominalCode, name, description, type, currency, taxRateRef, bankAccountNumber, subType,
+      classification, subsidiaryRefs, parentRef, passThrough.'
+    tags:
+    - Object
+    source: openapi/fis-accountcontrollerv2-api-openapi.yml#/components/schemas/PushChartOfAccountV2
+  - term: BatchUpdateChartOfAccountV2ResponseDto
+    definition: 'Object declared by the contract with fields: connectionUuid, businessName, serviceName, batchId, batch.'
+    tags:
+    - Object
+    source: openapi/fis-accountcontrollerv2-api-openapi.yml#/components/schemas/BatchUpdateChartOfAccountV2ResponseDto
+  - term: Error400DtoV2
+    definition: 'Object declared by the contract with fields: statusCode, message, error.'
+    tags:
+    - Object
+    source: openapi/fis-accountcontrollerv2-api-openapi.yml#/components/schemas/Error400DtoV2
+  - term: PushChartOfAccountV2ResponseDto
+    definition: 'Object declared by the contract with fields: connectionUuid, businessName, serviceName, pushCommunicationId, requestedOn, status,
+      data.'
+    tags:
+    - Object
+    source: openapi/fis-accountcontrollerv2-api-openapi.yml#/components/schemas/PushChartOfAccountV2ResponseDto
+  - term: ListReportMetaDataV2
+    definition: 'Object declared by the contract with fields: connectionUuid, businessName, serviceName, reportId, createdAt, updatedAt.'
+    tags:
+    - Object
+    source: openapi/fis-accountcontrollerv2-api-openapi.yml#/components/schemas/ListReportMetaDataV2
+  - term: BatchUpdateChartOfAccount
+    definition: 'Object declared by the contract with fields: nominalCode, name, description, classification, currency, type, bankAccountNumber,
+      taxRateRef, parentRef, subsidiaryRefs, passThrough, accountRef.'
+    tags:
+    - Object
+    source: openapi/fis-accountcontrollerv2-api-openapi.yml#/components/schemas/BatchUpdateChartOfAccount
+  - term: SubsidiaryRefDto
+    definition: 'Object declared by the contract with fields: id.'
+    tags:
+    - Object
+    source: openapi/fis-accountcontrollerv2-api-openapi.yml#/components/schemas/SubsidiaryRefDto
+  - term: BatchUpdateChartOfAccountV2Dto
+    definition: 'Object declared by the contract with fields: connectionUuid, batch.'
+    tags:
+    - Object
+    source: openapi/fis-accountcontrollerv2-api-openapi.yml#/components/schemas/BatchUpdateChartOfAccountV2Dto
+  - term: PushChartOfAccountV2Dto
+    definition: 'Object declared by the contract with fields: connectionUuid, data.'
+    tags:
+    - Object
+    source: openapi/fis-accountcontrollerv2-api-openapi.yml#/components/schemas/PushChartOfAccountV2Dto
+  - term: TaxRateObjectRefResponse
+    definition: 'Object declared by the contract with fields: id, name.'
+    tags:
+    - Object
+    source: openapi/fis-accountcontrollerv2-api-openapi.yml#/components/schemas/TaxRateObjectRefResponse
+  - term: GetChartOfAccountsV2ResponseDto
+    definition: 'Object declared by the contract with fields: pagination, meta, data.'
+    tags:
+    - Object
+    source: openapi/fis-accountcontrollerv2-api-openapi.yml#/components/schemas/GetChartOfAccountsV2ResponseDto
+  - term: UpdateChartOfAccountV2ResponseDto
+    definition: 'Object declared by the contract with fields: connectionUuid, businessName, serviceName, pushCommunicationId, requestedOn, status,
+      data.'
+    tags:
+    - Object
+    source: openapi/fis-accountcontrollerv2-api-openapi.yml#/components/schemas/UpdateChartOfAccountV2ResponseDto
+  - term: BatchPushChartOfAccountV2Dto
+    definition: 'Object declared by the contract with fields: connectionUuid, batch.'
+    tags:
+    - Object
+    source: openapi/fis-accountcontrollerv2-api-openapi.yml#/components/schemas/BatchPushChartOfAccountV2Dto
+  - term: UpdateChartOfAccountV2Dto
+    definition: 'Object declared by the contract with fields: connectionUuid, data.'
+    tags:
+    - Object
+    source: openapi/fis-accountcontrollerv2-api-openapi.yml#/components/schemas/UpdateChartOfAccountV2Dto
+  - term: UpdateChartOfAccountV2
+    definition: 'Object declared by the contract with fields: nominalCode, name, description, classification, currency, type, bankAccountNumber,
+      taxRateRef, parentRef, subsidiaryRefs, passThrough.'
+    tags:
+    - Object
+    source: openapi/fis-accountcontrollerv2-api-openapi.yml#/components/schemas/UpdateChartOfAccountV2
+  - term: PushChartOfAccountIndividualResponseV2Dto
+    definition: 'Object declared by the contract with fields: pushCommunicationId, requestedOn, status, data.'
+    tags:
+    - Object
+    source: openapi/fis-accountcontrollerv2-api-openapi.yml#/components/schemas/PushChartOfAccountIndividualResponseV2Dto
+  - term: ParentRefDtoV2
+    definition: 'Object declared by the contract with fields: id, name.'
+    tags:
+    - Object
+    source: openapi/fis-accountcontrollerv2-api-openapi.yml#/components/schemas/ParentRefDtoV2
+  - term: TrackingCategoryRef
+    definition: 'Object declared by the contract with fields: id, name, option, optionId.'
+    tags:
+    - Object
+    source: openapi/fis-accountingtransaction-api-openapi.yml#/components/schemas/TrackingCategoryRef
+  - term: AccountingTransactionCurrency
+    definition: 'Object declared by the contract with fields: id, name, symbol.'
+    tags:
+    - Object
+    source: openapi/fis-accountingtransaction-api-openapi.yml#/components/schemas/AccountingTransactionCurrency
+  - term: AccountingTransactionEntityRef
+    definition: 'Object declared by the contract with fields: id, name.'
+    tags:
+    - Object
+    source: openapi/fis-accountingtransaction-api-openapi.yml#/components/schemas/AccountingTransactionEntityRef
+  - term: AccountingTransactionAccountRef
+    definition: 'Object declared by the contract with fields: id, name, section, subSection, group, subGroup.'
+    tags:
+    - Object
+    source: openapi/fis-accountingtransaction-api-openapi.yml#/components/schemas/AccountingTransactionAccountRef
+  - term: AccountingTransactionsReportMetaData
+    definition: 'Object declared by the contract with fields: reportId, serviceName, businessName, startDate, endDate, createdAt, updatedAt.'
+    tags:
+    - Object
+    source: openapi/fis-accountingtransaction-api-openapi.yml#/components/schemas/AccountingTransactionsReportMetaData
+  - term: AccountingTransactionsResponseDto
+    definition: 'Object declared by the contract with fields: pagination, meta, data, count.'
+    tags:
+    - Object
+    source: openapi/fis-accountingtransaction-api-openapi.yml#/components/schemas/AccountingTransactionsResponseDto
+  - term: AccountingTransactionDataV1
+    definition: 'Object declared by the contract with fields: postedDate, type, isReconciled, currencyRate, isSplitTransaction, parentTransactionId,
+      subTotal, taxAmount, totalAmount, memo, sourceModifiedDate, id. (6 more)'
+    tags:
+    - Object
+    source: openapi/fis-accountingtransaction-api-openapi.yml#/components/schemas/AccountingTransactionDataV1
+  - term: AccountingTransactionTrackingCategoryRefV2
+    definition: 'Object declared by the contract with fields: id, name, option, optionId, type.'
+    tags:
+    - Object
+    source: openapi/fis-accountingtransactioncontrollerv2-api-openapi.yml#/components/schemas/AccountingTransactionTrackingCategoryRefV2
+  - term: AccountingTransactionsReportMetaDataV2
+    definition: 'Object declared by the contract with fields: connectionUuid, businessName, serviceName, reportId, startDate, endDate, createdAt,
+      updatedAt.'
+    tags:
+    - Object
+    source: openapi/fis-accountingtransactioncontrollerv2-api-openapi.yml#/components/schemas/AccountingTransactionsReportMetaDataV2
+  - term: AccountingTransactionEntityRefV2
+    definition: 'Object declared by the contract with fields: id, name, type.'
+    tags:
+    - Object
+    source: openapi/fis-accountingtransactioncontrollerv2-api-openapi.yml#/components/schemas/AccountingTransactionEntityRefV2
+  - term: AccountingTransactionsResponseV2Dto
+    definition: 'Object declared by the contract with fields: pagination, meta, data.'
+    tags:
+    - Object
+    source: openapi/fis-accountingtransactioncontrollerv2-api-openapi.yml#/components/schemas/AccountingTransactionsResponseV2Dto
+  - term: AccountingTransactionDataV2
+    definition: 'Object declared by the contract with fields: postedDate, type, isReconciled, currencyRate, isSplitTransaction, parentTransactionId,
+      subTotal, taxAmount, totalAmount, memo, sourceModifiedDate, id. (10 more)'
+    tags:
+    - Object
+    source: openapi/fis-accountingtransactioncontrollerv2-api-openapi.yml#/components/schemas/AccountingTransactionDataV2
+  - term: AccountingTransactionAccountRefV2
+    definition: 'Object declared by the contract with fields: id, name.'
+    tags:
+    - Object
+    source: openapi/fis-accountingtransactioncontrollerv2-api-openapi.yml#/components/schemas/AccountingTransactionAccountRefV2
+  - term: AccountBalance
+    definition: 'Object declared by the contract with fields: accountId, availableBalance, currentBalance, currency, asOf.'
+    tags:
+    - Object
+    source: openapi/fis-accounts-api-openapi.yml#/components/schemas/AccountBalance
+  - term: AccountReference
+    definition: 'Object declared by the contract with fields: accountNumber, routingNumber, accountType, accountHolderName, bankName, swiftCode.'
+    tags:
+    - Object
+    source: openapi/fis-ach-api-openapi.yml#/components/schemas/AccountReference
+  - term: AchBatch
+    definition: 'Object declared by the contract with fields: batchId, status, transactionCount, totalDebits, totalCredits, createdAt.'
+    tags:
+    - Object
+    source: openapi/fis-ach-api-openapi.yml#/components/schemas/AchBatch
+  - term: AchTransferRequest
+    definition: 'Object declared by the contract with fields: amount, entryClassCode, transactionType, debtorAccount, creditorAccount, description,
+      effectiveDate, sameDayAch.'
+    tags:
+    - Object
+    source: openapi/fis-ach-api-openapi.yml#/components/schemas/AchTransferRequest
+  - term: AchBatchRequest
+    definition: 'Object declared by the contract with fields: companyName, companyId, entryClassCode, description, effectiveDate, transactions.'
+    tags:
+    - Object
+    source: openapi/fis-ach-api-openapi.yml#/components/schemas/AchBatchRequest
+  - term: ArAgingDataV1
+    definition: 'Object declared by the contract with fields: customerRef, current, dpd30, dpd60, dpd90, dpd90+, total, currencyRef.'
+    tags:
+    - Object
+    source: openapi/fis-aging-api-openapi.yml#/components/schemas/ArAgingDataV1
+  - term: ArAgingReport
+    definition: 'Object declared by the contract with fields: meta, data.'
+    tags:
+    - Object
+    source: openapi/fis-aging-api-openapi.yml#/components/schemas/ArAgingReport
+  - term: ArAgingCustomerRef
+    definition: 'Object declared by the contract with fields: id, name.'
+    tags:
+    - Object
+    source: openapi/fis-aging-api-openapi.yml#/components/schemas/ArAgingCustomerRef
+  - term: ArAgingResponseDto
+    definition: 'Object declared by the contract with fields: pagination, count, reports.'
+    tags:
+    - Object
+    source: openapi/fis-aging-api-openapi.yml#/components/schemas/ArAgingResponseDto
+  - term: ApAgingReport
+    definition: 'Object declared by the contract with fields: meta, data.'
+    tags:
+    - Object
+    source: openapi/fis-aging-api-openapi.yml#/components/schemas/ApAgingReport
+  - term: ApAgingMetaData
+    definition: 'Object declared by the contract with fields: reportId, serviceName, businessName, startDate, endDate, createdAt, updatedAt, reportFrequency.'
+    tags:
+    - Object
+    source: openapi/fis-aging-api-openapi.yml#/components/schemas/ApAgingMetaData
+  - term: ApArAgingCurrencyRef
+    definition: 'Object declared by the contract with fields: id, name, symbol.'
+    tags:
+    - Object
+    source: openapi/fis-aging-api-openapi.yml#/components/schemas/ApArAgingCurrencyRef
+  - term: ApAgingResponseDto
+    definition: 'Object declared by the contract with fields: pagination, count, reports.'
+    tags:
+    - Object
+    source: openapi/fis-aging-api-openapi.yml#/components/schemas/ApAgingResponseDto
+  - term: ApAgingDataV1
+    definition: 'Object declared by the contract with fields: vendorRef, current, dpd30, dpd60, dpd90, dpd90+, total, currencyRef.'
+    tags:
+    - Object
+    source: openapi/fis-aging-api-openapi.yml#/components/schemas/ApAgingDataV1
+  - term: ArAgingMetaData
+    definition: 'Object declared by the contract with fields: reportId, serviceName, businessName, startDate, endDate, createdAt, updatedAt, reportFrequency.'
+    tags:
+    - Object
+    source: openapi/fis-aging-api-openapi.yml#/components/schemas/ArAgingMetaData
+  - term: ApAgingVendorRef
+    definition: 'Object declared by the contract with fields: id, name.'
+    tags:
+    - Object
+    source: openapi/fis-aging-api-openapi.yml#/components/schemas/ApAgingVendorRef
+  - term: ArAgingResponseV2Dto
+    definition: 'Object declared by the contract with fields: pagination, reports.'
+    tags:
+    - Object
+    source: openapi/fis-agingcontrollerv2-api-openapi.yml#/components/schemas/ArAgingResponseV2Dto
+  - term: ArAgingMetaDataV2
+    definition: 'Object declared by the contract with fields: connectionUuid, businessName, serviceName, reportId, startDate, endDate, createdAt,
+      updatedAt, reportFrequency.'
+    tags:
+    - Object
+    source: openapi/fis-agingcontrollerv2-api-openapi.yml#/components/schemas/ArAgingMetaDataV2
+  - term: ArAgingDataV2
+    definition: 'Object declared by the contract with fields: customerRef, current, dpd30, dpd60, dpd90, dpd90+, total, currency.'
+    tags:
+    - Object
+    source: openapi/fis-agingcontrollerv2-api-openapi.yml#/components/schemas/ArAgingDataV2
+  - term: ApAgingResponseV2Dto
+    definition: 'Object declared by the contract with fields: pagination, reports.'
+    tags:
+    - Object
+    source: openapi/fis-agingcontrollerv2-api-openapi.yml#/components/schemas/ApAgingResponseV2Dto
+  - term: ArAgingCustomerV2Ref
+    definition: 'Object declared by the contract with fields: id, name.'
+    tags:
+    - Object
+    source: openapi/fis-agingcontrollerv2-api-openapi.yml#/components/schemas/ArAgingCustomerV2Ref

@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-get-attachment-v2-response-dto-schema.json",
+  "title": "GetAttachmentV2ResponseDto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-attachmentcontrollerv2-api-openapi.yml#/components/schemas/GetAttachmentV2ResponseDto",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "$ref": "#/$defs/ListReportMetaDataV2"
+    },
+    "pagination": {
+      "$ref": "#/$defs/PaginationMetaData"
+    },
+    "data": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/GetAttachmentV2Data"
+      }
+    }
+  },
+  "required": [
+    "meta",
+    "pagination",
+    "data"
+  ],
+  "$defs": {
+    "AttachmentLinkV2": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "bill",
+            "invoice",
+            "customer",
+            "vendor",
+            "deposit",
+            "journalEntry",
+            "billPayment",
+            "invoicePayment",
+            "expense",
+            "inventory",
+            "purchaseOrder",
+            "invoiceCreditNote",
+            "billCreditNote",
+            "bankTransaction",
+            "bankTransfer",
+            "account"
+          ]
+        },
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "id"
+      ]
+    },
+    "GetAttachmentV2Data": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "fileName": {
+          "type": "string"
+        },
+        "contentType": {
+          "type": "string"
+        },
+        "uploadDate": {
+          "type": "string"
+        },
+        "fileSize": {
+          "type": "number",
+          "format": "float"
+        },
+        "sourceModifiedDate": {
+          "type": "string"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AttachmentLinkV2"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "url"
+      ]
+    },
+    "ListReportMetaDataV2": {
+      "type": "object",
+      "properties": {
+        "connectionUuid": {
+          "type": "string",
+          "readOnly": true
+        },
+        "businessName": {
+          "type": "string",
+          "readOnly": true
+        },
+        "serviceName": {
+          "type": "string",
+          "readOnly": true,
+          "enum": [
+            "freshbooks",
+            "quickbooks",
+            "quickbooksDesktop",
+            "xero",
+            "oracleNetsuite",
+            "sageBusinessCloud",
+            "sageIntacct",
+            "dynamicsBusinessCentral",
+            "dynamics365Finance",
+            "wave",
+            "myob",
+            "zohoBooks",
+            "byod"
+          ]
+        },
+        "reportId": {
+          "readOnly": true,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "readOnly": true,
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": false
+        }
+      },
+      "required": [
+        "connectionUuid",
+        "businessName",
+        "serviceName",
+        "reportId",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "PaginationMetaData": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "type": "number",
+          "readOnly": true
+        },
+        "limit": {
+          "type": "number",
+          "readOnly": true
+        },
+        "count": {
+          "type": "number",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "offset",
+        "limit",
+        "count"
+      ]
+    }
+  }
+}

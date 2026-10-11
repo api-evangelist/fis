@@ -1,0 +1,323 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-get-expense-response-v2-dto-schema.json",
+  "title": "GetExpenseResponseV2Dto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-expensecontrollerv2-api-openapi.yml#/components/schemas/GetExpenseResponseV2Dto",
+  "type": "object",
+  "properties": {
+    "pagination": {
+      "$ref": "#/$defs/PaginationMetaData"
+    },
+    "meta": {
+      "readOnly": true,
+      "allOf": [
+        {
+          "$ref": "#/$defs/BasicStartEndDateReportMetaDataV2"
+        }
+      ]
+    },
+    "data": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/GetExpenseData"
+      }
+    }
+  },
+  "required": [
+    "pagination",
+    "meta",
+    "data"
+  ],
+  "$defs": {
+    "AccountRef": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "AccountRefV2Dto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "BasicStartEndDateReportMetaDataV2": {
+      "type": "object",
+      "properties": {
+        "connectionUuid": {
+          "type": "string",
+          "readOnly": true
+        },
+        "businessName": {
+          "type": "string",
+          "readOnly": true
+        },
+        "serviceName": {
+          "type": "string",
+          "readOnly": true,
+          "enum": [
+            "freshbooks",
+            "quickbooks",
+            "quickbooksDesktop",
+            "xero",
+            "oracleNetsuite",
+            "sageBusinessCloud",
+            "sageIntacct",
+            "dynamicsBusinessCentral",
+            "dynamics365Finance",
+            "wave",
+            "myob",
+            "zohoBooks",
+            "byod"
+          ]
+        },
+        "reportId": {
+          "readOnly": true,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "readOnly": true,
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": false
+        },
+        "startDate": {
+          "type": "string",
+          "readOnly": true,
+          "format": "date-time"
+        },
+        "endDate": {
+          "type": "string",
+          "readOnly": true,
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "connectionUuid",
+        "businessName",
+        "serviceName",
+        "reportId",
+        "createdAt",
+        "updatedAt",
+        "startDate",
+        "endDate"
+      ]
+    },
+    "ExpenseLineItem": {
+      "type": "object",
+      "properties": {
+        "accountRef": {
+          "$ref": "#/$defs/AccountRef"
+        },
+        "description": {
+          "type": "string"
+        },
+        "unitAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "quantity": {
+          "type": "number",
+          "format": "integer"
+        },
+        "taxRateRef": {
+          "$ref": "#/$defs/TaxRateObjectRefResponse"
+        },
+        "taxAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "amount": {
+          "type": "number",
+          "format": "float"
+        },
+        "trackingCategoryRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TrackingCategoryResponse"
+          }
+        }
+      },
+      "required": [
+        "amount"
+      ]
+    },
+    "GetExpenseData": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "vendorRef": {
+          "$ref": "#/$defs/VendorRefDtoV2"
+        },
+        "accountRef": {
+          "$ref": "#/$defs/AccountRefV2Dto"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "totalAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "currencyRate": {
+          "type": "number",
+          "format": "float"
+        },
+        "postedDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "paymentMethod": {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "cash",
+            "check",
+            "creditCard",
+            "debitCard",
+            "bankTransfer",
+            "giftCard",
+            "other"
+          ],
+          "deprecated": true
+        },
+        "paymentMethodRef": {
+          "$ref": "#/$defs/PaymentMethodRefResponse"
+        },
+        "memo": {
+          "type": "string"
+        },
+        "lines": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ExpenseLineItem"
+          }
+        },
+        "sourceModifiedDate": {
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "totalAmount",
+        "postedDate"
+      ]
+    },
+    "PaginationMetaData": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "type": "number",
+          "readOnly": true
+        },
+        "limit": {
+          "type": "number",
+          "readOnly": true
+        },
+        "count": {
+          "type": "number",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "offset",
+        "limit",
+        "count"
+      ]
+    },
+    "PaymentMethodRefResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "cash",
+            "check",
+            "creditCard",
+            "debitCard",
+            "bankTransfer",
+            "giftCard",
+            "other"
+          ]
+        }
+      }
+    },
+    "TaxRateObjectRefResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "TrackingCategoryResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "readOnly": false
+        },
+        "name": {
+          "type": "string",
+          "readOnly": false
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "class",
+            "department",
+            "location",
+            "unknown"
+          ]
+        }
+      }
+    },
+    "VendorRefDtoV2": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

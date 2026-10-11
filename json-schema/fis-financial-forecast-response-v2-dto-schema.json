@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-financial-forecast-response-v2-dto-schema.json",
+  "title": "FinancialForecastResponseV2Dto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-financialforecastcontrollerv2-api-openapi.yml#/components/schemas/FinancialForecastResponseV2Dto",
+  "type": "object",
+  "properties": {
+    "count": {
+      "type": "number",
+      "readOnly": true,
+      "format": "integer"
+    },
+    "reports": {
+      "readOnly": true,
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/FinancialForecastReportV2"
+      }
+    }
+  },
+  "required": [
+    "count",
+    "reports"
+  ],
+  "$defs": {
+    "FinancialForecastDataV2": {
+      "type": "object",
+      "properties": {
+        "section": {
+          "type": "string"
+        },
+        "subSection": {
+          "type": "string"
+        },
+        "group": {
+          "type": "string"
+        },
+        "subGroup": {
+          "type": "string"
+        },
+        "account": {
+          "type": "string"
+        },
+        "subAccount": {
+          "type": "string"
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "value": {
+          "type": "number",
+          "format": "double"
+        }
+      },
+      "required": [
+        "section",
+        "subSection",
+        "group",
+        "subGroup",
+        "endDate",
+        "value"
+      ]
+    },
+    "FinancialForecastMetaDataV2": {
+      "type": "object",
+      "properties": {
+        "connectionUuid": {
+          "type": "string",
+          "readOnly": true
+        },
+        "businessName": {
+          "type": "string",
+          "readOnly": true
+        },
+        "serviceName": {
+          "type": "string",
+          "readOnly": true,
+          "enum": [
+            "freshbooks",
+            "quickbooks",
+            "quickbooksDesktop",
+            "xero",
+            "oracleNetsuite",
+            "sageBusinessCloud",
+            "sageIntacct",
+            "dynamicsBusinessCentral",
+            "dynamics365Finance",
+            "wave",
+            "myob",
+            "zohoBooks",
+            "byod"
+          ]
+        },
+        "reportId": {
+          "type": "string",
+          "readOnly": true
+        },
+        "financialStatementType": {
+          "type": "string",
+          "readOnly": true,
+          "enum": [
+            "balanceSheets",
+            "incomeStatements",
+            "cashflowStatements"
+          ]
+        },
+        "reportFrequency": {
+          "type": "string",
+          "readOnly": true
+        },
+        "startDate": {
+          "type": "string",
+          "readOnly": true
+        },
+        "endDate": {
+          "type": "string",
+          "readOnly": true
+        },
+        "createdAt": {
+          "type": "string",
+          "readOnly": true,
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "readOnly": true,
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "connectionUuid",
+        "businessName",
+        "serviceName",
+        "reportId",
+        "financialStatementType",
+        "reportFrequency",
+        "startDate",
+        "endDate",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "FinancialForecastReportV2": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "#/$defs/FinancialForecastMetaDataV2"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FinancialForecastDataV2"
+          }
+        }
+      },
+      "required": [
+        "meta",
+        "data"
+      ]
+    }
+  }
+}

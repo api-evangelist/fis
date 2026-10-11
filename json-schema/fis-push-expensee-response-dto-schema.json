@@ -1,0 +1,242 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-push-expensee-response-dto-schema.json",
+  "title": "PushExpenseeResponseDto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-expensecontrollerv2-api-openapi.yml#/components/schemas/PushExpenseeResponseDto",
+  "type": "object",
+  "properties": {
+    "connectionUuid": {
+      "type": "string",
+      "readOnly": true
+    },
+    "businessName": {
+      "type": "string",
+      "readOnly": true
+    },
+    "serviceName": {
+      "type": "string",
+      "readOnly": true,
+      "enum": [
+        "freshbooks",
+        "quickbooks",
+        "quickbooksDesktop",
+        "xero",
+        "oracleNetsuite",
+        "sageBusinessCloud",
+        "sageIntacct",
+        "dynamicsBusinessCentral",
+        "dynamics365Finance",
+        "wave",
+        "myob",
+        "zohoBooks",
+        "byod"
+      ]
+    },
+    "pushCommunicationId": {
+      "type": "string",
+      "readOnly": true
+    },
+    "requestedOn": {
+      "type": "string",
+      "readOnly": true,
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "readOnly": true,
+      "enum": [
+        "success",
+        "failed",
+        "pending"
+      ]
+    },
+    "data": {
+      "readOnly": true,
+      "allOf": [
+        {
+          "$ref": "#/$defs/PushExpense"
+        }
+      ]
+    }
+  },
+  "required": [
+    "connectionUuid",
+    "businessName",
+    "serviceName",
+    "pushCommunicationId",
+    "requestedOn",
+    "status",
+    "data"
+  ],
+  "$defs": {
+    "AccountRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "BillTrackingCategoryRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "class",
+            "department",
+            "location",
+            "unknown"
+          ]
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "ExpenseLineDto": {
+      "type": "object",
+      "properties": {
+        "accountRef": {
+          "$ref": "#/$defs/AccountRefDto"
+        },
+        "taxRateRef": {
+          "$ref": "#/$defs/TaxRateRefDto"
+        },
+        "trackingCategoryRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/BillTrackingCategoryRefDto"
+          }
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 4000
+        },
+        "quantity": {
+          "type": "number",
+          "format": "float"
+        },
+        "unitAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "taxAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "amount": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "PaymentMethodRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "cash",
+            "check",
+            "creditCard",
+            "debitCard",
+            "bankTransfer",
+            "giftCard",
+            "other"
+          ]
+        }
+      }
+    },
+    "PushExpense": {
+      "type": "object",
+      "properties": {
+        "passThrough": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "vendorRef": {
+          "$ref": "#/$defs/VendorRefDto"
+        },
+        "accountRef": {
+          "$ref": "#/$defs/AccountRefDto"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "currencyRate": {
+          "type": "number"
+        },
+        "postedDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "paymentMethod": {
+          "type": "string",
+          "deprecated": true,
+          "enum": [
+            "unknown",
+            "cash",
+            "check",
+            "creditCard",
+            "debitCard",
+            "bankTransfer",
+            "giftCard",
+            "other"
+          ]
+        },
+        "paymentMethodRef": {
+          "$ref": "#/$defs/PaymentMethodRefDto"
+        },
+        "memo": {
+          "type": "string",
+          "maxLength": 4000
+        },
+        "lines": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ExpenseLineDto"
+          }
+        }
+      }
+    },
+    "TaxRateRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "VendorRefDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  }
+}

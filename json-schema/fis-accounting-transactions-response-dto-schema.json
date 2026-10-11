@@ -1,0 +1,336 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-accounting-transactions-response-dto-schema.json",
+  "title": "AccountingTransactionsResponseDto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-accountingtransaction-api-openapi.yml#/components/schemas/AccountingTransactionsResponseDto",
+  "type": "object",
+  "properties": {
+    "pagination": {
+      "$ref": "#/$defs/PaginationMetaData"
+    },
+    "meta": {
+      "$ref": "#/$defs/AccountingTransactionsReportMetaData"
+    },
+    "data": {
+      "readOnly": true,
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/AccountingTransactionDataV1"
+      }
+    },
+    "count": {
+      "type": "number",
+      "readOnly": true,
+      "format": "integer"
+    }
+  },
+  "required": [
+    "pagination",
+    "meta",
+    "data",
+    "count"
+  ],
+  "$defs": {
+    "AccountingTransactionAccountRef": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "readOnly": false
+        },
+        "name": {
+          "type": "string",
+          "readOnly": false
+        },
+        "section": {
+          "type": "string",
+          "readOnly": false,
+          "enum": [
+            "Assets",
+            "Expenses",
+            "Income",
+            "Liabilities",
+            "Equity"
+          ]
+        },
+        "subSection": {
+          "type": "string",
+          "readOnly": false,
+          "enum": [
+            "Current Assets",
+            "Non-Current Assets",
+            "Current Liabilities",
+            "Non-Current Liabilities",
+            "Equity",
+            "Income",
+            "Other Income",
+            "Operating Expenses",
+            "Other Expenses",
+            "Cost of Goods Sold"
+          ]
+        },
+        "group": {
+          "type": "string",
+          "readOnly": false
+        },
+        "subGroup": {
+          "type": "string",
+          "readOnly": false
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "AccountingTransactionCurrency": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "A three letter string representing the ISO-4217 code for the currency. For example, USD.",
+          "readOnly": false
+        },
+        "name": {
+          "type": "string",
+          "readOnly": false
+        },
+        "symbol": {
+          "type": "string"
+        }
+      }
+    },
+    "AccountingTransactionDataV1": {
+      "type": "object",
+      "properties": {
+        "postedDate": {
+          "format": "date",
+          "type": "string",
+          "readOnly": false
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "expense",
+            "invoice",
+            "payment",
+            "payroll",
+            "journalEntry",
+            "bill",
+            "vendorCreditNote",
+            "creditNote",
+            "billPayment",
+            "bankTransaction",
+            "transfer",
+            "deposit",
+            "refund",
+            "estimate",
+            "inventoryAdjustment",
+            "purchaseOrder",
+            "taxPayment",
+            "taxAdjustment",
+            "taxRefund",
+            "taxReversal",
+            "other",
+            "unknown"
+          ],
+          "readOnly": false
+        },
+        "isReconciled": {
+          "type": "boolean",
+          "readOnly": false
+        },
+        "currencyRate": {
+          "type": "number",
+          "format": "float",
+          "readOnly": false
+        },
+        "isSplitTransaction": {
+          "type": "boolean",
+          "readOnly": false
+        },
+        "parentTransactionId": {
+          "type": "string",
+          "readOnly": false
+        },
+        "subTotal": {
+          "type": "number",
+          "format": "float",
+          "readOnly": false
+        },
+        "taxAmount": {
+          "type": "number",
+          "format": "float",
+          "readOnly": false
+        },
+        "totalAmount": {
+          "type": "number",
+          "format": "float",
+          "readOnly": false
+        },
+        "memo": {
+          "type": "string",
+          "readOnly": false
+        },
+        "sourceModifiedDate": {
+          "type": "string",
+          "format": "date",
+          "readOnly": false
+        },
+        "id": {
+          "type": "string",
+          "readOnly": false
+        },
+        "isPosting": {
+          "type": "boolean",
+          "readOnly": false
+        },
+        "transactionNumber": {
+          "type": "string",
+          "readOnly": false
+        },
+        "entityRef": {
+          "$ref": "#/$defs/AccountingTransactionEntityRef"
+        },
+        "trackingCategoryRef": {
+          "deprecated": true,
+          "allOf": [
+            {
+              "$ref": "#/$defs/TrackingCategoryRef"
+            }
+          ]
+        },
+        "accountRef": {
+          "$ref": "#/$defs/AccountingTransactionAccountRef"
+        },
+        "currencyRef": {
+          "$ref": "#/$defs/AccountingTransactionCurrency"
+        }
+      },
+      "required": [
+        "postedDate",
+        "type",
+        "isPosting"
+      ]
+    },
+    "AccountingTransactionEntityRef": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "readOnly": false
+        },
+        "name": {
+          "type": "string",
+          "readOnly": false
+        }
+      }
+    },
+    "AccountingTransactionsReportMetaData": {
+      "type": "object",
+      "properties": {
+        "reportId": {
+          "readOnly": true,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "serviceName": {
+          "type": "string",
+          "readOnly": true,
+          "enum": [
+            "quickbooks",
+            "xero",
+            "freshbooks",
+            "quickbooksDesktop",
+            "sageIntacct",
+            "sageBusinessCloud",
+            "oracleNetsuite",
+            "dynamicsBusinessCentral",
+            "dynamics365Finance",
+            "wave",
+            "zohoBooks",
+            "myob"
+          ]
+        },
+        "businessName": {
+          "type": "string",
+          "readOnly": true
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": false
+        }
+      },
+      "required": [
+        "reportId",
+        "serviceName",
+        "businessName",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "PaginationMetaData": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "type": "number",
+          "readOnly": true
+        },
+        "limit": {
+          "type": "number",
+          "readOnly": true
+        },
+        "count": {
+          "type": "number",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "offset",
+        "limit",
+        "count"
+      ]
+    },
+    "TrackingCategoryRef": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "readOnly": false
+        },
+        "name": {
+          "type": "string",
+          "readOnly": false
+        },
+        "option": {
+          "type": "string",
+          "readOnly": false
+        },
+        "optionId": {
+          "type": "string",
+          "readOnly": false
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  }
+}

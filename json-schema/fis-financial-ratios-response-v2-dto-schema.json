@@ -1,0 +1,406 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-financial-ratios-response-v2-dto-schema.json",
+  "title": "FinancialRatiosResponseV2Dto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-financialratiocontrollerv2-api-openapi.yml#/components/schemas/FinancialRatiosResponseV2Dto",
+  "type": "object",
+  "properties": {
+    "count": {
+      "type": "number",
+      "readOnly": true,
+      "format": "integer",
+      "deprecated": true
+    },
+    "pagination": {
+      "$ref": "#/$defs/PaginationMetaData"
+    },
+    "ratios": {
+      "readOnly": true,
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/FinancialRatiosReportV2"
+      }
+    }
+  },
+  "required": [
+    "count",
+    "pagination",
+    "ratios"
+  ],
+  "$defs": {
+    "FinancialRatiosCreditData": {
+      "type": "object",
+      "properties": {
+        "averageCollectionPeriod": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "FinancialRatiosData": {
+      "type": "object",
+      "properties": {
+        "credit": {
+          "$ref": "#/$defs/FinancialRatiosCreditData"
+        },
+        "efficiency": {
+          "$ref": "#/$defs/FinancialRatiosEfficiencyData"
+        },
+        "leverage": {
+          "$ref": "#/$defs/FinancialRatiosLeverageData"
+        },
+        "liquidity": {
+          "$ref": "#/$defs/FinancialRatiosLiquidityData"
+        },
+        "market": {
+          "$ref": "#/$defs/FinancialRatiosMarketData"
+        },
+        "profitability": {
+          "$ref": "#/$defs/FinancialRatiosProfitabilityData"
+        },
+        "reliability": {
+          "$ref": "#/$defs/FinancialRatiosReliabilityData"
+        }
+      }
+    },
+    "FinancialRatiosEfficiencyData": {
+      "type": "object",
+      "properties": {
+        "grossBurnRate": {
+          "type": "number",
+          "format": "float"
+        },
+        "inventoryTurnoverRatio": {
+          "type": "number",
+          "format": "float"
+        },
+        "assetTurnoverRatio": {
+          "type": "number",
+          "format": "float"
+        },
+        "payablesConversionPeriod": {
+          "type": "number",
+          "format": "float"
+        },
+        "accountsReceivableTurnoverRatio": {
+          "type": "number",
+          "format": "float"
+        },
+        "accountsPayableTurnoverRatio": {
+          "type": "number",
+          "format": "float"
+        },
+        "daysPayableOutstanding": {
+          "type": "number",
+          "format": "float"
+        },
+        "daysSalesOutstanding": {
+          "type": "number",
+          "format": "float"
+        },
+        "averageOutstandingPayablesBalance": {
+          "type": "number",
+          "format": "float"
+        },
+        "averageOutstandingReceivablesBalance": {
+          "type": "number",
+          "format": "float"
+        },
+        "churnRate": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "FinancialRatiosLeverageData": {
+      "type": "object",
+      "properties": {
+        "equityToLTAssets": {
+          "type": "number",
+          "format": "float"
+        },
+        "shortDebtToEquityRatio": {
+          "type": "number",
+          "format": "float"
+        },
+        "debtToEquityRatio": {
+          "type": "number",
+          "format": "float"
+        },
+        "interestBankLoan": {
+          "type": "number",
+          "format": "float"
+        },
+        "interestCoverageRatio": {
+          "type": "number",
+          "format": "float"
+        },
+        "debtToAssetsRatio": {
+          "type": "number",
+          "format": "float"
+        },
+        "debtServiceCoverageRatio": {
+          "type": "number",
+          "format": "float"
+        },
+        "leverageIndex": {
+          "type": "number",
+          "format": "float"
+        },
+        "leverageRatio": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "FinancialRatiosLiquidityData": {
+      "type": "object",
+      "properties": {
+        "quickRatio": {
+          "type": "number",
+          "format": "float"
+        },
+        "absoluteLiquidity": {
+          "type": "number",
+          "format": "float"
+        },
+        "currentRatio": {
+          "type": "number",
+          "format": "float"
+        },
+        "grossBurn": {
+          "type": "number",
+          "format": "float"
+        },
+        "runway": {
+          "type": "number",
+          "format": "float"
+        },
+        "cashRatio": {
+          "type": "number",
+          "format": "float"
+        },
+        "freeCashflowRatio": {
+          "type": "number",
+          "format": "float"
+        },
+        "cashFlowCoverageRatio": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "FinancialRatiosMarketData": {
+      "type": "object",
+      "properties": {
+        "debtToEnterpriseValue": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "FinancialRatiosMetaDataV2": {
+      "type": "object",
+      "properties": {
+        "connectionUuid": {
+          "type": "string",
+          "readOnly": true
+        },
+        "businessName": {
+          "type": "string",
+          "readOnly": true
+        },
+        "serviceName": {
+          "type": "string",
+          "readOnly": true,
+          "enum": [
+            "freshbooks",
+            "quickbooks",
+            "quickbooksDesktop",
+            "xero",
+            "oracleNetsuite",
+            "sageBusinessCloud",
+            "sageIntacct",
+            "dynamicsBusinessCentral",
+            "dynamics365Finance",
+            "wave",
+            "myob",
+            "zohoBooks",
+            "byod"
+          ]
+        },
+        "reportId": {
+          "type": "string",
+          "readOnly": true
+        },
+        "startDate": {
+          "type": "string",
+          "readOnly": true
+        },
+        "endDate": {
+          "type": "string",
+          "readOnly": true
+        },
+        "reportFrequency": {
+          "type": "string",
+          "readOnly": true
+        },
+        "createdAt": {
+          "type": "string",
+          "readOnly": true,
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "readOnly": true,
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "connectionUuid",
+        "businessName",
+        "serviceName",
+        "reportId",
+        "startDate",
+        "endDate",
+        "reportFrequency",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "FinancialRatiosProfitabilityData": {
+      "type": "object",
+      "properties": {
+        "returnOnAssets": {
+          "type": "number",
+          "format": "float"
+        },
+        "ebitda": {
+          "type": "number",
+          "format": "float"
+        },
+        "ebitdaMargin": {
+          "type": "number",
+          "format": "float"
+        },
+        "workingCapital": {
+          "type": "number",
+          "format": "float"
+        },
+        "freeCashFlow": {
+          "type": "number",
+          "format": "float"
+        },
+        "grossMargin": {
+          "type": "number",
+          "format": "float"
+        },
+        "netProfitMargin": {
+          "type": "number",
+          "format": "float"
+        },
+        "operatingMargin": {
+          "type": "number",
+          "format": "float"
+        },
+        "returnOnEquity": {
+          "type": "number",
+          "format": "float"
+        },
+        "revenueConcentrationIndex": {
+          "type": "number",
+          "format": "float"
+        },
+        "totalAccrualsTotalAssets": {
+          "type": "number",
+          "format": "float"
+        },
+        "sgaExpensesIndex": {
+          "type": "number",
+          "format": "float"
+        },
+        "salesGrowthIndex": {
+          "type": "number",
+          "format": "float"
+        },
+        "grossMarginIndex": {
+          "type": "number",
+          "format": "float"
+        },
+        "annualRecurringRevenue": {
+          "type": "number",
+          "format": "float"
+        },
+        "annualRecurringRevenueRate": {
+          "type": "number",
+          "format": "float"
+        },
+        "monthlyRecurringRevenue": {
+          "type": "number",
+          "format": "float"
+        },
+        "monthlyRecurringRevenueRate": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "FinancialRatiosReliabilityData": {
+      "type": "object",
+      "properties": {
+        "assetQualityIndex": {
+          "type": "number",
+          "format": "float"
+        },
+        "depreciationIndex": {
+          "type": "number",
+          "format": "float"
+        },
+        "daysSalesReceivablesIndex": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "FinancialRatiosReportV2": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "#/$defs/FinancialRatiosMetaDataV2"
+        },
+        "data": {
+          "$ref": "#/$defs/FinancialRatiosData"
+        }
+      },
+      "required": [
+        "meta",
+        "data"
+      ]
+    },
+    "PaginationMetaData": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "type": "number",
+          "readOnly": true
+        },
+        "limit": {
+          "type": "number",
+          "readOnly": true
+        },
+        "count": {
+          "type": "number",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "offset",
+        "limit",
+        "count"
+      ]
+    }
+  }
+}

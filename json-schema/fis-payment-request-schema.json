@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-payment-request-schema.json",
+  "title": "PaymentRequest",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-payments-api-openapi.yml#/components/schemas/PaymentRequest",
+  "type": "object",
+  "required": [
+    "amount",
+    "currency",
+    "paymentMethod",
+    "debtorAccount",
+    "creditorAccount"
+  ],
+  "properties": {
+    "amount": {
+      "type": "number",
+      "format": "double",
+      "minimum": 0.01,
+      "description": "Payment amount"
+    },
+    "currency": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 3,
+      "description": "ISO 4217 currency code (e.g., \"USD\")"
+    },
+    "paymentMethod": {
+      "type": "string",
+      "enum": [
+        "ACH",
+        "WIRE",
+        "RTP",
+        "FEDNOW",
+        "CARD"
+      ],
+      "description": "Payment rail to use"
+    },
+    "debtorAccount": {
+      "$ref": "#/$defs/AccountReference"
+    },
+    "creditorAccount": {
+      "$ref": "#/$defs/AccountReference"
+    },
+    "remittanceInfo": {
+      "type": "string",
+      "maxLength": 140,
+      "description": "Payment reference or memo"
+    },
+    "executionDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Requested execution date (defaults to next business day)"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "NORMAL",
+        "HIGH",
+        "SAME_DAY"
+      ]
+    }
+  },
+  "$defs": {
+    "AccountReference": {
+      "type": "object",
+      "required": [
+        "accountNumber",
+        "routingNumber"
+      ],
+      "properties": {
+        "accountNumber": {
+          "type": "string",
+          "description": "Bank account number"
+        },
+        "routingNumber": {
+          "type": "string",
+          "pattern": "^\\d{9}$",
+          "description": "ABA routing transit number (9 digits)"
+        },
+        "accountType": {
+          "type": "string",
+          "enum": [
+            "CHECKING",
+            "SAVINGS",
+            "LOAN"
+          ]
+        },
+        "accountHolderName": {
+          "type": "string"
+        },
+        "bankName": {
+          "type": "string"
+        },
+        "swiftCode": {
+          "type": "string",
+          "description": "SWIFT/BIC code for international wires"
+        }
+      }
+    }
+  }
+}

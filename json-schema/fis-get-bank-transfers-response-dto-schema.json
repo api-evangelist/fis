@@ -1,0 +1,218 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-get-bank-transfers-response-dto-schema.json",
+  "title": "GetBankTransfersResponseDto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-bank-api-openapi.yml#/components/schemas/GetBankTransfersResponseDto",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "$ref": "#/$defs/BankTransfersReportMetaData"
+    },
+    "count": {
+      "type": "integer",
+      "deprecated": true
+    },
+    "pagination": {
+      "$ref": "#/$defs/PaginationMetaData"
+    },
+    "data": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/GetBankTransferDataV1"
+      }
+    }
+  },
+  "required": [
+    "meta",
+    "count",
+    "pagination",
+    "data"
+  ],
+  "$defs": {
+    "BankTransferFromAccountRef": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "BankTransferToAccountRef": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "BankTransfersReportMetaData": {
+      "type": "object",
+      "properties": {
+        "reportId": {
+          "readOnly": true,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "serviceName": {
+          "type": "string",
+          "readOnly": true,
+          "enum": [
+            "freshbooks",
+            "quickbooks",
+            "quickbooksDesktop",
+            "xero",
+            "oracleNetsuite",
+            "sageBusinessCloud",
+            "sageIntacct",
+            "dynamicsBusinessCentral",
+            "dynamics365Finance",
+            "wave",
+            "myob",
+            "zohoBooks",
+            "byod"
+          ]
+        },
+        "businessName": {
+          "type": "string",
+          "readOnly": true
+        },
+        "startDate": {
+          "type": "string",
+          "readOnly": true,
+          "format": "date-time"
+        },
+        "endDate": {
+          "type": "string",
+          "readOnly": true,
+          "format": "date-time"
+        },
+        "createdAt": {
+          "type": "string",
+          "readOnly": true,
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": false
+        }
+      },
+      "required": [
+        "reportId",
+        "serviceName",
+        "businessName",
+        "startDate",
+        "endDate",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "CurrencyRef": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "symbol": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "GetBankTransferDataV1": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "currencyRate": {
+          "type": "number",
+          "format": "float"
+        },
+        "totalAmount": {
+          "type": "number",
+          "format": "float"
+        },
+        "fromAccountRef": {
+          "$ref": "#/$defs/BankTransferFromAccountRef"
+        },
+        "toAccountRef": {
+          "$ref": "#/$defs/BankTransferToAccountRef"
+        },
+        "fromBankTransactionId": {
+          "type": "string"
+        },
+        "toBankTransactionId": {
+          "type": "string"
+        },
+        "memo": {
+          "type": "string"
+        },
+        "sourceModifiedDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "currencyRef": {
+          "$ref": "#/$defs/CurrencyRef"
+        }
+      },
+      "required": [
+        "id",
+        "date",
+        "totalAmount",
+        "fromAccountRef",
+        "toAccountRef",
+        "fromBankTransactionId",
+        "toBankTransactionId"
+      ]
+    },
+    "PaginationMetaData": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "type": "number",
+          "readOnly": true
+        },
+        "limit": {
+          "type": "number",
+          "readOnly": true
+        },
+        "count": {
+          "type": "number",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "offset",
+        "limit",
+        "count"
+      ]
+    }
+  }
+}

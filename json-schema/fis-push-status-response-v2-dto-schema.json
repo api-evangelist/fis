@@ -1,0 +1,237 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fis/main/json-schema/fis-push-status-response-v2-dto-schema.json",
+  "title": "PushStatusResponseV2Dto",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fis-datacontrollerv2-api-openapi.yml#/components/schemas/PushStatusResponseV2Dto",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "$ref": "#/$defs/PushStatusMetaDataV2"
+    },
+    "pagination": {
+      "$ref": "#/$defs/PaginationMetaData"
+    },
+    "data": {
+      "readOnly": true,
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/PushStatusDataV2"
+      }
+    }
+  },
+  "required": [
+    "meta",
+    "pagination",
+    "data"
+  ],
+  "$defs": {
+    "Error": {
+      "type": "object",
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "ObjectId": {
+      "type": "object",
+      "properties": {}
+    },
+    "PaginationMetaData": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "type": "number",
+          "readOnly": true
+        },
+        "limit": {
+          "type": "number",
+          "readOnly": true
+        },
+        "count": {
+          "type": "number",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "offset",
+        "limit",
+        "count"
+      ]
+    },
+    "PushByodFileStatusData": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "readOnly": true,
+          "format": "uri"
+        },
+        "name": {
+          "type": "string",
+          "readOnly": true
+        },
+        "status": {
+          "type": "string",
+          "readOnly": true,
+          "enum": [
+            "success",
+            "failed",
+            "pending"
+          ]
+        }
+      },
+      "required": [
+        "path",
+        "name",
+        "status"
+      ]
+    },
+    "PushStatusDataV2": {
+      "type": "object",
+      "properties": {
+        "serviceName": {
+          "type": "string",
+          "readOnly": true,
+          "enum": [
+            "quickbooks",
+            "xero",
+            "freshbooks",
+            "quickbooksDesktop",
+            "sageIntacct",
+            "sageBusinessCloud",
+            "oracleNetsuite",
+            "dynamicsBusinessCentral",
+            "dynamics365Finance",
+            "wave",
+            "zohoBooks",
+            "myob"
+          ]
+        },
+        "dataType": {
+          "type": "string",
+          "readOnly": true
+        },
+        "requestedOn": {
+          "format": "date-time",
+          "type": "string",
+          "readOnly": true
+        },
+        "completedOn": {
+          "format": "date-time",
+          "type": "string",
+          "readOnly": true
+        },
+        "status": {
+          "type": "string",
+          "readOnly": true,
+          "enum": [
+            "success",
+            "failed",
+            "pending"
+          ]
+        },
+        "responseCode": {
+          "type": "number",
+          "readOnly": true,
+          "format": "integer"
+        },
+        "validation": {
+          "$ref": "#/$defs/Validation"
+        },
+        "pushCommunicationId": {
+          "type": "string",
+          "readOnly": true
+        },
+        "batchId": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/ObjectId"
+            }
+          ]
+        },
+        "sourceObjectIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PushByodFileStatusData"
+          }
+        }
+      },
+      "required": [
+        "serviceName",
+        "dataType",
+        "requestedOn",
+        "completedOn",
+        "status",
+        "responseCode",
+        "pushCommunicationId"
+      ]
+    },
+    "PushStatusMetaDataV2": {
+      "type": "object",
+      "properties": {
+        "connectionUuid": {
+          "type": "string",
+          "readOnly": true
+        },
+        "businessName": {
+          "type": "string",
+          "readOnly": true
+        },
+        "serviceName": {
+          "type": "string",
+          "readOnly": true,
+          "enum": [
+            "freshbooks",
+            "quickbooks",
+            "quickbooksDesktop",
+            "xero",
+            "oracleNetsuite",
+            "sageBusinessCloud",
+            "sageIntacct",
+            "dynamicsBusinessCentral",
+            "dynamics365Finance",
+            "wave",
+            "myob",
+            "zohoBooks",
+            "byod"
+          ]
+        },
+        "count": {
+          "type": "number",
+          "readOnly": true,
+          "format": "integer"
+        }
+      },
+      "required": [
+        "connectionUuid",
+        "businessName",
+        "serviceName",
+        "count"
+      ]
+    },
+    "Validation": {
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Error"
+          }
+        }
+      }
+    }
+  }
+}
