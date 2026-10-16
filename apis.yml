@@ -47,6 +47,8 @@ image: https://codeconnect.fisglobal.com/assets/FIS_codeConnect_logo_white.svg
 created: '2026-04-28'
 modified: '2026-09-10'
 common:
+- type: OAuthScopes
+  url: scopes/fis-scopes.yml
 - type: Spectral
   url: rules/fis-rules.yml
 - type: Spectral
