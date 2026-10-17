@@ -171,8 +171,10 @@ apis:
     type: Portal
   - url: https://codeconnect.fisglobal.com/
     type: Documentation
-  description: FIS (Fidelity National Information Services) provides core banking platforms including the Systematics suite. APIs bridge mainframe-based
-    account processing, transaction management, and loan servicing systems to modern integration layers via SOAP and REST interfaces.
+  description: >-
+    FIS (Fidelity National Information Services) provides core banking platforms including the Systematics
+    suite. APIs bridge mainframe-based account processing, transaction management, and loan servicing
+    systems to modern integration layers via SOAP and REST interfaces.
 - aid: fis:fis-wealth-management-api
   name: FIS Wealth Management API
   tags:
@@ -193,8 +195,9 @@ apis:
     type: Portal
   - url: https://codeconnect.fisglobal.com/
     type: Documentation
-  description: FIS wealth management APIs enable integration with portfolio management, account aggregation, trading, and advisory systems for
-    wealth management platforms and financial advisors.
+  description: >-
+    FIS wealth management APIs enable integration with portfolio management, account aggregation, trading,
+    and advisory systems for wealth management platforms and financial advisors.
 - aid: fis:fis-accounts-api
   name: FIS Global Accounts API
   description: Account information and balance inquiries
@@ -291,8 +294,10 @@ apis:
     url: json-schema/fis-wire-transfer-schema.json
 - aid: fidelity-national-information:code-connect
   name: FIS Code Connect API Marketplace
-  description: FIS Code Connect is the developer marketplace exposing FIS APIs across payments, banking, capital markets, and wealth management
-    products. Access to most APIs requires a partner agreement and authenticated developer credentials.
+  description: >-
+    FIS Code Connect is the developer marketplace exposing FIS APIs across payments, banking, capital
+    markets, and wealth management products. Access to most APIs requires a partner agreement and authenticated
+    developer credentials.
   humanURL: https://codeconnect.fisglobal.com/
   tags:
   - API Marketplace
@@ -358,7 +363,8 @@ apis:
     url: json-schema/fis-batch-push-chart-of-account-v2-dto-schema.json
 - aid: fis:fis-accountingtransaction-api
   name: FIS Global Accounting Transaction API
-  description: The AccountingTransaction API from FIS Global — 1 operation(s) for accountingtransaction.
+  description: >-
+    The AccountingTransaction API from FIS Global — 1 operation(s) for accountingtransaction.
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
@@ -378,7 +384,8 @@ apis:
     url: json-schema/fis-accounting-transactions-response-dto-schema.json
 - aid: fis:fis-accountingtransactioncontrollerv2-api
   name: FIS Global Accounting Transaction Controller V2 API
-  description: The AccountingTransactionControllerV2 API from FIS Global — 1 operation(s) for accountingtransactioncontrollerv2.
+  description: >-
+    The AccountingTransactionControllerV2 API from FIS Global — 1 operation(s) for accountingtransactioncontrollerv2.
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
@@ -466,7 +473,8 @@ apis:
     url: json-schema/fis-get-attachment-response-v1-dto-schema.json
 - aid: fis:fis-attachmentcontrollerv2-api
   name: FIS Global Attachment Controller V2 API
-  description: The AttachmentControllerV2 API from FIS Global — 1 operation(s) for attachmentcontrollerv2.
+  description: >-
+    The AttachmentControllerV2 API from FIS Global — 1 operation(s) for attachmentcontrollerv2.
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
@@ -684,7 +692,8 @@ apis:
     url: json-schema/fis-business-valuation-response-dto-schema.json
 - aid: fis:fis-businessvaluationcontrollerv2-api
   name: FIS Global Business Valuation Controller V2 API
-  description: The BusinessValuationControllerV2 API from FIS Global — 1 operation(s) for businessvaluationcontrollerv2.
+  description: >-
+    The BusinessValuationControllerV2 API from FIS Global — 1 operation(s) for businessvaluationcontrollerv2.
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
@@ -728,7 +737,8 @@ apis:
     url: json-schema/fis-disable-connection-dto-schema.json
 - aid: fis:fis-connectioncontrollerv2-api
   name: FIS Global Connection Controller V2 API
-  description: The ConnectionControllerV2 API from FIS Global — 2 operation(s) for connectioncontrollerv2.
+  description: >-
+    The ConnectionControllerV2 API from FIS Global — 2 operation(s) for connectioncontrollerv2.
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
@@ -1114,7 +1124,8 @@ apis:
     url: json-schema/fis-push-file-upload-dto-schema.json
 - aid: fis:fis-financialbenchmarking-api
   name: FIS Global Financial Benchmarking API
-  description: The FinancialBenchmarking API from FIS Global — 1 operation(s) for financialbenchmarking.
+  description: >-
+    The FinancialBenchmarking API from FIS Global — 1 operation(s) for financialbenchmarking.
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
@@ -1134,7 +1145,8 @@ apis:
     url: json-schema/fis-financial-benchmarkings-response-dto-schema.json
 - aid: fis:fis-financialbenchmarkingcontrollerv2-api
   name: FIS Global Financial Benchmarking Controller V2 API
-  description: The FinancialBenchmarkingControllerV2 API from FIS Global — 1 operation(s) for financialbenchmarkingcontrollerv2.
+  description: >-
+    The FinancialBenchmarkingControllerV2 API from FIS Global — 1 operation(s) for financialbenchmarkingcontrollerv2.
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
@@ -1176,7 +1188,8 @@ apis:
     url: json-schema/fis-financial-forecast-response-v1-dto-schema.json
 - aid: fis:fis-financialforecastcontrollerv2-api
   name: FIS Global Financial Forecast Controller V2 API
-  description: The FinancialForecastControllerV2 API from FIS Global — 1 operation(s) for financialforecastcontrollerv2.
+  description: >-
+    The FinancialForecastControllerV2 API from FIS Global — 1 operation(s) for financialforecastcontrollerv2.
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
@@ -1216,7 +1229,8 @@ apis:
     url: json-schema/fis-financial-fraud-risk-response-dto-schema.json
 - aid: fis:fis-financialfraudriskcontrollerv2-api
   name: FIS Global Financial Fraud Risk Controller V2 API
-  description: The FinancialFraudRiskControllerV2 API from FIS Global — 1 operation(s) for financialfraudriskcontrollerv2.
+  description: >-
+    The FinancialFraudRiskControllerV2 API from FIS Global — 1 operation(s) for financialfraudriskcontrollerv2.
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
@@ -1256,7 +1270,8 @@ apis:
     url: json-schema/fis-financial-ratios-response-dto-schema.json
 - aid: fis:fis-financialratiocontrollerv2-api
   name: FIS Global Financial Ratio Controller V2 API
-  description: The FinancialRatioControllerV2 API from FIS Global — 1 operation(s) for financialratiocontrollerv2.
+  description: >-
+    The FinancialRatioControllerV2 API from FIS Global — 1 operation(s) for financialratiocontrollerv2.
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
@@ -1298,7 +1313,8 @@ apis:
     url: json-schema/fis-income-statements-response-dto-schema.json
 - aid: fis:fis-financialstatementcontrollerv2-api
   name: FIS Global Financial Statement Controller V2 API
-  description: The FinancialStatementControllerV2 API from FIS Global — 6 operation(s) for financialstatementcontrollerv2.
+  description: >-
+    The FinancialStatementControllerV2 API from FIS Global — 6 operation(s) for financialstatementcontrollerv2.
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
@@ -1334,7 +1350,8 @@ apis:
     url: asyncapi/fis-webhooks.yml
 - aid: fis:fis-inventorycontrollerv2-api
   name: FIS Global Inventory Controller V2 API
-  description: The InventoryControllerV2 API from FIS Global — 2 operation(s) for inventorycontrollerv2.
+  description: >-
+    The InventoryControllerV2 API from FIS Global — 2 operation(s) for inventorycontrollerv2.
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
@@ -1464,7 +1481,8 @@ apis:
     url: asyncapi/fis-webhooks.yml
 - aid: fis:fis-paymentmethodcontrollerv2-api
   name: FIS Global Payment Method Controller V2 API
-  description: The PaymentMethodControllerV2 API from FIS Global — 1 operation(s) for paymentmethodcontrollerv2.
+  description: >-
+    The PaymentMethodControllerV2 API from FIS Global — 1 operation(s) for paymentmethodcontrollerv2.
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
@@ -1518,7 +1536,8 @@ apis:
     url: asyncapi/fis-webhooks.yml
 - aid: fis:fis-portfoliometricscontrollerv2-api
   name: FIS Global Portfolio Metrics Controller V2 API
-  description: The PortfolioMetricsControllerV2 API from FIS Global — 1 operation(s) for portfoliometricscontrollerv2.
+  description: >-
+    The PortfolioMetricsControllerV2 API from FIS Global — 1 operation(s) for portfoliometricscontrollerv2.
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
@@ -1556,7 +1575,8 @@ apis:
     url: asyncapi/fis-webhooks.yml
 - aid: fis:fis-probabilityofdefaultcontrollerv2-api
   name: FIS Global Probability Of Default Controller V2 API
-  description: The ProbabilityOfDefaultControllerV2 API from FIS Global — 1 operation(s) for probabilityofdefaultcontrollerv2.
+  description: >-
+    The ProbabilityOfDefaultControllerV2 API from FIS Global — 1 operation(s) for probabilityofdefaultcontrollerv2.
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
@@ -1610,7 +1630,8 @@ apis:
     url: asyncapi/fis-webhooks.yml
 - aid: fis:fis-purchaseordercontrollerv2-api
   name: FIS Global Purchase Order Controller V2 API
-  description: The PurchaseOrderControllerV2 API from FIS Global — 1 operation(s) for purchaseordercontrollerv2.
+  description: >-
+    The PurchaseOrderControllerV2 API from FIS Global — 1 operation(s) for purchaseordercontrollerv2.
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
@@ -1700,7 +1721,8 @@ apis:
     url: asyncapi/fis-webhooks.yml
 - aid: fis:fis-taxbenchmarkingcontrollerv2-api
   name: FIS Global Tax Benchmarking Controller V2 API
-  description: The TaxBenchmarkingControllerV2 API from FIS Global — 1 operation(s) for taxbenchmarkingcontrollerv2.
+  description: >-
+    The TaxBenchmarkingControllerV2 API from FIS Global — 1 operation(s) for taxbenchmarkingcontrollerv2.
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
@@ -1754,7 +1776,8 @@ apis:
     url: asyncapi/fis-webhooks.yml
 - aid: fis:fis-trackingcategorycontrollerv2-api
   name: FIS Global Tracking Category Controller V2 API
-  description: The TrackingCategoryControllerV2 API from FIS Global — 1 operation(s) for trackingcategorycontrollerv2.
+  description: >-
+    The TrackingCategoryControllerV2 API from FIS Global — 1 operation(s) for trackingcategorycontrollerv2.
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
@@ -1790,7 +1813,8 @@ apis:
     url: asyncapi/fis-webhooks.yml
 - aid: fis:fis-transactioncontrollerv2-api
   name: FIS Global Transaction Controller V2 API
-  description: The TransactionControllerV2 API from FIS Global — 1 operation(s) for transactioncontrollerv2.
+  description: >-
+    The TransactionControllerV2 API from FIS Global — 1 operation(s) for transactioncontrollerv2.
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:
@@ -1826,7 +1850,8 @@ apis:
     url: asyncapi/fis-webhooks.yml
 - aid: fis:fis-trialbalancecontrollerv2-api
   name: FIS Global Trial Balance Controller V2 API
-  description: The TrialBalanceControllerV2 API from FIS Global — 1 operation(s) for trialbalancecontrollerv2.
+  description: >-
+    The TrialBalanceControllerV2 API from FIS Global — 1 operation(s) for trialbalancecontrollerv2.
   humanURL: https://codeconnect.fisglobal.com/
   baseURL: https://api.fisglobal.com
   tags:

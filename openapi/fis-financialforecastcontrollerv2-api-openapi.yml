@@ -116,77 +116,98 @@ paths:
       - FinancialForecastControllerV2
 components:
   schemas:
-    Error403Dto:
+    Error401Dto:
       type: object
       properties:
         statusCode:
           type: number
           readOnly: true
-          example: 403
+          example: 401
         message:
           readOnly: true
           example:
-          - Forbidden resource
+          - Unauthorized
           type: array
           items:
             type: string
         error:
           type: string
           readOnly: true
-          example: Forbidden
+          example: Unauthorized
       required:
       - statusCode
       - message
       - error
-    Error500ResponseDto:
+    Error400ResponseDtoV2:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error500Dto'
+          - $ref: '#/components/schemas/Error400DtoV2'
         payload:
           type: object
           readOnly: true
       required:
       - error
       - payload
-    Error401ResponseDto:
+    Error400DtoV2:
       type: object
       properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
         statusCode:
           type: number
           readOnly: true
-          example: 500
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
       required:
-      - error
-      - message
       - statusCode
+      - message
+      - error
+    FinancialForecastDataV2:
+      type: object
+      properties:
+        section:
+          type: string
+          example: Assets
+        subSection:
+          type: string
+          example: Current Assets
+        group:
+          type: string
+          example: Cash And Cash Equivalents
+        subGroup:
+          type: string
+          example: Checking
+        account:
+          type: string
+          example: Bank of America
+        subAccount:
+          type: string
+        endDate:
+          type: string
+          example: '2022-03-31'
+          format: date
+        value:
+          type: number
+          example: 1500000.5
+          format: double
+      required:
+      - section
+      - subSection
+      - group
+      - subGroup
+      - endDate
+      - value
     FinancialForecastMetaDataV2:
       type: object
       properties:
@@ -261,41 +282,6 @@ components:
       - endDate
       - createdAt
       - updatedAt
-    Error400ResponseDtoV2:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
     FinancialForecastResponseV2Dto:
       type: object
       properties:
@@ -312,6 +298,20 @@ components:
       required:
       - count
       - reports
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
     Error403ResponseDto:
       type: object
       properties:
@@ -326,63 +326,41 @@ components:
       required:
       - error
       - payload
-    Error400DtoV2:
+    Error403Dto:
       type: object
       properties:
         statusCode:
           type: number
           readOnly: true
-          example: 400
+          example: 403
         message:
           readOnly: true
           example:
-          - connectionUuid should not be empty
+          - Forbidden resource
           type: array
           items:
             type: string
         error:
           type: string
           readOnly: true
-          example: Bad Request
+          example: Forbidden
       required:
       - statusCode
       - message
       - error
-    FinancialForecastDataV2:
+    Error500ResponseDto:
       type: object
       properties:
-        section:
-          type: string
-          example: Assets
-        subSection:
-          type: string
-          example: Current Assets
-        group:
-          type: string
-          example: Cash And Cash Equivalents
-        subGroup:
-          type: string
-          example: Checking
-        account:
-          type: string
-          example: Bank of America
-        subAccount:
-          type: string
-        endDate:
-          type: string
-          example: '2022-03-31'
-          format: date
-        value:
-          type: number
-          example: 1500000.5
-          format: double
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
       required:
-      - section
-      - subSection
-      - group
-      - subGroup
-      - endDate
-      - value
+      - error
+      - payload
     FinancialForecastReportV2:
       type: object
       properties:
@@ -395,6 +373,28 @@ components:
       required:
       - meta
       - data
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
   securitySchemes:
     bearer:
       scheme: bearer

@@ -94,6 +94,67 @@ paths:
       - PortfolioMetricsControllerV2
 components:
   schemas:
+    PortfolioMetricsResponseDto:
+      type: object
+      properties:
+        count:
+          type: number
+          readOnly: true
+          format: integer
+          example: 1
+        reports:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/PortfolioMetricsReport'
+      required:
+      - count
+      - reports
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    PortfolioMetricsReport:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/PortfolioMetricsReportMetaData'
+        data:
+          $ref: '#/components/schemas/PortfolioMetricsReportData'
+      required:
+      - meta
+      - data
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
     SummaryStatisticsData:
       type: object
       properties:
@@ -143,22 +204,83 @@ components:
       - quantile25**
       - quantile75**
       - quantile95**
-    PortfolioMetricsResponseDto:
+    PortfolioMetricsReportMetaData:
       type: object
       properties:
-        count:
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-01T01:02:03Z'
+          format: date-time
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+        reportFrequency:
+          type: string
+          readOnly: true
+          example: month
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+      required:
+      - startDate
+      - endDate
+      - reportFrequency
+      - createdAt
+    Error400DtoV2:
+      type: object
+      properties:
+        statusCode:
           type: number
           readOnly: true
-          format: integer
-          example: 1
-        reports:
+          example: 400
+        message:
           readOnly: true
+          example:
+          - connectionUuid should not be empty
           type: array
           items:
-            $ref: '#/components/schemas/PortfolioMetricsReport'
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
       required:
-      - count
-      - reports
+      - statusCode
+      - message
+      - error
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
     Error403Dto:
       type: object
       properties:
@@ -188,55 +310,6 @@ components:
           readOnly: true
           allOf:
           - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    Error400ResponseDtoV2:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
         payload:
           type: object
           readOnly: true
@@ -286,101 +359,28 @@ components:
       - subSection
       - group
       - subGroup
-    Error401Dto:
+    Error500Dto:
       type: object
       properties:
-        statusCode:
-          type: number
+        error:
+          type: string
           readOnly: true
-          example: 401
+          example: Internal Server Error
         message:
           readOnly: true
           example:
-          - Unauthorized
+          - INTERNAL_ERROR
           type: array
           items:
             type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
-    PortfolioMetricsReportMetaData:
-      type: object
-      properties:
-        startDate:
-          type: string
-          readOnly: true
-          example: '2020-11-01T01:02:03Z'
-          format: date-time
-        endDate:
-          type: string
-          readOnly: true
-          example: '2020-11-30T01:02:03Z'
-          format: date-time
-        reportFrequency:
-          type: string
-          readOnly: true
-          example: month
-        createdAt:
-          type: string
-          readOnly: true
-          example: '2020-11-30T01:02:03Z'
-          format: date-time
-      required:
-      - startDate
-      - endDate
-      - reportFrequency
-      - createdAt
-    PortfolioMetricsReport:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/PortfolioMetricsReportMetaData'
-        data:
-          $ref: '#/components/schemas/PortfolioMetricsReportData'
-      required:
-      - meta
-      - data
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    Error400DtoV2:
-      type: object
-      properties:
         statusCode:
           type: number
           readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - connectionUuid should not be empty
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
+          example: 500
       required:
-      - statusCode
-      - message
       - error
+      - message
+      - statusCode
   securitySchemes:
     bearer:
       scheme: bearer

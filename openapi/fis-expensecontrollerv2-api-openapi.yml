@@ -152,6 +152,532 @@ paths:
       - ExpenseControllerV2
 components:
   schemas:
+    TaxRateRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '12'
+      required:
+      - id
+    TaxRateObjectRefResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '124'
+        name:
+          type: string
+          example: Railz
+      required:
+      - id
+    Error400DtoV2:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    PaymentMethodRefResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '3'
+        name:
+          type: string
+          example: Harmonized sales tax
+        type:
+          type: string
+          example: creditCard
+          enum:
+          - unknown
+          - cash
+          - check
+          - creditCard
+          - debitCard
+          - bankTransfer
+          - giftCard
+          - other
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    GetExpenseData:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        vendorRef:
+          $ref: '#/components/schemas/VendorRefDtoV2'
+        accountRef:
+          $ref: '#/components/schemas/AccountRefV2Dto'
+        currency:
+          type: string
+          example: USD
+        totalAmount:
+          type: number
+          example: 100.13
+          format: float
+        currencyRate:
+          type: number
+          example: 1.13
+          format: float
+        postedDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        paymentMethod:
+          type: string
+          enum:
+          - unknown
+          - cash
+          - check
+          - creditCard
+          - debitCard
+          - bankTransfer
+          - giftCard
+          - other
+          example: creditCard
+          deprecated: true
+        paymentMethodRef:
+          $ref: '#/components/schemas/PaymentMethodRefResponse'
+        memo:
+          type: string
+          example: Example expense memo.
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExpenseLineItem'
+        sourceModifiedDate:
+          format: date-time
+          type: string
+          example: '2021-03-10T11:26:06.619Z'
+      required:
+      - id
+      - totalAmount
+      - postedDate
+    ExpenseLineItem:
+      type: object
+      properties:
+        accountRef:
+          $ref: '#/components/schemas/AccountRef'
+        description:
+          type: string
+          example: Services rendered.
+        unitAmount:
+          type: number
+          example: 100.5
+          format: float
+        quantity:
+          type: number
+          example: 3
+          format: integer
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateObjectRefResponse'
+        taxAmount:
+          type: number
+          example: 20.5
+          format: float
+        amount:
+          type: number
+          example: 10.5
+          format: float
+        trackingCategoryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrackingCategoryResponse'
+      required:
+      - amount
+    GetExpenseResponseV2Dto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        meta:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/BasicStartEndDateReportMetaDataV2'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetExpenseData'
+      required:
+      - pagination
+      - meta
+      - data
+    AccountRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '200'
+      required:
+      - id
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    AccountRefV2Dto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '200'
+    BillTrackingCategoryRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4040'
+        type:
+          type: string
+          example: class
+          enum:
+          - class
+          - department
+          - location
+          - unknown
+      required:
+      - id
+    ExpenseLineDto:
+      type: object
+      properties:
+        accountRef:
+          $ref: '#/components/schemas/AccountRefDto'
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateRefDto'
+        trackingCategoryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillTrackingCategoryRefDto'
+        description:
+          type: string
+          maxLength: 4000
+          example: Services rendered.
+        quantity:
+          type: number
+          format: float
+          example: '4'
+        unitAmount:
+          type: number
+          format: float
+          example: '50.4'
+        taxAmount:
+          type: number
+          format: float
+          example: '50.4'
+        amount:
+          type: number
+          format: float
+          example: '50.4'
+    VendorRefDtoV2:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    VendorRefDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '130'
+      required:
+      - id
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    AccountRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '145'
+        name:
+          type: string
+          example: Example account
+      required:
+      - id
+    PushExpenseeResponseDto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushExpense'
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - data
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    TrackingCategoryResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4040'
+          readOnly: false
+        name:
+          type: string
+          readOnly: false
+          example: Region
+        type:
+          type: string
+          example: class
+          enum:
+          - class
+          - department
+          - location
+          - unknown
+    PushExpense:
+      type: object
+      properties:
+        passThrough:
+          type: object
+          example:
+            CustomField:
+            - DefinitionId: '1'
+              StringValue: my custom value
+              Name: Field One
+          additionalProperties: true
+        vendorRef:
+          $ref: '#/components/schemas/VendorRefDto'
+        accountRef:
+          $ref: '#/components/schemas/AccountRefDto'
+        currency:
+          type: string
+          example: CAD
+        currencyRate:
+          type: number
+          example: '1.13'
+        postedDate:
+          type: string
+          format: date
+          example: '2021-03-29'
+        paymentMethod:
+          type: string
+          deprecated: true
+          enum:
+          - unknown
+          - cash
+          - check
+          - creditCard
+          - debitCard
+          - bankTransfer
+          - giftCard
+          - other
+          example: creditCard
+        paymentMethodRef:
+          $ref: '#/components/schemas/PaymentMethodRefDto'
+        memo:
+          type: string
+          maxLength: 4000
+          example: Example memo.
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExpenseLineDto'
+    PushExpenseDto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          description: Unique connection identifier.
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        data:
+          $ref: '#/components/schemas/PushExpense'
+      required:
+      - connectionUuid
+      - data
     BasicStartEndDateReportMetaDataV2:
       type: object
       properties:
@@ -217,294 +743,6 @@ components:
       - updatedAt
       - startDate
       - endDate
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
-    AccountRefV2Dto:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '200'
-    TaxRateRefDto:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '12'
-      required:
-      - id
-    PushExpense:
-      type: object
-      properties:
-        passThrough:
-          type: object
-          example:
-            CustomField:
-            - DefinitionId: '1'
-              StringValue: my custom value
-              Name: Field One
-          additionalProperties: true
-        vendorRef:
-          $ref: '#/components/schemas/VendorRefDto'
-        accountRef:
-          $ref: '#/components/schemas/AccountRefDto'
-        currency:
-          type: string
-          example: CAD
-        currencyRate:
-          type: number
-          example: '1.13'
-        postedDate:
-          type: string
-          format: date
-          example: '2021-03-29'
-        paymentMethod:
-          type: string
-          deprecated: true
-          enum:
-          - unknown
-          - cash
-          - check
-          - creditCard
-          - debitCard
-          - bankTransfer
-          - giftCard
-          - other
-          example: creditCard
-        paymentMethodRef:
-          $ref: '#/components/schemas/PaymentMethodRefDto'
-        memo:
-          type: string
-          maxLength: 4000
-          example: Example memo.
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/ExpenseLineDto'
-    Error400ResponseDtoV2:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    TrackingCategoryResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '4040'
-          readOnly: false
-        name:
-          type: string
-          readOnly: false
-          example: Region
-        type:
-          type: string
-          example: class
-          enum:
-          - class
-          - department
-          - location
-          - unknown
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    VendorRefDto:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '130'
-      required:
-      - id
-    Error500ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    VendorRefDtoV2:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-    PaymentMethodRefResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '3'
-        name:
-          type: string
-          example: Harmonized sales tax
-        type:
-          type: string
-          example: creditCard
-          enum:
-          - unknown
-          - cash
-          - check
-          - creditCard
-          - debitCard
-          - bankTransfer
-          - giftCard
-          - other
-    GetExpenseData:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        vendorRef:
-          $ref: '#/components/schemas/VendorRefDtoV2'
-        accountRef:
-          $ref: '#/components/schemas/AccountRefV2Dto'
-        currency:
-          type: string
-          example: USD
-        totalAmount:
-          type: number
-          example: 100.13
-          format: float
-        currencyRate:
-          type: number
-          example: 1.13
-          format: float
-        postedDate:
-          format: date-time
-          type: string
-          example: '2021-03-09T10:18:29.985Z'
-        paymentMethod:
-          type: string
-          enum:
-          - unknown
-          - cash
-          - check
-          - creditCard
-          - debitCard
-          - bankTransfer
-          - giftCard
-          - other
-          example: creditCard
-          deprecated: true
-        paymentMethodRef:
-          $ref: '#/components/schemas/PaymentMethodRefResponse'
-        memo:
-          type: string
-          example: Example expense memo.
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/ExpenseLineItem'
-        sourceModifiedDate:
-          format: date-time
-          type: string
-          example: '2021-03-10T11:26:06.619Z'
-      required:
-      - id
-      - totalAmount
-      - postedDate
-    BillTrackingCategoryRefDto:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '4040'
-        type:
-          type: string
-          example: class
-          enum:
-          - class
-          - department
-          - location
-          - unknown
-      required:
-      - id
-    PaginationMetaData:
-      type: object
-      properties:
-        offset:
-          type: number
-          readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
-          readOnly: true
-      required:
-      - offset
-      - limit
-      - count
-    Error400DtoV2:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - connectionUuid should not be empty
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
     PaymentMethodRefDto:
       type: object
       properties:
@@ -526,244 +764,6 @@ components:
           - bankTransfer
           - giftCard
           - other
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    ExpenseLineDto:
-      type: object
-      properties:
-        accountRef:
-          $ref: '#/components/schemas/AccountRefDto'
-        taxRateRef:
-          $ref: '#/components/schemas/TaxRateRefDto'
-        trackingCategoryRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/BillTrackingCategoryRefDto'
-        description:
-          type: string
-          maxLength: 4000
-          example: Services rendered.
-        quantity:
-          type: number
-          format: float
-          example: '4'
-        unitAmount:
-          type: number
-          format: float
-          example: '50.4'
-        taxAmount:
-          type: number
-          format: float
-          example: '50.4'
-        amount:
-          type: number
-          format: float
-          example: '50.4'
-    GetExpenseResponseV2Dto:
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        meta:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/BasicStartEndDateReportMetaDataV2'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetExpenseData'
-      required:
-      - pagination
-      - meta
-      - data
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
-    TaxRateObjectRefResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '124'
-        name:
-          type: string
-          example: Railz
-      required:
-      - id
-    ExpenseLineItem:
-      type: object
-      properties:
-        accountRef:
-          $ref: '#/components/schemas/AccountRef'
-        description:
-          type: string
-          example: Services rendered.
-        unitAmount:
-          type: number
-          example: 100.5
-          format: float
-        quantity:
-          type: number
-          example: 3
-          format: integer
-        taxRateRef:
-          $ref: '#/components/schemas/TaxRateObjectRefResponse'
-        taxAmount:
-          type: number
-          example: 20.5
-          format: float
-        amount:
-          type: number
-          example: 10.5
-          format: float
-        trackingCategoryRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/TrackingCategoryResponse'
-      required:
-      - amount
-    AccountRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '145'
-        name:
-          type: string
-          example: Example account
-      required:
-      - id
-    AccountRefDto:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '200'
-      required:
-      - id
-    PushExpenseDto:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          description: Unique connection identifier.
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        data:
-          $ref: '#/components/schemas/PushExpense'
-      required:
-      - connectionUuid
-      - data
-    PushExpenseeResponseDto:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          readOnly: true
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        pushCommunicationId:
-          type: string
-          readOnly: true
-          example: 60473b57f0cdd1683ca71f60
-        requestedOn:
-          type: string
-          readOnly: true
-          example: '2021-03-09T08:15:22.035Z'
-          format: date-time
-        status:
-          type: string
-          readOnly: true
-          example: pending
-          enum:
-          - success
-          - failed
-          - pending
-        data:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/PushExpense'
-      required:
-      - connectionUuid
-      - businessName
-      - serviceName
-      - pushCommunicationId
-      - requestedOn
-      - status
-      - data
   securitySchemes:
     bearer:
       scheme: bearer

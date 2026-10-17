@@ -311,22 +311,41 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    PushStatusResponseDto:
+    DataStatusResponseDto:
       type: object
       properties:
         meta:
-          $ref: '#/components/schemas/PushStatusMetaData'
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        data:
           readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/DataSyncMeta'
+        data:
           type: array
           items:
-            $ref: '#/components/schemas/PushStatusDataV1'
+            $ref: '#/components/schemas/DataSyncData'
       required:
       - meta
-      - pagination
-      - data
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
     Error403Dto:
       type: object
       properties:
@@ -349,95 +368,65 @@ components:
       - statusCode
       - message
       - error
-    PushStatusDataV1:
+    PushStatusMetaData:
       type: object
       properties:
-        serviceName:
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        businessName:
           type: string
           readOnly: true
-          example: quickbooks
-          enum:
-          - quickbooks
-          - xero
-          - freshbooks
-          - quickbooksDesktop
-          - sageIntacct
-          - sageBusinessCloud
-          - oracleNetsuite
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - zohoBooks
-          - myob
-        dataType:
+          example: Railz
+      required:
+      - count
+      - businessName
+    Report:
+      type: object
+      properties:
+        startDate:
           type: string
-          readOnly: true
-          example: balanceSheet
-        requestedOn:
-          format: date-time
+          example: '2021-03-01T00:00:00Z'
+        endDate:
           type: string
-          readOnly: true
-          example: '2021-03-17T07:58:39.781Z'
-        completedOn:
-          format: date-time
+          example: '2021-03-31T00:00:00Z'
+        lastSuccessfulSync:
           type: string
-          readOnly: true
-          example: '2021-03-17T07:58:39.781Z'
-        status:
+          example: '2021-04-01T00:31:00Z'
+        reportFrequency:
           type: string
-          readOnly: true
+          example: month
+        currentStatus:
+          type: string
           example: success
           enum:
           - success
           - failed
           - pending
-        responseCode:
-          type: number
-          readOnly: true
-          example: 200
-          format: integer
-        validation:
-          $ref: '#/components/schemas/Validation'
-        pushCommunicationId:
+          - empty
+        latestReportId:
           type: string
-          readOnly: true
-          example: 60473b57f0cdd1683ca71f60
-        batchId:
-          example: 63bf973a0f08e292519d4f5d
-          allOf:
-          - $ref: '#/components/schemas/ObjectId'
-        sourceObjectId:
+          example: 6070149d1d685e6cf0583e36
+        latestSuccessfulReportId:
           type: string
-          example: '144'
-        sourceObjectIds:
-          example:
-          - '144'
-          - '154'
-          type: array
-          items:
-            type: string
-      required:
-      - serviceName
-      - dataType
-      - requestedOn
-      - completedOn
-      - status
-      - responseCode
-      - pushCommunicationId
-    Error403ResponseDto:
+          example: 601077f5914dac670966f660
+        accountingMethod:
+          type: string
+          example: accrual
+        reconstructed:
+          type: boolean
+          example: true
+    Error:
       type: object
       properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
+        field:
+          type: string
+          example: customerName
+        message:
+          type: string
+          example: Must have a length between 1 and 500 characters.
     DataType:
       type: object
       properties:
@@ -459,6 +448,33 @@ components:
       required:
       - dataType
       - reports
+    DataSyncMeta:
+      type: object
+      properties:
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - quickbooks
+          - xero
+          - freshbooks
+          - quickbooksDesktop
+          - sageIntacct
+          - sageBusinessCloud
+          - oracleNetsuite
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - zohoBooks
+          - myob
+        businessName:
+          type: string
+          readOnly: true
+          example: Demo Business
+      required:
+      - serviceName
+      - businessName
     Error500ResponseDto:
       type: object
       properties:
@@ -472,6 +488,65 @@ components:
       required:
       - error
       - payload
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    PushStatusResponseDto:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/PushStatusMetaData'
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        data:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/PushStatusDataV1'
+      required:
+      - meta
+      - pagination
+      - data
+    DataSyncData:
+      type: object
+      properties:
+        connectionId:
+          type: string
+          readOnly: true
+          example: CON-94652dff-06ab-4b97-bd1b-f91adf7048c3
+        dataTypes:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/DataType'
+        syncTime:
+          type: number
+          example: '1.234'
+        percentageCompleted:
+          type: number
+          example: '75.89'
+      required:
+      - connectionId
+      - dataTypes
     DataSyncResponseDto:
       type: object
       properties:
@@ -515,13 +590,34 @@ components:
       - serviceName
       - dataType
       - requestedOn
-    Validation:
+    Error403ResponseDto:
       type: object
       properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
     PaginationMetaData:
       type: object
       properties:
@@ -538,107 +634,6 @@ components:
       - offset
       - limit
       - count
-    Error400ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    ObjectId:
-      type: object
-      properties: {}
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    DataSyncMeta:
-      type: object
-      properties:
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - quickbooks
-          - xero
-          - freshbooks
-          - quickbooksDesktop
-          - sageIntacct
-          - sageBusinessCloud
-          - oracleNetsuite
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - zohoBooks
-          - myob
-        businessName:
-          type: string
-          readOnly: true
-          example: Demo Business
-      required:
-      - serviceName
-      - businessName
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
     DataSyncDto:
       type: object
       properties:
@@ -730,121 +725,126 @@ components:
       - businessName
       - serviceName
       - dataType
-    PushStatusMetaData:
+    Validation:
       type: object
       properties:
-        count:
-          type: number
-          readOnly: true
-          example: 1
-          format: integer
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-      required:
-      - count
-      - businessName
-    DataSyncData:
-      type: object
-      properties:
-        connectionId:
-          type: string
-          readOnly: true
-          example: CON-94652dff-06ab-4b97-bd1b-f91adf7048c3
-        dataTypes:
-          readOnly: true
+        errors:
           type: array
           items:
-            $ref: '#/components/schemas/DataType'
-        syncTime:
-          type: number
-          example: '1.234'
-        percentageCompleted:
-          type: number
-          example: '75.89'
-      required:
-      - connectionId
-      - dataTypes
-    DataStatusResponseDto:
+            $ref: '#/components/schemas/Error'
+    Error500Dto:
       type: object
       properties:
-        meta:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/DataSyncMeta'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/DataSyncData'
-      required:
-      - meta
-    Error400Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - businessName cannot be null
-          type: array
-          items:
-            type: string
         error:
           type: string
           readOnly: true
-          example: Bad Request
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
       required:
-      - statusCode
-      - message
       - error
-    Report:
+      - message
+      - statusCode
+    Error400ResponseDto:
       type: object
       properties:
-        startDate:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    ObjectId:
+      type: object
+      properties: {}
+    PushStatusDataV1:
+      type: object
+      properties:
+        serviceName:
           type: string
-          example: '2021-03-01T00:00:00Z'
-        endDate:
+          readOnly: true
+          example: quickbooks
+          enum:
+          - quickbooks
+          - xero
+          - freshbooks
+          - quickbooksDesktop
+          - sageIntacct
+          - sageBusinessCloud
+          - oracleNetsuite
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - zohoBooks
+          - myob
+        dataType:
           type: string
-          example: '2021-03-31T00:00:00Z'
-        lastSuccessfulSync:
+          readOnly: true
+          example: balanceSheet
+        requestedOn:
+          format: date-time
           type: string
-          example: '2021-04-01T00:31:00Z'
-        reportFrequency:
+          readOnly: true
+          example: '2021-03-17T07:58:39.781Z'
+        completedOn:
+          format: date-time
           type: string
-          example: month
-        currentStatus:
+          readOnly: true
+          example: '2021-03-17T07:58:39.781Z'
+        status:
           type: string
+          readOnly: true
           example: success
           enum:
           - success
           - failed
           - pending
-          - empty
-        latestReportId:
+        responseCode:
+          type: number
+          readOnly: true
+          example: 200
+          format: integer
+        validation:
+          $ref: '#/components/schemas/Validation'
+        pushCommunicationId:
           type: string
-          example: 6070149d1d685e6cf0583e36
-        latestSuccessfulReportId:
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        batchId:
+          example: 63bf973a0f08e292519d4f5d
+          allOf:
+          - $ref: '#/components/schemas/ObjectId'
+        sourceObjectId:
           type: string
-          example: 601077f5914dac670966f660
-        accountingMethod:
-          type: string
-          example: accrual
-        reconstructed:
-          type: boolean
-          example: true
-    Error:
-      type: object
-      properties:
-        field:
-          type: string
-          example: customerName
-        message:
-          type: string
-          example: Must have a length between 1 and 500 characters.
+          example: '144'
+        sourceObjectIds:
+          example:
+          - '144'
+          - '154'
+          type: array
+          items:
+            type: string
+      required:
+      - serviceName
+      - dataType
+      - requestedOn
+      - completedOn
+      - status
+      - responseCode
+      - pushCommunicationId
   securitySchemes:
     bearer:
       scheme: bearer

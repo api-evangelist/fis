@@ -103,173 +103,6 @@ paths:
       - TaxBenchmarkingControllerV2
 components:
   schemas:
-    TaxBenchmarkingsData:
-      type: object
-      properties:
-        section:
-          oneOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-          allOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-        subSection:
-          oneOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-          allOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-        group:
-          oneOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-          allOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-        subGroup:
-          oneOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-          allOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-        ratios:
-          oneOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-          allOf:
-          - $ref: '#/components/schemas/SummaryStatisticsData'
-      required:
-      - section
-      - subSection
-      - group
-      - subGroup
-      - ratios
-    TaxBenchmarkingsReport:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/TaxBenchmarkingsReportMetaData'
-        data:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/TaxBenchmarkingsData'
-      required:
-      - meta
-      - data
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
-    Error500ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    Error400DtoV2:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - connectionUuid should not be empty
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    Error400ResponseDtoV2:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
     Error401Dto:
       type: object
       properties:
@@ -292,28 +125,19 @@ components:
       - statusCode
       - message
       - error
-    TaxBenchmarkingsReportMetaData:
+    Error400ResponseDtoV2:
       type: object
       properties:
-        industryCode:
-          type: string
+        error:
           readOnly: true
-          example: '44'
-        region:
-          type: string
-          example: CA
-        numberOfBusinesses:
-          type: number
-          example: 282
-        createdAt:
-          type: string
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
           readOnly: true
-          example: '2020-11-30T01:02:03Z'
-          format: date-time
       required:
-      - industryCode
-      - numberOfBusinesses
-      - createdAt
+      - error
+      - payload
     SummaryStatisticsData:
       type: object
       properties:
@@ -363,6 +187,90 @@ components:
       - quantile25**
       - quantile75**
       - quantile95**
+    Error400DtoV2:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    TaxBenchmarkingsData:
+      type: object
+      properties:
+        section:
+          oneOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+          allOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+        subSection:
+          oneOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+          allOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+        group:
+          oneOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+          allOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+        subGroup:
+          oneOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+          allOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+        ratios:
+          oneOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+          allOf:
+          - $ref: '#/components/schemas/SummaryStatisticsData'
+      required:
+      - section
+      - subSection
+      - group
+      - subGroup
+      - ratios
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
     TaxBenchmarkingsResponseDto:
       type: object
       properties:
@@ -379,6 +287,98 @@ components:
       required:
       - count
       - reports
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    TaxBenchmarkingsReportMetaData:
+      type: object
+      properties:
+        industryCode:
+          type: string
+          readOnly: true
+          example: '44'
+        region:
+          type: string
+          example: CA
+        numberOfBusinesses:
+          type: number
+          example: 282
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+      required:
+      - industryCode
+      - numberOfBusinesses
+      - createdAt
+    TaxBenchmarkingsReport:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/TaxBenchmarkingsReportMetaData'
+        data:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxBenchmarkingsData'
+      required:
+      - meta
+      - data
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
   securitySchemes:
     bearer:
       scheme: bearer

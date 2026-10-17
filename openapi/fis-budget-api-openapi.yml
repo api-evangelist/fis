@@ -91,17 +91,68 @@ paths:
       - Budget
 components:
   schemas:
-    Balance:
+    GetBudgetData:
       type: object
       properties:
-        amount:
+        id:
           type: string
-          example: 2.2
-          format: float
-        date:
+          example: '450789469'
+        name:
+          type: string
+          example: Expense
+        type:
+          type: string
+          example: Expense Accounts
+        startDate:
           format: date-time
           type: string
           example: '2022-03-11T11:29:03-05:00'
+        endDate:
+          format: date-time
+          type: string
+          example: '2022-04-11T11:29:03-05:00'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/Lines'
+        status:
+          type: string
+          enum:
+          - unknown
+          - active
+          - archived
+        createdDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+        sourceModifiedDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
+      required:
+      - id
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
     BudgetReportMetaDataV2:
       type: object
       properties:
@@ -163,6 +214,71 @@ components:
       - reportId
       - createdAt
       - updatedAt
+    AccountRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '145'
+        name:
+          type: string
+          example: Example account
+      required:
+      - id
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error400DtoV2:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    TrackingCategoryResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4040'
+          readOnly: false
+        name:
+          type: string
+          readOnly: false
+          example: Region
+        type:
+          type: string
+          example: class
+          enum:
+          - class
+          - department
+          - location
+          - unknown
     GetBudgetResponseV2Dto:
       type: object
       properties:
@@ -178,24 +294,50 @@ components:
       - pagination
       - meta
       - data
-    Lines:
+    Error401ResponseDto:
       type: object
       properties:
-        id:
-          type: string
-          example: '466157049'
-        balances:
-          type: array
-          items:
-            $ref: '#/components/schemas/Balance'
-        accountRef:
-          $ref: '#/components/schemas/AccountRef'
-        customerRef:
-          $ref: '#/components/schemas/AccountRef'
-        trackingCategoryRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/TrackingCategoryResponse'
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
     Error403Dto:
       type: object
       properties:
@@ -231,31 +373,35 @@ components:
       required:
       - error
       - payload
-    Error401ResponseDto:
+    Balance:
       type: object
       properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    AccountRef:
+        amount:
+          type: string
+          example: 2.2
+          format: float
+        date:
+          format: date-time
+          type: string
+          example: '2022-03-11T11:29:03-05:00'
+    Lines:
       type: object
       properties:
         id:
           type: string
-          example: '145'
-        name:
-          type: string
-          example: Example account
-      required:
-      - id
+          example: '466157049'
+        balances:
+          type: array
+          items:
+            $ref: '#/components/schemas/Balance'
+        accountRef:
+          $ref: '#/components/schemas/AccountRef'
+        customerRef:
+          $ref: '#/components/schemas/AccountRef'
+        trackingCategoryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrackingCategoryResponse'
     Error500Dto:
       type: object
       properties:
@@ -278,152 +424,6 @@ components:
       - error
       - message
       - statusCode
-    Error400ResponseDtoV2:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    TrackingCategoryResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '4040'
-          readOnly: false
-        name:
-          type: string
-          readOnly: false
-          example: Region
-        type:
-          type: string
-          example: class
-          enum:
-          - class
-          - department
-          - location
-          - unknown
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
-    PaginationMetaData:
-      type: object
-      properties:
-        offset:
-          type: number
-          readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
-          readOnly: true
-      required:
-      - offset
-      - limit
-      - count
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    Error400DtoV2:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - connectionUuid should not be empty
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
-    GetBudgetData:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '450789469'
-        name:
-          type: string
-          example: Expense
-        type:
-          type: string
-          example: Expense Accounts
-        startDate:
-          format: date-time
-          type: string
-          example: '2022-03-11T11:29:03-05:00'
-        endDate:
-          format: date-time
-          type: string
-          example: '2022-04-11T11:29:03-05:00'
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/Lines'
-        status:
-          type: string
-          enum:
-          - unknown
-          - active
-          - archived
-        createdDate:
-          format: date-time
-          type: string
-          example: '2021-03-09T10:18:29.985Z'
-        sourceModifiedDate:
-          format: date-time
-          type: string
-          example: '2021-03-09T10:18:29.985Z'
-      required:
-      - id
   securitySchemes:
     bearer:
       scheme: bearer

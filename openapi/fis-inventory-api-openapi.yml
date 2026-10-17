@@ -205,6 +205,60 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    UpdateInventoryV1Dto:
+      type: object
+      properties:
+        connection:
+          $ref: '#/components/schemas/UpdateInventoryConnection'
+        data:
+          $ref: '#/components/schemas/UpdateInventoryV1'
+      required:
+      - connection
+      - data
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    UpdateInventoryConnection:
+      type: object
+      properties:
+        businessName:
+          type: string
+          example: Railz
+          description: Unique business name identifier.
+        serviceName:
+          type: string
+          example: quickbooks
+          description: Name of accounting platform service.
+          enum:
+          - quickbooks
+          - xero
+          - freshbooks
+          - dynamicsBusinessCentral
+          - oracleNetsuite
+          - wave
+          - sageIntacct
+      required:
+      - businessName
+      - serviceName
     PushInventoryV1:
       type: object
       properties:
@@ -248,16 +302,37 @@ components:
           type: boolean
           example: true
           default: true
-    PushInventoryV1Dto:
+    PushConnection:
       type: object
       properties:
-        connection:
-          $ref: '#/components/schemas/PushConnection'
-        data:
-          $ref: '#/components/schemas/PushInventoryV1'
+        businessName:
+          type: string
+          example: Railz
+          description: Unique business name identifier.
+        serviceName:
+          type: string
+          example: quickbooks
+          description: Name of accounting platform service.
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - shopify
+          - square
+          - plaid
+          - myob
+          - zohoBooks
+          - byod
       required:
-      - connection
-      - data
+      - businessName
+      - serviceName
     Error403Dto:
       type: object
       properties:
@@ -298,58 +373,21 @@ components:
         taxRateRef:
           type: string
           example: '12'
-    UpdateInventoryV1Dto:
+    ListReportMetaData:
       type: object
       properties:
-        connection:
-          $ref: '#/components/schemas/UpdateInventoryConnection'
-        data:
-          $ref: '#/components/schemas/UpdateInventoryV1'
-      required:
-      - connection
-      - data
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
+        reportId:
           readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    UpdateInventoryV1ResponseDto:
-      type: object
-      properties:
-        pushCommunicationId:
-          type: string
-          readOnly: true
-          example: 60473b57f0cdd1683ca71f60
-        requestedOn:
-          type: string
-          readOnly: true
-          example: '2021-03-09T08:15:22.035Z'
-          format: date-time
-        status:
-          type: string
-          readOnly: true
-          example: pending
-          enum:
-          - success
-          - failed
-          - pending
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
+          example:
+          - 5fad8a342a88364234392fb5
+          - 5fad8a342a88364234392fb6
+          type: array
+          items:
+            type: string
         serviceName:
           type: string
           readOnly: true
-          example: quickbooks
+          example: xero
           enum:
           - freshbooks
           - quickbooks
@@ -364,39 +402,51 @@ components:
           - myob
           - zohoBooks
           - byod
-        data:
+        businessName:
+          type: string
           readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/UpdateInventoryV1'
+          example: Railz
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
       required:
-      - pushCommunicationId
-      - requestedOn
-      - status
-      - businessName
+      - reportId
       - serviceName
-      - data
-    Error500ResponseDto:
+      - businessName
+      - createdAt
+      - updatedAt
+    BillOrInvoiceItem:
       type: object
       properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    InventorySubsidiaryRef:
+        description:
+          type: string
+          example: Item description
+        unitPrice:
+          type: number
+          example: 100.5
+          format: float
+        accountRef:
+          $ref: '#/components/schemas/AccountRef'
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateRef'
+    InventoryLocationRef:
       type: object
       properties:
         id:
           type: string
-          example: '2'
+          example: '9'
         name:
           type: string
-          example: Company Ltd
+          example: Boston
+      required:
+      - id
     TaxRateRef:
       type: object
       properties:
@@ -412,29 +462,13 @@ components:
           format: float
       required:
       - id
-    PaginationMetaData:
-      type: object
-      properties:
-        offset:
-          type: number
-          readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
-          readOnly: true
-      required:
-      - offset
-      - limit
-      - count
-    Error400ResponseDto:
+    Error500ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error400Dto'
+          - $ref: '#/components/schemas/Error500Dto'
         payload:
           type: object
           readOnly: true
@@ -494,105 +528,6 @@ components:
       - businessName
       - serviceName
       - data
-    BillOrInvoiceItem:
-      type: object
-      properties:
-        description:
-          type: string
-          example: Item description
-        unitPrice:
-          type: number
-          example: 100.5
-          format: float
-        accountRef:
-          $ref: '#/components/schemas/AccountRef'
-        taxRateRef:
-          $ref: '#/components/schemas/TaxRateRef'
-    ListReportMetaData:
-      type: object
-      properties:
-        reportId:
-          readOnly: true
-          example:
-          - 5fad8a342a88364234392fb5
-          - 5fad8a342a88364234392fb6
-          type: array
-          items:
-            type: string
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        createdAt:
-          type: string
-          readOnly: true
-          example: '2020-11-25T01:02:03Z'
-          format: date-time
-        updatedAt:
-          type: string
-          example: '2020-11-30T01:02:03Z'
-          format: date-time
-          readOnly: false
-      required:
-      - reportId
-      - serviceName
-      - businessName
-      - createdAt
-      - updatedAt
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
     Error401Dto:
       type: object
       properties:
@@ -615,130 +550,6 @@ components:
       - statusCode
       - message
       - error
-    PushConnection:
-      type: object
-      properties:
-        businessName:
-          type: string
-          example: Railz
-          description: Unique business name identifier.
-        serviceName:
-          type: string
-          example: quickbooks
-          description: Name of accounting platform service.
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - shopify
-          - square
-          - plaid
-          - myob
-          - zohoBooks
-          - byod
-      required:
-      - businessName
-      - serviceName
-    UpdateInventoryV1:
-      type: object
-      properties:
-        code:
-          type: string
-          maxLength: 30
-          example: GOL-W
-        type:
-          type: string
-          enum:
-          - inventory
-          - nonInventory
-          - service
-          example: inventory
-        subsidiaryRefs:
-          example:
-          - '2'
-          - 3hn
-          - 1t2
-          type: array
-          items:
-            type: string
-        name:
-          type: string
-          example: White golf balls.
-          maxLength: 50
-        invoiceItem:
-          $ref: '#/components/schemas/InventoryBillInvoiceLineItems'
-        billItem:
-          $ref: '#/components/schemas/InventoryBillInvoiceLineItems'
-        isBillItem:
-          type: boolean
-          example: true
-          default: true
-        isInvoiceItem:
-          type: boolean
-          example: true
-          default: true
-    UpdateInventoryConnection:
-      type: object
-      properties:
-        businessName:
-          type: string
-          example: Railz
-          description: Unique business name identifier.
-        serviceName:
-          type: string
-          example: quickbooks
-          description: Name of accounting platform service.
-          enum:
-          - quickbooks
-          - xero
-          - freshbooks
-          - dynamicsBusinessCentral
-          - oracleNetsuite
-          - wave
-          - sageIntacct
-      required:
-      - businessName
-      - serviceName
-    AccountRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '145'
-        name:
-          type: string
-          example: Example account
-      required:
-      - id
-    InventoryLocationRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '9'
-        name:
-          type: string
-          example: Boston
-      required:
-      - id
-    QuantityOnHandData:
-      type: object
-      properties:
-        locationRef:
-          $ref: '#/components/schemas/InventoryLocationRef'
-        quantity:
-          type: number
-          example: 2.5
-          format: float
-        accountRef:
-          $ref: '#/components/schemas/AccountRef'
     GetInventoryResponseDto:
       type: object
       properties:
@@ -760,28 +571,6 @@ components:
       - count
       - meta
       - data
-    Error400Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - businessName cannot be null
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
     GetInventoryDataV1:
       type: object
       properties:
@@ -838,6 +627,217 @@ components:
       required:
       - id
       - itemStatus
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    AccountRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '145'
+        name:
+          type: string
+          example: Example account
+      required:
+      - id
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    PushInventoryV1Dto:
+      type: object
+      properties:
+        connection:
+          $ref: '#/components/schemas/PushConnection'
+        data:
+          $ref: '#/components/schemas/PushInventoryV1'
+      required:
+      - connection
+      - data
+    InventorySubsidiaryRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '2'
+        name:
+          type: string
+          example: Company Ltd
+    QuantityOnHandData:
+      type: object
+      properties:
+        locationRef:
+          $ref: '#/components/schemas/InventoryLocationRef'
+        quantity:
+          type: number
+          example: 2.5
+          format: float
+        accountRef:
+          $ref: '#/components/schemas/AccountRef'
+    UpdateInventoryV1ResponseDto:
+      type: object
+      properties:
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: quickbooks
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/UpdateInventoryV1'
+      required:
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - businessName
+      - serviceName
+      - data
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    UpdateInventoryV1:
+      type: object
+      properties:
+        code:
+          type: string
+          maxLength: 30
+          example: GOL-W
+        type:
+          type: string
+          enum:
+          - inventory
+          - nonInventory
+          - service
+          example: inventory
+        subsidiaryRefs:
+          example:
+          - '2'
+          - 3hn
+          - 1t2
+          type: array
+          items:
+            type: string
+        name:
+          type: string
+          example: White golf balls.
+          maxLength: 50
+        invoiceItem:
+          $ref: '#/components/schemas/InventoryBillInvoiceLineItems'
+        billItem:
+          $ref: '#/components/schemas/InventoryBillInvoiceLineItems'
+        isBillItem:
+          type: boolean
+          example: true
+          default: true
+        isInvoiceItem:
+          type: boolean
+          example: true
+          default: true
   securitySchemes:
     bearer:
       scheme: bearer

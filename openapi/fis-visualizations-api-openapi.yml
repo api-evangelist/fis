@@ -4267,169 +4267,6 @@ paths:
       x-operation-id-original: financialForecasts summary eligibility
 components:
   schemas:
-    EntityRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '233'
-        name:
-          type: string
-          example: Railz Inc.
-      required:
-      - id
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
-    BusinessValuationReportV2:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/BusinessValuationMetaDataV2'
-        data:
-          $ref: '#/components/schemas/BusinessValuationData'
-      required:
-      - meta
-      - data
-    ReconciledBankTransactionsV2:
-      type: object
-      properties:
-        id:
-          type: string
-          example: lPNjeW1nR6CDn5okmGQ6hEpMo4lLNoSrzqDje
-          readOnly: false
-        date:
-          type: string
-          example: '2017-01-29'
-          readOnly: false
-          format: date-time
-        amount:
-          type: number
-          readOnly: false
-          example: 1000
-        accountType:
-          type: string
-          example: investment, credit, depository, loan, brokerage, other
-        accountId:
-          type: string
-          example: onD7kPQJ98cDejlnXpZeHeqp1qBlX5TogLqxW
-        description:
-          type: string
-          example: BMO Bank of Montreal
-        accountingTransactionId:
-          type: string
-          example: 13
-        accountingTransactionType:
-          type: string
-          enum:
-          - expense
-          - invoice
-          - payment
-          - payroll
-          - journalEntry
-          - bill
-          - vendorCreditNote
-          - creditNote
-          - billPayment
-          - bankTransaction
-          - transfer
-          - deposit
-          - refund
-          - estimate
-          - inventoryAdjustment
-          - purchaseOrder
-          - taxPayment
-          - taxAdjustment
-          - taxRefund
-          - taxReversal
-          - other
-          - unknown
-        isPosting:
-          type: boolean
-          example: 'true'
-        isSplitTransaction:
-          type: boolean
-          example: 'true'
-        subTotal:
-          type: number
-          example: 300.5
-          format: float
-        transactionNumber:
-          type: string
-          example: INV-001
-        transactionReportId:
-          type: string
-          example: 5fad8a342a88364234392fb6
-        accountRef:
-          $ref: '#/components/schemas/ReconcilationAccountRef'
-        entityRef:
-          $ref: '#/components/schemas/EntityRef'
-      required:
-      - id
-      - date
-      - amount
-      - accountId
-      - accountRef
-    BusinessValuationData:
-      type: object
-      properties:
-        liquidationValue:
-          type: number
-          example: 100000
-          format: double
-        discountedCashflowValue:
-          type: number
-          example: 100000
-          format: double
-        discountRate:
-          type: number
-          example: 0.12
-          format: double
-        revenueMultiple:
-          type: number
-          example: 1.6
-          format: double
-        multipleToRevenueValue:
-          type: number
-          example: 100000
-          format: double
-        firstChicagoValue:
-          type: number
-          example: 100000
-          format: double
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
     FinancialStatementReportMetaDataV2:
       type: object
       properties:
@@ -4516,6 +4353,286 @@ components:
       - startDate
       - endDate
       - accountingMethod
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    CreditsReport:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/CreditRatingsReportMetaData'
+        data:
+          $ref: '#/components/schemas/CreditsData'
+      required:
+      - meta
+      - data
+    EntityRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '233'
+        name:
+          type: string
+          example: Railz Inc.
+      required:
+      - id
+    BankReconciliationReportV2:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/BankReconciliationReportMetaDataV2'
+        data:
+          readOnly: false
+          type: array
+          items:
+            $ref: '#/components/schemas/BankReconciliationV2Data'
+      required:
+      - meta
+      - data
+    CreditRatingsReportMetaData:
+      type: object
+      properties:
+        reportId:
+          type: string
+          readOnly: true
+          example: 5fad8a342a88364234392fb5
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - quickbooks
+          - xero
+          - freshbooks
+          - quickbooksDesktop
+          - sageIntacct
+          - sageBusinessCloud
+          - oracleNetsuite
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - zohoBooks
+          - myob
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          readOnly: false
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+      required:
+      - reportId
+      - serviceName
+      - businessName
+      - startDate
+      - endDate
+      - createdAt
+      - updatedAt
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    BusinessValuationMetaDataV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        reportId:
+          type: string
+          readOnly: true
+          example: 5fad8a342a88364234392fb5
+        startDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        endDate:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+          format: date-time
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - reportId
+      - startDate
+      - endDate
+      - createdAt
+      - updatedAt
+    BusinessValuationData:
+      type: object
+      properties:
+        liquidationValue:
+          type: number
+          example: 100000
+          format: double
+        discountedCashflowValue:
+          type: number
+          example: 100000
+          format: double
+        discountRate:
+          type: number
+          example: 0.12
+          format: double
+        revenueMultiple:
+          type: number
+          example: 1.6
+          format: double
+        multipleToRevenueValue:
+          type: number
+          example: 100000
+          format: double
+        firstChicagoValue:
+          type: number
+          example: 100000
+          format: double
+    TaxBenchmarkingFormattedData:
+      type: object
+      properties:
+        section:
+          oneOf:
+          - $ref: '#/components/schemas/TaxBenchmarkingSubItems'
+          allOf:
+          - $ref: '#/components/schemas/TaxBenchmarkingSubItems'
+        subSection:
+          oneOf:
+          - $ref: '#/components/schemas/TaxBenchmarkingSubItems'
+          allOf:
+          - $ref: '#/components/schemas/TaxBenchmarkingSubItems'
+        group:
+          oneOf:
+          - $ref: '#/components/schemas/TaxBenchmarkingSubItems'
+          allOf:
+          - $ref: '#/components/schemas/TaxBenchmarkingSubItems'
+        subGroup:
+          oneOf:
+          - $ref: '#/components/schemas/TaxBenchmarkingSubItems'
+          allOf:
+          - $ref: '#/components/schemas/TaxBenchmarkingSubItems'
+      required:
+      - section
+      - subSection
+      - group
+      - subGroup
+    BusinessValuesFormattedData:
+      type: object
+      properties:
+        section:
+          type: object
+        subSection:
+          type: object
+        group:
+          type: object
+        subGroup:
+          type: object
+      required:
+      - section
+      - subSection
+      - group
+      - subGroup
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
     BankReconciliationReportMetaDataV2:
       type: object
       properties:
@@ -4578,180 +4695,80 @@ components:
       - endDate
       - createdAt
       - updatedAt
-    BankReconciliationReportV2:
+    BusinessValuationReportV2:
       type: object
       properties:
         meta:
-          $ref: '#/components/schemas/BankReconciliationReportMetaDataV2'
+          $ref: '#/components/schemas/BusinessValuationMetaDataV2'
         data:
-          readOnly: false
-          type: array
-          items:
-            $ref: '#/components/schemas/BankReconciliationV2Data'
+          $ref: '#/components/schemas/BusinessValuationData'
       required:
       - meta
       - data
-    Error500ResponseDto:
+    BankReconciliationV2Data:
       type: object
       properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    PaginationMetaData:
-      type: object
-      properties:
-        offset:
+        bankTransactionsCount:
           type: number
-          readOnly: true
-        limit:
+          example: 35
+        accountingTransactionsCount:
           type: number
-          readOnly: true
-        count:
+          example: 50
+        bankTransactionsAmount:
           type: number
-          readOnly: true
-      required:
-      - offset
-      - limit
-      - count
-    BusinessValuesFormattedData:
-      type: object
-      properties:
-        section:
-          type: object
-        subSection:
-          type: object
-        group:
-          type: object
-        subGroup:
-          type: object
-      required:
-      - section
-      - subSection
-      - group
-      - subGroup
-    CreditsResponseDto:
-      type: object
-      properties:
-        count:
+          example: 105.5
+          format: float
+        accountingTransactionsAmount:
           type: number
-          readOnly: true
-          format: integer
+          example: 750.5
+          format: float
+        bankTransactionsTotalValue:
+          type: number
+          example: 109.95
+          format: float
+        accountingTransactionsTotalValue:
+          type: number
+          example: 500.5
+          format: float
+        weightedPercentageError:
+          type: number
           example: 1
-        reports:
-          readOnly: false
-          type: array
-          items:
-            $ref: '#/components/schemas/CreditsReport'
-      required:
-      - count
-      - reports
-    Error400ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    FinancialForecastsSummaryEligibilityResponse:
-      type: object
-      properties:
-        summaryAvailable:
-          type: boolean
-        responseMsg:
-          type: string
-        statementsList:
-          type: array
-          items:
-            type: string
-      required:
-      - summaryAvailable
-      - responseMsg
-      - statementsList
-    BankTransactions:
-      type: object
-      properties:
-        id:
-          type: string
-          example: lPNjeW1nR6CDn5okmGQ6hEpMo4lLNoSrzqDje
-          readOnly: false
-        date:
-          type: string
-          example: '2017-01-29'
-          readOnly: false
-          format: date-time
-        amount:
+          format: float
+        accuracyScore:
           type: number
-          readOnly: false
-          example: 1000
-        accountType:
-          type: string
-          example: investment, credit, depository, loan, brokerage, other
-        accountId:
-          type: string
-          example: onD7kPQJ98cDejlnXpZeHeqp1qBlX5TogLqxW
-        description:
-          type: string
-          example: BMO Bank of Montreal
+          example: 50.5
+          format: float
+        bankTransactionsUnreconciledCount:
+          type: number
+          example: 25
+        bankTransactionsUnreconciledAmount:
+          type: number
+          example: 109.95
+          format: float
+        dailyAccuracyScore:
+          type: number
+          example: 0.24
+          format: float
+        unreconciledBankTransactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/BankTransactions'
+        reconciledBankTransactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReconciledBankTransactionsV2'
       required:
-      - id
-      - date
-      - amount
-      - accountId
-    TaxBenchmarkingFormattedData:
-      type: object
-      properties:
-        section:
-          oneOf:
-          - $ref: '#/components/schemas/TaxBenchmarkingSubItems'
-          allOf:
-          - $ref: '#/components/schemas/TaxBenchmarkingSubItems'
-        subSection:
-          oneOf:
-          - $ref: '#/components/schemas/TaxBenchmarkingSubItems'
-          allOf:
-          - $ref: '#/components/schemas/TaxBenchmarkingSubItems'
-        group:
-          oneOf:
-          - $ref: '#/components/schemas/TaxBenchmarkingSubItems'
-          allOf:
-          - $ref: '#/components/schemas/TaxBenchmarkingSubItems'
-        subGroup:
-          oneOf:
-          - $ref: '#/components/schemas/TaxBenchmarkingSubItems'
-          allOf:
-          - $ref: '#/components/schemas/TaxBenchmarkingSubItems'
-      required:
-      - section
-      - subSection
-      - group
-      - subGroup
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
+      - bankTransactionsCount
+      - accountingTransactionsCount
+      - bankTransactionsAmount
+      - accountingTransactionsAmount
+      - bankTransactionsTotalValue
+      - accountingTransactionsTotalValue
+      - weightedPercentageError
+      - accuracyScore
+      - bankTransactionsUnreconciledCount
+      - bankTransactionsUnreconciledAmount
+      - dailyAccuracyScore
     CreditsData:
       type: object
       properties:
@@ -4919,7 +4936,93 @@ components:
       - railzRating
       - railzGrade
       - description
-    BusinessValuationMetaDataV2:
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    BankReconciliationResponseV2Dto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+          deprecated: true
+        reports:
+          readOnly: false
+          type: array
+          items:
+            $ref: '#/components/schemas/BankReconciliationReportV2'
+      required:
+      - pagination
+      - count
+      - reports
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    BankAccountMetaDataV2:
       type: object
       properties:
         connectionUuid:
@@ -4949,36 +5052,26 @@ components:
           - zohoBooks
           - byod
         reportId:
-          type: string
           readOnly: true
-          example: 5fad8a342a88364234392fb5
-        startDate:
-          type: string
-          readOnly: true
-          example: '2020-11-25T01:02:03Z'
-          format: date-time
-        endDate:
-          type: string
-          readOnly: true
-          example: '2020-11-25T01:02:03Z'
-          format: date-time
+          example:
+          - 5fad8a342a88364234392fb5
+          type: array
+          items:
+            type: string
         createdAt:
           type: string
           readOnly: true
-          example: '2020-12-25T01:02:03Z'
           format: date-time
+          example: '2020-12-25T01:02:03Z'
         updatedAt:
           type: string
-          readOnly: true
-          example: '2020-12-25T01:02:03Z'
           format: date-time
+          example: '2020-12-25T01:02:03Z'
       required:
       - connectionUuid
       - businessName
       - serviceName
       - reportId
-      - startDate
-      - endDate
       - createdAt
       - updatedAt
     Error500Dto:
@@ -5003,36 +5096,183 @@ components:
       - error
       - message
       - statusCode
-    CreditsReport:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/CreditRatingsReportMetaData'
-        data:
-          $ref: '#/components/schemas/CreditsData'
-      required:
-      - meta
-      - data
-    BankReconciliationResponseV2Dto:
+    GetBankAccountResponseV2Dto:
       type: object
       properties:
         pagination:
           $ref: '#/components/schemas/PaginationMetaData'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetBankAccountData'
+        meta:
+          $ref: '#/components/schemas/BankAccountMetaDataV2'
+        count:
+          type: integer
+          readOnly: true
+          example: 1
+          deprecated: true
+      required:
+      - pagination
+      - data
+      - meta
+      - count
+    FinancialForecastsSummaryEligibilityResponse:
+      type: object
+      properties:
+        summaryAvailable:
+          type: boolean
+        responseMsg:
+          type: string
+        statementsList:
+          type: array
+          items:
+            type: string
+      required:
+      - summaryAvailable
+      - responseMsg
+      - statementsList
+    ReconciledBankTransactionsV2:
+      type: object
+      properties:
+        id:
+          type: string
+          example: lPNjeW1nR6CDn5okmGQ6hEpMo4lLNoSrzqDje
+          readOnly: false
+        date:
+          type: string
+          example: '2017-01-29'
+          readOnly: false
+          format: date-time
+        amount:
+          type: number
+          readOnly: false
+          example: 1000
+        accountType:
+          type: string
+          example: investment, credit, depository, loan, brokerage, other
+        accountId:
+          type: string
+          example: onD7kPQJ98cDejlnXpZeHeqp1qBlX5TogLqxW
+        description:
+          type: string
+          example: BMO Bank of Montreal
+        accountingTransactionId:
+          type: string
+          example: 13
+        accountingTransactionType:
+          type: string
+          enum:
+          - expense
+          - invoice
+          - payment
+          - payroll
+          - journalEntry
+          - bill
+          - vendorCreditNote
+          - creditNote
+          - billPayment
+          - bankTransaction
+          - transfer
+          - deposit
+          - refund
+          - estimate
+          - inventoryAdjustment
+          - purchaseOrder
+          - taxPayment
+          - taxAdjustment
+          - taxRefund
+          - taxReversal
+          - other
+          - unknown
+        isPosting:
+          type: boolean
+          example: 'true'
+        isSplitTransaction:
+          type: boolean
+          example: 'true'
+        subTotal:
+          type: number
+          example: 300.5
+          format: float
+        transactionNumber:
+          type: string
+          example: INV-001
+        transactionReportId:
+          type: string
+          example: 5fad8a342a88364234392fb6
+        accountRef:
+          $ref: '#/components/schemas/ReconcilationAccountRef'
+        entityRef:
+          $ref: '#/components/schemas/EntityRef'
+      required:
+      - id
+      - date
+      - amount
+      - accountId
+      - accountRef
+    TaxBenchmarkingSubItems:
+      type: object
+      properties:
+        max:
+          type: object
+        mean:
+          type: object
+        median:
+          type: object
+        min:
+          type: object
+        quantile25:
+          type: object
+        quantile5:
+          type: object
+        quantile75:
+          type: object
+        quantile95:
+          type: object
+        sdev:
+          type: object
+        total:
+          type: object
+      required:
+      - max
+      - mean
+      - median
+      - min
+      - quantile25
+      - quantile5
+      - quantile75
+      - quantile95
+      - sdev
+      - total
+    BusinessValuationResponseV2Dto:
+      type: object
+      properties:
         count:
           type: number
           readOnly: true
           example: 1
           format: integer
-          deprecated: true
         reports:
-          readOnly: false
           type: array
           items:
-            $ref: '#/components/schemas/BankReconciliationReportV2'
+            $ref: '#/components/schemas/BusinessValuationReportV2'
       required:
-      - pagination
       - count
       - reports
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
     ReconcilationAccountRef:
       type: object
       properties:
@@ -5080,62 +5320,22 @@ components:
       required:
       - id
       - name
-    Error401Dto:
+    CreditsResponseDto:
       type: object
       properties:
-        statusCode:
+        count:
           type: number
           readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
+          format: integer
+          example: 1
+        reports:
+          readOnly: false
           type: array
           items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
+            $ref: '#/components/schemas/CreditsReport'
       required:
-      - statusCode
-      - message
-      - error
-    TaxBenchmarkingSubItems:
-      type: object
-      properties:
-        max:
-          type: object
-        mean:
-          type: object
-        median:
-          type: object
-        min:
-          type: object
-        quantile25:
-          type: object
-        quantile5:
-          type: object
-        quantile75:
-          type: object
-        quantile95:
-          type: object
-        sdev:
-          type: object
-        total:
-          type: object
-      required:
-      - max
-      - mean
-      - median
-      - min
-      - quantile25
-      - quantile5
-      - quantile75
-      - quantile95
-      - sdev
-      - total
+      - count
+      - reports
     TaxBenchmarkingVisualizationResponse:
       type: object
       properties:
@@ -5149,91 +5349,6 @@ components:
       - meta
       - businessValues
       - taxBenchmarkingData
-    BankReconciliationV2Data:
-      type: object
-      properties:
-        bankTransactionsCount:
-          type: number
-          example: 35
-        accountingTransactionsCount:
-          type: number
-          example: 50
-        bankTransactionsAmount:
-          type: number
-          example: 105.5
-          format: float
-        accountingTransactionsAmount:
-          type: number
-          example: 750.5
-          format: float
-        bankTransactionsTotalValue:
-          type: number
-          example: 109.95
-          format: float
-        accountingTransactionsTotalValue:
-          type: number
-          example: 500.5
-          format: float
-        weightedPercentageError:
-          type: number
-          example: 1
-          format: float
-        accuracyScore:
-          type: number
-          example: 50.5
-          format: float
-        bankTransactionsUnreconciledCount:
-          type: number
-          example: 25
-        bankTransactionsUnreconciledAmount:
-          type: number
-          example: 109.95
-          format: float
-        dailyAccuracyScore:
-          type: number
-          example: 0.24
-          format: float
-        unreconciledBankTransactions:
-          type: array
-          items:
-            $ref: '#/components/schemas/BankTransactions'
-        reconciledBankTransactions:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReconciledBankTransactionsV2'
-      required:
-      - bankTransactionsCount
-      - accountingTransactionsCount
-      - bankTransactionsAmount
-      - accountingTransactionsAmount
-      - bankTransactionsTotalValue
-      - accountingTransactionsTotalValue
-      - weightedPercentageError
-      - accuracyScore
-      - bankTransactionsUnreconciledCount
-      - bankTransactionsUnreconciledAmount
-      - dailyAccuracyScore
-    GetBankAccountResponseV2Dto:
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetBankAccountData'
-        meta:
-          $ref: '#/components/schemas/BankAccountMetaDataV2'
-        count:
-          type: integer
-          readOnly: true
-          example: 1
-          deprecated: true
-      required:
-      - pagination
-      - data
-      - meta
-      - count
     GetBankAccountData:
       type: object
       properties:
@@ -5290,151 +5405,36 @@ components:
       - currency
       - accountName
       - accountType
-    BusinessValuationResponseV2Dto:
+    BankTransactions:
       type: object
       properties:
-        count:
-          type: number
-          readOnly: true
-          example: 1
-          format: integer
-        reports:
-          type: array
-          items:
-            $ref: '#/components/schemas/BusinessValuationReportV2'
-      required:
-      - count
-      - reports
-    BankAccountMetaDataV2:
-      type: object
-      properties:
-        connectionUuid:
+        id:
           type: string
-          readOnly: true
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        reportId:
-          readOnly: true
-          example:
-          - 5fad8a342a88364234392fb5
-          type: array
-          items:
-            type: string
-        createdAt:
-          type: string
-          readOnly: true
-          format: date-time
-          example: '2020-12-25T01:02:03Z'
-        updatedAt:
-          type: string
-          format: date-time
-          example: '2020-12-25T01:02:03Z'
-      required:
-      - connectionUuid
-      - businessName
-      - serviceName
-      - reportId
-      - createdAt
-      - updatedAt
-    Error400Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - businessName cannot be null
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
-    CreditRatingsReportMetaData:
-      type: object
-      properties:
-        reportId:
-          type: string
-          readOnly: true
-          example: 5fad8a342a88364234392fb5
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - quickbooks
-          - xero
-          - freshbooks
-          - quickbooksDesktop
-          - sageIntacct
-          - sageBusinessCloud
-          - oracleNetsuite
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - zohoBooks
-          - myob
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        startDate:
-          type: string
-          readOnly: true
-          example: '2020-11-25T01:02:03Z'
-          format: date-time
-        endDate:
-          type: string
-          readOnly: true
-          example: '2020-11-25T01:02:03Z'
-          format: date-time
-        createdAt:
-          type: string
-          readOnly: true
-          example: '2020-12-25T01:02:03Z'
-          format: date-time
-        updatedAt:
-          type: string
+          example: lPNjeW1nR6CDn5okmGQ6hEpMo4lLNoSrzqDje
           readOnly: false
-          example: '2020-11-30T01:02:03Z'
+        date:
+          type: string
+          example: '2017-01-29'
+          readOnly: false
           format: date-time
+        amount:
+          type: number
+          readOnly: false
+          example: 1000
+        accountType:
+          type: string
+          example: investment, credit, depository, loan, brokerage, other
+        accountId:
+          type: string
+          example: onD7kPQJ98cDejlnXpZeHeqp1qBlX5TogLqxW
+        description:
+          type: string
+          example: BMO Bank of Montreal
       required:
-      - reportId
-      - serviceName
-      - businessName
-      - startDate
-      - endDate
-      - createdAt
-      - updatedAt
+      - id
+      - date
+      - amount
+      - accountId
   securitySchemes:
     bearer:
       scheme: bearer

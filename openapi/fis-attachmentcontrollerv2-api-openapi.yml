@@ -148,6 +148,35 @@ paths:
       - AttachmentControllerV2
 components:
   schemas:
+    AttachmentLinkV2:
+      type: object
+      properties:
+        type:
+          type: string
+          example: bill
+          enum:
+          - bill
+          - invoice
+          - customer
+          - vendor
+          - deposit
+          - journalEntry
+          - billPayment
+          - invoicePayment
+          - expense
+          - inventory
+          - purchaseOrder
+          - invoiceCreditNote
+          - billCreditNote
+          - bankTransaction
+          - bankTransfer
+          - account
+        id:
+          type: string
+          example: '234'
+      required:
+      - type
+      - id
     PushAttachmentV2:
       type: object
       properties:
@@ -163,6 +192,28 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PushAttachmentLink'
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
     PushAttachmentV2Dto:
       type: object
       properties:
@@ -178,139 +229,16 @@ components:
       required:
       - connectionUuid
       - file
-    ListReportMetaDataV2:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          readOnly: true
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        reportId:
-          readOnly: true
-          example:
-          - 5fad8a342a88364234392fb5
-          - 5fad8a342a88364234392fb6
-          type: array
-          items:
-            type: string
-        createdAt:
-          type: string
-          readOnly: true
-          example: '2020-11-25T01:02:03Z'
-          format: date-time
-        updatedAt:
-          type: string
-          example: '2020-11-30T01:02:03Z'
-          format: date-time
-          readOnly: false
-      required:
-      - connectionUuid
-      - businessName
-      - serviceName
-      - reportId
-      - createdAt
-      - updatedAt
-    GetAttachmentV2Data:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        url:
-          type: string
-          example: https://api.railz.ai/Attachments/Image00394.png
-          format: uri
-        fileName:
-          type: string
-          example: image00394.png
-        contentType:
-          type: string
-          example: image/jpeg
-        uploadDate:
-          type: string
-          example: '2020-11-25T01:02:03Z'
-        fileSize:
-          type: number
-          example: 10495
-          format: float
-        sourceModifiedDate:
-          type: string
-          example: '2021-03-09T08:49:36.035Z'
-        links:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttachmentLinkV2'
-      required:
-      - id
-      - url
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
-    Error500ResponseDto:
+    Error400ResponseDtoV2:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error500Dto'
+          - $ref: '#/components/schemas/Error400DtoV2'
         payload:
           type: object
           readOnly: true
-      required:
-      - error
-      - payload
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
       required:
       - error
       - payload
@@ -336,86 +264,21 @@ components:
       - statusCode
       - message
       - error
-    PushAttachmentLink:
+    GetAttachmentV2ResponseDto:
       type: object
       properties:
-        type:
-          type: string
-          example: bill
-          enum:
-          - bill
-          - invoice
-          - customer
-          - vendor
-          - deposit
-          - journalEntry
-          - billPayment
-          - invoicePayment
-          - expense
-          - inventory
-          - purchaseOrder
-          - invoiceCreditNote
-          - billCreditNote
-          - bankTransaction
-          - bankTransfer
-          - account
-        id:
-          type: string
-          example: '133'
-      required:
-      - type
-      - id
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
+        meta:
+          $ref: '#/components/schemas/ListReportMetaDataV2'
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        data:
           type: array
           items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
+            $ref: '#/components/schemas/GetAttachmentV2Data'
       required:
-      - error
-      - message
-      - statusCode
-    Error400ResponseDtoV2:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    PaginationMetaData:
-      type: object
-      properties:
-        offset:
-          type: number
-          readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
-          readOnly: true
-      required:
-      - offset
-      - limit
-      - count
+      - meta
+      - pagination
+      - data
     PushAttachmentV2ResponseDto:
       type: object
       properties:
@@ -474,28 +337,20 @@ components:
       - requestedOn
       - status
       - data
-    Error401Dto:
+    Error401ResponseDto:
       type: object
       properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
         error:
-          type: string
           readOnly: true
-          example: Unauthorized
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
       required:
-      - statusCode
-      - message
       - error
+      - payload
     Error403ResponseDto:
       type: object
       properties:
@@ -510,22 +365,7 @@ components:
       required:
       - error
       - payload
-    GetAttachmentV2ResponseDto:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/ListReportMetaDataV2'
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetAttachmentV2Data'
-      required:
-      - meta
-      - pagination
-      - data
-    AttachmentLinkV2:
+    PushAttachmentLink:
       type: object
       properties:
         type:
@@ -550,10 +390,170 @@ components:
           - account
         id:
           type: string
-          example: '234'
+          example: '133'
       required:
       - type
       - id
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    GetAttachmentV2Data:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        url:
+          type: string
+          example: https://api.railz.ai/Attachments/Image00394.png
+          format: uri
+        fileName:
+          type: string
+          example: image00394.png
+        contentType:
+          type: string
+          example: image/jpeg
+        uploadDate:
+          type: string
+          example: '2020-11-25T01:02:03Z'
+        fileSize:
+          type: number
+          example: 10495
+          format: float
+        sourceModifiedDate:
+          type: string
+          example: '2021-03-09T08:49:36.035Z'
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachmentLinkV2'
+      required:
+      - id
+      - url
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    ListReportMetaDataV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          - 5fad8a342a88364234392fb6
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - reportId
+      - createdAt
+      - updatedAt
   securitySchemes:
     bearer:
       scheme: bearer

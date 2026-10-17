@@ -207,22 +207,28 @@ paths:
       x-operation-id-original: disable connection
 components:
   schemas:
-    serviceAccountRefType:
+    Error401Dto:
       type: object
       properties:
-        id:
-          type: string
-          example: '12345'
-        entityRef:
-          type:
-          - object
-          - 'null'
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
           example:
-            id: '100'
-          properties:
-            id:
-              type: string
-              example: '100'
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
     DisconnectResponseDto:
       type: object
       properties:
@@ -272,6 +278,122 @@ components:
       - status
       - createdAt
       - updatedAt
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    MetaDataCount:
+      type: object
+      properties:
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+      required:
+      - count
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    DisableConnectionDto:
+      type: object
+      properties:
+        connectionId:
+          type: string
+          example: CON-e66400c1-4d2f-4683-9bea-275799943695
+      required:
+      - connectionId
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
     ConnectionsResponseData:
       type: object
       properties:
@@ -361,95 +483,36 @@ components:
       - businessUuid
       - businessName
       - connectionId
-    Error403Dto:
+    serviceAccountRefType:
       type: object
       properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
+        id:
+          type: string
+          example: '12345'
+        entityRef:
+          type:
+          - object
+          - 'null'
           example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
+            id: '100'
+          properties:
+            id:
+              type: string
+              example: '100'
+    ConnectionsInstitutionData:
+      type: object
+      properties:
+        name:
           type: string
           readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
-    Error500ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    DisableConnectionDto:
-      type: object
-      properties:
-        connectionId:
-          type: string
-          example: CON-e66400c1-4d2f-4683-9bea-275799943695
-      required:
-      - connectionId
-    Error400Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - businessName cannot be null
-          type: array
-          items:
-            type: string
-        error:
+          example: Citizens bank
+        logo:
           type: string
           readOnly: true
-          example: Bad Request
+          example: https://serverlogo.url
       required:
-      - statusCode
-      - message
-      - error
-    MetaDataCount:
-      type: object
-      properties:
-        count:
-          type: number
-          readOnly: true
-          example: 1
-          format: integer
-      required:
-      - count
+      - name
+      - logo
     ConnectionsResponseDto:
       type: object
       properties:
@@ -487,69 +550,6 @@ components:
       - error
       - message
       - statusCode
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
-    ConnectionsInstitutionData:
-      type: object
-      properties:
-        name:
-          type: string
-          readOnly: true
-          example: Citizens bank
-        logo:
-          type: string
-          readOnly: true
-          example: https://serverlogo.url
-      required:
-      - name
-      - logo
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    Error400ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
   securitySchemes:
     bearer:
       scheme: bearer

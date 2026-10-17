@@ -174,6 +174,64 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    PushDepositConnection:
+      type: object
+      properties:
+        businessName:
+          type: string
+          example: Railz
+          description: Unique business name identifier.
+        serviceName:
+          type: string
+          example: quickbooks
+          description: Name of accounting platform service.
+          enum:
+          - quickbooks
+          - xero
+      required:
+      - businessName
+      - serviceName
+    Error400Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - businessName cannot be null
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    DepositEntityRef:
+      type: object
+      properties:
+        name:
+          type: string
+          example: ABC Inc.
+        id:
+          type: string
+          example: '1'
+        type:
+          type: string
+          example: vendor
+          enum:
+          - customer
+          - employee
+          - unknown
+      required:
+      - id
+      - type
     Error403Dto:
       type: object
       properties:
@@ -213,206 +271,26 @@ components:
       required:
       - type
       - id
-    GetDepositData:
+    GetDepositResponseDto:
       type: object
       properties:
-        id:
-          type: string
-          example: '1'
-        postedDate:
-          format: date-time
-          type: string
-          example: '2021-03-09T10:18:29.985Z'
-        currencyRef:
-          $ref: '#/components/schemas/CurrencyRef'
-        currencyRate:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        count:
           type: number
-          example: 1.13
-          format: float
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/DepositLineItems'
-        subTotal:
-          type: number
-          example: 301.5
-          format: float
-        taxAmount:
-          type: number
-          example: 20.5
-          format: float
-        totalAmount:
-          type: number
-          example: 322
-          format: float
-        status:
-          type: string
-          enum:
-          - open
-          - paid
-          - void
-          - unknown
-          - draft
-        memo:
-          type: string
-          example: Example bill memo.
-        sourceModifiedDate:
-          format: date-time
-          type: string
-          example: '2021-03-09T10:18:29.985Z'
-      required:
-      - id
-      - postedDate
-      - totalAmount
-      - status
-    DepositLineItems:
-      type: object
-      properties:
-        description:
-          type: string
-          example: Services rendered.
-        unitAmount:
-          type: number
-          example: 100.5
-          format: float
-        quantity:
-          type: number
-          example: 3
+          readOnly: true
+          example: 1
           format: integer
-        subTotal:
-          type: number
-          example: 301.5
-          format: float
-          deprecated: true
-        taxAmount:
-          type: number
-          example: 20.5
-          format: float
-        totalAmount:
-          type: number
-          example: 322
-          format: float
-        accountRef:
-          $ref: '#/components/schemas/AccountRef'
-        taxRateRef:
-          $ref: '#/components/schemas/TaxRateRef'
-        entityRef:
-          $ref: '#/components/schemas/DepositEntityRef'
-        link:
-          deprecated: true
-          allOf:
-          - $ref: '#/components/schemas/Link'
-        links:
+        meta:
+          $ref: '#/components/schemas/BasicStartEndDateReportMetaData'
+        data:
           type: array
           items:
-            $ref: '#/components/schemas/Links'
+            $ref: '#/components/schemas/GetDepositData'
       required:
-      - totalAmount
-    Link:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - billPayment
-          - transfer
-          - journalEntry
-          - paymentOnAccount
-          - other
-        id:
-          type: string
-          example: '560'
-      required:
-      - id
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    PushDepositV1Dto:
-      type: object
-      properties:
-        connection:
-          $ref: '#/components/schemas/PushDepositConnection'
-        data:
-          $ref: '#/components/schemas/PushDepositV1'
-      required:
-      - connection
-      - data
-    Error500ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    PushDepositV1ResponseDto:
-      type: object
-      properties:
-        pushCommunicationId:
-          type: string
-          readOnly: true
-          example: 60473b57f0cdd1683ca71f60
-        requestedOn:
-          type: string
-          readOnly: true
-          example: '2021-03-09T08:15:22.035Z'
-          format: date-time
-        status:
-          type: string
-          readOnly: true
-          example: pending
-          enum:
-          - success
-          - failed
-          - pending
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        serviceName:
-          type: string
-          readOnly: true
-          example: quickbooks
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        data:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/PushDepositV1'
-      required:
-      - pushCommunicationId
-      - requestedOn
-      - status
-      - businessName
-      - serviceName
+      - pagination
+      - count
+      - meta
       - data
     TaxRateRef:
       type: object
@@ -429,6 +307,57 @@ components:
           format: float
       required:
       - id
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Link:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - billPayment
+          - transfer
+          - journalEntry
+          - paymentOnAccount
+          - other
+        id:
+          type: string
+          example: '560'
+      required:
+      - id
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
     CurrencyRef:
       type: object
       properties:
@@ -443,6 +372,34 @@ components:
           example: USD,CAD
       required:
       - id
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
     PaginationMetaData:
       type: object
       properties:
@@ -459,6 +416,80 @@ components:
       - offset
       - limit
       - count
+    AccountRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '145'
+        name:
+          type: string
+          example: Example account
+      required:
+      - id
+    PushDepositV1:
+      type: object
+      properties:
+        currencyRate:
+          type: number
+          example: '1.13'
+        memo:
+          type: string
+          maxLength: 4000
+          example: Example memo.
+        currency:
+          type: string
+          example: CAD
+        customerRef:
+          type: string
+          example: '124'
+        postedDate:
+          type: string
+          format: date
+          example: '2021-03-29'
+        bankAccountRef:
+          type: string
+          example: '200'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/PushDepositLineV1'
+      required:
+      - postedDate
+      - bankAccountRef
+      - lines
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    PushDepositV1Dto:
+      type: object
+      properties:
+        connection:
+          $ref: '#/components/schemas/PushDepositConnection'
+        data:
+          $ref: '#/components/schemas/PushDepositV1'
+      required:
+      - connection
+      - data
     BasicStartEndDateReportMetaData:
       type: object
       properties:
@@ -519,19 +550,6 @@ components:
       - updatedAt
       - startDate
       - endDate
-    Error400ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
     PushDepositLineV1:
       type: object
       properties:
@@ -576,185 +594,167 @@ components:
       - quantity
       - unitAmount
       - accountRef
-    Error401ResponseDto:
+    PushDepositV1ResponseDto:
+      type: object
+      properties:
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: quickbooks
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushDepositV1'
+      required:
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - businessName
+      - serviceName
+      - data
+    DepositLineItems:
+      type: object
+      properties:
+        description:
+          type: string
+          example: Services rendered.
+        unitAmount:
+          type: number
+          example: 100.5
+          format: float
+        quantity:
+          type: number
+          example: 3
+          format: integer
+        subTotal:
+          type: number
+          example: 301.5
+          format: float
+          deprecated: true
+        taxAmount:
+          type: number
+          example: 20.5
+          format: float
+        totalAmount:
+          type: number
+          example: 322
+          format: float
+        accountRef:
+          $ref: '#/components/schemas/AccountRef'
+        taxRateRef:
+          $ref: '#/components/schemas/TaxRateRef'
+        entityRef:
+          $ref: '#/components/schemas/DepositEntityRef'
+        link:
+          deprecated: true
+          allOf:
+          - $ref: '#/components/schemas/Link'
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/Links'
+      required:
+      - totalAmount
+    Error400ResponseDto:
       type: object
       properties:
         error:
           readOnly: true
           allOf:
-          - $ref: '#/components/schemas/Error401Dto'
+          - $ref: '#/components/schemas/Error400Dto'
         payload:
           type: object
           readOnly: true
-          example: {}
       required:
       - error
       - payload
-    Error500Dto:
+    GetDepositData:
       type: object
       properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
-    DepositEntityRef:
-      type: object
-      properties:
-        name:
-          type: string
-          example: ABC Inc.
         id:
           type: string
           example: '1'
-        type:
+        postedDate:
+          format: date-time
           type: string
-          example: vendor
-          enum:
-          - customer
-          - employee
-          - unknown
-      required:
-      - id
-      - type
-    PushDepositConnection:
-      type: object
-      properties:
-        businessName:
-          type: string
-          example: Railz
-          description: Unique business name identifier.
-        serviceName:
-          type: string
-          example: quickbooks
-          description: Name of accounting platform service.
-          enum:
-          - quickbooks
-          - xero
-      required:
-      - businessName
-      - serviceName
-    GetDepositResponseDto:
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        count:
-          type: number
-          readOnly: true
-          example: 1
-          format: integer
-        meta:
-          $ref: '#/components/schemas/BasicStartEndDateReportMetaData'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetDepositData'
-      required:
-      - pagination
-      - count
-      - meta
-      - data
-    AccountRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '145'
-        name:
-          type: string
-          example: Example account
-      required:
-      - id
-    Error400Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - businessName cannot be null
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
-    PushDepositV1:
-      type: object
-      properties:
+          example: '2021-03-09T10:18:29.985Z'
+        currencyRef:
+          $ref: '#/components/schemas/CurrencyRef'
         currencyRate:
           type: number
-          example: '1.13'
-        memo:
-          type: string
-          maxLength: 4000
-          example: Example memo.
-        currency:
-          type: string
-          example: CAD
-        customerRef:
-          type: string
-          example: '124'
-        postedDate:
-          type: string
-          format: date
-          example: '2021-03-29'
-        bankAccountRef:
-          type: string
-          example: '200'
+          example: 1.13
+          format: float
         lines:
           type: array
           items:
-            $ref: '#/components/schemas/PushDepositLineV1'
+            $ref: '#/components/schemas/DepositLineItems'
+        subTotal:
+          type: number
+          example: 301.5
+          format: float
+        taxAmount:
+          type: number
+          example: 20.5
+          format: float
+        totalAmount:
+          type: number
+          example: 322
+          format: float
+        status:
+          type: string
+          enum:
+          - open
+          - paid
+          - void
+          - unknown
+          - draft
+        memo:
+          type: string
+          example: Example bill memo.
+        sourceModifiedDate:
+          format: date-time
+          type: string
+          example: '2021-03-09T10:18:29.985Z'
       required:
+      - id
       - postedDate
-      - bankAccountRef
-      - lines
+      - totalAmount
+      - status
   securitySchemes:
     bearer:
       scheme: bearer

@@ -3757,41 +3757,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    Error403Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
-    Error500ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
     CreditsData:
       type: object
       properties:
@@ -3959,20 +3924,28 @@ components:
       - railzRating
       - railzGrade
       - description
-    Error401ResponseDto:
+    Error401Dto:
       type: object
       properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
         error:
+          type: string
           readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
+          example: Unauthorized
       required:
+      - statusCode
+      - message
       - error
-      - payload
     Error400Dto:
       type: object
       properties:
@@ -3995,6 +3968,30 @@ components:
       - statusCode
       - message
       - error
+    CreditsReport:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/CreditRatingsReportMetaData'
+        data:
+          $ref: '#/components/schemas/CreditsData'
+      required:
+      - meta
+      - data
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
     CreditRatingsReportMetaData:
       type: object
       properties:
@@ -4051,16 +4048,84 @@ components:
       - endDate
       - createdAt
       - updatedAt
-    CreditsReport:
+    Error403ResponseDto:
       type: object
       properties:
-        meta:
-          $ref: '#/components/schemas/CreditRatingsReportMetaData'
-        data:
-          $ref: '#/components/schemas/CreditsData'
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
       required:
-      - meta
-      - data
+      - error
+      - payload
+    Error400ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    Error403Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 403
+        message:
+          readOnly: true
+          example:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    CreditsResponseDto:
+      type: object
+      properties:
+        count:
+          type: number
+          readOnly: true
+          format: integer
+          example: 1
+        reports:
+          readOnly: false
+          type: array
+          items:
+            $ref: '#/components/schemas/CreditsReport'
+      required:
+      - count
+      - reports
     Error500Dto:
       type: object
       properties:
@@ -4083,71 +4148,6 @@ components:
       - error
       - message
       - statusCode
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    CreditsResponseDto:
-      type: object
-      properties:
-        count:
-          type: number
-          readOnly: true
-          format: integer
-          example: 1
-        reports:
-          readOnly: false
-          type: array
-          items:
-            $ref: '#/components/schemas/CreditsReport'
-      required:
-      - count
-      - reports
-    Error400ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
   securitySchemes:
     bearer:
       scheme: bearer

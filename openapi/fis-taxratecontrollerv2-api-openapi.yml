@@ -219,6 +219,50 @@ paths:
       - TaxRateControllerV2
 components:
   schemas:
+    Error400DtoV2:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    TaxRateComponentV2:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: HST
+        rate:
+          type: number
+          example: 13
+          format: float
+        isCompound:
+          type: boolean
+          example: false
+        isPurchasesTax:
+          type: boolean
+          example: false
+        isSalesTax:
+          type: boolean
+          example: false
     Error403Dto:
       type: object
       properties:
@@ -241,6 +285,364 @@ components:
       - statusCode
       - message
       - error
+    TaxAccountRef:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - paid
+          - collected
+        name:
+          type: string
+      required:
+      - id
+      - type
+    GetTaxAuthorityData:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: Dept. of Revenue
+        memo:
+          type: string
+        registrationNumber:
+          type: string
+          example: '460000000066001'
+        sourceModifiedDate:
+          format: date-time
+          type: string
+          example: '2021-03-10T11:26:06.619Z'
+      required:
+      - id
+      - name
+    PushTaxRate:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Name of the tax rate
+        code:
+          type: string
+          example: '11200'
+        effectiveTaxRate:
+          type: number
+          format: float
+          example: 0
+        totalTaxRate:
+          type: number
+          format: float
+          example: 0
+        bankName:
+          type: string
+          example: TD Bank
+        components:
+          type: array
+          items:
+            $ref: '#/components/schemas/PushTaxRateComponent'
+        taxAuthority:
+          $ref: '#/components/schemas/TaxAuthority'
+        taxAccountRef:
+          $ref: '#/components/schemas/BaseTaxAccountRef'
+        taxType:
+          type: string
+          example: salesTax
+          enum:
+          - salesTax
+          - goodsAndServicesTax
+          - importTax
+          - luxuryCarTax
+          - withholdingsTax
+          - other
+      required:
+      - name
+    BaseTaxAccountRef:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - paid
+          - collected
+      required:
+      - id
+      - type
+    TaxAuthority:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+      - id
+    GetTaxAuthorityResponseDto:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/ListReportMetaDataV2'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetTaxAuthorityData'
+      required:
+      - meta
+      - data
+    Error500ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error500Dto'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
+    ListReportMetaDataV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        reportId:
+          readOnly: true
+          example:
+          - 5fad8a342a88364234392fb5
+          - 5fad8a342a88364234392fb6
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+          readOnly: false
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - reportId
+      - createdAt
+      - updatedAt
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    PushTaxRateComponent:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        name:
+          type: string
+          example: HST
+        rate:
+          type: number
+          example: 13
+          format: float
+        isCompound:
+          type: boolean
+          example: false
+        isPurchasesTax:
+          type: boolean
+          example: false
+        isSalesTax:
+          type: boolean
+          example: false
+    PaginationMetaData:
+      type: object
+      properties:
+        offset:
+          type: number
+          readOnly: true
+        limit:
+          type: number
+          readOnly: true
+        count:
+          type: number
+          readOnly: true
+      required:
+      - offset
+      - limit
+      - count
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    GetTaxRatesResponseV2Dto:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetaData'
+        meta:
+          $ref: '#/components/schemas/ListReportMetaDataV2'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetTaxRatesDataV2'
+      required:
+      - pagination
+      - meta
+      - data
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    PushTaxRateResponseDto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        pushCommunicationId:
+          type: string
+          readOnly: true
+          example: 60473b57f0cdd1683ca71f60
+        requestedOn:
+          type: string
+          readOnly: true
+          example: '2021-03-09T08:15:22.035Z'
+          format: date-time
+        status:
+          type: string
+          readOnly: true
+          example: pending
+          enum:
+          - success
+          - failed
+          - pending
+        data:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/PushTaxRate'
+      required:
+      - connectionUuid
+      - businessName
+      - serviceName
+      - pushCommunicationId
+      - requestedOn
+      - status
+      - data
     PushTaxRateDto:
       type: object
       properties:
@@ -309,408 +711,6 @@ components:
       required:
       - id
       - name
-    PushTaxRate:
-      type: object
-      properties:
-        name:
-          type: string
-          example: Name of the tax rate
-        code:
-          type: string
-          example: '11200'
-        effectiveTaxRate:
-          type: number
-          format: float
-          example: 0
-        totalTaxRate:
-          type: number
-          format: float
-          example: 0
-        bankName:
-          type: string
-          example: TD Bank
-        components:
-          type: array
-          items:
-            $ref: '#/components/schemas/PushTaxRateComponent'
-        taxAuthority:
-          $ref: '#/components/schemas/TaxAuthority'
-        taxAccountRef:
-          $ref: '#/components/schemas/BaseTaxAccountRef'
-        taxType:
-          type: string
-          example: salesTax
-          enum:
-          - salesTax
-          - goodsAndServicesTax
-          - importTax
-          - luxuryCarTax
-          - withholdingsTax
-          - other
-      required:
-      - name
-    PushTaxRateComponent:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        name:
-          type: string
-          example: HST
-        rate:
-          type: number
-          example: 13
-          format: float
-        isCompound:
-          type: boolean
-          example: false
-        isPurchasesTax:
-          type: boolean
-          example: false
-        isSalesTax:
-          type: boolean
-          example: false
-    Error403ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    Error500ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    GetTaxAuthorityResponseDto:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/ListReportMetaDataV2'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetTaxAuthorityData'
-      required:
-      - meta
-      - data
-    PaginationMetaData:
-      type: object
-      properties:
-        offset:
-          type: number
-          readOnly: true
-        limit:
-          type: number
-          readOnly: true
-        count:
-          type: number
-          readOnly: true
-      required:
-      - offset
-      - limit
-      - count
-    BaseTaxAccountRef:
-      type: object
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-          enum:
-          - paid
-          - collected
-      required:
-      - id
-      - type
-    Error400DtoV2:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - connectionUuid should not be empty
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
-    ListReportMetaDataV2:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          readOnly: true
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        reportId:
-          readOnly: true
-          example:
-          - 5fad8a342a88364234392fb5
-          - 5fad8a342a88364234392fb6
-          type: array
-          items:
-            type: string
-        createdAt:
-          type: string
-          readOnly: true
-          example: '2020-11-25T01:02:03Z'
-          format: date-time
-        updatedAt:
-          type: string
-          example: '2020-11-30T01:02:03Z'
-          format: date-time
-          readOnly: false
-      required:
-      - connectionUuid
-      - businessName
-      - serviceName
-      - reportId
-      - createdAt
-      - updatedAt
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    GetTaxRatesResponseV2Dto:
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationMetaData'
-        meta:
-          $ref: '#/components/schemas/ListReportMetaDataV2'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetTaxRatesDataV2'
-      required:
-      - pagination
-      - meta
-      - data
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
-    TaxAuthority:
-      type: object
-      properties:
-        id:
-          type: string
-      required:
-      - id
-    PushTaxRateResponseDto:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          readOnly: true
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - freshbooks
-          - quickbooks
-          - quickbooksDesktop
-          - xero
-          - oracleNetsuite
-          - sageBusinessCloud
-          - sageIntacct
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - myob
-          - zohoBooks
-          - byod
-        pushCommunicationId:
-          type: string
-          readOnly: true
-          example: 60473b57f0cdd1683ca71f60
-        requestedOn:
-          type: string
-          readOnly: true
-          example: '2021-03-09T08:15:22.035Z'
-          format: date-time
-        status:
-          type: string
-          readOnly: true
-          example: pending
-          enum:
-          - success
-          - failed
-          - pending
-        data:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/PushTaxRate'
-      required:
-      - connectionUuid
-      - businessName
-      - serviceName
-      - pushCommunicationId
-      - requestedOn
-      - status
-      - data
-    GetTaxAuthorityData:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        name:
-          type: string
-          example: Dept. of Revenue
-        memo:
-          type: string
-        registrationNumber:
-          type: string
-          example: '460000000066001'
-        sourceModifiedDate:
-          format: date-time
-          type: string
-          example: '2021-03-10T11:26:06.619Z'
-      required:
-      - id
-      - name
-    TaxRateComponentV2:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        name:
-          type: string
-          example: HST
-        rate:
-          type: number
-          example: 13
-          format: float
-        isCompound:
-          type: boolean
-          example: false
-        isPurchasesTax:
-          type: boolean
-          example: false
-        isSalesTax:
-          type: boolean
-          example: false
-    TaxAccountRef:
-      type: object
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-          enum:
-          - paid
-          - collected
-        name:
-          type: string
-      required:
-      - id
-      - type
   securitySchemes:
     bearer:
       scheme: bearer

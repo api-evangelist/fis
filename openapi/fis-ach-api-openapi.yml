@@ -64,32 +64,6 @@ paths:
                 $ref: '#/components/schemas/AchBatch'
 components:
   schemas:
-    AccountReference:
-      type: object
-      required:
-      - accountNumber
-      - routingNumber
-      properties:
-        accountNumber:
-          type: string
-          description: Bank account number
-        routingNumber:
-          type: string
-          pattern: ^\d{9}$
-          description: ABA routing transit number (9 digits)
-        accountType:
-          type: string
-          enum:
-          - CHECKING
-          - SAVINGS
-          - LOAN
-        accountHolderName:
-          type: string
-        bankName:
-          type: string
-        swiftCode:
-          type: string
-          description: SWIFT/BIC code for international wires
     AchBatch:
       type: object
       properties:
@@ -112,27 +86,38 @@ components:
         createdAt:
           type: string
           format: date-time
-    AchTransfer:
-      allOf:
-      - $ref: '#/components/schemas/AchTransferRequest'
-      - type: object
-        properties:
-          transferId:
-            type: string
-          status:
-            type: string
-            enum:
-            - CREATED
-            - SUBMITTED
-            - SETTLED
-            - RETURNED
-            - REJECTED
-          traceNumber:
-            type: string
-            description: NACHA trace number
-          createdAt:
-            type: string
-            format: date-time
+    AchBatchRequest:
+      type: object
+      required:
+      - companyName
+      - companyId
+      - transactions
+      properties:
+        companyName:
+          type: string
+          maxLength: 16
+        companyId:
+          type: string
+          maxLength: 10
+        entryClassCode:
+          type: string
+          enum:
+          - PPD
+          - CCD
+          - CTX
+          - WEB
+          - TEL
+        description:
+          type: string
+          maxLength: 10
+        effectiveDate:
+          type: string
+          format: date
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AchTransferRequest'
+          maxItems: 10000
     AchTransferRequest:
       type: object
       required:
@@ -178,38 +163,53 @@ components:
         sameDayAch:
           type: boolean
           default: false
-    AchBatchRequest:
+    AccountReference:
       type: object
       required:
-      - companyName
-      - companyId
-      - transactions
+      - accountNumber
+      - routingNumber
       properties:
-        companyName:
+        accountNumber:
           type: string
-          maxLength: 16
-        companyId:
+          description: Bank account number
+        routingNumber:
           type: string
-          maxLength: 10
-        entryClassCode:
+          pattern: ^\d{9}$
+          description: ABA routing transit number (9 digits)
+        accountType:
           type: string
           enum:
-          - PPD
-          - CCD
-          - CTX
-          - WEB
-          - TEL
-        description:
+          - CHECKING
+          - SAVINGS
+          - LOAN
+        accountHolderName:
           type: string
-          maxLength: 10
-        effectiveDate:
+        bankName:
           type: string
-          format: date
-        transactions:
-          type: array
-          items:
-            $ref: '#/components/schemas/AchTransferRequest'
-          maxItems: 10000
+        swiftCode:
+          type: string
+          description: SWIFT/BIC code for international wires
+    AchTransfer:
+      allOf:
+      - $ref: '#/components/schemas/AchTransferRequest'
+      - type: object
+        properties:
+          transferId:
+            type: string
+          status:
+            type: string
+            enum:
+            - CREATED
+            - SUBMITTED
+            - SETTLED
+            - RETURNED
+            - REJECTED
+          traceNumber:
+            type: string
+            description: NACHA trace number
+          createdAt:
+            type: string
+            format: date-time
   securitySchemes:
     OAuth2ClientCredentials:
       type: oauth2

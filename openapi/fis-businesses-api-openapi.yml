@@ -766,59 +766,131 @@ paths:
       - Businesses
 components:
   schemas:
-    Error403Dto:
+    BusinessInfoDataV1:
       type: object
       properties:
-        statusCode:
+        businessName:
+          type: string
+          example: Railz
+        legalName:
+          type: string
+          example: Railz Financial Technologies Inc
+        businessEmail:
+          type: string
+          example: noreply@railz.ai
+        website:
+          type: string
+          example: www.railz.ai
+        primaryPhoneNumber:
+          type: string
+          example: 416-555-1212
+        fiscalYearEndDay:
           type: number
-          readOnly: true
-          example: 403
-        message:
-          readOnly: true
-          example:
-          - Forbidden resource
+          example: 31
+          format: integer
+        fiscalYearEndMonth:
+          type: number
+          example: 12
+          format: integer
+        industryType:
+          type: string
+          example: Financial
+        industryCode:
+          type: string
+          example: '123'
+        businessShortCode:
+          type: string
+          example: 6Qfdg!
+        baseCurrency:
+          type: string
+          example: USD
+        businessRegistrationNumber:
+          type: string
+          example: BN123456789
+        currencyRefs:
           type: array
           items:
-            type: string
-        error:
+            $ref: '#/components/schemas/BusinessInfoCurrencyRef'
+        subsidiaryRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessInfoSubsidiaryRef'
+        mailingAddress:
+          $ref: '#/components/schemas/BusinessInfoAddress'
+        legalAddress:
+          $ref: '#/components/schemas/BusinessInfoAddress'
+        locationRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessInfoLocationRef'
+        businessType:
           type: string
-          readOnly: true
-          example: Forbidden
-      required:
-      - statusCode
-      - message
-      - error
-    ConnectionMigrationDto:
+          example: organization
+          enum:
+          - soleProprietorship
+          - partnership
+          - limitedLiability
+          - corporation
+          - organization
+          - other
+          - unknown
+          - notForProfit
+        accountingMethod:
+          type: string
+          example: accrual
+    PostBusinessesResponseDtoV2:
       type: object
       properties:
-        serviceName:
+        businessName:
           type: string
-          enum:
-          - quickbooks
-          - xero
-          - freshbooks
-          - dynamicsBusinessCentral
-          - sageBusinessCloud
-          - zohoBooks
-          - wave
-          - plaid
-        accessToken:
+          readOnly: true
+          example: Railz
+        url:
           type: string
-        refreshToken:
+          readOnly: true
+        metadata:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/MetadataObjectDto'
+        status:
           type: string
-        accountId:
+          readOnly: true
+        createdAt:
+          format: date-time
           type: string
-        location:
+          readOnly: true
+        businessUuid:
           type: string
-          enum:
-          - com
-          - eu
-          - in
-          - au
-          - jp
-          - ca
+          readOnly: true
       required:
-      - serviceName
+      - businessName
+      - url
+      - metadata
+      - status
+      - createdAt
+      - businessUuid
+    BusinessInfoSubsidiaryRefCurrencyRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '3'
+    UpdateBusinessDto:
+      type: object
+      properties:
+        businessName:
+          type: string
+          example: Railz
+        newBusinessName:
+          type: string
+          example: Railz
+        metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetadataObjectDto'
+      required:
+      - businessName
     BusinessInfoSubsidiaryRefParentRef:
       type: object
       properties:
@@ -828,43 +900,71 @@ components:
         name:
           type: string
           example: Honeywell Holdings
-    Error400ResponseDtoV2:
+    Error400Dto:
       type: object
       properties:
-        error:
+        statusCode:
+          type: number
           readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400DtoV2'
-        payload:
-          type: object
+          example: 400
+        message:
           readOnly: true
-      required:
-      - error
-      - payload
-    UpdateBusinessDtoV2:
-      type: object
-      properties:
-        businessName:
-          type: string
-          example: Railz
-        metadata:
+          example:
+          - businessName cannot be null
           type: array
           items:
-            $ref: '#/components/schemas/MetadataObjectDto'
-    Error403ResponseDto:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    BusinessInfoLocationRef:
       type: object
       properties:
-        error:
+        id:
+          type: string
+          example: '52'
+        name:
+          type: string
+          example: United States
+        address:
+          $ref: '#/components/schemas/BusinessInfoLocationAddress'
+        parentRef:
+          $ref: '#/components/schemas/BusinessInfoLocationParentRef'
+    DeleteBusinessResponseDto:
+      type: object
+      properties:
+        deleted:
+          type: string
           readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error403Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
       required:
+      - deleted
+    Error400DtoV2:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 400
+        message:
+          readOnly: true
+          example:
+          - connectionUuid should not be empty
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Bad Request
+      required:
+      - statusCode
+      - message
       - error
-      - payload
     BusinessInfoAddress:
       type: object
       properties:
@@ -902,113 +1002,68 @@ components:
         postalCode:
           type: string
           example: A0B1C2
-    MetaPageData:
+    Error403Dto:
       type: object
       properties:
-        count:
+        statusCode:
           type: number
           readOnly: true
-          example: 1
-          format: integer
-        offset:
-          type: number
+          example: 403
+        message:
           readOnly: true
-          example: 1
-          format: integer
-        limit:
-          type: number
-          readOnly: true
-          example: 1
-          format: integer
-        currentPage:
-          type: number
-          readOnly: true
-          example: 1
-          format: integer
-        totalPages:
-          type: number
-          readOnly: true
-          example: 1
-          format: integer
-      required:
-      - count
-      - offset
-      - limit
-      - currentPage
-      - totalPages
-    BaseConnectionsResponseDataV2:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          readOnly: true
-          example: CON-e66400c1-4d2f-4683-9bea-275799943695
-        firstRecordDate:
-          type: string
-          example: '2020-12-25T01:02:03Z'
-          format: date-time
-        serviceName:
-          type: string
-          readOnly: true
-          example: xero
-          enum:
-          - quickbooks
-          - xero
-          - freshbooks
-          - quickbooksDesktop
-          - sageIntacct
-          - sageBusinessCloud
-          - oracleNetsuite
-          - dynamicsBusinessCentral
-          - dynamics365Finance
-          - wave
-          - zohoBooks
-          - myob
-        description:
-          type: string
-          example: TD Bank
-        status:
-          type: string
-          readOnly: true
-          example: active
-        createdAt:
-          type: string
-          readOnly: true
-          example: '2020-12-25T01:02:03Z'
-          format: date-time
-        updatedAt:
-          type: string
-          readOnly: true
-          example: '2020-12-25T01:02:03Z'
-          format: date-time
-        disconnectReason:
-          type: string
-          example: disconnectedByCustomer
-        syncTime:
-          type: number
-          example: '1.3092'
-        institution:
           example:
-            name: Citizens bank
-            logo: https://serverlogo.url
-          allOf:
-          - $ref: '#/components/schemas/ConnectionsInstitutionData'
-        isMockData:
+          - Forbidden resource
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Forbidden
+      required:
+      - statusCode
+      - message
+      - error
+    Error404Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 404
+        message:
+          readOnly: true
+          example:
+          - Not Found
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Not Found
+      required:
+      - statusCode
+      - message
+      - error
+    BusinessInfoCurrencyRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '21'
+        isActive:
+          type: boolean
+          example: false
+        isBaseCurrency:
           type: boolean
           example: true
-        serviceAccountRef:
-          example:
-            id: '12345'
-            entityRef:
-              id: '100'
-          allOf:
-          - $ref: '#/components/schemas/serviceAccountRefType'
-      required:
-      - connectionUuid
-      - serviceName
-      - status
-      - createdAt
-      - updatedAt
+        symbol:
+          type: string
+          example: USD
+        name:
+          type: string
+          example: USA
     BusinessInfoLocationParentRef:
       type: object
       properties:
@@ -1018,55 +1073,27 @@ components:
         name:
           type: string
           example: United States
-    BusinessesResponseDataV1:
+    BusinessInfoLocationAddress:
       type: object
       properties:
-        businessUuid:
+        line1:
           type: string
-          readOnly: true
-          example: BIZ-0f1ef788-54eb-4ed1-a7d3-5605febe6d84
-        businessName:
+          example: 180 John St
+        line2:
           type: string
-          readOnly: true
-          example: Railz
-        status:
+          example: Suite 12E
+        city:
           type: string
-          readOnly: true
-          example: active
-        createdAt:
+          example: Seattle
+        region:
           type: string
-          readOnly: true
-          example: '2020-12-25T01:02:03Z'
-          format: date-time
-        updatedAt:
+          example: Washington
+        country:
           type: string
-          readOnly: true
-          example: '2020-12-25T01:02:03Z'
-          format: date-time
-        metadata:
-          readOnly: true
-          example:
-          - name: new business1
-            value: canada
-            webhookLocation:
-            - header
-            - body
-          type: array
-          items:
-            type: string
-        connections:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/BaseConnectionsResponseDataV1'
-      required:
-      - businessUuid
-      - businessName
-      - status
-      - createdAt
-      - updatedAt
-      - metadata
-      - connections
+          example: United States
+        postalCode:
+          type: string
+          example: '19222'
     CreateBusinessDto:
       type: object
       properties:
@@ -1079,6 +1106,85 @@ components:
             $ref: '#/components/schemas/MetadataObjectDto'
       required:
       - businessName
+    BusinessInfoMetaDataV2:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        serviceName:
+          type: string
+          readOnly: true
+          example: xero
+          enum:
+          - freshbooks
+          - quickbooks
+          - quickbooksDesktop
+          - xero
+          - oracleNetsuite
+          - sageBusinessCloud
+          - sageIntacct
+          - dynamicsBusinessCentral
+          - dynamics365Finance
+          - wave
+          - myob
+          - zohoBooks
+          - byod
+        reportId:
+          type: string
+          readOnly: true
+          example: 5fad8a342a88364234392fb5
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-11-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          readOnly: true
+          example: '2020-11-30T01:02:03Z'
+          format: date-time
+      required:
+      - connectionUuid
+      - reportId
+      - createdAt
+      - updatedAt
+    ConnectionMigrationDto:
+      type: object
+      properties:
+        serviceName:
+          type: string
+          enum:
+          - quickbooks
+          - xero
+          - freshbooks
+          - dynamicsBusinessCentral
+          - sageBusinessCloud
+          - zohoBooks
+          - wave
+          - plaid
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+        accountId:
+          type: string
+        location:
+          type: string
+          enum:
+          - com
+          - eu
+          - in
+          - au
+          - jp
+          - ca
+      required:
+      - serviceName
     Error500ResponseDto:
       type: object
       properties:
@@ -1086,120 +1192,6 @@ components:
           readOnly: true
           allOf:
           - $ref: '#/components/schemas/Error500Dto'
-        payload:
-          type: object
-          readOnly: true
-      required:
-      - error
-      - payload
-    BusinessInfoAddressV2:
-      type: object
-      properties:
-        city:
-          type: string
-          example: Toronto
-        country:
-          type: string
-          example: Canada
-        line1:
-          type: string
-          example: 1234 Park Street
-        line2:
-          type: string
-          example: Suite 1000
-        region:
-          type: string
-          example: 'ON'
-        postalCode:
-          type: string
-          example: A0B1C2
-    PostBusinessesResponseDto:
-      type: object
-      properties:
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        url:
-          type: string
-          readOnly: true
-        metadata:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/MetadataObjectDto'
-        status:
-          type: string
-          readOnly: true
-        createdAt:
-          format: date-time
-          type: string
-          readOnly: true
-        businessUUID:
-          type: string
-          readOnly: true
-      required:
-      - businessName
-      - url
-      - metadata
-      - status
-      - createdAt
-      - businessUUID
-    BusinessInfoResponseDtoV2:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/BusinessInfoMetaDataV2'
-        data:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/BusinessInfoDataV2'
-      required:
-      - meta
-      - data
-    ConnectionsInstitutionData:
-      type: object
-      properties:
-        name:
-          type: string
-          readOnly: true
-          example: Citizens bank
-        logo:
-          type: string
-          readOnly: true
-          example: https://serverlogo.url
-      required:
-      - name
-      - logo
-    Error400DtoV2:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - connectionUuid should not be empty
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
-    Error400ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error400Dto'
         payload:
           type: object
           readOnly: true
@@ -1300,6 +1292,324 @@ components:
             id:
               type: string
               example: '100'
+    Error401Dto:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          readOnly: true
+          example: 401
+        message:
+          readOnly: true
+          example:
+          - Unauthorized
+          type: array
+          items:
+            type: string
+        error:
+          type: string
+          readOnly: true
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    ConnectionMigrationResponseDto:
+      type: object
+      properties:
+        connectionUuid:
+          type: string
+          readOnly: true
+      required:
+      - connectionUuid
+    PutBusinessesResponseDto:
+      type: object
+      properties:
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        url:
+          type: string
+          readOnly: true
+        metadata:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/MetadataObjectDto'
+        status:
+          type: string
+          readOnly: true
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        businessUUID:
+          type: string
+          readOnly: true
+        updatedAt:
+          format: date-time
+          type: string
+          readOnly: true
+      required:
+      - businessName
+      - url
+      - metadata
+      - status
+      - createdAt
+      - businessUUID
+      - updatedAt
+    UpdateBusinessDtoV2:
+      type: object
+      properties:
+        businessName:
+          type: string
+          example: Railz
+        metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetadataObjectDto'
+    BusinessInfoAddressV2:
+      type: object
+      properties:
+        city:
+          type: string
+          example: Toronto
+        country:
+          type: string
+          example: Canada
+        line1:
+          type: string
+          example: 1234 Park Street
+        line2:
+          type: string
+          example: Suite 1000
+        region:
+          type: string
+          example: 'ON'
+        postalCode:
+          type: string
+          example: A0B1C2
+    MetadataObjectDto:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        webhookLocation:
+          type: array
+          items:
+            type: string
+            enum:
+            - header
+            - body
+            - query
+      required:
+      - name
+      - value
+    BusinessesResponseDataV2:
+      type: object
+      properties:
+        businessUuid:
+          type: string
+          readOnly: true
+          example: BIZ-0f1ef788-54eb-4ed1-a7d3-5605febe6d84
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        status:
+          type: string
+          readOnly: true
+          example: active
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+          format: date-time
+        metadata:
+          readOnly: true
+          example:
+          - name: new business1
+            value: canada
+            webhookLocation:
+            - header
+            - body
+          type: array
+          items:
+            type: string
+        connections:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/BaseConnectionsResponseDataV2'
+      required:
+      - businessUuid
+      - businessName
+      - status
+      - createdAt
+      - updatedAt
+      - metadata
+      - connections
+    BusinessInfoSubsidiaryRef:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '8'
+        name:
+          type: string
+          example: Honeywell
+        parentRef:
+          $ref: '#/components/schemas/BusinessInfoSubsidiaryRefParentRef'
+        currencies:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessInfoSubsidiaryRefCurrencyRef'
+        locations:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessInfoSubsidiaryRefLocationRef'
+    PutBusinessesResponseDtoV2:
+      type: object
+      properties:
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        url:
+          type: string
+          readOnly: true
+        metadata:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/MetadataObjectDto'
+        status:
+          type: string
+          readOnly: true
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        businessUuid:
+          type: string
+          readOnly: true
+        updatedAt:
+          format: date-time
+          type: string
+          readOnly: true
+      required:
+      - businessName
+      - url
+      - metadata
+      - status
+      - createdAt
+      - businessUuid
+      - updatedAt
+    Error401ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error401Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    Error403ResponseDto:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error403Dto'
+        payload:
+          type: object
+          readOnly: true
+          example: {}
+      required:
+      - error
+      - payload
+    MetaPageData:
+      type: object
+      properties:
+        count:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        offset:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        limit:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        currentPage:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+        totalPages:
+          type: number
+          readOnly: true
+          example: 1
+          format: integer
+      required:
+      - count
+      - offset
+      - limit
+      - currentPage
+      - totalPages
+    Error500Dto:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Internal Server Error
+        message:
+          readOnly: true
+          example:
+          - INTERNAL_ERROR
+          type: array
+          items:
+            type: string
+        statusCode:
+          type: number
+          readOnly: true
+          example: 500
+      required:
+      - error
+      - message
+      - statusCode
+    Error400ResponseDtoV2:
+      type: object
+      properties:
+        error:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Error400DtoV2'
+        payload:
+          type: object
+          readOnly: true
+      required:
+      - error
+      - payload
     BusinessInfoDataV2:
       type: object
       properties:
@@ -1379,359 +1689,6 @@ components:
       required:
       - businessType
       - accountingMethod
-    BusinessInfoDataV1:
-      type: object
-      properties:
-        businessName:
-          type: string
-          example: Railz
-        legalName:
-          type: string
-          example: Railz Financial Technologies Inc
-        businessEmail:
-          type: string
-          example: noreply@railz.ai
-        website:
-          type: string
-          example: www.railz.ai
-        primaryPhoneNumber:
-          type: string
-          example: 416-555-1212
-        fiscalYearEndDay:
-          type: number
-          example: 31
-          format: integer
-        fiscalYearEndMonth:
-          type: number
-          example: 12
-          format: integer
-        industryType:
-          type: string
-          example: Financial
-        industryCode:
-          type: string
-          example: '123'
-        businessShortCode:
-          type: string
-          example: 6Qfdg!
-        baseCurrency:
-          type: string
-          example: USD
-        businessRegistrationNumber:
-          type: string
-          example: BN123456789
-        currencyRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/BusinessInfoCurrencyRef'
-        subsidiaryRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/BusinessInfoSubsidiaryRef'
-        mailingAddress:
-          $ref: '#/components/schemas/BusinessInfoAddress'
-        legalAddress:
-          $ref: '#/components/schemas/BusinessInfoAddress'
-        locationRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/BusinessInfoLocationRef'
-        businessType:
-          type: string
-          example: organization
-          enum:
-          - soleProprietorship
-          - partnership
-          - limitedLiability
-          - corporation
-          - organization
-          - other
-          - unknown
-          - notForProfit
-        accountingMethod:
-          type: string
-          example: accrual
-    DeleteBusinessResponseDto:
-      type: object
-      properties:
-        deleted:
-          type: string
-          readOnly: true
-      required:
-      - deleted
-    Error401ResponseDto:
-      type: object
-      properties:
-        error:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/Error401Dto'
-        payload:
-          type: object
-          readOnly: true
-          example: {}
-      required:
-      - error
-      - payload
-    PutBusinessesResponseDtoV2:
-      type: object
-      properties:
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        url:
-          type: string
-          readOnly: true
-        metadata:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/MetadataObjectDto'
-        status:
-          type: string
-          readOnly: true
-        createdAt:
-          format: date-time
-          type: string
-          readOnly: true
-        businessUuid:
-          type: string
-          readOnly: true
-        updatedAt:
-          format: date-time
-          type: string
-          readOnly: true
-      required:
-      - businessName
-      - url
-      - metadata
-      - status
-      - createdAt
-      - businessUuid
-      - updatedAt
-    PutBusinessesResponseDto:
-      type: object
-      properties:
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        url:
-          type: string
-          readOnly: true
-        metadata:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/MetadataObjectDto'
-        status:
-          type: string
-          readOnly: true
-        createdAt:
-          format: date-time
-          type: string
-          readOnly: true
-        businessUUID:
-          type: string
-          readOnly: true
-        updatedAt:
-          format: date-time
-          type: string
-          readOnly: true
-      required:
-      - businessName
-      - url
-      - metadata
-      - status
-      - createdAt
-      - businessUUID
-      - updatedAt
-    BusinessInfoCurrencyRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '21'
-        isActive:
-          type: boolean
-          example: false
-        isBaseCurrency:
-          type: boolean
-          example: true
-        symbol:
-          type: string
-          example: USD
-        name:
-          type: string
-          example: USA
-    BusinessInfoLocationRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '52'
-        name:
-          type: string
-          example: United States
-        address:
-          $ref: '#/components/schemas/BusinessInfoLocationAddress'
-        parentRef:
-          $ref: '#/components/schemas/BusinessInfoLocationParentRef'
-    Error500Dto:
-      type: object
-      properties:
-        error:
-          type: string
-          readOnly: true
-          example: Internal Server Error
-        message:
-          readOnly: true
-          example:
-          - INTERNAL_ERROR
-          type: array
-          items:
-            type: string
-        statusCode:
-          type: number
-          readOnly: true
-          example: 500
-      required:
-      - error
-      - message
-      - statusCode
-    Error401Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 401
-        message:
-          readOnly: true
-          example:
-          - Unauthorized
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Unauthorized
-      required:
-      - statusCode
-      - message
-      - error
-    BusinessesResponseDataV2:
-      type: object
-      properties:
-        businessUuid:
-          type: string
-          readOnly: true
-          example: BIZ-0f1ef788-54eb-4ed1-a7d3-5605febe6d84
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        status:
-          type: string
-          readOnly: true
-          example: active
-        createdAt:
-          type: string
-          readOnly: true
-          example: '2020-12-25T01:02:03Z'
-          format: date-time
-        updatedAt:
-          type: string
-          readOnly: true
-          example: '2020-12-25T01:02:03Z'
-          format: date-time
-        metadata:
-          readOnly: true
-          example:
-          - name: new business1
-            value: canada
-            webhookLocation:
-            - header
-            - body
-          type: array
-          items:
-            type: string
-        connections:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/BaseConnectionsResponseDataV2'
-      required:
-      - businessUuid
-      - businessName
-      - status
-      - createdAt
-      - updatedAt
-      - metadata
-      - connections
-    BusinessInfoLocationAddress:
-      type: object
-      properties:
-        line1:
-          type: string
-          example: 180 John St
-        line2:
-          type: string
-          example: Suite 12E
-        city:
-          type: string
-          example: Seattle
-        region:
-          type: string
-          example: Washington
-        country:
-          type: string
-          example: United States
-        postalCode:
-          type: string
-          example: '19222'
-    ConnectionMigrationResponseDto:
-      type: object
-      properties:
-        connectionUuid:
-          type: string
-          readOnly: true
-      required:
-      - connectionUuid
-    PostBusinessesResponseDtoV2:
-      type: object
-      properties:
-        businessName:
-          type: string
-          readOnly: true
-          example: Railz
-        url:
-          type: string
-          readOnly: true
-        metadata:
-          readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/MetadataObjectDto'
-        status:
-          type: string
-          readOnly: true
-        createdAt:
-          format: date-time
-          type: string
-          readOnly: true
-        businessUuid:
-          type: string
-          readOnly: true
-      required:
-      - businessName
-      - url
-      - metadata
-      - status
-      - createdAt
-      - businessUuid
     BusinessInfoResponseDtoV1:
       type: object
       properties:
@@ -1744,12 +1701,6 @@ components:
       required:
       - meta
       - data
-    BusinessInfoSubsidiaryRefCurrencyRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '3'
     BusinessInfoMetaData:
       type: object
       properties:
@@ -1794,156 +1745,136 @@ components:
       - businessName
       - createdAt
       - updatedAt
-    BusinessInfoSubsidiaryRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '8'
-        name:
-          type: string
-          example: Honeywell
-        parentRef:
-          $ref: '#/components/schemas/BusinessInfoSubsidiaryRefParentRef'
-        currencies:
-          type: array
-          items:
-            $ref: '#/components/schemas/BusinessInfoSubsidiaryRefCurrencyRef'
-        locations:
-          type: array
-          items:
-            $ref: '#/components/schemas/BusinessInfoSubsidiaryRefLocationRef'
-    BusinessInfoSubsidiaryRefLocationRef:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '5'
-    MetadataObjectDto:
-      type: object
-      properties:
-        name:
-          type: string
-        value:
-          type: string
-        webhookLocation:
-          type: array
-          items:
-            type: string
-            enum:
-            - header
-            - body
-            - query
-      required:
-      - name
-      - value
-    Error400Dto:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 400
-        message:
-          readOnly: true
-          example:
-          - businessName cannot be null
-          type: array
-          items:
-            type: string
-        error:
-          type: string
-          readOnly: true
-          example: Bad Request
-      required:
-      - statusCode
-      - message
-      - error
-    BusinessesV2ResponseDto:
+    BusinessInfoResponseDtoV2:
       type: object
       properties:
         meta:
-          readOnly: true
-          allOf:
-          - $ref: '#/components/schemas/MetaPageData'
+          $ref: '#/components/schemas/BusinessInfoMetaDataV2'
         data:
           readOnly: true
-          type: array
-          items:
-            $ref: '#/components/schemas/BusinessesResponseDataV2'
+          allOf:
+          - $ref: '#/components/schemas/BusinessInfoDataV2'
       required:
       - meta
       - data
-    Error404Dto:
+    Error400ResponseDto:
       type: object
       properties:
-        statusCode:
-          type: number
-          readOnly: true
-          example: 404
-        message:
-          readOnly: true
-          example:
-          - Not Found
-          type: array
-          items:
-            type: string
         error:
-          type: string
           readOnly: true
-          example: Not Found
+          allOf:
+          - $ref: '#/components/schemas/Error400Dto'
+        payload:
+          type: object
+          readOnly: true
       required:
-      - statusCode
-      - message
       - error
-    BusinessInfoMetaDataV2:
+      - payload
+    BaseConnectionsResponseDataV2:
       type: object
       properties:
         connectionUuid:
           type: string
           readOnly: true
-          example: CON-396d5daa-26b2-4979-89b6-cafb2c298155
-        businessName:
+          example: CON-e66400c1-4d2f-4683-9bea-275799943695
+        firstRecordDate:
           type: string
-          readOnly: true
-          example: Railz
+          example: '2020-12-25T01:02:03Z'
+          format: date-time
         serviceName:
           type: string
           readOnly: true
           example: xero
           enum:
-          - freshbooks
           - quickbooks
-          - quickbooksDesktop
           - xero
-          - oracleNetsuite
-          - sageBusinessCloud
+          - freshbooks
+          - quickbooksDesktop
           - sageIntacct
+          - sageBusinessCloud
+          - oracleNetsuite
           - dynamicsBusinessCentral
           - dynamics365Finance
           - wave
-          - myob
           - zohoBooks
-          - byod
-        reportId:
+          - myob
+        description:
+          type: string
+          example: TD Bank
+        status:
           type: string
           readOnly: true
-          example: 5fad8a342a88364234392fb5
+          example: active
         createdAt:
           type: string
           readOnly: true
-          example: '2020-11-25T01:02:03Z'
+          example: '2020-12-25T01:02:03Z'
           format: date-time
         updatedAt:
           type: string
           readOnly: true
-          example: '2020-11-30T01:02:03Z'
+          example: '2020-12-25T01:02:03Z'
           format: date-time
+        disconnectReason:
+          type: string
+          example: disconnectedByCustomer
+        syncTime:
+          type: number
+          example: '1.3092'
+        institution:
+          example:
+            name: Citizens bank
+            logo: https://serverlogo.url
+          allOf:
+          - $ref: '#/components/schemas/ConnectionsInstitutionData'
+        isMockData:
+          type: boolean
+          example: true
+        serviceAccountRef:
+          example:
+            id: '12345'
+            entityRef:
+              id: '100'
+          allOf:
+          - $ref: '#/components/schemas/serviceAccountRefType'
       required:
       - connectionUuid
-      - reportId
+      - serviceName
+      - status
       - createdAt
       - updatedAt
+    PostBusinessesResponseDto:
+      type: object
+      properties:
+        businessName:
+          type: string
+          readOnly: true
+          example: Railz
+        url:
+          type: string
+          readOnly: true
+        metadata:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/MetadataObjectDto'
+        status:
+          type: string
+          readOnly: true
+        createdAt:
+          format: date-time
+          type: string
+          readOnly: true
+        businessUUID:
+          type: string
+          readOnly: true
+      required:
+      - businessName
+      - url
+      - metadata
+      - status
+      - createdAt
+      - businessUUID
     BusinessesV1ResponseDto:
       type: object
       properties:
@@ -1959,21 +1890,90 @@ components:
       required:
       - meta
       - data
-    UpdateBusinessDto:
+    BusinessInfoSubsidiaryRefLocationRef:
       type: object
       properties:
+        id:
+          type: string
+          example: '5'
+    ConnectionsInstitutionData:
+      type: object
+      properties:
+        name:
+          type: string
+          readOnly: true
+          example: Citizens bank
+        logo:
+          type: string
+          readOnly: true
+          example: https://serverlogo.url
+      required:
+      - name
+      - logo
+    BusinessesResponseDataV1:
+      type: object
+      properties:
+        businessUuid:
+          type: string
+          readOnly: true
+          example: BIZ-0f1ef788-54eb-4ed1-a7d3-5605febe6d84
         businessName:
           type: string
+          readOnly: true
           example: Railz
-        newBusinessName:
+        status:
           type: string
-          example: Railz
+          readOnly: true
+          example: active
+        createdAt:
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+          format: date-time
+        updatedAt:
+          type: string
+          readOnly: true
+          example: '2020-12-25T01:02:03Z'
+          format: date-time
         metadata:
+          readOnly: true
+          example:
+          - name: new business1
+            value: canada
+            webhookLocation:
+            - header
+            - body
           type: array
           items:
-            $ref: '#/components/schemas/MetadataObjectDto'
+            type: string
+        connections:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/BaseConnectionsResponseDataV1'
       required:
+      - businessUuid
       - businessName
+      - status
+      - createdAt
+      - updatedAt
+      - metadata
+      - connections
+    BusinessesV2ResponseDto:
+      type: object
+      properties:
+        meta:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/MetaPageData'
+        data:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessesResponseDataV2'
+      required:
+      - meta
+      - data
   securitySchemes:
     bearer:
       scheme: bearer
