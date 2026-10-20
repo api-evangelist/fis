@@ -17,30 +17,6 @@ checked:
 summary: null
 marketplace_apps: []
 edges:
-- partner_name: FDX (Financial Data Exchange)
-  partner: fdx
-  type: contract
-  channel: standard-directory
-  relationship: standard-participant
-  direction: partner-built
-  evidence: https://registry.financialdataexchange.org/
-  contract_reference:
-    register: FDX Registry
-    standard: FDX API
-    spec_file: null
-    register_api: https://registry.financialdataexchange.org/fdxregistryapi/organizations/search/listingTags
-    role: data-provider
-    member_type: MEMBER
-    registered_name: FISGlobal
-    register_id: 306
-    registered_website: https://www.fisglobal.com/
-    country: United States
-    fdx_version: null
-    matched_by: domain+name-among-holders:fisglobal.com
-    detected_by: sweep-fdx.py
-    detected: '2026-10-14'
-  detected_by: sweep-fdx.py
-  first_seen: '2026-10-14'
 - partner_name: ISO 10383 (MIC)
   partner: null
   type: register
@@ -70,7 +46,31 @@ edges:
       legal_name: PLATFORM SECURITIES LLP
       country: GB
     detected_by: sweep-capital-markets.py
-    detected: '2026-10-15'
+    detected: '2026-10-19'
   detected_by: sweep-capital-markets.py
-  first_seen: '2026-10-15'
+  first_seen: '2026-10-19'
+- partner_name: FDX (Financial Data Exchange)
+  partner: fdx
+  type: contract
+  channel: standard-directory
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://registry.financialdataexchange.org/
+  contract_reference:
+    register: FDX Registry
+    standard: FDX API
+    spec_file: null
+    register_api: https://registry.financialdataexchange.org/fdxregistryapi/organizations/search/listingTags
+    role: data-provider
+    member_type: MEMBER
+    registered_name: FISGlobal
+    register_id: 306
+    registered_website: https://www.fisglobal.com/
+    country: United States
+    fdx_version: null
+    matched_by: domain+name-among-holders:fisglobal.com
+    detected_by: sweep-fdx.py
+    detected: '2026-10-19'
+  detected_by: sweep-fdx.py
+  first_seen: '2026-10-19'
 templates: []
