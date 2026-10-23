@@ -3,10 +3,10 @@
   "feeds": [
     {
       "source": "https://www.fisglobal.com/insights",
-      "error": "HTTPError"
+      "error": "TimeoutError"
     }
   ],
-  "fetched": "2026-10-10T13:15:00Z",
+  "fetched": "2026-10-17T14:53:57Z",
   "post_count": 0,
   "agent_pulled": "2026-06-27"
 }
