@@ -1,0 +1,50 @@
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-10-28'
+method: searched
+source: https://www.fisglobal.com/products/accounting-data-as-a-service
+sources:
+- https://www.fisglobal.com/products/accounting-data-as-a-service
+provenance:
+  tool: engine/economics/harvest_pricing.py
+  run: 20261028T141507
+  grounding: every price_text was found verbatim in the fetched page text
+audience: developer-api
+pricing_basis: negotiated
+delivery:
+  delivery: managed
+  method: page
+  read: '2026-10-28'
+  managed_tier: Enterprise
+published: false
+note: No numeric price is published on the pricing page; Product page mentions Freemium and Enterprise
+  tiers but shows no numeric prices; directs to 'Get pricing'/'Contact sales'.
+plan_count: 2
+plans:
+- name: Freemium
+  price_text: Freemium
+  period: none
+  included_quota: Enjoy lifetime sandbox testing and production access for up to five connected businesses.
+- name: Enterprise
+  price_text: Get pricing
+  period: none
+  included_quota: Get a personalized solution backed by dedicated support and volume pricing.
+x-canonical:
+  generated: '2026-11-01'
+  vocabulary: engine/economics/plans-canonical.yml
+  models: []
+  units: []
+  plans:
+  - name: Freemium
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods:
+    - none
+  - name: Enterprise
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods:
+    - none
