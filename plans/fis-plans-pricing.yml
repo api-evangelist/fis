@@ -29,7 +29,7 @@ plans:
   period: none
   included_quota: Get a personalized solution backed by dedicated support and volume pricing.
 x-canonical:
-  generated: '2026-11-02'
+  generated: '2026-11-06'
   vocabulary: engine/economics/plans-canonical.yml
   models: []
   units: []
