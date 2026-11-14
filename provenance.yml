@@ -14,6 +14,12 @@ artifacts:
   capabilities/fis-capability-edges.yml:
     method: unknown
     evidence: no authorship recorded
+  certification/observations-2026-11-11.jsonl:
+    method: unknown
+    evidence: no authorship recorded
+  certification/status.yml:
+    method: unknown
+    evidence: no authorship recorded
   changelog/fis-changelog.yml:
     method: searched
     evidence: declared in the artifact
@@ -62,6 +68,9 @@ artifacts:
   conventions/fis-conventions.yml:
     method: derived
     evidence: declared in the artifact
+  data-license/fis-data-license.yml:
+    method: harvested
+    evidence: declared in the artifact
   data-model/fis-data-model.yml:
     method: derived
     evidence: declared in the artifact
@@ -78,6 +87,9 @@ artifacts:
     method: unknown
     evidence: no authorship recorded
   heartbeat/2026-11-06.yml:
+    method: unknown
+    evidence: no authorship recorded
+  heartbeat/2026-11-13.yml:
     method: unknown
     evidence: no authorship recorded
   hosts/fis-hosts.yml:
@@ -455,7 +467,7 @@ artifacts:
   kin/checks-2026-10-23T222754.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
-  kin/checks-2026-11-02T082323.yml:
+  kin/checks-2026-11-06T143934.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   kin/score-2026-09-23T000603.yml:
@@ -519,6 +531,9 @@ artifacts:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   kin/score-2026-11-02T082323.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-11-06T143934.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   lifecycle/fis-lifecycle.yml:
@@ -833,6 +848,9 @@ artifacts:
     evidence: declared in the artifact
   sla/fis-sla.yml:
     method: generated
+    evidence: declared in the artifact
+  terms/fis-terms-of-service.yml:
+    method: harvested
     evidence: declared in the artifact
   vendors/fis-vendors.yml:
     method: unknown
